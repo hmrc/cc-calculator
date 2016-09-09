@@ -1,0 +1,24 @@
+cc.calc.id.should.not.be.less.than.0 = ID should not be less than 0
+cc.calc.household.income.too.low = Household income should not be less than 0.00
+cc.calc.childcare.spend.too.low = Childcare Spend cost should not be less than 0.00
+cc.scheme.config.invalid.tax.year = No configuration available for the provided Tax Year
+cc.calc.voucher.amount.less.than.0 = Voucher amount should not be less than 0.00
+cc.calc.invalid.number.of.months = Number of months should not be less than 0 and not more than 99
+cc.calc.taxable.pay.less.than.0 = Taxable pay should not be less than 0.00
+cc.calc.gross.amount.less.than.0 = Gross amount should not be less than 0.00
+cc.calc.invalid.number.of.ty = Please provide at least 1 Tax Year
+cc.calc.invalid.number.of.periods = Please provide at least 1 Period
+cc.calc.invalid.number.of.claimants = Please provide at least 1 claimant
+cc.calc.invalid.number.of.children = Please provide at least 1 child or maximun of 25 children
+cc.calc.invalid.request.exception = You have provided a wrong type of request
+
+#### ESC #####
+cc.scheme.config.invalid.tax.code = Please enter valid tax code
+cc.scheme.config.invalid.ni.category = Please enter valid NI category (Only letter A or B or C are valid)
+cc.scheme.config.ni.category.not.found = Please ensure relevant configuration for NI category are made available in the configuration files .
+
+#####TFC#####
+cc.scheme.config.from.date= unspecified argument: from date
+cc.scheme.config.until.date = unspecified argument: until date
+cc.scheme.config.from.until.start.date = unspecified argument: from date until date
+

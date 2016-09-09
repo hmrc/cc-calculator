@@ -1,0 +1,34 @@
+{
+  "payload": {
+    "eligibility": {
+      "esc":null,
+      "tc": null,
+      "tfc": {
+        "from": "2015-08-27",
+        "until": "ABCD",
+        "householdEligibility": true,
+        "periods": [
+          {
+            "from" : "2015-08-27",
+            "until" : "2015-11-27",
+            "periodEligibility" : true,
+            "children" : [
+              {
+                "id" : 0,
+                "name" : "Child 1",
+                "qualifying" : true,
+                "from" : "2015-08-27",
+                "until" : "2015-11-27",
+                "childcareCost" : 100.00,
+                "disability": {
+                  "disabled": false,
+                  "severelyDisabled": false
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

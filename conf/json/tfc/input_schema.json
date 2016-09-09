@@ -1,0 +1,206 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://localhost/cc-calculator/calculate/tax-free-childcare",
+  "type": "object",
+  "properties": {
+    "success": {
+      "id": "http://localhost/cc-calculator/calculate/tax-free-childcare/success",
+      "type": "boolean"
+    },
+    "publicKey": {
+      "id": "http://localhost/cc-calculator/calculate/tax-free-childcare/publicKey",
+      "type": "string"
+    },
+    "payload": {
+      "id": "http://localhost/cc-calculator/calculate/tax-free-childcare/payload",
+      "type": "object",
+      "properties": {
+        "claimDate": {
+          "id": "http://localhost/cc-calculator/calculate/tax-free-childcare/payload/claimDate",
+          "type": "string"
+        },
+        "data": {
+          "id": "http://localhost/cc-calculator/calculate/tax-free-childcare/payload/data",
+          "type": "object",
+          "properties": {
+            "claimants": {
+              "id": "http://localhost/cc-calculator/calculate/tax-free-childcare/payload/data/claimants",
+              "type": "array",
+              "items": {
+                "id": "http://localhost/cc-calculator/calculate/tax-free-childcare/payload/data/claimants/0",
+                "type": "object",
+                "properties": {
+                  "disabled": {
+                    "id": "http://localhost/cc-calculator/calculate/tax-free-childcare/payload/data/claimants/0/disabled",
+                    "type": "boolean"
+                  },
+                  "severeDisability": {
+                    "id": "http://localhost/cc-calculator/calculate/tax-free-childcare/payload/data/claimants/0/severeDisability",
+                    "type": "boolean"
+                  },
+                  "partner": {
+                    "id": "http://localhost/cc-calculator/calculate/tax-free-childcare/payload/data/claimants/0/partner",
+                    "type": "boolean"
+                  },
+                  "tfc": {
+                    "id": "http://localhost/cc-calculator/calculate/tax-free-childcare/payload/data/claimants/0/tfc",
+                    "type": "object",
+                    "properties": {}
+                  }
+                }
+              }
+            },
+            "children": {
+              "id": "http://localhost/cc-calculator/calculate/tax-free-childcare/payload/data/children",
+              "type": "array",
+              "minItems": 0,
+              "maxItems": 25
+            }
+          }
+        },
+        "eligibility": {
+          "id": "http://localhost/cc-calculator/calculate/tax-free-childcare/payload/eligibility",
+          "type": "object",
+          "properties": {
+            "tfc": {
+              "id": "http://localhost/cc-calculator/calculate/tax-free-childcare/payload/eligibility/tfc",
+              "type": "object",
+              "properties": {
+                "eligible": {
+                  "id": "http://localhost/cc-calculator/calculate/tax-free-childcare/payload/eligibility/tfc/eligible",
+                  "type": "boolean"
+                },
+                "elements": {
+                  "id": "http://localhost/cc-calculator/calculate/tax-free-childcare/payload/eligibility/tfc/elements",
+                  "type": "object",
+                  "properties": {
+                    "claimants": {
+                      "id": "http://localhost/cc-calculator/calculate/tax-free-childcare/payload/eligibility/tfc/elements/claimants",
+                      "type": "array",
+                      "items": [
+                        {
+                          "id": "http://localhost/cc-calculator/calculate/tax-free-childcare/payload/eligibility/tfc/elements/claimants/0",
+                          "type": "object",
+                          "properties": {
+                            "qualifying": {
+                              "id": "http://localhost/cc-calculator/calculate/tax-free-childcare/payload/eligibility/tfc/elements/claimants/0/qualifying",
+                              "type": "boolean"
+                            },
+                            "partner": {
+                              "id": "http://localhost/cc-calculator/calculate/tax-free-childcare/payload/eligibility/tfc/elements/claimants/0/partner",
+                              "type": "boolean"
+                            },
+                            "elements": {
+                              "id": "http://localhost/cc-calculator/calculate/tax-free-childcare/payload/eligibility/tfc/elements/claimants/0/elements",
+                              "type": "object",
+                              "properties": {
+                                "disability": {
+                                  "id": "http://localhost/cc-calculator/calculate/tax-free-childcare/payload/eligibility/tfc/elements/claimants/0/elements/disability",
+                                  "type": "boolean"
+                                },
+                                "severeDisability": {
+                                  "id": "http://localhost/cc-calculator/calculate/tax-free-childcare/payload/eligibility/tfc/elements/claimants/0/elements/severeDisability",
+                                  "type": "boolean"
+                                }
+                              }
+                            },
+                            "failures": {
+                              "id": "http://localhost/cc-calculator/calculate/tax-free-childcare/payload/eligibility/tfc/elements/claimants/0/failures",
+                              "type": "array",
+                              "items": [
+                                {
+                                  "id": "http://localhost/cc-calculator/calculate/tax-free-childcare/payload/eligibility/tfc/elements/claimants/0/failures/0",
+                                  "type": "string"
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      ],
+                      "minItems": 1,
+                      "maxItems": 2
+                    }
+                  }
+                },
+                "periods": {
+                  "id": "http://localhost/cc-calculator/calculate/tax-free-childcare/payload/eligibility/tfc/periods",
+                  "type": "array",
+                  "items": {
+                    "id": "http://localhost/cc-calculator/calculate/tax-free-childcare/payload/eligibility/tfc/periods/0",
+                    "type": "object",
+                    "properties": {
+                      "from": {
+                        "id": "http://localhost/cc-calculator/calculate/tax-free-childcare/payload/eligibility/tfc/periods/0/from",
+                        "type": "string"
+                      },
+                      "until": {
+                        "id": "http://localhost/cc-calculator/calculate/tax-free-childcare/payload/eligibility/tfc/periods/0/until",
+                        "type": "string"
+                      },
+                      "children": {
+                        "id": "http://localhost/cc-calculator/calculate/tax-free-childcare/payload/eligibility/tfc/periods/0/children",
+                        "type": "array",
+                        "items": [
+                          {
+                            "id": "http://localhost/cc-calculator/calculate/tax-free-childcare/payload/eligibility/tfc/periods/0/children/0",
+                            "type": "object",
+                            "properties": {
+                              "qualifying": {
+                                "id": "http://localhost/cc-calculator/calculate/tax-free-childcare/payload/eligibility/tfc/periods/0/children/0/qualifying",
+                                "type": "boolean"
+                              },
+                              "name": {
+                                "id": "http://localhost/cc-calculator/calculate/tax-free-childcare/payload/eligibility/tfc/periods/0/children/0/name",
+                                "type": "string"
+                              },
+                              "date_of_birth": {
+                                "id": "http://localhost/cc-calculator/calculate/tax-free-childcare/payload/eligibility/tfc/periods/0/children/0/date_of_birth",
+                                "type": "string"
+                              },
+                              "childcare_spend": {
+                                "id": "http://localhost/cc-calculator/calculate/tax-free-childcare/payload/eligibility/tfc/periods/0/children/0/childcare_spend",
+                                "type": "number"
+                              },
+                              "childcare_spend_period": {
+                                "id": "http://localhost/cc-calculator/calculate/tax-free-childcare/payload/eligibility/tfc/periods/0/children/0/childcare_spend_period",
+                                "type": "string"
+                              },
+                              "elements": {
+                                "id": "http://localhost/cc-calculator/calculate/tax-free-childcare/payload/eligibility/tfc/periods/0/children/0/elements",
+                                "type": "object",
+                                "properties": {
+                                  "disability": {
+                                    "id": "http://localhost/cc-calculator/calculate/tax-free-childcare/payload/eligibility/tfc/periods/0/children/0/elements/disability",
+                                    "type": "boolean"
+                                  }
+                                }
+                              },
+                              "failures": {
+                                "id": "http://localhost/cc-calculator/calculate/tax-free-childcare/payload/eligibility/tfc/periods/0/children/0/failures",
+                                "type": "array",
+                                "items": [
+                                  {
+                                    "id": "http://localhost/cc-calculator/calculate/tax-free-childcare/payload/eligibility/tfc/periods/0/children/0/failures/0",
+                                    "type": "string"
+                                  }
+                                ]
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "publicKey",
+    "payload"
+  ]
+}

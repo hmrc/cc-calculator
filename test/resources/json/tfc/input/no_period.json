@@ -1,0 +1,14 @@
+{
+  "payload": {
+    "eligibility": {
+      "esc":null,
+      "tc": null,
+      "tfc": {
+        "from": "2015-08-27",
+        "until": "2015-11-27",
+        "householdEligibility": true,
+        "periods":[]
+      }
+    }
+  }
+}

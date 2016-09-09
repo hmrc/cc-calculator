@@ -1,0 +1,69 @@
+{
+  "calculation": {
+    "tc": {
+      "from": "27/08/2010",
+      "until": "05/04/2011",
+      "totalAward": 1980.29,
+      "houseHoldAdviceAmount": 0.00,
+
+      "periods": [
+        {
+          "from": "27/08/2010",
+          "until": "05/04/2011",
+          "periodNetAmount": 1301.51,
+          "periodAdviceAmount": 0.00,
+          "elements": {
+              "wtcWorkElement": {
+                "maximumAmount": 0.00,
+                "taperAmount": 0.00,
+                "netAmount": 0.00
+              },
+              "wtcChildcareElement": {
+                "maximumAmount": 0.00,
+                "taperAmount": 0.00,
+                "netAmount": 0.00
+              },
+              "ctcIndividualElement": {
+                "maximumAmount": 0.00,
+                "taperAmount": 0.00,
+                "netAmount": 1118.51
+              },
+              "ctcFamilyElement": {
+                "maximumAmount": 0.00,
+                "taperAmount": 0.00,
+                "netAmount": 183.0
+              }
+          }
+        },
+        {
+          "from": "27/08/2010",
+          "until": "05/04/2011",
+          "periodNetAmount": 678.78,
+          "periodAdviceAmount": 0.00,
+          "elements": {
+            "wtcWorkElement": {
+                "maximumAmount": 0.00,
+                "taperAmount": 0.00,
+                "netAmount": 0.00
+              },
+              "wtcChildcareElement": {
+                "maximumAmount": 0.00,
+                "taperAmount": 0.00,
+                "netAmount": 0.00
+              },
+              "ctcIndividualElement": {
+                "maximumAmount": 0.00,
+                "taperAmount": 0.00,
+                "netAmount": 353.28
+              },
+              "ctcFamilyElement": {
+                "maximumAmount": 0.00,
+                "taperAmount": 0.00,
+                "netAmount": 325.50
+              }
+          }
+        }
+      ]
+    }
+  }
+}

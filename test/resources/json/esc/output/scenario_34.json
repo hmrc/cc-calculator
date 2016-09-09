@@ -1,0 +1,87 @@
+{
+  "calculation": {
+    "tc": null,
+    "tfc": null,
+    "esc": {
+      "from": "2017-04-06",
+      "until": "2018-04-06",
+      "totalSavings": {
+        "totalSaving": 777.60,
+        "taxSaving": 486.00,
+        "niSaving": 291.60
+      },
+      "taxYears": [{
+        "from": "2017-04-06",
+        "until": "2018-04-06",
+        "totalSavings": {
+          "totalSaving": 777.60,
+          "taxSaving": 486.00,
+          "niSaving": 291.60
+        },
+        "claimants": [{
+          "qualifying": true,
+          "eligibleMonthsInTaxYear": 5,
+          "isPartner": false,
+          "income": {
+            "taxablePay": 25000,
+            "gross": 25000,
+            "taxCode": "",
+            "niCategory": "A"
+          },
+          "elements": {
+            "vouchers": true
+          },
+          "escAmount": 1000,
+          "escAmountPeriod": "Month",
+          "escStartDate": "2012-08-27",
+          "savings": {
+            "totalSaving": 388.80,
+            "taxSaving": 243.00,
+            "niSaving": 145.80
+          },
+          "maximumRelief": 243.0,
+          "maximumReliefPeriod": "Month",
+          "taxAndNIBeforeSacrifice": {
+            "taxPaid": 233.20,
+            "niPaid": 169.32
+          },
+          "taxAndNIAfterSacrifice": {
+            "taxPaid": 184.60,
+            "niPaid": 140.16
+          }
+        }, {
+          "qualifying": true,
+          "eligibleMonthsInTaxYear": 5,
+          "isPartner": true,
+          "income": {
+            "taxablePay": 20000,
+            "gross": 20000,
+            "taxCode": "",
+            "niCategory": "A"
+          },
+          "elements": {
+            "vouchers": true
+          },
+          "escAmount": 1000,
+          "escAmountPeriod": "Month",
+          "escStartDate": "2012-08-27",
+          "savings": {
+            "totalSaving": 388.80,
+            "taxSaving": 243.00,
+            "niSaving": 145.80
+          },
+          "maximumRelief": 243.0,
+          "maximumReliefPeriod": "Month",
+          "taxAndNIBeforeSacrifice": {
+            "taxPaid": 150.00,
+            "niPaid": 119.40
+          },
+          "taxAndNIAfterSacrifice": {
+            "taxPaid": 101.40,
+            "niPaid": 90.24
+          }
+        }]
+      }]
+    }
+  }
+}

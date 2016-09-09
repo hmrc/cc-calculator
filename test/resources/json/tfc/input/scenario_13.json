@@ -1,0 +1,91 @@
+{
+  "payload": {
+    "eligibility": {
+      "tfc":{
+        "from": "2016-12-09",
+        "until": "2017-12-09",
+        "householdEligibility": true,
+        "periods": [
+          {
+            "from": "2016-12-09",
+            "until": "2017-03-09",
+            "periodEligibility": true,
+            "children": [
+              {
+                "id": 0,
+                "name": "Child 1",
+                "qualifying": true,
+                "from": "2016-12-09",
+                "until": "2017-03-09",
+                "childcareCost": 1000.00,
+                "disability": {
+                  "disabled": false,
+                  "severelyDisabled": false
+                }
+              }
+            ]
+          },
+          {
+            "from": "2017-03-09",
+            "until": "2017-06-09",
+            "periodEligibility": true,
+            "children": [
+              {
+                "id": 0,
+                "name": "Child 1",
+                "qualifying": true,
+                "from": "2017-03-09",
+                "until": "2017-06-09",
+                "childcareCost": 1000.00,
+                "disability": {
+                  "disabled": false,
+                  "severelyDisabled": false
+                }
+              }
+            ]
+          },
+          {
+            "from": "2017-06-09",
+            "until": "2017-09-09",
+            "periodEligibility": true,
+            "children": [
+              {
+                "id": 0,
+                "name": "Child 1",
+                "qualifying": true,
+                "from": "2017-06-09",
+                "until": "2017-09-06",
+                "childcareCost": 1000.00,
+                "disability": {
+                  "disabled": false,
+                  "severelyDisabled": false
+                }
+              }
+            ]
+          },
+          {
+            "from": "2017-09-09",
+            "until": "2017-12-09",
+            "periodEligibility": false,
+            "children": [
+              {
+                "id": 0,
+                "name": "Child 1",
+                "qualifying": false,
+                "from": null,
+                "until": null,
+                "childcareCost": 1000.00,
+                "disability": {
+                  "disabled": false,
+                  "severelyDisabled": false
+                }
+              }
+            ]
+          }
+         ]
+      },
+      "tc": null,
+      "esc": null
+    }
+  }
+}

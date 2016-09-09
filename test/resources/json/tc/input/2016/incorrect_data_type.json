@@ -1,0 +1,97 @@
+{
+  "payload": {
+    "eligibility": {
+      "tc": {
+        "taxYears": [
+            {
+                "from": "2016-09-27",
+                "until": "2017-04-06",
+                    "elements": {
+                      "basic": true,
+                      "hours30": false,
+                      "claimants": [
+                        {
+                          "qualifying": true,
+                          "isPartner": false,
+                          "elements": {
+                            "disability": false,
+                            "severeDisability": false
+                          },
+                          "failures": [
+                            "hours30"
+                          ]
+                        },
+                        {
+                          "qualifying": false,
+                          "isPartner": true,
+                          "elements": {
+                            "disability": false,
+                            "severeDisability": false
+                          },
+                          "failures": [
+                            "hours30",
+                            "income"
+                          ]
+                        }
+                      ]
+                    },
+                    "periods": [
+                      {
+                        "from": "2016-09-27",
+                        "until": "12/12/2016",
+                        "elements": {
+                          "childcare": "true",
+                          "loneParent": false,
+                          "secondParent": true,
+                          "family": true
+                        },
+                        "children": [
+                          {
+                            "qualifying": true,
+                            "name": "Child 1",
+                            "date_of_birth": "13/12/1996",
+                            "childcare_spend": "200.00",
+                            "childcare_spend_period": "monthly",
+                            "elements": {
+                              "child": true,
+                              "youngAdult": true,
+                              "disability": true,
+                              "severeDisability": true,
+                              "childcare": true
+                            }
+                          },
+                          {
+                            "qualifying": false,
+                            "name": "Child 2",
+                            "date_of_birth": "12/05/2001",
+                            "childcare_spend": 5000.00,
+                            "childcare_spend_period": "monthly",
+                            "elements": {
+                              "child": false,
+                              "youngAdult": false,
+                              "disability": false,
+                              "severeDisability": false,
+                              "childcare": true
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "from": "2016-12-13",
+                        "until": "2017-04-06",
+                        "elements": {
+                          "childcare": false,
+                          "loneParent": false,
+                          "secondParent": false,
+                          "family": false
+                        },
+                        "children": [
+                        ]
+                      }
+                    ]
+            }
+        ]
+      }
+    }
+  }
+}

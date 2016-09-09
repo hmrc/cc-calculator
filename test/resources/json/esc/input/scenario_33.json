@@ -1,0 +1,60 @@
+{
+  "payload": {
+  "eligibility": {
+    "esc": {
+      "taxYears": [
+        {
+          "startDate": "2017-04-06",
+          "endDate": "2018-04-06",
+          "periods": [
+            {
+              "from": "2017-04-06",
+              "until": "2018-04-06",
+              "claimants": [
+                {
+                  "qualifying": true,
+                  "isPartner": false,
+                  "eligibleMonthsInPeriod": 5,
+                  "income": {
+                    "taxablePay": 70000.00,
+                    "gross": 70000.00,
+                    "taxCode": "",
+                    "niCategory": ""
+                  },
+                  "elements": {
+                    "vouchers": true
+                  },
+                  "escAmount": 100.00,
+                  "escAmountPeriod": "Month",
+                  "escStartDate": "2012-08-27",
+                  "failures": []
+                },
+                {
+                  "qualifying": true,
+                  "isPartner": true,
+                  "eligibleMonthsInPeriod": 5,
+                  "income": {
+                    "taxablePay": 10000.00,
+                    "gross": 10000.00,
+                    "taxCode": "",
+                    "niCategory": ""
+                  },
+                  "elements": {
+                    "vouchers": true
+                  },
+                  "escAmount": 100.00,
+                  "escAmountPeriod": "Month",
+                  "escStartDate": "2012-08-27",
+                  "failures": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "tc": null,
+    "tfc": null
+  }
+}
+}

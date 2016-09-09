@@ -1,0 +1,70 @@
+// calculation output
+
+{
+  "success": true,
+  "publicKey": "12345567",
+  "payload": {
+    "claimDate": "2015-08-27T18:46:17",
+    "data": {
+      "claimants": [
+        {
+          "disabled": false,
+          "severeDisability": false,
+          "partner": false
+        }
+      ],
+      "children": [
+      ]
+    },
+    "calculation": {
+      "tfc": {
+        "parent-contribution": 0.00,
+        "government-contribution": 0.00,
+        "periods": [
+          {
+            "from": "27/08/2010",
+            "until": "05/04/2011",
+            "elements": {
+              "monthly": {
+                "parent-contribution": 0.00,
+                "government-contribution": 0.00
+              },
+              "3-monthly": {
+                "parent-contribution": 0.00,
+                "government-contribution": 0.00
+              },
+              "children": [
+                {
+                  "name": "Child 1",
+                  "date_of_birth": "27/08/2010",
+                  "childcare": 0.00,
+                  "childcare_period": 0.00,
+                  "repeat_contribution": {
+                    "parent": 870.00,
+                    "government": 166.66,
+                    "not-receiving": 0.00,
+                    "warnings": [
+                      "EXCEEDS_TOPUP"
+                    ]
+                  },
+                  "single-contribution": {
+                    "parent": 500.00,
+                    "government": 0.00,
+                    "not-receiving": 0.00,
+                    "warnings": [
+                      "OVER_12_NOT_DISABLED"
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  },
+  "error": {
+    "code": 404,
+    "message": "An error occured"
+  }
+}

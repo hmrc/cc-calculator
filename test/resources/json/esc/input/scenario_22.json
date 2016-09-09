@@ -1,0 +1,102 @@
+{
+  "payload": {
+    "eligibility": {
+      "esc": {
+        "taxYears": [
+          {
+            "startDate": "2016-04-06",
+            "endDate": "2017-04-06",
+            "periods": [
+              {
+                "from": "2016-04-06",
+                "until": "2017-12-06",
+                "claimants": [
+                  {
+                    "qualifying": true,
+                    "isPartner": false,
+                    "eligibleMonthsInPeriod": 0,
+                    "income": {
+                      "taxablePay": 45000.00,
+                      "gross": 45000.00,
+                      "taxCode": "1100L",
+                      "niCategory": "A"
+                    },
+                    "elements": {
+                      "vouchers": false
+                    },
+                    "escAmount": 230.00,
+                    "escAmountPeriod": "Month",
+                    "escStartDate": "2013-08-27",
+                    "failures": []
+                  },
+                  {
+                    "qualifying": true,
+                    "isPartner": true,
+                    "eligibleMonthsInPeriod": 0,
+                    "income": {
+                      "taxablePay": 30000.00,
+                      "gross": 30000.00,
+                      "taxCode": "1100L",
+                      "niCategory": "B"
+                    },
+                    "elements": {
+                      "vouchers": true
+                    },
+                    "escAmount": 150.00,
+                    "escAmountPeriod": "Month",
+                    "escStartDate": "2012-08-27",
+                    "failures": []
+                  }
+                ]
+              },
+              {
+                "from": "2016-12-06",
+                "until": "2017-04-06",
+                "claimants": [
+                  {
+                    "qualifying": true,
+                    "isPartner": false,
+                    "eligibleMonthsInPeriod": 7,
+                    "income": {
+                      "taxablePay": 45000.00,
+                      "gross": 45000.00,
+                      "taxCode": "1100L",
+                      "niCategory": "A"
+                    },
+                    "elements": {
+                      "vouchers": true
+                    },
+                    "escAmount": 230.00,
+                    "escAmountPeriod": "Month",
+                    "escStartDate": "2013-08-27",
+                    "failures": []
+                  },
+                  {
+                    "qualifying": true,
+                    "isPartner": true,
+                    "eligibleMonthsInPeriod": 9,
+                    "income": {
+                      "taxablePay": 30000.00,
+                      "gross": 30000.00,
+                      "taxCode": "1100L",
+                      "niCategory": "B"
+                    },
+                    "elements": {
+                      "vouchers": true
+                    },
+                    "escAmount": 150.00,
+                    "escAmountPeriod": "Month",
+                    "escStartDate": "2012-08-27",
+                    "failures": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "tc": null,
+      "tfc": null
+    }
+  }
+}

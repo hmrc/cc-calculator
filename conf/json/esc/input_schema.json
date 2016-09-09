@@ -1,0 +1,219 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://localhost/cc-calculator/calculate/employer-supported-childcare",
+  "type": "object",
+  "properties": {
+    "publicKey": {
+      "id": "http://localhost/cc-calculator/calculate/employer-supported-childcare/publicKey",
+      "type": "string"
+    },
+    "payload": {
+      "id": "http://localhost/cc-calculator/calculate/employer-supported-childcare/payload",
+      "type": "object",
+      "properties": {
+        "claimDate": {
+          "id": "http://localhost/cc-calculator/calculate/employer-supported-childcare/payload/claimDate",
+          "type": "string"
+        },
+        "data": {
+          "id": "http://localhost/cc-calculator/calculate/employer-supported-childcare/payload/data",
+          "type": "object",
+          "properties": {
+            "claimants": {
+              "id": "http://localhost/cc-calculator/calculate/employer-supported-childcare/payload/data/claimants",
+              "type": "array",
+              "items": {
+                "id": "http://localhost/cc-calculator/calculate/employer-supported-childcare/payload/data/claimants/0",
+                "type": "object",
+                "properties": {
+                  "disabled": {
+                    "id": "http://localhost/cc-calculator/calculate/employer-supported-childcare/payload/data/claimants/0/disabled",
+                    "type": "boolean"
+                  },
+                  "severeDisability": {
+                    "id": "http://localhost/cc-calculator/calculate/employer-supported-childcare/payload/data/claimants/0/severeDisability",
+                    "type": "boolean"
+                  },
+                  "partner": {
+                    "id": "http://localhost/cc-calculator/calculate/employer-supported-childcare/payload/data/claimants/0/partner",
+                    "type": "boolean"
+                  },
+                  "esc": {
+                    "id": "http://localhost/cc-calculator/calculate/employer-supported-childcare/payload/data/claimants/0/esc",
+                    "type": "object",
+                    "properties": {
+                      "taxable_earnings": {
+                        "id": "http://localhost/cc-calculator/calculate/employer-supported-childcare/payload/data/claimants/0/esc/taxable_earnings",
+                        "type": "integer"
+                      },
+                      "gross_earnings": {
+                        "id": "http://localhost/cc-calculator/calculate/employer-supported-childcare/payload/data/claimants/0/esc/gross_earnings",
+                        "type": "integer"
+                      },
+                      "currency": {
+                        "id": "http://localhost/cc-calculator/calculate/employer-supported-childcare/payload/data/claimants/0/esc/currency",
+                        "type": "string"
+                      },
+                      "national_insurance_category": {
+                        "id": "http://localhost/cc-calculator/calculate/employer-supported-childcare/payload/data/claimants/0/esc/national_insurance_category",
+                        "type": "string"
+                      },
+                      "esc_value": {
+                        "id": "http://localhost/cc-calculator/calculate/employer-supported-childcare/payload/data/claimants/0/esc/esc_value",
+                        "type": "integer"
+                      },
+                      "date_joined": {
+                        "id": "http://localhost/cc-calculator/calculate/employer-supported-childcare/payload/data/claimants/0/esc/date_joined",
+                        "type": "string"
+                      },
+                      "tax_code": {
+                        "id": "http://localhost/cc-calculator/calculate/employer-supported-childcare/payload/data/claimants/0/esc/tax_code",
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "minItems": 0,
+              "maxItems": 2
+            },
+            "children": {
+              "id": "http://localhost/cc-calculator/calculate/employer-supported-childcare/payload/data/children",
+              "type": "array",
+              "items": {
+                "id": "http://localhost/cc-calculator/calculate/employer-supported-childcare/payload/data/children/0",
+                "type": "object"
+              },
+              "minItems": 0,
+              "maxItems": 25
+            }
+          }
+        },
+        "eligibility": {
+          "id": "http://localhost/cc-calculator/calculate/employer-supported-childcare/payload/eligibility",
+          "type": "object",
+          "properties": {
+            "esc": {
+              "id": "http://localhost/cc-calculator/calculate/employer-supported-childcare/payload/eligibility/esc",
+              "type": "object",
+              "properties": {
+                "eligible": {
+                  "id": "http://localhost/cc-calculator/calculate/employer-supported-childcare/payload/eligibility/esc/eligible",
+                  "type": "boolean"
+                },
+                "elements": {
+                  "id": "http://localhost/cc-calculator/calculate/employer-supported-childcare/payload/eligibility/esc/elements",
+                  "type": "object",
+                  "properties": {
+                    "claimants": {
+                      "id": "http://localhost/cc-calculator/calculate/employer-supported-childcare/payload/eligibility/esc/elements/claimants",
+                      "type": "array",
+                      "items": {
+                        "id": "http://localhost/cc-calculator/calculate/employer-supported-childcare/payload/eligibility/esc/elements/claimants/0",
+                        "type": "object",
+                        "properties": {
+                          "qualifying": {
+                            "id": "http://localhost/cc-calculator/calculate/employer-supported-childcare/payload/eligibility/esc/elements/claimants/0/qualifying",
+                            "type": "boolean"
+                          },
+                          "partner": {
+                            "id": "http://localhost/cc-calculator/calculate/employer-supported-childcare/payload/eligibility/esc/elements/claimants/0/partner",
+                            "type": "boolean"
+                          },
+                          "elements": {
+                            "id": "http://localhost/cc-calculator/calculate/employer-supported-childcare/payload/eligibility/esc/elements/claimants/0/elements",
+                            "type": "object",
+                            "properties": {
+                              "disability": {
+                                "id": "http://localhost/cc-calculator/calculate/employer-supported-childcare/payload/eligibility/esc/elements/claimants/0/elements/disability",
+                                "type": "boolean"
+                              },
+                              "vouchers": {
+                                "id": "http://localhost/cc-calculator/calculate/employer-supported-childcare/payload/eligibility/esc/elements/claimants/0/elements/vouchers",
+                                "type": "boolean"
+                              },
+                              "salary_sacrifice": {
+                                "id": "http://localhost/cc-calculator/calculate/employer-supported-childcare/payload/eligibility/esc/elements/claimants/0/elements/salary_sacrifice",
+                                "type": "boolean"
+                              }
+                            }
+                          },
+                          "failures": {
+                            "id": "http://localhost/cc-calculator/calculate/employer-supported-childcare/payload/eligibility/esc/elements/claimants/0/failures",
+                            "type": "array",
+                            "items": [
+                              {
+                                "id": "http://localhost/cc-calculator/calculate/employer-supported-childcare/payload/eligibility/esc/elements/claimants/0/failures/0",
+                                "type": "string"
+                              },
+                              {
+                                "id": "http://localhost/cc-calculator/calculate/employer-supported-childcare/payload/eligibility/esc/elements/claimants/0/failures/1",
+                                "type": "string"
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "periods": {
+                  "id": "http://localhost/cc-calculator/calculate/employer-supported-childcare/payload/eligibility/esc/periods",
+                  "type": "array",
+                  "items": {
+                    "id": "http://localhost/cc-calculator/calculate/employer-supported-childcare/payload/eligibility/esc/periods/0",
+                    "type": "object",
+                    "properties": {
+                      "from": {
+                        "id": "http://localhost/cc-calculator/calculate/employer-supported-childcare/payload/eligibility/esc/periods/0/from",
+                        "type": "string"
+                      },
+                      "until": {
+                        "id": "http://localhost/cc-calculator/calculate/employer-supported-childcare/payload/eligibility/esc/periods/0/until",
+                        "type": "string"
+                      },
+                      "children": {
+                        "id": "http://localhost/cc-calculator/calculate/employer-supported-childcare/payload/eligibility/esc/periods/0/children",
+                        "type": "array",
+                        "items": {
+                          "id": "http://localhost/cc-calculator/calculate/employer-supported-childcare/payload/eligibility/esc/periods/0/children/0",
+                          "type": "object",
+                          "properties": {
+                            "qualifying": {
+                              "id": "http://localhost/cc-calculator/calculate/employer-supported-childcare/payload/eligibility/esc/periods/0/children/0/qualifying",
+                              "type": "boolean"
+                            },
+                            "name": {
+                              "id": "http://localhost/cc-calculator/calculate/employer-supported-childcare/payload/eligibility/esc/periods/0/children/0/name",
+                              "type": "string"
+                            },
+                            "date_of_birth": {
+                              "id": "http://localhost/cc-calculator/calculate/employer-supported-childcare/payload/eligibility/esc/periods/0/children/0/date_of_birth",
+                              "type": "string"
+                            },
+                            "failures": {
+                              "id": "http://localhost/cc-calculator/calculate/employer-supported-childcare/payload/eligibility/esc/periods/0/children/0/failures",
+                              "type": "array",
+                              "items": {
+                                "id": "http://localhost/cc-calculator/calculate/employer-supported-childcare/payload/eligibility/esc/periods/0/children/0/failures/0",
+                                "type": "string"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "publicKey",
+    "payload"
+  ]
+}

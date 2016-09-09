@@ -1,0 +1,42 @@
+{
+  "payload": {
+    "eligibility": {
+      "esc": {
+        "taxYears": [
+          {
+            "startDate": "2016-04-06",
+            "endDate": "2017-04-06",
+            "periods": [
+              {
+                "from": "2016-04-06",
+                "until": "2017-04-06",
+                "claimants": [
+                  {
+                    "qualifying": true,
+                    "isPartner": false,
+                    "eligibleMonthsInPeriod": 1,
+                    "income": {
+                      "taxablePay": 20000.00,
+                      "gross": 20000.00,
+                      "taxCode": "1060L",
+                      "niCategory": "A"
+                    },
+                    "elements": {
+                      "vouchers": true
+                    },
+                    "escAmount": 242.00,
+                    "escAmountPeriod": "Month",
+                    "escStartDate": "2010-08-27",
+                    "failures": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "tc": null,
+      "tfc": null
+    }
+  }
+}

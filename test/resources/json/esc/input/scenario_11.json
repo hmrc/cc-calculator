@@ -1,0 +1,42 @@
+{
+  "payload": {
+    "eligibility": {
+      "esc": {
+        "taxYears": [
+          {
+            "startDate": "2016-04-06",
+            "endDate": "2017-04-06",
+            "periods": [
+              {
+                "from": "2016-04-06",
+                "until": "2017-04-06",
+                "claimants": [
+                  {
+                    "qualifying": false,
+                    "isPartner": false,
+                    "eligibleMonthsInPeriod": 0,
+                    "income": {
+                      "taxablePay": 150001.00,
+                      "gross": 150001.00,
+                      "taxCode": "1100L",
+                      "niCategory": "A"
+                    },
+                    "elements": {
+                      "vouchers": false
+                    },
+                    "escAmount": 1000.00,
+                    "escAmountPeriod": "Month",
+                    "escStartDate": "2013-08-27",
+                    "failures": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "tc": null,
+      "tfc": null
+    }
+  }
+}

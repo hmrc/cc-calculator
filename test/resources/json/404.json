@@ -1,0 +1,19 @@
+{
+  "success": false,
+  "publicKey": "12345567",
+  "payload": {
+    "claimDate": "2015-08-27",
+    "data": {
+      "claimants": [
+      ],
+      "children": [
+      ]
+    },
+    "eligibility": {
+    }
+  },
+  "error": {
+    "code": 404,
+    "message": "An error occurred"
+  }
+}
