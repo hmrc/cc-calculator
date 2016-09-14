@@ -237,3 +237,8 @@ The service will accept a JSON request formatted according to Eligibility Micros
         "error": "Something bad happened"
     }
     ```
+
+License
+---
+
+This code is open source software licensed under the [Apache 2.0 License]("http://www.apache.org/licenses/LICENSE-2.0.html").
