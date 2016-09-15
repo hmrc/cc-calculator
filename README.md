@@ -7,10 +7,6 @@
 
 This is a placeholder README.md for a new repository
 
-### License
-
-This code is open source software licensed under the [Apache 2.0 License]("http://www.apache.org/licenses/LICENSE-2.0.html").
-
 Childcare Calculator microservice calculates actual childcare costs per different scheme (Tax Credits, Employer Supported Childcare and Tax Free Childcare).
 
 Microservice consists of 3 different parts, each having separate endpoints and a different input/output structure.
