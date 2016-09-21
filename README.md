@@ -1,6 +1,3 @@
-**CC Calculator**
-----
-
 # cc-calculator
 
 [![Build Status](https://travis-ci.org/hmrc/cc-calculator.svg?branch=master)](https://travis-ci.org/hmrc/cc-calculator) [ ![Download](https://api.bintray.com/packages/hmrc/releases/cc-calculator/images/download.svg) ](https://bintray.com/hmrc/releases/cc-calculator/_latestVersion)
@@ -25,7 +22,7 @@ The service will accept a JSON request formatted according to Eligibility Micros
 
   * **CC Calculator:** 9372
 
-* **API Documentation per each service:**
+* **API Documentation for each service:**
 
     * **[Tax Credits Calculation](/README_TC.md)**
     * **[Employer Supported Childcare Calculation](/README_ESC.md)**

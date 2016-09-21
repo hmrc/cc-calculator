@@ -1,5 +1,4 @@
-**ESC Calculator**
-----
+# ESC Calculator
 
 Employer Supported Childcare Calculator accepts Eligibility Microservice's output result with additional fields added for calculation.
 
