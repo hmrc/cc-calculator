@@ -39,7 +39,6 @@ trait TFCCalculator extends CCCalculator {
     import scala.concurrent.ExecutionContext.Implicits.global
 
     def getHouseholdContribution(periods: List[TFCPeriod]) : Contribution = {
-      Logger.debug(s"TFCCalculator.TFCCalculatorService.getHouseholdContribution")
       val householdTotalParentContribution: BigDecimal = periods.foldLeft(BigDecimal(0.00))((acc, TFCPeriod) => acc + TFCPeriod.periodContribution.parent)
       val householdTotalGovernmentContribution: BigDecimal = periods.foldLeft(BigDecimal(0.00))((acc, TFCPeriod) => acc + TFCPeriod.periodContribution.government)
       val householdTotalChildcareSpend: BigDecimal = periods.foldLeft(BigDecimal(0.00))((acc, TFCPeriod) => acc + TFCPeriod.periodContribution.totalChildCareSpend)
@@ -53,18 +52,24 @@ trait TFCCalculator extends CCCalculator {
 
 
     def getChildQualifyingDaysInTFCPeriod(from: Option[LocalDate], until: Option[LocalDate]) = {
-      Logger.debug(s"TFCCalculator.TFCCalculatorService.getChildQualifyingDaysInTFCPeriod")
       (from, until) match {
-        case (null, Some(u)) =>  throw new IllegalArgumentException(Messages("cc.scheme.config.from.date"))
-        case (Some(f), null) =>   throw new IllegalArgumentException(Messages("cc.scheme.config.until.date"))
-        case (null,null) => throw new IllegalArgumentException(Messages("cc.scheme.config.from.until.date"))
+        case (null, Some(u)) =>
+          Logger.warn("TFCCalculator.TFCCalculatorService.getChildQualifyingDaysInTFCPeriod Exception - from date is null")
+          throw new IllegalArgumentException(Messages("cc.scheme.config.from.date"))
+        case (Some(f), null) =>
+          Logger.warn("TFCCalculator.TFCCalculatorService.getChildQualifyingDaysInTFCPeriod Exception - until date is null")
+          throw new IllegalArgumentException(Messages("cc.scheme.config.until.date"))
+        case (null,null) =>
+          Logger.warn("TFCCalculator.TFCCalculatorService.getChildQualifyingDaysInTFCPeriod Exception - from and until dates are null")
+          throw new IllegalArgumentException(Messages("cc.scheme.config.from.until.date"))
         case (Some(f), Some(u)) => daysBetween(f,u)
-        case (_, _) => throw new IllegalArgumentException
+        case (_, _) =>
+          Logger.warn("TFCCalculator.TFCCalculatorService.getChildQualifyingDaysInTFCPeriod Exception - from and until dates are incorrect")
+          throw new IllegalArgumentException
       }
     }
 
     def getMaximumTopup(child : models.input.tfc.Child, tfcTaxYearConfig : TFCTaxYearConfig): BigDecimal = {
-      Logger.debug(s"TFCCalculator.TFCCalculatorService.getMaximumTopup")
       val maximumTopupConfig = child.getChildDisability match {
         case true => tfcTaxYearConfig.maxGovtContributionForDisabled
         case _ => tfcTaxYearConfig.maxGovtContribution
@@ -78,7 +83,6 @@ trait TFCCalculator extends CCCalculator {
     }
 
     def getCalculatedTFCPeriods(periods: List[models.input.tfc.TFCPeriod]): List[TFCPeriod] = {
-      Logger.debug(s"TFCCalculator.TFCCalculatorService.getCalculatedTFCPeriods")
       val calculatedPeriod = for (period <- periods) yield {
         val outputChildren = getOutputChildren(period)
         val outputPeriod = getPeriodContribution(outputChildren)
@@ -94,7 +98,6 @@ trait TFCCalculator extends CCCalculator {
     }
 
     def getPeriodContribution(Children : List[OutputChild]) : Contribution = {
-      Logger.debug(s"TFCCalculator.TFCCalculatorService.getPeriodContribution")
       val periodParentContribution: BigDecimal = Children.foldLeft(BigDecimal(0.00))((acc, child) => acc + child.childContribution.parent)
       val periodGovernmentContribution: BigDecimal = Children.foldLeft(BigDecimal(0.00))((acc, child) => acc + child.childContribution.government)
       val periodTotalChildcareSpend: BigDecimal = Children.foldLeft(BigDecimal(0.00))((acc, child) => acc + child.childContribution.totalChildCareSpend)
@@ -107,7 +110,6 @@ trait TFCCalculator extends CCCalculator {
     }
 
     def getOutputChildren(period: models.input.tfc.TFCPeriod): List[OutputChild] = {
-      Logger.debug(s"TFCCalculator.TFCCalculatorService.getOutputChildren")
       val outputChild = for(child <- period.children) yield {
         OutputChild(
           id = child.id,
@@ -122,7 +124,6 @@ trait TFCCalculator extends CCCalculator {
     }
 
     def getChildContribution(child : Child, tfcTaxYearConfig: TFCTaxYearConfig, noOfDaysInAPeriod : Int) : Contribution = {
-      Logger.debug(s"TFCCalculator.TFCCalculatorService.getChildContribution")
       val totalChildCareSpend  = getChildCareCostForPeriod(child)
 
       val governmentContribution : BigDecimal = {
@@ -148,7 +149,6 @@ trait TFCCalculator extends CCCalculator {
      def getTopUpPercentForChildCareCost(child : Child, tfcTaxYearConfig: TFCTaxYearConfig) = ((tfcTaxYearConfig.topUpPercent * getChildCareCostForPeriod(child))/100)
 
     override def award(request : Request) : Future[AwardPeriod] = {
-      Logger.debug(s"TFCCalculator.TFCCalculatorService.award")
       def getTFCCalculation(eligibility: TFCEligibility): TFCCalculation = {
 
         TFCCalculation(

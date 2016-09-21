@@ -26,7 +26,6 @@ object JSONFactory extends JSONFactory
 trait JSONFactory {
 
   def generateErrorJSON(status: Int, errors: Either[Seq[(JsPath, Seq[ValidationError])], Exception]): JsObject = {
-    Logger.debug(s"JSONFactory.generateErrorJSON")
     errors match {
       case Left(e) =>
         val errorsSequence = errorBuilder(e)
@@ -37,12 +36,10 @@ trait JSONFactory {
   }
 
   def generateResultJson(response : AwardPeriod): JsObject = {
-    Logger.debug(s"JSONFactory.generateResultJson")
     Json.obj("calculation" -> Json.toJson[AwardPeriod](response))
   }
 
   def errorBuilder(errors: Seq[(JsPath, Seq[ValidationError])]): JsArray = {
-    Logger.debug(s"JSONFactory.errorBuilder")
     errors.nonEmpty match {
       case true => {
         JsArray(
@@ -64,7 +61,9 @@ trait JSONFactory {
           }
         )
       }
-      case false => JsArray(Seq(JsString("Error while generating JSON response")))
+      case false =>
+        Logger.warn("JSONFactory.errorBuilder - Error while generating JSON response")
+        JsArray(Seq(JsString("Error while generating JSON response")))
     }
   }
 

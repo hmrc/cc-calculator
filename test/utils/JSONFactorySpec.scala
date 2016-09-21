@@ -25,7 +25,6 @@ import models.output.OutputAPIModel.AwardPeriod
 import models.output.tc.TCCalculation
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
-import play.api.Logger
 import play.api.data.validation.ValidationError
 import play.api.libs.json._
 import uk.gov.hmrc.play.test.UnitSpec
@@ -125,9 +124,7 @@ class JSONFactorySpec extends UnitSpec with FakeCCCalculatorApplication {
           |}
         """.stripMargin)
 
-      Logger.debug(outputJson.toString())
       val result = utils.JSONFactory.generateResultJson(response)
-      Logger.debug(result.toString())
       result shouldBe outputJson
     }
 

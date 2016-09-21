@@ -41,7 +41,6 @@ trait TCCalculator extends CCCalculator {
     this: TCCalculatorService =>
 
     protected def getPeriodAmount(period: models.output.tc.Period, amount : BigDecimal = 0.00, fullCalculationRequired: Boolean) : models.output.tc.Period = {
-      Logger.debug(s"TCCalculator.TCCalculatorTapering.getPeriodAmount")
       models.output.tc.Period(
         from = period.from,
         until = period.until,
@@ -78,7 +77,6 @@ trait TCCalculator extends CCCalculator {
     }
 
     def netAmountPerElementPerPeriod(taperAmount: BigDecimal, maximumAmountPerElement: BigDecimal) : BigDecimal = {
-      Logger.debug(s"TCCalculator.TCCalculatorTapering.netAmountPerElementPerPeriod")
       if (taperAmount.>(maximumAmountPerElement)) {
         //WTC work element is nil and further taper is required
         BigDecimal(0.00)
@@ -89,12 +87,10 @@ trait TCCalculator extends CCCalculator {
     }
 
     def isTaperingRequiredForElements(income: BigDecimal, threshold: BigDecimal) : Boolean = {
-      Logger.debug(s"TCCalculator.TCCalculatorTapering.isTaperingRequiredForElements")
       income > threshold
     }
 
     def getHigherAmount(amount1: BigDecimal, amount2: BigDecimal) = {
-      Logger.debug(s"TCCalculator.TCCalculatorTapering.getHigherAmount")
       if (amount1.>=(amount2))
         amount1
       else
@@ -103,42 +99,33 @@ trait TCCalculator extends CCCalculator {
 
     //In order to maintain consistency across TC logic the amount is truncated to 3 digits after decimal point and rounded up to the nearest pence
     def earningsAmountToTaperForPeriod(income: BigDecimal, thresholdIncome: BigDecimal, period: Period) : BigDecimal = {
-      Logger.debug(s"TCCalculator.TCCalculatorTapering.earningsAmountToTaperForPeriod")
       val taperRate = period.config.thresholds.taperRatePercent
       val rawResult = (income - thresholdIncome) * (taperRate / BigDecimal(100.00))
       round(roundDownToThreeDigits(rawResult))
     }
 
     def getPercentOfAmount(amount : BigDecimal, percentage : Int) : BigDecimal = {
-      Logger.debug(s"TCCalculator.TCCalculatorTapering.getPercentOfAmount")
       (amount / 100) * percentage
     }
 
     def wtcIncomeThresholdForPeriod(period : Period) : BigDecimal = {
-      Logger.debug(s"TCCalculator.TCCalculatorTapering.wtcIncomeThresholdForPeriod - Begin")
       val thresholdConfig = period.config.thresholds.wtcIncomeThreshold
       val thresholdForPeriod = amountForDateRange(thresholdConfig, Periods.Yearly, period.from, period.until)
-      Logger.debug(s"TCCalculator.TCCalculatorTapering.wtcIncomeThresholdForPeriod - End")
       thresholdForPeriod
     }
 
     def ctcIncomeThresholdForPeriod(period : Period) : BigDecimal = {
-      Logger.debug(s"TCCalculator.TCCalculatorTapering.ctcIncomeThresholdForPeriod - Begin")
       val thresholdConfig = period.config.thresholds.ctcIncomeThreshold
       val thresholdForPeriod = amountForDateRange(thresholdConfig, Periods.Yearly, period.from, period.until)
-      Logger.debug(s"TCCalculator.TCCalculatorTapering.ctcIncomeThresholdForPeriod - End")
       thresholdForPeriod
     }
 
     def incomeForPeriod(previousHouseHoldIncome : BigDecimal, period : Period) : BigDecimal = {
-      Logger.debug(s"TCCalculator.TCCalculatorTapering.incomeForPeriod - Begin")
       val incomeForPeriod = amountForDateRange(previousHouseHoldIncome, Periods.Yearly, period.from, period.until)
-      Logger.debug(s"TCCalculator.TCCalculatorTapering.incomeForPeriod - End")
       incomeForPeriod
     }
 
     def taperFirstElement(period: models.output.tc.Period, inputPeriod: models.input.tc.Period, income: BigDecimal, wtcIncomeThreshold: BigDecimal): models.output.tc.Period = {
-      Logger.debug(s"TCCalculator.TCCalculatorTapering.taperFirstElement")
       val wtcWorkElementMaxAmount = period.elements.wtcWorkElement.maximumAmount
       val firstTaperThreshold = earningsAmountToTaperForPeriod(income, wtcIncomeThreshold, inputPeriod)
       val wtcWorkNetAmount = netAmountPerElementPerPeriod(firstTaperThreshold, wtcWorkElementMaxAmount)
@@ -167,7 +154,6 @@ trait TCCalculator extends CCCalculator {
     }
 
     def taperSecondElement(period: models.output.tc.Period, inputPeriod: models.input.tc.Period, income: BigDecimal, wtcIncomeThreshold: BigDecimal): models.output.tc.Period = {
-      Logger.debug(s"TCCalculator.TCCalculatorTapering.taperSecondElement")
       val secondTaperAmount = earningsAmountToTaperForPeriod(income, wtcIncomeThreshold, inputPeriod)
       val secondTaperThreshold = secondTaperAmount - period.elements.wtcWorkElement.maximumAmount
       val wtcChildcareNetAmount = netAmountPerElementPerPeriod(secondTaperThreshold, period.elements.wtcChildcareElement.maximumAmount)
@@ -205,7 +191,6 @@ trait TCCalculator extends CCCalculator {
     }
 
     def taperThirdElement(period: models.output.tc.Period, inputPeriod: models.input.tc.Period, income: BigDecimal, wtcIncomeThreshold: BigDecimal, ctcIncomeThreshold: BigDecimal): (models.output.tc.Period, Boolean) = {
-      Logger.debug(s"TCCalculator.TCCalculatorTapering.taperThirdElement")
       val taperRate = inputPeriod.config.thresholds.taperRatePercent
       val calculatedCTCThreshold = ((period.elements.wtcWorkElement.maximumAmount + period.elements.wtcChildcareElement.maximumAmount) / taperRate * 100) + wtcIncomeThreshold
       val roundedCalculatedCTCThreshold = round(roundDownToThreeDigits(calculatedCTCThreshold))
@@ -272,7 +257,6 @@ trait TCCalculator extends CCCalculator {
     }
 
     def taperFourthElement(period: models.output.tc.Period, inputPeriod: models.input.tc.Period, income: BigDecimal, wtcIncomeThreshold: BigDecimal, ctcIncomeThreshold: BigDecimal, continue: Boolean = false): models.output.tc.Period = {
-      Logger.debug(s"TCCalculator.TCCalculatorTapering.taperFourthElement")
       if (continue) {
         val taperRate = inputPeriod.config.thresholds.taperRatePercent
         val incomeToTaperElementsNil = (period.elements.wtcWorkElement.maximumAmount + period.elements.wtcChildcareElement.maximumAmount + period.elements.ctcIndividualElement.maximumAmount) / taperRate * 100 + wtcIncomeThreshold
@@ -336,7 +320,6 @@ trait TCCalculator extends CCCalculator {
     this : TCCalculatorService  =>
 
     def basicElementForPeriod(period: Period): (Boolean, BigDecimal) = {
-      Logger.debug(s"TCCalculator.TCCalculatorElements.basicElementForPeriod")
       if (period.householdElements.basic) {
         val basicElement = period.config.wtc.basicElement
         val basicElementForPeriod = amountForDateRange(basicElement, Periods.Yearly, period.from, period.until)
@@ -347,7 +330,6 @@ trait TCCalculator extends CCCalculator {
     }
 
     def hours30ElementForPeriod(period: Period): (Boolean, BigDecimal) = {
-      Logger.debug(s"TCCalculator.TCCalculatorElements.hours30ElementForPeriod")
       if (period.householdElements.hours30) {
         val hours30Element = period.config.wtc.hours30Element
         val hours30ElementForPeriod = amountForDateRange(hours30Element, Periods.Yearly, period.from, period.until)
@@ -358,7 +340,6 @@ trait TCCalculator extends CCCalculator {
     }
 
     def loneParentElementForPeriod(period: Period): (Boolean, BigDecimal) = {
-      Logger.debug(s"TCCalculator.TCCalculatorElements.loneParentElementForPeriod")
       if (period.householdElements.loneParent) {
         val loneParentElementMaximumAmount = period.config.wtc.loneParentElement
         val maximumAmountForDays = amountForDateRange(loneParentElementMaximumAmount, Periods.Yearly, period.from, period.until)
@@ -369,7 +350,6 @@ trait TCCalculator extends CCCalculator {
     }
 
     def secondAdultElementForPeriod(period: Period): (Boolean, BigDecimal) = {
-      Logger.debug(s"TCCalculator.TCCalculatorElements.secondAdultElementForPeriod")
       if (period.householdElements.secondParent) {
         val coupleElementMaximumAmount = period.config.wtc.coupleElement
         val maximumAmountForDays = amountForDateRange(coupleElementMaximumAmount, Periods.Yearly, period.from, period.until)
@@ -380,7 +360,6 @@ trait TCCalculator extends CCCalculator {
     }
 
     def maxFamilyElementForPeriod(period: Period): (Boolean, BigDecimal) = {
-      Logger.debug(s"TCCalculator.TCCalculatorElements.maxFamilyElementForPeriod")
       if (period.householdElements.family) {
         val familyElementMaximumAmount = period.config.ctc.familyElement
         val maximumAmountForDays = amountForDateRange(familyElementMaximumAmount, Periods.Yearly, period.from, period.until)
@@ -391,7 +370,6 @@ trait TCCalculator extends CCCalculator {
     }
 
     def disabledWorkerElementForPeriod(period: Period, claimant: Claimant): (Boolean, BigDecimal) = {
-      Logger.debug(s"TCCalculator.TCCalculatorElements.disabledWorkerElementForPeriod")
       val element = claimant.getsDisabilityElement
       if (element) {
         val disabledWorkerElement = period.config.wtc.disabledWorkerElement
@@ -403,7 +381,6 @@ trait TCCalculator extends CCCalculator {
     }
 
     def severelyDisabledWorkerElementForPeriod(period: Period, claimant: Claimant): (Boolean, BigDecimal) = {
-      Logger.debug(s"TCCalculator.TCCalculatorElements.severelyDisabledWorkerElementForPeriod")
       val element = claimant.getsSevereDisabilityElement
       if (element) {
         val severeDisabilityWorkerElement = period.config.wtc.severeDisabilityWorkerElement
@@ -415,7 +392,6 @@ trait TCCalculator extends CCCalculator {
     }
 
     def childOrYoungAdultBasicElementForPeriod(period: Period, child: Child): (Boolean, BigDecimal) = {
-      Logger.debug(s"TCCalculator.TCCalculatorElements.childOrYoungAdultBasicElementForPeriod")
       val element = child.isQualifyingCTC
       if (element) {
         val childElementMaximumAmount = period.config.ctc.childElement
@@ -427,7 +403,6 @@ trait TCCalculator extends CCCalculator {
     }
 
     def childOrYoungAdultDisabilityElementForPeriod(period: Period, child: Child): (Boolean, BigDecimal) = {
-      Logger.debug(s"TCCalculator.TCCalculatorElements.childOrYoungAdultDisabilityElementForPeriod")
       val element = child.getsDisabilityElement
       if (element) {
         val maximumAmount = period.config.ctc.disabledChildElement
@@ -439,7 +414,6 @@ trait TCCalculator extends CCCalculator {
     }
 
     def childOrYoungAdultSevereDisabilityElementForPeriod(period: Period, child: Child): (Boolean, BigDecimal) = {
-      Logger.debug(s"TCCalculator.TCCalculatorElements.childOrYoungAdultSevereDisabilityElementForPeriod")
       val element = child.getsSevereDisabilityElement
       if (element) {
         val maximumAmount = period.config.ctc.severeDisabilityChildElement
@@ -451,7 +425,6 @@ trait TCCalculator extends CCCalculator {
     }
 
     def maxChildElementForPeriod(period: Period): (Boolean, BigDecimal) = {
-      Logger.debug(s"TCCalculator.TCCalculatorElements.maxChildElementForPeriod")
       period.children match {
         case head :: tail =>
           // get an amount List[(Boolean, BigDecimal)] for each child (including disability and severe if it applies)
@@ -471,7 +444,6 @@ trait TCCalculator extends CCCalculator {
     }
 
     private def claimantWorkElementsForPeriod(houseHoldElement: HouseHoldElements): Boolean = {
-      Logger.debug(s"TCCalculator.TCCalculatorElements.claimantWorkElementsForPeriod")
       val loneOrSecond = (houseHoldElement.basic, houseHoldElement.hours30, houseHoldElement.loneParent, houseHoldElement.secondParent)
       loneOrSecond match {
         case (hh, ho, false, true) =>
@@ -485,7 +457,6 @@ trait TCCalculator extends CCCalculator {
     }
 
     def maxWorkElementForPeriod(period: Period): (Boolean, BigDecimal) = {
-      Logger.debug(s"TCCalculator.TCCalculatorElements.maxWorkElementForPeriod")
       val basic = basicElementForPeriod(period)
       val hours30 = hours30ElementForPeriod(period)
       val loneParent = loneParentElementForPeriod(period)
@@ -506,7 +477,6 @@ trait TCCalculator extends CCCalculator {
     }
 
     protected def getChildcareThresholdPerWeek(period: models.input.tc.Period) : BigDecimal = {
-      Logger.debug(s"TCCalculator.TCCalculatorElements.getChildcareThresholdPerWeek")
       if (period.children.length > 1) {
         val threshold = period.config.wtc.maxChildcareMoreChildrenElement
         threshold
@@ -519,7 +489,6 @@ trait TCCalculator extends CCCalculator {
     }
 
     private def getTotalChildcarePerWeek(period: Period) = {
-      Logger.debug(s"TCCalculator.TCCalculatorElements.getTotalChildcarePerWeek - Begin")
       val amountPerWeek = period.children.foldLeft(BigDecimal(0.00)) {
         (acc, child) =>
           if (child.isQualifyingWTC) {
@@ -531,12 +500,10 @@ trait TCCalculator extends CCCalculator {
             acc
           }
       }
-      Logger.debug(s"TCCalculator.TCCalculatorElements.getTotalChildcarePerWeek - End")
       roundDownToThreeDigits(amountPerWeek)
     }
 
     def maxChildcareElementForPeriod(period: Period) : (Boolean, BigDecimal) = {
-      Logger.debug(s"TCCalculator.TCCalculatorElements.maxChildcareElementForPeriod")
 
       val totalCostPerWeek = getTotalChildcarePerWeek(period)
       val totalCostPerWeekRounded = roundToPound(totalCostPerWeek)
@@ -558,7 +525,6 @@ trait TCCalculator extends CCCalculator {
     }
 
     def generateMaximumAmountsForPeriod(period: Period) = {
-      Logger.debug(s"TCCalculator.TCCalculatorElements.generateMaximumAmountsForPeriod")
       val childElement = maxChildElementForPeriod(period)
       val familyElement = maxFamilyElementForPeriod(period)
       val childcareElement = maxChildcareElementForPeriod(period)
@@ -604,7 +570,6 @@ trait TCCalculator extends CCCalculator {
     override def roundToPound(value : BigDecimal) = value.setScale(0, RoundingMode.UP)
 
     def amountFromPeriodToDaily(cost: BigDecimal, fromPeriod: Periods.Period, daysInTheYear : Int): BigDecimal = {
-      Logger.debug(s"TCCalculator.TCCalculatorHelpers.amountFromPeriodToDaily - Begin")
       val amount : BigDecimal = fromPeriod match {
         case Periods.Weekly => (cost * 52) / daysInTheYear
         case Periods.Fortnightly => (cost * 26) / daysInTheYear
@@ -613,12 +578,10 @@ trait TCCalculator extends CCCalculator {
         case Periods.Yearly => cost / daysInTheYear
         case _ => 0.00 //error
       }
-      Logger.debug(s"TCCalculator.TCCalculatorHelpers.amountFromPeriodToDaily - End")
       amount
     }
 
     def amountForDateRange(cost: BigDecimal, period: Periods.Period, fromDate: LocalDate, toDate: LocalDate, rounded : Boolean = true, truncated : Boolean = true) = {
-      Logger.debug(s"TCCalculator.TCCalculatorHelpers.amountForDateRange")
       if (fromDate.isBefore(toDate)) {
         //determines if the tax year falls in a leap year and uses 366 days instead of 365 in calculation
         val taxYearDates = TCConfig.getCurrentTaxYearDateRange(fromDate)
@@ -652,12 +615,10 @@ trait TCCalculator extends CCCalculator {
     }
 
     def getTotalMaximumAmountPerPeriod(period :models.output.tc.Period) : BigDecimal = {
-      Logger.debug(s"TCCalculator.TCCalculatorHelpers.getTotalMaximumAmountPerPeriod")
       period.elements.wtcWorkElement.maximumAmount + period.elements.wtcChildcareElement.maximumAmount + period.elements.ctcIndividualElement.maximumAmount + period.elements.ctcFamilyElement.maximumAmount
     }
 
     def determineTaxYearToProRata(taxYears : List[models.output.tc.TaxYear], proRataEndDate : LocalDate) : (Boolean, Option[models.output.tc.TaxYear]) = {
-      Logger.debug(s"TCCalculator.TCCalculatorHelpers.determineTaxYearToProRata - Begin")
       val result = for (ty <- taxYears) yield {
         if (proRataEndDate.toDate.after(ty.from.toDate) && proRataEndDate.toDate.before(ty.until.toDate)) {
           (true, Some(ty))
@@ -667,12 +628,10 @@ trait TCCalculator extends CCCalculator {
       }
 
       val filtered = if (result.exists(c => c._2.isDefined)) result.filter(x => x._2.isDefined) else result
-      Logger.debug(s"TCCalculator.TCCalculatorHelpers.determineTaxYearToProRata - End")
       filtered.head
     }
 
     def proRataTaxYear(taxYear : models.output.tc.TaxYear, proRataStartDate : LocalDate, proRataEndDate : LocalDate) : models.output.tc.TaxYear = {
-      Logger.debug(s"TCCalculator.TCCalculatorHelpers.proRataTaxYear")
 
       val numberOfDaysInTaxYear = daysBetween(taxYear.from, taxYear.until)
       val numberofDaysProRata = daysBetween(proRataStartDate, proRataEndDate)
@@ -696,7 +655,6 @@ trait TCCalculator extends CCCalculator {
     }
 
     def adjustAwardWithProRata(award : TCCalculation, proRataTaxYear: models.output.tc.TaxYear) : models.output.tc.TCCalculation = {
-      Logger.debug(s"TCCalculator.TCCalculatorHelpers.adjustAwardWithProRata - Begin")
       val taxYears = for(ty <- award.taxYears) yield {
         if (proRataTaxYear.from == ty.from) {
           proRataTaxYear
@@ -710,7 +668,6 @@ trait TCCalculator extends CCCalculator {
 
       // copy the original calculation swapping out the tax year that has been pro-ratard and adjusting the total calculation value
       val result = award.copy(proRataEnd = proRataTaxYear.proRataEnd, totalAwardProRataAmount = proRataTotalAward, totalHouseHoldAdviceProRataAmount = proRataTotalAdvice, taxYears = taxYears)
-      Logger.debug(s"TCCalculator.TCCalculatorHelpers.adjustAwardWithProRata - End")
       result
     }
   }
@@ -723,18 +680,15 @@ trait TCCalculator extends CCCalculator {
     //reverse taper rate is truncated to 3 decimal places
     //currently using just WTC threshold to calculate advice
     def getAdviceCalculationRounded(totalAmount : BigDecimal, wtcIncomeThreshold : BigDecimal, period: models.input.tc.Period) : BigDecimal = {
-      Logger.debug(s"TCCalculator.TCCalculatorService.getAdviceCalculationRounded - Begin")
 
       val taperPercentage = period.config.thresholds.taperRatePercent
       val reverseTaperRate = BigDecimal(100.00) / BigDecimal(taperPercentage)
       val reverseTaperRateRounded = roundDownToThreeDigits(reverseTaperRate)
       val adviceAmount= round((reverseTaperRateRounded * totalAmount) + wtcIncomeThreshold)
-      Logger.debug(s"TCCalculator.TCCalculatorService.getAdviceCalculationRounded - End")
       adviceAmount
     }
 
     def generateRequiredAmountsPerPeriod(period : models.output.tc.Period, inputPeriod: models.input.tc.Period, income : BigDecimal, wtcIncomeThreshold: BigDecimal, ctcIncomeThreshold: BigDecimal, fullCalculationRequired : Boolean = true) : models.output.tc.Period = {
-      Logger.debug(s"TCCalculator.TCCalculatorService.generateRequiredAmountsPerPeriod")
       val totalMaximumAmount = getTotalMaximumAmountPerPeriod(period)
 
       if(fullCalculationRequired){
@@ -770,7 +724,6 @@ trait TCCalculator extends CCCalculator {
     }
 
     def getCalculatedPeriods(taxYear : models.input.tc.TaxYear, previousHouseholdIncome : BigDecimal, fullCalculationRequired : Boolean = true) : List[models.output.tc.Period] = {
-      Logger.debug(s"TCCalculator.TCCalculatorService.getCalculatedPeriods - Begin")
       val periods = taxYear.periods
       val calculatedPeriods = for (period <- periods) yield {
         // get all the elements for the period (pro-rota to the number of days) for each household composition
@@ -784,12 +737,10 @@ trait TCCalculator extends CCCalculator {
         //calculate the net due for period
         amountForElements
       }
-      Logger.debug(s"TCCalculator.TCCalculatorService.getCalculatedPeriods - End")
       calculatedPeriods
     }
 
     def getCalculatedTaxYears(inputTCEligibility: TCEligibility, incomeAdviceCalculation: Boolean = false): List[TaxYear] = {
-      Logger.debug(s"TCCalculator.TCCalculatorService.getCalculatedTaxYears - Begin")
       val taxYears = inputTCEligibility.taxYears
 
       val calculatedTaxYears = for (taxYear <- taxYears) yield {
@@ -817,14 +768,12 @@ trait TCCalculator extends CCCalculator {
           )
         }
       }
-      Logger.debug(s"TCCalculator.TCCalculatorService.getCalculatedTaxYears - End")
       calculatedTaxYears
     }
 
     override def award(request : Request) : Future[models.output.OutputAPIModel.AwardPeriod] = {
 
       def createTCCalculation(calculatedTaxYears : List[TaxYear], annualAward: BigDecimal) = {
-        Logger.debug(s"TCCalculator.TCCalculatorService.award.createTCCalculation")
         TCCalculation(
           from = calculatedTaxYears.head.from,
           until = {
@@ -840,7 +789,6 @@ trait TCCalculator extends CCCalculator {
       }
 
       def annualAward(taxYears : List[TaxYear]) : BigDecimal = {
-        Logger.debug(s"TCCalculator.TCCalculatorService.award.annualAward")
         taxYears.foldLeft(BigDecimal(0.00))((acc, taxYear) => acc + taxYear.taxYearAwardAmount)
       }
 
@@ -866,6 +814,7 @@ trait TCCalculator extends CCCalculator {
                 )
             }
           case Failure(e) =>
+            Logger.warn(s"TCCalculator.TCCalculatorService.award.annualAward - Exception")
             AwardPeriod()
         }
       }
@@ -874,7 +823,6 @@ trait TCCalculator extends CCCalculator {
     def incomeAdvice(request : Request) : Future[models.output.OutputAPIModel.AwardPeriod] = {
 
       def createTCCalculation(calculatedTaxYears : List[TaxYear], annualAdvice: BigDecimal) = {
-        Logger.debug(s"TCCalculator.TCCalculatorService.incomeAdvice.createTCCalculation")
         TCCalculation(
           from = calculatedTaxYears.head.from,
           until = {
@@ -890,7 +838,6 @@ trait TCCalculator extends CCCalculator {
       }
 
       def annualAdvice(taxYears : List[TaxYear]) : BigDecimal = {
-        Logger.debug(s"TCCalculator.TCCalculatorService.incomeAdvice.annualAdvice")
         taxYears.foldLeft(BigDecimal(0.00))((acc, taxYear) => acc + taxYear.taxYearAdviceAmount)
       }
 

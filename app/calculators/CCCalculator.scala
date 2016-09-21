@@ -73,7 +73,6 @@ trait CCCalculator {
     def roundDownToThreeDigits(value : BigDecimal) = value.setScale(3, RoundingMode.DOWN)
 
     def verifyPenceDifference(amount: BigDecimal, originalSpend: BigDecimal) : (BigDecimal, Boolean) = {
-      Logger.debug(s"CCCalculator.CCCalculatorService.verifyPenceDifference")
 
       if (amount > originalSpend) {
         val difference: BigDecimal = amount - originalSpend
@@ -89,13 +88,11 @@ trait CCCalculator {
     }
 
     def reduceBy1Pence(amount: BigDecimal): BigDecimal = {
-      Logger.debug(s"CCCalculator.CCCalculatorService.reduceBy1Pence")
       amount - BigDecimal(0.01)
     }
 
     // normalise the monetary amount per quarter quarter
     def amountToQuarterlyAmount(cost: BigDecimal, fromPeriod: Periods.Period): BigDecimal = {
-      Logger.debug(s"CCCalculator.CCCalculatorService.amountToQuarterlyAmount")
       val amount : BigDecimal = fromPeriod match {
         case Periods.Weekly => (cost * 52) / 4
         case Periods.Fortnightly => (cost * 26) / 4
@@ -109,7 +106,6 @@ trait CCCalculator {
 
 
     def amountToWeeklyAmount(cost: BigDecimal, fromPeriod : Periods.Period) : BigDecimal = {
-      Logger.debug(s"CCCalculator.CCCalculatorService.amountToWeeklyAmount")
       val amount : BigDecimal = fromPeriod match {
         case Periods.Weekly => cost
         case Periods.Fortnightly => cost / 2
@@ -122,7 +118,6 @@ trait CCCalculator {
     }
 
     def amountToMonthlyAmount(cost: BigDecimal, fromPeriod : Periods.Period) : BigDecimal = {
-      Logger.debug(s"CCCalculator.CCCalculatorService.amountToMonthlyAmount")
       val amount : BigDecimal = fromPeriod match {
         case Periods.Weekly => (cost * 52) / 12
         case Periods.Fortnightly => (cost * 26) / 12
@@ -135,7 +130,6 @@ trait CCCalculator {
     }
 
     def amountToAnnualAmount(cost: BigDecimal, fromPeriod: Periods.Period) : BigDecimal = {
-      Logger.debug(s"CCCalculator.CCCalculatorService.amountToAnnualAmount")
       val amount : BigDecimal = fromPeriod match {
         case Periods.Weekly => cost * 52
         case Periods.Fortnightly => cost * 26
@@ -148,7 +142,6 @@ trait CCCalculator {
     }
 
     def amountFromPeriodToDaily(cost: BigDecimal, fromPeriod: Periods.Period): BigDecimal = {
-      Logger.debug(s"CCCalculator.CCCalculatorService.amountFromPeriodToDaily")
       val amount : BigDecimal = fromPeriod match {
         case Periods.Weekly => (cost * 52) / 365
         case Periods.Fortnightly => (cost * 26) / 365
@@ -161,7 +154,6 @@ trait CCCalculator {
     }
 
     def annualAmountToPeriod(cost: BigDecimal, fromPeriod: Periods.Period): BigDecimal = {
-      Logger.debug(s"CCCalculator.CCCalculatorService.annualAmountToPeriod")
       val amount : BigDecimal = fromPeriod match {
         case Periods.Weekly => cost / 52
         case Periods.Fortnightly => cost / 26
@@ -174,7 +166,6 @@ trait CCCalculator {
     }
 
     def monthlyAmountToPeriod(cost: BigDecimal, fromPeriod: Periods.Period): BigDecimal = {
-      Logger.debug(s"CCCalculator.CCCalculatorService.monthlyAmountToPeriod")
       val amount : BigDecimal = fromPeriod match {
         case Periods.Weekly => (cost * 12) / 52
         case Periods.Fortnightly => (cost * 12) / 26
@@ -188,7 +179,6 @@ trait CCCalculator {
 
     // quarterly amount into a period
     def quarterlyAmountToPeriod(cost: BigDecimal, period: Periods.Period): BigDecimal = {
-      Logger.debug(s"CCCalculator.CCCalculatorService.quarterlyAmountToPeriod")
       val amount : BigDecimal = period match {
         case Periods.Weekly => (cost / 52) * 4
         case Periods.Fortnightly => (cost / 26) * 4
@@ -201,7 +191,6 @@ trait CCCalculator {
     }
 
     def dailyAmountToPeriod(cost: BigDecimal, toPeriod: Periods.Period) : BigDecimal = {
-      Logger.debug(s"CCCalculator.CCCalculatorService.dailyAmountToPeriod")
       val amount: BigDecimal = toPeriod match {
         case Periods.Weekly => (cost * 365) / 52
         case Periods.Fortnightly => (cost * 365) / 26
@@ -214,13 +203,11 @@ trait CCCalculator {
     }
 
     def convertToCurrency(amount: BigDecimal): String = {
-      Logger.debug(s"CCCalculator.CCCalculatorService.convertToCurrency")
       val formatter: NumberFormat = NumberFormat.getCurrencyInstance(Locale.UK)
       formatter.format(amount).trim
     }
 
     def daysBetween(fromDate: LocalDate, toDate: LocalDate) = {
-      Logger.debug(s"CCCalculator.CCCalculatorService.daysBetween")
       val numberOfDays = Days.daysBetween(fromDate, toDate)
       numberOfDays.getDays
     }

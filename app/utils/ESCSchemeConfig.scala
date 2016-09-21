@@ -19,7 +19,7 @@ package utils
 import org.joda.time.LocalDate
 import play.api.Play._
 import play.api.i18n.Messages
-import play.api.{Logger, Configuration, Play}
+import play.api.{Configuration, Play}
 import uk.gov.hmrc.play.config.ServicesConfig
 
 /**
@@ -70,7 +70,6 @@ case class ESCTaxYearConfig (
 object ESCConfig extends CCConfig with ServicesConfig {
 
   def getConfig(currentDate: LocalDate, niCategoryCode : String): ESCTaxYearConfig = {
-    Logger.debug(s"ESCConfig.getConfig - Begin")
     val configs: Seq[play.api.Configuration] = Play.application.configuration.getConfigSeq("esc.rule-change").get
 
     // get the default config and keep
@@ -86,12 +85,10 @@ object ESCConfig extends CCConfig with ServicesConfig {
       case _ =>
         getTaxYear(niCategoryCode, defaultConfig)
     }
-    Logger.debug(s"ESCConfig.getConfig - End")
     config
   }
 
   def getTaxYear(niCategoryCode : String, config : Configuration): ESCTaxYearConfig = {
-    Logger.debug(s"ESCConfig.getTaxYear")
     // get the ni Category
     val niCat = getNiCategory(niCategoryCode, config)
     ESCTaxYearConfig(
@@ -112,7 +109,6 @@ object ESCConfig extends CCConfig with ServicesConfig {
   }
 
   def getNiCategory(niCategoryCode: String, config: play.api.Configuration) :NiCategory ={
-    Logger.debug(s"ESCConfig.getNiCategory - Begin")
     // get the ni Category
     val niCode = niCategoryCode match {
       case cat if cat.isEmpty => config.getString("default-ni-code").get
@@ -125,12 +121,10 @@ object ESCConfig extends CCConfig with ServicesConfig {
       case Some(z) => z
       case _ =>   throw new NoSuchElementException(Messages("cc.scheme.config.ni.category.not.found"))
     }
-    Logger.debug(s"ESCConfig.getNiCategory - End")
     niCat
   }
 
   def getNiCategoryHelper(cat: String, niCategories: Seq[play.api.Configuration], acc: Option[NiCategory]): Option[NiCategory] = {
-    Logger.debug(s"ESCConfig.getNiCategoryHelper")
     niCategories match {
       case Nil =>  acc
       case head :: tail =>

@@ -18,7 +18,7 @@ package utils
 
 import org.joda.time.LocalDate
 import play.api.Play._
-import play.api.{Logger, Configuration, Play}
+import play.api.{Configuration, Play}
 import uk.gov.hmrc.play.config.ServicesConfig
 
 /**
@@ -45,7 +45,6 @@ case class TFCTaxYearConfig(
 object TFCConfig extends CCConfig with TFCConfig with ServicesConfig {
 
   def getConfig(currentDate: LocalDate) : TFCTaxYearConfig  = {
-    Logger.debug(s"TFCConfig.getConfig")
 
     val configs: Seq[play.api.Configuration] = Play.application.configuration.getConfigSeq("tfc.rule-change").get
     // get the default config and keep
@@ -65,7 +64,6 @@ object TFCConfig extends CCConfig with TFCConfig with ServicesConfig {
   }
 
   def getTaxYear(config : Configuration): TFCTaxYearConfig = {
-    Logger.debug(s"TFCConfig.getTaxYear")
     TFCTaxYearConfig(
       topUpPercent = config.getDouble("top-up-percent").get,
       maxEligibleChildcareAmount = config.getDouble("max-eligible-child-care-amount-per-child").get,

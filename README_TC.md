@@ -1,5 +1,4 @@
-**TC Calculator**
-----
+# TC Calculator
 
 Tax Credits Calculator service layer has 2 different endpoints with separate calculations, both calculation share the same input and output model.
 

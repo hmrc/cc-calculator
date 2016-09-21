@@ -1,5 +1,4 @@
-**TFC Calculator**
-----
+# TFC Calculator
 
 Tax Free Childcare Calculator accepts Eligibility Microservice's output result with additional fields added for calculation.
 

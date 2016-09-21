@@ -50,11 +50,11 @@ trait TFCCalculatorController extends CalculatorController with ServicesConfig {
         result => {
           result.getTFCEligibility.isSuccess match {
             case true =>
-              Logger.debug(s"\n\n TFC Calculator Validation passed in TFCCalculatorController.calculate: ${result.toString}\n\n")
+              Logger.info(s"\n\n TFC Calculator Validation passed in TFCCalculatorController.calculate: ${result.toString}\n\n")
               auditEvent.auditTFCRequest(result.toString)
               calculator.award(result).map {
                 response =>
-                  Logger.debug(s"\n\n TFC Calculator Result in TFCCalculatorController.calculate: ${response.toString}\n\n")
+                  Logger.info(s"\n\n TFC Calculator Result in TFCCalculatorController.calculate: ${response.toString}\n\n")
                   auditEvent.auditTFCResponse(utils.JSONFactory.generateResultJson(response).toString())
                   Ok(utils.JSONFactory.generateResultJson(response))
               } recover {
