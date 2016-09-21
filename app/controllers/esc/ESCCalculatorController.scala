@@ -49,10 +49,10 @@ trait ESCCalculatorController extends CalculatorController with ServicesConfig {
           result.getESCEligibility.isSuccess match {
             case true =>
               auditEvent.auditESCRequest(result.toString)
-              Logger.debug(s"\n\n ESC Calculator Validation passed in ESCCalculatorController.calculate: ${result.toString}\n\n")
+              Logger.info(s"\n\n ESC Calculator Validation passed in ESCCalculatorController.calculate: ${result.toString}\n\n")
               calculator.award(result).map {
                 response =>
-                  Logger.debug(s"\n\n ESC Calculator Result in ESCCalculatorController.calculate: ${response.toString}\n\n")
+                  Logger.info(s"\n\n ESC Calculator Result in ESCCalculatorController.calculate: ${response.toString}\n\n")
                   auditEvent.auditESCResponse(utils.JSONFactory.generateResultJson(response).toString())
                   Ok(utils.JSONFactory.generateResultJson(response))
               } recover {

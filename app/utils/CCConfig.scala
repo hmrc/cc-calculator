@@ -29,7 +29,6 @@ trait CCConfig extends CCFormat {
   val formatterDatePattern = "dd-MM-yyyy"
 
   def getConfigForTaxYear(currentDate: LocalDate, configs : Seq[Configuration]) : Option[Configuration] =  {
-    Logger.debug(s"CCConfig.getConfigForTaxYear - Begin")
     //get the configs for all years except the default
     val configsExcludingDefault = configs.filter(x => {
       !x.getString("rule-date").equals(Some("default"))
@@ -40,12 +39,10 @@ trait CCConfig extends CCFormat {
       predicate
     }).reverse
     val result = getConfigHelper(currentDate, sorted.toList, None)
-    Logger.debug(s"CCConfig.getConfigForTaxYear - End")
     result
   }
 
   def getConfigHelper(currentDate: LocalDate, taxYearConfigs: List[Configuration], acc: Option[Configuration]): Option[Configuration] = {
-    Logger.debug(s"CCConfig.getConfigHelper")
 
     taxYearConfigs match {
       case Nil => acc
@@ -61,7 +58,6 @@ trait CCConfig extends CCFormat {
   }
 
   def getCurrentTaxYear(from: LocalDate) : Int = {
-    Logger.debug(s"CCConfig.getCurrentTaxYear")
     val currentCalendar = Calendar.getInstance()
     currentCalendar.clear()
     currentCalendar.setTime(from.toDate)
@@ -90,7 +86,6 @@ trait CCConfig extends CCFormat {
   }
 
   def taxYearEndDate(now: LocalDate = LocalDate.now(), schemeName: String) = {
-    Logger.debug(s"CCConfig.taxYearEndDate")
     val month = configuration.getInt(s"$schemeName.end-of-tax-year-date.month").getOrElse(0)
     val day = configuration.getInt(s"$schemeName.end-of-tax-year-date.day").getOrElse(0)
     // have to determine the year as this is not a fixed date

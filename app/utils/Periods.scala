@@ -44,12 +44,10 @@ object EnumUtils {
 
   implicit def enumWrites[E <: Enumeration]: Writes[E#Value] =
     new Writes[E#Value] {
-      Logger.debug(s"EnumUtils.enumWrites")
       def writes(v: E#Value): JsValue = JsString(v.toString)
     }
 
   implicit def enumFormat[E <: Enumeration](enum: E): Format[E#Value] = {
-    Logger.debug(s"EnumUtils.enumFormat")
     Format(enumReads(enum), enumWrites)
   }
 }
@@ -69,7 +67,6 @@ object Periods extends Enumeration {
   implicit def enumWrites: Writes[Period] = EnumUtils.enumWrites
 
   def toString(period: Value): String = {
-    Logger.debug(s"Periods.toString")
     period match {
       case Weekly => Messages("cc.period.weekly")
       case Fortnightly => Messages("cc.period.fortnightly")
@@ -81,7 +78,6 @@ object Periods extends Enumeration {
   }
 
   def toPeriod(period: String): Value = {
-    Logger.debug(s"Periods.toPeriod")
     period.toLowerCase match {
       case "monthly" => Monthly
       case "3-monthly" => Quarterly

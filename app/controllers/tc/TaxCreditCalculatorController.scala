@@ -52,10 +52,10 @@ trait TaxCreditCalculatorController extends CalculatorController with ServicesCo
         result => {
           result.getTaxCreditsEligibility.isSuccess match {
             case true =>
-              Logger.debug(s"\n\n TC Calculator Validation passed in TaxCreditCalculatorController.incomeAdvice: ${result.toString}\n\n")
+              Logger.info(s"\n\n TC Calculator Validation passed in TaxCreditCalculatorController.incomeAdvice: ${result.toString}\n\n")
               calculator.incomeAdvice(result).map {
                 response =>
-                  Logger.debug(s"\n\n TC Calculator Result in TaxCreditCalculatorController.incomeAdvice: ${response.toString}\n\n")
+                  Logger.info(s"\n\n TC Calculator Result in TaxCreditCalculatorController.incomeAdvice: ${response.toString}\n\n")
                   Ok(utils.JSONFactory.generateResultJson(response))
               } recover {
                 case e: Exception =>
@@ -81,10 +81,10 @@ trait TaxCreditCalculatorController extends CalculatorController with ServicesCo
          result.getTaxCreditsEligibility.isSuccess match {
            case true =>
              auditEvent.auditTCRequest(result.toString)
-             Logger.debug(s"\n\n TC Calculator Validation passed in TaxCreditCalculatorController.calculate: ${result.toString}\n\n")
+             Logger.info(s"\n\n TC Calculator Validation passed in TaxCreditCalculatorController.calculate: ${result.toString}\n\n")
              calculator.award(result).map {
                response =>
-                 Logger.debug(s"\n\n TC Calculator Result in TaxCreditCalculatorController.calculate: ${response.toString}\n\n")
+                 Logger.info(s"\n\n TC Calculator Result in TaxCreditCalculatorController.calculate: ${response.toString}\n\n")
                  auditEvent.auditTCResponse(utils.JSONFactory.generateResultJson(response).toString())
                  Ok(utils.JSONFactory.generateResultJson(response))
              } recover {

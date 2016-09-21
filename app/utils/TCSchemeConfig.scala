@@ -19,7 +19,7 @@ package utils
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import play.api.Play._
-import play.api.{Logger, Configuration, Play}
+import play.api.{Configuration, Play}
 import uk.gov.hmrc.play.config.ServicesConfig
 
 /**
@@ -64,7 +64,6 @@ case class TCTaxYearConfig(
 object TCConfig extends CCConfig with TCConfig with ServicesConfig {
 
   def getCurrentTaxYearDateRange(fromDate : LocalDate) : (LocalDate, LocalDate) = {
-    Logger.debug(s"TCConfig.getCurrentTaxYearDateRange - Begin")
     val pattern = "dd-MM-yyyy"
     val formatter = DateTimeFormat.forPattern(pattern)
     val month = TCConfig.taxYearEndMonth
@@ -73,12 +72,10 @@ object TCConfig extends CCConfig with TCConfig with ServicesConfig {
 
     val taxYearStartDate = LocalDate.parse(s"$day-$month-$currentTaxYear", formatter)
     val taxYearEndDate = LocalDate.parse(s"$day-$month-${currentTaxYear + 1}", formatter)
-    Logger.debug(s"TCConfig.getCurrentTaxYearDateRange - End")
     (taxYearStartDate, taxYearEndDate)
   }
 
   def getConfig(currentDate: LocalDate) : TCTaxYearConfig  = {
-    Logger.debug(s"TCConfig.getConfig - Begin")
 
     val configs: Seq[play.api.Configuration] = Play.application.configuration.getConfigSeq("tc.rule-change").get
     // get the default config and keep
@@ -94,12 +91,10 @@ object TCConfig extends CCConfig with TCConfig with ServicesConfig {
       case _ =>
         getTaxYear(defaultConfig)
     }
-    Logger.debug(s"TCConfig.getConfig - End")
     config
   }
 
   def getTaxYear(config : Configuration): TCTaxYearConfig = {
-    Logger.debug(s"TCConfig.getTaxYear")
     TCTaxYearConfig(
       wtc = WTC(
         basicElement = config.getInt("input-elements.wtc.basic-element").get,
