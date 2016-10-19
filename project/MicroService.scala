@@ -1,5 +1,4 @@
 import sbt.Keys._
-import sbt.Tests.{Group, SubProcess}
 import sbt._
 import scoverage._
 import uk.gov.hmrc.SbtAutoBuildPlugin
@@ -10,14 +9,10 @@ import uk.gov.hmrc.versioning.SbtGitVersioning
 
 trait MicroService {
 
-  import TestPhases._
-  import uk.gov.hmrc.DefaultBuildSettings._
-  import scoverage.ScoverageSbtPlugin._
-
   val appName: String
 
   lazy val appDependencies : Seq[ModuleID] = ???
-  lazy val plugins : Seq[Plugins] = Seq(play.PlayScala)
+  lazy val plugins : Seq[Plugins] = Seq()
   lazy val playSettings : Seq[Setting[_]] = Seq.empty
 
   lazy val scoverageSettings = {
@@ -31,46 +26,21 @@ trait MicroService {
   }
 
   lazy val microservice = Project(appName, file("."))
-    .enablePlugins(plugins: _*)
-    .enablePlugins(SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin)
-    .settings(playSettings: _*)
-    .settings(scalaSettings: _*)
-    .settings(publishingSettings: _*)
+    .enablePlugins(Seq(play.PlayScala, SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin) ++ plugins : _*)
     .settings(playSettings ++ scoverageSettings : _*)
-    .settings(defaultSettings(): _*)
+    .settings(publishingSettings : _*)
     .settings(
-      targetJvm := "jvm-1.8",
       libraryDependencies ++= appDependencies,
-      parallelExecution in Test := false,
-      fork in Test := false,
-      retrieveManaged := true
+      retrieveManaged := true,
+      resolvers := Seq(
+        Resolver.bintrayRepo("hmrc", "releases"),
+        Resolver.typesafeRepo("releases")
+      ),
+      scalaVersion := "2.11.7",
+      crossScalaVersions := Seq("2.11.7"),
+      ivyScala := ivyScala.value map { _.copy(overrideScalaVersion = true) }
     )
-    .settings(Repositories.playPublishingSettings : _*)
-    .settings(inConfig(TemplateTest)(Defaults.testSettings): _*)
-    .configs(IntegrationTest)
-    .settings(inConfig(TemplateItTest)(Defaults.itSettings): _*)
-    .settings(
-      Keys.fork in IntegrationTest := false,
-      unmanagedSourceDirectories in IntegrationTest <<= (baseDirectory in IntegrationTest)(base => Seq(base / "it")),
-      addTestReportOption(IntegrationTest, "int-test-reports"),
-      testGrouping in IntegrationTest := oneForkedJvmPerTest((definedTests in IntegrationTest).value),
-      parallelExecution in IntegrationTest := false)
-    .settings(resolvers += Resolver.bintrayRepo("hmrc", "releases"))
 
-}
-
-private object TestPhases {
-
-  val allPhases = "tt->test;test->test;test->compile;compile->compile"
-  val allItPhases = "tit->it;it->it;it->compile;compile->compile"
-
-  lazy val TemplateTest = config("tt") extend Test
-  lazy val TemplateItTest = config("tit") extend IntegrationTest
-
-  def oneForkedJvmPerTest(tests: Seq[TestDefinition]) =
-    tests map {
-      test => new Group(test.name, Seq(test), SubProcess(ForkOptions(runJVMOptions = Seq("-Dtest.name=" + test.name))))
-    }
 }
 
 private object Repositories {

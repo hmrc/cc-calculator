@@ -14,19 +14,18 @@ private object AppDependencies {
   import play.PlayImport._
   import play.core.PlayVersion
 
-  private val microServiceBootstrapVersion = "4.2.1"
-  private val playConfigVersion = "2.0.1"
-  private val playAuthorisationVersion = "3.1.0"
+  private val microServiceBootstrapVersion = "4.4.0"
+  private val playConfigVersion = "2.1.0"
+  private val playAuthorisationVersion = "3.3.0"
   private val playJsonLoggerVersion = "2.1.1"
-  private val playUrlBindersVersion = "1.0.0"
+  private val playUrlBindersVersion = "1.1.0"
   private val playSchedulingVersion = "1.1.0"
   private val playHealthVersion = "1.1.0"
-  private val scalaTestVersion = "2.2.2"
-  private val pegDownVersion = "1.4.2"
-  private val hmrcTestVersion = "1.6.0"
+  private val scalaTestVersion = "2.2.6"
+  private val pegDownVersion = "1.6.0"
+  private val hmrcTestVersion = "1.8.0"
   private val jsonSchemaValidator = "2.2.6"
   private val json4s = "3.2.11"
-  private val httpVerbs = "3.3.0"
 
   val compile = Seq(
     ws,
@@ -37,7 +36,6 @@ private object AppDependencies {
     "uk.gov.hmrc" %% "play-authorisation" % playAuthorisationVersion,
     "uk.gov.hmrc" %% "play-scheduling" % playSchedulingVersion,
     "uk.gov.hmrc" %% "play-health" % playHealthVersion,
-    "uk.gov.hmrc" %% "http-verbs" % httpVerbs,
     "com.github.fge" % "json-schema-validator" % jsonSchemaValidator,
     "org.json4s" %% "json4s-jackson" % json4s
   )
@@ -59,21 +57,6 @@ private object AppDependencies {
     }.test
   }
 
-  object IntegrationTest {
-    def apply() = new TestDependencies {
-
-      override lazy val scope: String = "it"
-
-      override lazy val test = Seq(
-        "org.scalatestplus" %% "play" % "1.2.0" % scope,
-        "org.scalatest" %% "scalatest" % scalaTestVersion % scope,
-        "uk.gov.hmrc" %% "hmrctest" % hmrcTestVersion % scope,
-        "org.pegdown" % "pegdown" % pegDownVersion % scope,
-        "com.typesafe.play" %% "play-test" % PlayVersion.current % scope
-      )
-    }.test
-  }
-
-  def apply() = compile ++ Test() ++ IntegrationTest()
+  def apply() = compile ++ Test()
 }
 
