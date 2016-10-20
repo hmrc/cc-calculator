@@ -21,7 +21,7 @@ import controllers.CalculatorController
 import models.input.APIModels.Request
 import play.api.Logger
 import play.api.i18n.Messages
-import play.api.libs.json.JsError
+import play.api.libs.json.{JsValue, JsError}
 import play.api.mvc.Action
 import service.AuditEvents
 import uk.gov.hmrc.play.config.ServicesConfig
@@ -38,7 +38,7 @@ trait ESCCalculatorController extends CalculatorController with ServicesConfig {
 
   val auditEvent : AuditEvents
 
-  override def calculate = Action.async(parse.json) {
+  override def calculate: Action[JsValue] = Action.async(parse.json) {
     implicit request =>
       request.body.validate[Request].fold(
         error => {
@@ -62,7 +62,10 @@ trait ESCCalculatorController extends CalculatorController with ServicesConfig {
               }
             case _ =>
               Logger.warn(s"\n\n ESC Calculator Exception in ESCCalculatorController.calculate: Input Request::: ${result.toString}\n\n")
-              Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(play.api.http.Status.BAD_REQUEST, Right(new IllegalArgumentException(Messages("cc.calc.invalid.request.exception"))))))
+              Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(
+                play.api.http.Status.BAD_REQUEST,
+                Right(new IllegalArgumentException(Messages("cc.calc.invalid.request.exception")))
+              )))
 
           }
         }
