@@ -35,7 +35,9 @@ case class ESCEligibility(
 
 object ESCEligibility extends ESCConfig {
   implicit val escEligibilityReads : Reads[ESCEligibility] =
-      (JsPath \ "taxYears").read[List[TaxYear]].map { taxYears => ESCEligibility(taxYears) }.filter(ValidationError(Messages("cc.calc.invalid.number.of.ty")))(ty => ty.taxYears.length >= lowerTaxYearsLimitValidation)
+      (JsPath \ "taxYears").read[List[TaxYear]].map { taxYears =>
+        ESCEligibility(taxYears)
+      }.filter(ValidationError(Messages("cc.calc.invalid.number.of.ty")))(ty => ty.taxYears.length >= lowerTaxYearsLimitValidation)
 }
 
 case class TaxYear(
@@ -48,7 +50,9 @@ object TaxYear extends CCFormat with ESCConfig {
   implicit val taxYearReads: Reads[TaxYear] = (
     (JsPath \ "startDate").read[LocalDate](jodaLocalDateReads(datePattern)) and
       (JsPath \ "endDate").read[LocalDate](jodaLocalDateReads(datePattern)) and
-        (JsPath \ "periods").read[List[ESCPeriod]].filter(ValidationError(Messages("cc.calc.invalid.number.of.periods")))(periods => periods.length >= lowerPeriodsLimitValidation)
+        (JsPath \ "periods").read[List[ESCPeriod]].filter(
+        ValidationError(Messages("cc.calc.invalid.number.of.periods"))
+        )(periods => periods.length >= lowerPeriodsLimitValidation)
     )(TaxYear.apply _)
 }
 
@@ -62,7 +66,9 @@ object ESCPeriod extends CCFormat with ESCConfig {
   implicit val periodReads : Reads[ESCPeriod] = (
     (JsPath \ "from").read[LocalDate](jodaLocalDateReads(datePattern)) and
       (JsPath \ "until").read[LocalDate](jodaLocalDateReads(datePattern)) and
-        (JsPath \ "claimants").read[List[Claimant]].filter(ValidationError(Messages("cc.calc.invalid.number.of.claimants")))(claimants => claimants.length >= lowerClaimantsLimitValidation)
+        (JsPath \ "claimants").read[List[Claimant]].filter(
+        ValidationError(Messages("cc.calc.invalid.number.of.claimants"))
+        )(claimants => claimants.length >= lowerClaimantsLimitValidation)
     )(ESCPeriod.apply _)
 }
 
@@ -77,10 +83,12 @@ case class Income(
     gross match {
       case amount if amount > BigDecimal(100000.00) =>
         val revisedPersonalAllowance = defaultPersonalAllowance - (amount - BigDecimal(100000.00)) / 2
-        if(revisedPersonalAllowance < 0)
+        if(revisedPersonalAllowance < 0) {
           BigDecimal(0.00)
-        else
+        }
+        else {
           revisedPersonalAllowance
+        }
       case _ =>  defaultPersonalAllowance
     }
   }
@@ -96,12 +104,17 @@ object Income {
 }
 
 case class ClaimantElements(
-                             // claimants qualification is determined by employer providing esc and children's qualification (if there is at least 1 qualifying child)
+                             // claimants qualification is determined by employer providing esc and children's qualification
+                             // (if there is at least 1 qualifying child)
                              vouchers : Boolean = false
                              )
 
 object ClaimantElements {
-  implicit val claimantReads : Reads[ClaimantElements] = (JsPath \ "vouchers").read[Boolean].orElse(Reads.pure(false)).map { vouchers => ClaimantElements(vouchers) }
+  implicit val claimantReads : Reads[ClaimantElements] = (JsPath \ "vouchers").read[Boolean].orElse(
+    Reads.pure(false)
+  ).map { vouchers =>
+    ClaimantElements(vouchers)
+  }
 }
 
 case class Claimant (
@@ -127,11 +140,15 @@ object Claimant extends CCFormat with ESCConfig {
   implicit val claimantReads : Reads[Claimant] = (
     (JsPath \ "qualifying").read[Boolean].orElse(Reads.pure(false)) and
       (JsPath \ "isPartner").read[Boolean].orElse(Reads.pure(false)) and
-        (JsPath \ "eligibleMonthsInPeriod").read[Int].filter(ValidationError(Messages("cc.calc.invalid.number.of.months")))(months => months >= lowerMonthsLimitValidation && months < upperMonthsLimitValidation) and
+        (JsPath \ "eligibleMonthsInPeriod").read[Int].filter(
+          ValidationError(Messages("cc.calc.invalid.number.of.months"))
+        )(months => months >= lowerMonthsLimitValidation && months < upperMonthsLimitValidation) and
           (JsPath \ "income").read[Income] and
             (JsPath \ "elements").read[ClaimantElements] and
               (JsPath \ "escStartDate").read[LocalDate](jodaLocalDateReads(datePattern)) and
-                (JsPath \ "escAmount").read[BigDecimal].filter(ValidationError(Messages("cc.calc.voucher.amount.less.than.0")))(income => income >= BigDecimal(0.00)) and
+                (JsPath \ "escAmount").read[BigDecimal].filter(
+                  ValidationError(Messages("cc.calc.voucher.amount.less.than.0"))
+                )(income => income >= BigDecimal(0.00)) and
                   (JsPath \ "escAmountPeriod").read[Periods.Period]
     )(Claimant.apply _)
 }
