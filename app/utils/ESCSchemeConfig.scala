@@ -148,7 +148,9 @@ object ESCConfig extends CCConfig with ServicesConfig {
           )
           getNiCategoryHelper(cat, Nil, Some(niCat))
         }
-        else getNiCategoryHelper(cat, tail, acc)
+        else {
+          getNiCategoryHelper(cat, tail, acc)
+        }
     }
   }
 }

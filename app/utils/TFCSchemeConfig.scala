@@ -26,8 +26,10 @@ import uk.gov.hmrc.play.config.ServicesConfig
  */
 
 trait TFCConfig {
-  lazy val maxNoOfChildren = configuration.getInt(s"tfc.max-no-of-children").getOrElse(25)
-  lazy val maxNameLength = configuration.getInt(s"tfc.max-name-length").getOrElse(25)
+  private val defaultMaxNoOfChildren = 25
+  lazy val maxNoOfChildren = configuration.getInt(s"tfc.max-no-of-children").getOrElse(defaultMaxNoOfChildren)
+  private val defaultMaxNameLength = 25
+  lazy val maxNameLength = configuration.getInt(s"tfc.max-name-length").getOrElse(defaultMaxNameLength)
 
   lazy val taxYearEndMonth = configuration.getInt(s"tfc.end-of-tax-year-date.month").getOrElse(0)
   lazy val taxYearEndDay = configuration.getInt(s"tfc.end-of-tax-year-date.day").getOrElse(0)
