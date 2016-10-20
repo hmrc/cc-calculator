@@ -59,7 +59,9 @@ object TFCPeriod extends CCFormat{
     (JsPath \ "from").read[LocalDate](jodaLocalDateReads(datePattern)) and
       (JsPath \ "until").read[LocalDate](jodaLocalDateReads(datePattern)) and
         (JsPath \ "periodEligibility").read[Boolean] and
-          (JsPath \ "children").read[List[Child]].filter(ValidationError(Messages("cc.calc.invalid.number.of.children")))(children => children.length > 0 && children.length <= TFCConfig.maxNoOfChildren)
+          (JsPath \ "children").read[List[Child]].filter(
+          ValidationError(Messages("cc.calc.invalid.number.of.children"))
+          )(children => children.length > 0 && children.length <= TFCConfig.maxNoOfChildren)
     )(TFCPeriod.apply _)
 }
 
@@ -72,11 +74,11 @@ case class Child(
                   childcareCost : BigDecimal,
                   disability :Disability
                   ) {
-  def getChildDisability = {
+  def getChildDisability: Boolean = {
     disability.disabled || disability.severelyDisabled
   }
 
-  def getChildSevereDisability = {
+  def getChildSevereDisability: Boolean = {
     disability.severelyDisabled
   }
 
