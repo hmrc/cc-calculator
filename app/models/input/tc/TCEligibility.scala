@@ -31,7 +31,7 @@ case class TCEligibility(
                           proRataEnd: Option[LocalDate] = None
                           ) {
 
-  def isProrateringRequired = {
+  def isProrateringRequired: Boolean = {
     proRataEnd.isDefined
   }
 }
@@ -57,7 +57,9 @@ object TaxYear {
   implicit val taxYearsFormat: Reads[TaxYear] = (
     (JsPath \ "from").read[LocalDate](jodaLocalDateReads(datePattern)) and
       (JsPath \ "until").read[LocalDate](jodaLocalDateReads(datePattern)) and
-        (JsPath \ "houseHoldIncome").read[BigDecimal].filter(ValidationError(Messages("cc.calc.household.income.too.low")))(x => houseHoldIncomeValidation(x)) and
+        (JsPath \ "houseHoldIncome").read[BigDecimal].filter(
+        ValidationError(Messages("cc.calc.household.income.too.low"))
+        )(x => houseHoldIncomeValidation(x)) and
           (JsPath \ "periods").read[List[Period]]
     )(TaxYear.apply _)
 }
@@ -69,12 +71,12 @@ case class Period(from: LocalDate,
                   children: List[Child]
                    ) {
 
-  def getChildCareForPeriod = {
+  def getChildCareForPeriod: Boolean = {
     householdElements.childcare
   }
-  def config : TCTaxYearConfig = TCConfig.getConfig(from)
+  def config: TCTaxYearConfig = TCConfig.getConfig(from)
 
-  def atLeastOneClaimantIsClaimingSocialSecurityBenefit = {
+  def atLeastOneClaimantIsClaimingSocialSecurityBenefit: Boolean = {
     val count = claimants.foldLeft(0)((acc, claimant) => if (claimant.isClaimingSocialSecurity) acc + 1 else acc)
     count > 0
   }
@@ -113,19 +115,19 @@ case class Child(id: Short,
                  childcareCostPeriod: Periods.Period,
                  childElements: ChildElements) {
 
-  def isQualifyingWTC = {
+  def isQualifyingWTC: Boolean = {
     qualifying && childElements.childcare
   }
 
-  def isQualifyingCTC = {
+  def isQualifyingCTC: Boolean = {
     qualifying && (childElements.child || childElements.youngAdult)
   }
 
-  def getsDisabilityElement = {
+  def getsDisabilityElement: Boolean = {
     isQualifyingCTC && childElements.disability
   }
 
-  def getsSevereDisabilityElement = {
+  def getsSevereDisabilityElement: Boolean = {
     isQualifyingCTC && childElements.severeDisability
   }
 
@@ -144,7 +146,10 @@ object Child  {
     (JsPath \ "id").read[Short].filter(ValidationError(Messages("cc.calc.id.should.not.be.less.than.0")))(x => validID(x)) and
       (JsPath \ "name").read[String](maxLength[String](TCConfig.maxNameLength)) and
        (JsPath \ "qualifying").read[Boolean] and
-        (JsPath \ "childcareCost").read[BigDecimal].filter(ValidationError(Messages("cc.calc.childcare.spend.too.low")))(x => childSpendValidation(x)) and //childcareCost max value should be 30,000 per year (This will be based on childcareCost Period, hence should be handled in frontend)
+        (JsPath \ "childcareCost").read[BigDecimal].filter(
+        ValidationError(Messages("cc.calc.childcare.spend.too.low"))
+        )(x => childSpendValidation(x)) and
+        //childcareCost max value should be 30,000 per year (This will be based on childcareCost Period, hence should be handled in frontend)
           (JsPath \ "childcareCostPeriod").read[Periods.Period] and
             (JsPath \ "childElements").read[ChildElements]
     )(Child.apply _)
@@ -167,19 +172,19 @@ case class Claimant(qualifying: Boolean,
                     claimantElements: ClaimantDisability,
                     doesNotTaper : Boolean = false,
                     failures: Option[List[String]]) {
-  def isQualified = {
+  def isQualified: Boolean = {
     qualifying
   }
 
-  def getsDisabilityElement = {
+  def getsDisabilityElement: Boolean = {
     isQualified && claimantElements.disability
   }
 
-  def getsSevereDisabilityElement = {
+  def getsSevereDisabilityElement: Boolean = {
     isQualified && claimantElements.severeDisability
   }
 
-  def isClaimingSocialSecurity = {
+  def isClaimingSocialSecurity: Boolean = {
     doesNotTaper
   }
 }
