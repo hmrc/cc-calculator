@@ -225,33 +225,16 @@ trait ESCCalculator extends CCCalculator {
         qualifying = qualifying,
         eligibleMonthsInTaxYear = eligibleMonths,
         isPartner = isPartner,
-        income = models.output.esc.Income(
-          taxablePay = taxablePay,
-          gross = grossPay,
-          taxCode = taxCode,
-          niCategory = niCategory
-        ),
-        elements = models.output.esc.ClaimantElements(
-          vouchers = vouchers
-        ),
+        income = models.output.esc.Income(taxablePay = taxablePay, gross = grossPay, taxCode = taxCode, niCategory = niCategory),
+        elements = models.output.esc.ClaimantElements(vouchers = vouchers),
         escAmount = escAmount,
         escAmountPeriod = escAmountPeriod,
         escStartDate = escStartDate,
-        savings = models.output.esc.Savings(
-          totalSaving  = totalSaving,
-          taxSaving = taxSaving,
-          niSaving  = niSaving
-        ),
+        savings = models.output.esc.Savings(totalSaving = totalSaving, taxSaving = taxSaving, niSaving = niSaving),
         maximumRelief = maximumRelief,
         maximumReliefPeriod = maximumReliefPeriod,
-        taxAndNIBeforeSacrifice = models.output.esc.TaxAndNI(
-          taxPaid = taxPaidPreSacrifice,
-          niPaid = niPaidPreSacrifice
-        ),
-        taxAndNIAfterSacrifice = models.output.esc.TaxAndNI(
-          taxPaid = taxPaidPostSacrifice,
-          niPaid = niPaidPostSacrifice
-        )
+        taxAndNIBeforeSacrifice = models.output.esc.TaxAndNI(taxPaid = taxPaidPreSacrifice, niPaid = niPaidPreSacrifice),
+        taxAndNIAfterSacrifice = models.output.esc.TaxAndNI(taxPaid = taxPaidPostSacrifice, niPaid = niPaidPostSacrifice)
       )
     }
   }
@@ -506,9 +489,7 @@ trait ESCCalculator extends CCCalculator {
     }
 
     private def createClaimantList(period : ESCPeriod) :  List[Claimant]= {
-
       val calcPeriod = Periods.Monthly
-
       def calcReliefAmount(income: Income, isESCStartDateBefore2011: Boolean, escAmount: BigDecimal) = {
         val config = ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim)
         val taxCode = getTaxCode(period, income, config)
@@ -524,7 +505,6 @@ trait ESCCalculator extends CCCalculator {
         )
         (personalAllowanceAmountMonthly, determineActualIncomeRelief(escAmount, maximumReliefAmount))
       }
-
       def selectClaimant(parent: Claimant, partner: Claimant) = {
         val (parentPersonalAllowanceAmountMonthly, parentActualReliefAmount) =
           calcReliefAmount(parent.income, parent.isESCStartDateBefore2011, parent.escAmount)
@@ -543,7 +523,6 @@ trait ESCCalculator extends CCCalculator {
             period.claimants
         }
       }
-
       period.claimants.size match {
         case 2 =>
           val parent = period.claimants.head
