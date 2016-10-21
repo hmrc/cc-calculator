@@ -526,8 +526,10 @@ trait ESCCalculator extends CCCalculator {
       }
 
       def selectClaimant(parent: Claimant, partner: Claimant) = {
-        val (parentPersonalAllowanceAmountMonthly, parentActualReliefAmount) = calcReliefAmount(parent.income, parent.isESCStartDateBefore2011, parent.escAmount)
-        val (partnerPersonalAllowanceAmountMonthly, partnerActualReliefAmount) = calcReliefAmount(partner.income, partner.isESCStartDateBefore2011, partner.escAmount)
+        val (parentPersonalAllowanceAmountMonthly, parentActualReliefAmount) =
+          calcReliefAmount(parent.income, parent.isESCStartDateBefore2011, parent.escAmount)
+        val (partnerPersonalAllowanceAmountMonthly, partnerActualReliefAmount) =
+          calcReliefAmount(partner.income, partner.isESCStartDateBefore2011, partner.escAmount)
         (
           (annualAmountToPeriod(parent.income.taxablePay, calcPeriod) - parentActualReliefAmount),
           (annualAmountToPeriod(partner.income.taxablePay, calcPeriod) - partnerActualReliefAmount)
