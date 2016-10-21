@@ -481,55 +481,53 @@ trait ESCCalculator extends CCCalculator {
 
     private def createClaimantList(period : ESCPeriod) :  List[Claimant]= {
 
-      val claimantList = period.claimants.size match {
+      val calcPeriod = Periods.Monthly
+
+      def calcReliefAmount(income: Income, isESCStartDateBefore2011: Boolean, escAmount: BigDecimal) = {
+        val config = ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim)
+        val taxCode = getTaxCode(period, income, config)
+        val personalAllowanceAmountMonthly: BigDecimal = annualAmountToPeriod(getPersonalAllowance(period, income, config), calcPeriod)
+        val relevantEarningsAmount: BigDecimal = getAnnualRelevantEarnings(income, period, config)
+        val maximumReliefAmount: BigDecimal = determineMaximumIncomeRelief(
+          period,
+          isESCStartDateBefore2011,
+          relevantEarningsAmount,
+          calcPeriod,
+          taxCode,
+          config
+        )
+        (personalAllowanceAmountMonthly, determineActualIncomeRelief(escAmount, maximumReliefAmount))
+      }
+
+      def selectClaimant(parent: Claimant, partner: Claimant) = {
+        val (parentPersonalAllowanceAmountMonthly, parentActualReliefAmount) = calcReliefAmount(parent.income, parent.isESCStartDateBefore2011, parent.escAmount)
+        val (partnerPersonalAllowanceAmountMonthly, partnerActualReliefAmount) = calcReliefAmount(partner.income, partner.isESCStartDateBefore2011, partner.escAmount)
+        (
+          (annualAmountToPeriod(parent.income.taxablePay, calcPeriod) - parentActualReliefAmount),
+          (annualAmountToPeriod(partner.income.taxablePay, calcPeriod) - partnerActualReliefAmount)
+          ) match {
+          // parent income falls below personal allowance after the sacrifice assign the childcare spend to the partner
+          case (x, y) if (x <= parentPersonalAllowanceAmountMonthly && y > partnerPersonalAllowanceAmountMonthly) =>
+            List(parent.copy(escAmount = BigDecimal(0.00)), partner.copy(escAmount = partner.escAmount * 2))
+          case (x, y) if (x > parentPersonalAllowanceAmountMonthly && y <= partnerPersonalAllowanceAmountMonthly) =>
+            List(parent.copy(escAmount = parent.escAmount * 2), partner.copy(escAmount = BigDecimal(0.00)))
+          case (_, _) =>
+            period.claimants
+        }
+      }
+
+      period.claimants.size match {
         case 2 =>
           val parent = period.claimants.head
           val partner = period.claimants.tail.head
-
-          (parent.qualifying, partner.qualifying) match {
-
-            case (true, true) =>
-              val calcPeriod = Periods.Monthly
-
-              //calculate the personal allowance for the parent
-              val parentConfig = ESCConfig.getConfig(period.from, parent.income.niCategory.toUpperCase.trim)
-              val parentTaxCode = getTaxCode(period, parent.income, parentConfig)
-              val parentPersonalAllowanceAmountMonthly: BigDecimal = annualAmountToPeriod(getPersonalAllowance(period, parent.income, parentConfig), calcPeriod)
-              val parentRelevantEarningsAmount: BigDecimal = getAnnualRelevantEarnings(parent.income, period, parentConfig)
-              val parentMaximumReliefAmount: BigDecimal =
-                determineMaximumIncomeRelief(period, parent.isESCStartDateBefore2011, parentRelevantEarningsAmount, calcPeriod, parentTaxCode, parentConfig)
-              val parentActualReliefAmount: BigDecimal = determineActualIncomeRelief(parent.escAmount, parentMaximumReliefAmount)
-
-              //calculate the personal allowance for the partner
-              val partnerConfig = ESCConfig.getConfig(period.from, partner.income.niCategory.toUpperCase.trim)
-              val partnerTaxCode = getTaxCode(period, partner.income, partnerConfig)
-              val partnerPersonalAllowanceAmountMonthly: BigDecimal =
-                annualAmountToPeriod(getPersonalAllowance(period, partner.income, partnerConfig), calcPeriod)
-              val partnerRelevantEarningsAmount: BigDecimal = getAnnualRelevantEarnings(partner.income, period, partnerConfig)
-              val partnerMaximumReliefAmount: BigDecimal =
-                determineMaximumIncomeRelief(period, partner.isESCStartDateBefore2011, partnerRelevantEarningsAmount, calcPeriod, partnerTaxCode, partnerConfig)
-              val partnerActualReliefAmount: BigDecimal = determineActualIncomeRelief(partner.escAmount, partnerMaximumReliefAmount)
-
-              (
-                (annualAmountToPeriod(parent.income.taxablePay, calcPeriod) - parentActualReliefAmount),
-                (annualAmountToPeriod(partner.income.taxablePay, calcPeriod) - partnerActualReliefAmount)
-                ) match {
-                // parent income falls below personal allowance after the sacrifice assign the childcare spend to the partner
-                case (x, y) if (x <= parentPersonalAllowanceAmountMonthly && y > partnerPersonalAllowanceAmountMonthly) =>
-                  List(parent.copy(escAmount = BigDecimal(0.00)), partner.copy(escAmount = partner.escAmount * 2))
-                case (x, y) if (x > parentPersonalAllowanceAmountMonthly && y <= partnerPersonalAllowanceAmountMonthly) =>
-                  List(parent.copy(escAmount = parent.escAmount * 2), partner.copy(escAmount = BigDecimal(0.00)))
-                case (_, _) =>
-                  period.claimants
-              }
-
-            case(_, _) => period.claimants
-
+          if(parent.qualifying && partner.qualifying) {
+            selectClaimant(parent, partner)
           }
-
+          else {
+            period.claimants
+          }
         case _ => period.claimants
       }
-      claimantList
     }
 
     private def determineClaimantsForTaxYear(listOfClaimantPairs : List[models.output.esc.Claimant]) : List[models.output.esc.Claimant] = {
