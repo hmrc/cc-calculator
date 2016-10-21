@@ -332,41 +332,49 @@ trait ESCCalculator extends CCCalculator {
 
   trait ESCCalculatorNi extends ESCConfig with ESCCalculatorHelpers with CCCalculatorService {
 
-    def allocateAmountToNIBands(grossPay : BigDecimal, period : ESCPeriod, config :ESCTaxYearConfig) : CalculationNIBands = {
-      val lowerEarningsLimit : BigDecimal = config.niCategory.lelMonthlyUpperLimitForCat
-      val primaryEarningsLimit : BigDecimal = config.niCategory.lelPtMonthlyUpperLimitForCat
-      val upperAccrualEarningsLimit : BigDecimal = config.niCategory.ptUapMonthlyUpperLimitForCat
-      val upperEarningsLimit : BigDecimal = config.niCategory.uapUelMonthlyUpperLimitForCat
-      val lelPTBandCapacity : BigDecimal = primaryEarningsLimit - lowerEarningsLimit
-      val ptUAPBandCapacity : BigDecimal = upperAccrualEarningsLimit - primaryEarningsLimit
-      val uapUElBandCapacity : BigDecimal = upperEarningsLimit - upperAccrualEarningsLimit
+    def allocateAmountToNIBands(grossPay: BigDecimal, period: ESCPeriod, config: ESCTaxYearConfig): CalculationNIBands = {
+      val lowerEarningsLimit: BigDecimal = config.niCategory.lelMonthlyUpperLimitForCat
+      val primaryEarningsLimit: BigDecimal = config.niCategory.lelPtMonthlyUpperLimitForCat
+      val upperAccrualEarningsLimit: BigDecimal = config.niCategory.ptUapMonthlyUpperLimitForCat
+      val upperEarningsLimit: BigDecimal = config.niCategory.uapUelMonthlyUpperLimitForCat
+      val lelPTBandCapacity: BigDecimal = primaryEarningsLimit - lowerEarningsLimit
+      val ptUAPBandCapacity: BigDecimal = upperAccrualEarningsLimit - primaryEarningsLimit
+      val uapUElBandCapacity: BigDecimal = upperEarningsLimit - upperAccrualEarningsLimit
 
-      grossPay match {
-        case amount if amount <= lowerEarningsLimit =>
-          CalculationNIBands(lowerEarningsBand = amount)
-        case amount if amount > lowerEarningsLimit && amount <= primaryEarningsLimit =>
-          CalculationNIBands(lowerEarningsBand = lowerEarningsLimit, primaryEarningsBand = amount - lowerEarningsLimit)
-        case amount if amount > primaryEarningsLimit && amount <= upperAccrualEarningsLimit =>
-          CalculationNIBands(
-            lowerEarningsBand = lowerEarningsLimit,
-            primaryEarningsBand = lelPTBandCapacity,
-            upperAccrualEarningsBand = amount - (lowerEarningsLimit + lelPTBandCapacity)
-          )
-        case amount if amount > upperAccrualEarningsLimit && amount <= upperEarningsLimit =>
-          CalculationNIBands(
-            lowerEarningsBand = lowerEarningsLimit,
-            primaryEarningsBand = lelPTBandCapacity,
-            upperAccrualEarningsBand = ptUAPBandCapacity,
-            upperEarningsBand = amount - (lowerEarningsLimit + lelPTBandCapacity + ptUAPBandCapacity)
-          )
-        case amount if amount > upperEarningsLimit =>
-          CalculationNIBands(
-            lowerEarningsBand = lowerEarningsLimit,
-            primaryEarningsBand = lelPTBandCapacity,
-            upperAccrualEarningsBand = ptUAPBandCapacity,
-            upperEarningsBand = uapUElBandCapacity,
-            aboveUpperEarningsBand = amount - (lowerEarningsLimit + lelPTBandCapacity + ptUAPBandCapacity + uapUElBandCapacity)
-          )
+      if(grossPay <= lowerEarningsLimit) {
+        CalculationNIBands(
+          lowerEarningsBand = grossPay
+        )
+      }
+      else if (grossPay > lowerEarningsLimit && grossPay <= primaryEarningsLimit) {
+        CalculationNIBands(
+          lowerEarningsBand = lowerEarningsLimit,
+          primaryEarningsBand = grossPay - lowerEarningsLimit
+        )
+      }
+      else if (grossPay > primaryEarningsLimit && grossPay <= upperAccrualEarningsLimit) {
+        CalculationNIBands(
+          lowerEarningsBand = lowerEarningsLimit,
+          primaryEarningsBand = lelPTBandCapacity,
+          upperAccrualEarningsBand = grossPay - (lowerEarningsLimit + lelPTBandCapacity)
+        )
+      }
+      else if (grossPay > upperAccrualEarningsLimit && grossPay <= upperEarningsLimit) {
+        CalculationNIBands(
+          lowerEarningsBand = lowerEarningsLimit,
+          primaryEarningsBand = lelPTBandCapacity,
+          upperAccrualEarningsBand = ptUAPBandCapacity,
+          upperEarningsBand = grossPay - (lowerEarningsLimit + lelPTBandCapacity + ptUAPBandCapacity)
+        )
+      }
+      else {
+        CalculationNIBands(
+          lowerEarningsBand = lowerEarningsLimit,
+          primaryEarningsBand = lelPTBandCapacity,
+          upperAccrualEarningsBand = ptUAPBandCapacity,
+          upperEarningsBand = uapUElBandCapacity,
+          aboveUpperEarningsBand = grossPay - (lowerEarningsLimit + lelPTBandCapacity + ptUAPBandCapacity + uapUElBandCapacity)
+        )
       }
     }
 
