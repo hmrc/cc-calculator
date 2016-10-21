@@ -64,15 +64,15 @@ trait CCCalculator {
      * Unformatted:   5.465068
      * Formatted:      .46
      */
-    def round(value: BigDecimal) = value.setScale(2, RoundingMode.HALF_UP)
+    def round(value: BigDecimal): BigDecimal = value.setScale(2, RoundingMode.HALF_UP)
 
-    def roundToPound(value : BigDecimal) = value.setScale(0, RoundingMode.HALF_UP)
+    def roundToPound(value: BigDecimal): BigDecimal = value.setScale(0, RoundingMode.HALF_UP)
 
-    def roundup (value: BigDecimal) = value.setScale(2, RoundingMode.UP)
+    def roundup (value: BigDecimal): BigDecimal = value.setScale(2, RoundingMode.UP)
 
-    def roundDownToThreeDigits(value : BigDecimal) = value.setScale(3, RoundingMode.DOWN)
+    def roundDownToThreeDigits(value: BigDecimal): BigDecimal = value.setScale(3, RoundingMode.DOWN)
 
-    def verifyPenceDifference(amount: BigDecimal, originalSpend: BigDecimal) : (BigDecimal, Boolean) = {
+    def verifyPenceDifference(amount: BigDecimal, originalSpend: BigDecimal): (BigDecimal, Boolean) = {
 
       if (amount > originalSpend) {
         val difference: BigDecimal = amount - originalSpend
@@ -207,7 +207,7 @@ trait CCCalculator {
       formatter.format(amount).trim
     }
 
-    def daysBetween(fromDate: LocalDate, toDate: LocalDate) = {
+    def daysBetween(fromDate: LocalDate, toDate: LocalDate): Int = {
       val numberOfDays = Days.daysBetween(fromDate, toDate)
       numberOfDays.getDays
     }
