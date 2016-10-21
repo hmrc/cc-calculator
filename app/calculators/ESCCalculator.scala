@@ -48,11 +48,17 @@ trait ESCCalculator extends CCCalculator {
       }
     }
 
+
     def validateTaxCode(period : ESCPeriod, income : Income) : (BigDecimal, String) = { //TODO - Add validations for OT and K tax codes
+
+    def validateCode(code : String) : Boolean =  (code.equals("BR") || code.equals("D0") || code.equals("D1") || code.equals("NT"))
+    def validateCodeBasedOnEndsWith(code : String) : Boolean =  code.endsWith("L") || code.endsWith("M") ||
+      code.endsWith("N") || code.endsWith("T") || code.endsWith("Y")
+
       income.taxCode.toUpperCase.trim match {
-        case code if code.equals("BR") || code.equals("D0") || code.equals("D1") || code.equals("NT") =>
+        case code if validateCode(code) =>
           (BigDecimal(0.00), code)
-        case code if code.endsWith("L") || code.endsWith("M") || code.endsWith("N") || code.endsWith("T") || code.endsWith("Y") =>
+        case code if validateCodeBasedOnEndsWith(code) =>
           toInt(code.substring(0, code.length - 1)) match {
             case Some(number) =>
               (number * 10, code)
@@ -99,6 +105,37 @@ trait ESCCalculator extends CCCalculator {
       }
     }
 
+    private def determineMaximumIncomeReliefPost2011BasedOnRelevantEarnings(relevantEarnings: BigDecimal,
+                                   calcPeriod: Periods.Period = Periods.Monthly, config: ESCTaxYearConfig) = {
+      val higherRateCeiling : BigDecimal = config.taxHigherBandUpperLimit
+      val basicRateCeiling : BigDecimal = config.taxBasicBandCapacity
+      relevantEarnings match {
+        case amount if amount <= 0 =>
+          BigDecimal (0.00) //0% band return 0
+        case amount if amount <= basicRateCeiling => //20% band
+          monthlyAmountToPeriod (config.post2011MaxExemptionMonthlyBasic, calcPeriod)
+        case amount if amount > basicRateCeiling && amount <= higherRateCeiling => //40% band
+          monthlyAmountToPeriod (config.post2011MaxExemptionMonthlyHigher, calcPeriod)
+        case amount if amount > higherRateCeiling => //45% band
+          monthlyAmountToPeriod (config.post2011MaxExemptionMonthlyAdditional, calcPeriod)
+      }
+    }
+
+    private def determineMaximumIncomeReliefPre2011(relevantEarnings: BigDecimal,
+                                                    calcPeriod: Periods.Period = Periods.Monthly, taxCode: String) = {
+      relevantEarnings match {
+        case amount if amount <= 0 =>
+          BigDecimal(0.00)
+        case amount if amount > 0 =>
+          taxCode.toUpperCase match {
+            case "NT" => //No tax
+              BigDecimal(0.00)
+            case _ =>
+              monthlyAmountToPeriod(pre2011MaxExemptionMonthly, calcPeriod)
+          }
+      }
+    }
+
     def determineMaximumIncomeRelief(
                                       period : ESCPeriod,
                                       pre2011: Boolean,
@@ -107,43 +144,24 @@ trait ESCCalculator extends CCCalculator {
                                       taxCode: String,
                                       config: ESCTaxYearConfig
                                       ): BigDecimal = {
-      val higherRateCeiling : BigDecimal = config.taxHigherBandUpperLimit
-      val basicRateCeiling : BigDecimal = config.taxBasicBandCapacity
+
 
       pre2011 match {
         case true =>
-          relevantEarnings match {
-            case amount if amount <= 0 =>
-              BigDecimal(0.00)
-            case amount if amount > 0 =>
-              taxCode.toUpperCase match {
-                case code if code.equals("NT") => //No tax
-                  BigDecimal(0.00)
-                case _ =>
-                  monthlyAmountToPeriod(pre2011MaxExemptionMonthly, calcPeriod)
-              }
-          }
+          determineMaximumIncomeReliefPre2011(relevantEarnings, calcPeriod, taxCode)
+
         case false =>
           taxCode.toUpperCase match {
-            case code if code.equals("BR") => //20% band
+            case "BR" => //20% band
               monthlyAmountToPeriod (config.post2011MaxExemptionMonthlyBasic, calcPeriod)
-            case code if code.equals("D0") => //40% band
+            case "D0" => //40% band
               monthlyAmountToPeriod (config.post2011MaxExemptionMonthlyHigher, calcPeriod)
-            case code if code.equals("D1") => //45% band
+            case "D1" => //45% band
               monthlyAmountToPeriod (config.post2011MaxExemptionMonthlyAdditional, calcPeriod)
-            case code if code.equals("NT") => //No tax
+            case "NT" => //No tax
               BigDecimal(0.00)
             case _ =>
-              relevantEarnings match {
-                case amount if amount <= 0 =>
-                  BigDecimal (0.00) //0% band return 0
-                case amount if amount <= basicRateCeiling => //20% band
-                  monthlyAmountToPeriod (config.post2011MaxExemptionMonthlyBasic, calcPeriod)
-                case amount if amount > basicRateCeiling && amount <= higherRateCeiling => //40% band
-                  monthlyAmountToPeriod (config.post2011MaxExemptionMonthlyHigher, calcPeriod)
-                case amount if amount > higherRateCeiling => //45% band
-                  monthlyAmountToPeriod (config.post2011MaxExemptionMonthlyAdditional, calcPeriod)
-              }
+              determineMaximumIncomeReliefPost2011BasedOnRelevantEarnings(relevantEarnings, calcPeriod, config)
           }
       }
     }
