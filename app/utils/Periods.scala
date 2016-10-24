@@ -55,12 +55,15 @@ object EnumUtils {
 object Periods extends Enumeration {
   type Period = Value
 
+  private val yearlyIndex = 4
+  private val invalidIndex = 5
+
   val Weekly = Value(0, "Week")
   val Fortnightly = Value(1, "Fortnight")
   val Monthly = Value(2, "Month")
   val Quarterly = Value(3, "3 month")
-  val Yearly = Value(4, "Year")
-  val INVALID = Value(5, "INVALID")
+  val Yearly = Value(yearlyIndex, "Year")
+  val INVALID = Value(invalidIndex, "INVALID")
 
   implicit val enumReads: Reads[Period] = EnumUtils.enumReads(Periods)
 

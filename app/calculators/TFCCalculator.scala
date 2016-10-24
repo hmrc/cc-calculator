@@ -40,8 +40,10 @@ trait TFCCalculator extends CCCalculator {
 
     def getHouseholdContribution(periods: List[TFCPeriod]) : Contribution = {
       val householdTotalParentContribution: BigDecimal = periods.foldLeft(BigDecimal(0.00))((acc, TFCPeriod) => acc + TFCPeriod.periodContribution.parent)
-      val householdTotalGovernmentContribution: BigDecimal = periods.foldLeft(BigDecimal(0.00))((acc, TFCPeriod) => acc + TFCPeriod.periodContribution.government)
-      val householdTotalChildcareSpend: BigDecimal = periods.foldLeft(BigDecimal(0.00))((acc, TFCPeriod) => acc + TFCPeriod.periodContribution.totalChildCareSpend)
+      val householdTotalGovernmentContribution: BigDecimal =
+        periods.foldLeft(BigDecimal(0.00))((acc, TFCPeriod) => acc + TFCPeriod.periodContribution.government)
+      val householdTotalChildcareSpend: BigDecimal =
+        periods.foldLeft(BigDecimal(0.00))((acc, TFCPeriod) => acc + TFCPeriod.periodContribution.totalChildCareSpend)
 
       Contribution(
         parent = round(householdTotalParentContribution),
@@ -51,7 +53,7 @@ trait TFCCalculator extends CCCalculator {
     }
 
 
-    def getChildQualifyingDaysInTFCPeriod(from: Option[LocalDate], until: Option[LocalDate]) = {
+    def getChildQualifyingDaysInTFCPeriod(from: Option[LocalDate], until: Option[LocalDate]): Int = {
       (from, until) match {
         case (null, Some(u)) =>
           Logger.warn("TFCCalculator.TFCCalculatorService.getChildQualifyingDaysInTFCPeriod Exception - from date is null")
@@ -144,9 +146,10 @@ trait TFCCalculator extends CCCalculator {
       )
     }
 
-     def getChildCareCostForPeriod(child : Child) = amountToQuarterlyAmount(child.childcareCost, Periods.Monthly)
+     def getChildCareCostForPeriod(child: Child): BigDecimal = amountToQuarterlyAmount(child.childcareCost, Periods.Monthly)
 
-     def getTopUpPercentForChildCareCost(child : Child, tfcTaxYearConfig: TFCTaxYearConfig) = ((tfcTaxYearConfig.topUpPercent * getChildCareCostForPeriod(child))/100)
+     def getTopUpPercentForChildCareCost(child: Child, tfcTaxYearConfig: TFCTaxYearConfig): BigDecimal =
+       ((tfcTaxYearConfig.topUpPercent * getChildCareCostForPeriod(child)) / 100)
 
     override def award(request : Request) : Future[AwardPeriod] = {
       def getTFCCalculation(eligibility: TFCEligibility): TFCCalculation = {

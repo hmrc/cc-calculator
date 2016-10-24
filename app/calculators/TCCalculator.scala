@@ -37,287 +37,8 @@ trait TCCalculator extends CCCalculator {
 
   val calculator = new TCCalculatorService
 
-  trait TCCalculatorTapering {
-    this: TCCalculatorService =>
-
-    protected def getPeriodAmount(period: models.output.tc.Period, amount : BigDecimal = 0.00, fullCalculationRequired: Boolean) : models.output.tc.Period = {
-      models.output.tc.Period(
-        from = period.from,
-        until = period.until,
-        elements = Elements(
-          wtcWorkElement = Element(
-            maximumAmount = period.elements.wtcWorkElement.maximumAmount,
-            netAmount = period.elements.wtcWorkElement.maximumAmount,
-            taperAmount = BigDecimal(0.00)
-          ),
-          wtcChildcareElement = Element(
-            maximumAmount = period.elements.wtcChildcareElement.maximumAmount,
-            netAmount = period.elements.wtcChildcareElement.maximumAmount,
-            taperAmount = BigDecimal(0.00)
-          ),
-          ctcIndividualElement = Element(
-            maximumAmount = period.elements.ctcIndividualElement.maximumAmount,
-            netAmount = period.elements.ctcIndividualElement.maximumAmount,
-            taperAmount = BigDecimal(0.00)
-          ),
-          ctcFamilyElement = Element(
-            maximumAmount = period.elements.ctcFamilyElement.maximumAmount,
-            netAmount = period.elements.ctcFamilyElement.maximumAmount,
-            taperAmount = BigDecimal(0.00)
-          )
-        ),
-        periodNetAmount = {
-          if(fullCalculationRequired) amount else BigDecimal(0.00)
-        },
-        periodAdviceAmount = {
-          if(fullCalculationRequired) BigDecimal(0.00) else amount
-        }
-      )
-
-    }
-
-    def netAmountPerElementPerPeriod(taperAmount: BigDecimal, maximumAmountPerElement: BigDecimal) : BigDecimal = {
-      if (taperAmount.>(maximumAmountPerElement)) {
-        //WTC work element is nil and further taper is required
-        BigDecimal(0.00)
-      } else {
-        //tapering stops send the difference in amount as WTC element
-        maximumAmountPerElement - taperAmount
-      }
-    }
-
-    def isTaperingRequiredForElements(income: BigDecimal, threshold: BigDecimal) : Boolean = {
-      income > threshold
-    }
-
-    def getHigherAmount(amount1: BigDecimal, amount2: BigDecimal) = {
-      if (amount1.>=(amount2))
-        amount1
-      else
-        amount2
-    }
-
-    //In order to maintain consistency across TC logic the amount is truncated to 3 digits after decimal point and rounded up to the nearest pence
-    def earningsAmountToTaperForPeriod(income: BigDecimal, thresholdIncome: BigDecimal, period: Period) : BigDecimal = {
-      val taperRate = period.config.thresholds.taperRatePercent
-      val rawResult = (income - thresholdIncome) * (taperRate / BigDecimal(100.00))
-      round(roundDownToThreeDigits(rawResult))
-    }
-
-    def getPercentOfAmount(amount : BigDecimal, percentage : Int) : BigDecimal = {
-      (amount / 100) * percentage
-    }
-
-    def wtcIncomeThresholdForPeriod(period : Period) : BigDecimal = {
-      val thresholdConfig = period.config.thresholds.wtcIncomeThreshold
-      val thresholdForPeriod = amountForDateRange(thresholdConfig, Periods.Yearly, period.from, period.until)
-      thresholdForPeriod
-    }
-
-    def ctcIncomeThresholdForPeriod(period : Period) : BigDecimal = {
-      val thresholdConfig = period.config.thresholds.ctcIncomeThreshold
-      val thresholdForPeriod = amountForDateRange(thresholdConfig, Periods.Yearly, period.from, period.until)
-      thresholdForPeriod
-    }
-
-    def incomeForPeriod(previousHouseHoldIncome : BigDecimal, period : Period) : BigDecimal = {
-      val incomeForPeriod = amountForDateRange(previousHouseHoldIncome, Periods.Yearly, period.from, period.until)
-      incomeForPeriod
-    }
-
-    def taperFirstElement(period: models.output.tc.Period, inputPeriod: models.input.tc.Period, income: BigDecimal, wtcIncomeThreshold: BigDecimal): models.output.tc.Period = {
-      val wtcWorkElementMaxAmount = period.elements.wtcWorkElement.maximumAmount
-      val firstTaperThreshold = earningsAmountToTaperForPeriod(income, wtcIncomeThreshold, inputPeriod)
-      val wtcWorkNetAmount = netAmountPerElementPerPeriod(firstTaperThreshold, wtcWorkElementMaxAmount)
-
-      models.output.tc.Period(
-        from = period.from,
-        until = period.until,
-        elements = Elements(
-          wtcWorkElement = Element(
-            maximumAmount = wtcWorkElementMaxAmount,
-            netAmount = wtcWorkNetAmount,
-            taperAmount = {
-              if (wtcWorkNetAmount.equals(BigDecimal(0.00))) {
-                // cannot taper more than maximum amount for current element
-                period.elements.wtcWorkElement.maximumAmount
-              } else {
-                firstTaperThreshold
-              }
-            }
-          ),
-          wtcChildcareElement = period.elements.wtcChildcareElement,
-          ctcIndividualElement = period.elements.ctcIndividualElement,
-          ctcFamilyElement = period.elements.ctcFamilyElement
-        )
-      )
-    }
-
-    def taperSecondElement(period: models.output.tc.Period, inputPeriod: models.input.tc.Period, income: BigDecimal, wtcIncomeThreshold: BigDecimal): models.output.tc.Period = {
-      val secondTaperAmount = earningsAmountToTaperForPeriod(income, wtcIncomeThreshold, inputPeriod)
-      val secondTaperThreshold = secondTaperAmount - period.elements.wtcWorkElement.maximumAmount
-      val wtcChildcareNetAmount = netAmountPerElementPerPeriod(secondTaperThreshold, period.elements.wtcChildcareElement.maximumAmount)
-      models.output.tc.Period(
-        from = period.from,
-        until = period.until,
-        elements = Elements(
-          wtcWorkElement = period.elements.wtcWorkElement,
-          wtcChildcareElement = Element(
-            maximumAmount = period.elements.wtcChildcareElement.maximumAmount,
-            netAmount = {
-              if (period.elements.wtcWorkElement.netAmount.equals(BigDecimal(0.00))) {
-                wtcChildcareNetAmount
-              } else {
-                period.elements.wtcChildcareElement.maximumAmount
-              }
-            },
-            taperAmount = {
-              if (period.elements.wtcWorkElement.netAmount.equals(BigDecimal(0.00))) {
-                if (wtcChildcareNetAmount.equals(BigDecimal(0.00))) {
-                  // cannot taper more than maximum amount for current element
-                  period.elements.wtcChildcareElement.maximumAmount
-                } else {
-                  secondTaperThreshold
-                }
-              } else {
-                BigDecimal(0.00)
-              }
-            }
-          ),
-          ctcIndividualElement = period.elements.ctcIndividualElement,
-          ctcFamilyElement = period.elements.ctcFamilyElement
-        )
-      )
-    }
-
-    def taperThirdElement(period: models.output.tc.Period, inputPeriod: models.input.tc.Period, income: BigDecimal, wtcIncomeThreshold: BigDecimal, ctcIncomeThreshold: BigDecimal): (models.output.tc.Period, Boolean) = {
-      val taperRate = inputPeriod.config.thresholds.taperRatePercent
-      val calculatedCTCThreshold = ((period.elements.wtcWorkElement.maximumAmount + period.elements.wtcChildcareElement.maximumAmount) / taperRate * 100) + wtcIncomeThreshold
-      val roundedCalculatedCTCThreshold = round(roundDownToThreeDigits(calculatedCTCThreshold))
-      val taperingThreshold = getHigherAmount(ctcIncomeThreshold, roundedCalculatedCTCThreshold)
-
-      if (period.elements.wtcChildcareElement.netAmount.equals(BigDecimal(0.00))) {
-        val outputPeriod = models.output.tc.Period(
-          from = period.from,
-          until = period.until,
-          elements = Elements(
-            wtcWorkElement = period.elements.wtcWorkElement,
-            wtcChildcareElement = period.elements.wtcChildcareElement,
-            ctcIndividualElement = Element(
-              maximumAmount = period.elements.ctcIndividualElement.maximumAmount,
-              netAmount = {
-                if (income.>(taperingThreshold)) {
-                  //further tapering required as income is too high
-                  val thirdTaperAmount = earningsAmountToTaperForPeriod(income, taperingThreshold, inputPeriod)
-                  netAmountPerElementPerPeriod(thirdTaperAmount, period.elements.ctcIndividualElement.maximumAmount)
-                } else {
-                  //income is lower than threshold so don't taper
-                  period.elements.ctcIndividualElement.maximumAmount
-                }
-              },
-              taperAmount = {
-                if (income > taperingThreshold) {
-                  //further tapering required as income is too high
-                  val thirdTaperAmount = earningsAmountToTaperForPeriod(income, taperingThreshold, inputPeriod)
-                  val netAmount = netAmountPerElementPerPeriod(thirdTaperAmount, period.elements.ctcIndividualElement.maximumAmount)
-                  if (netAmount.equals(BigDecimal(0.00))) {
-                    period.elements.ctcIndividualElement.maximumAmount
-                  }
-                  else {
-                    thirdTaperAmount
-                  }
-                } else {
-                  //pass maximum amount if taperAmount needs to be used in 4th tapering
-                  BigDecimal(0.00)
-                }
-              }
-            ),
-            ctcFamilyElement = period.elements.ctcFamilyElement
-          )
-        )
-        (outputPeriod, true)
-      } else {
-        //tapering not required
-        val outputPeriod = models.output.tc.Period(
-          from = period.from,
-          until = period.until,
-          elements = Elements(
-            wtcWorkElement = period.elements.wtcWorkElement,
-            wtcChildcareElement = period.elements.wtcChildcareElement,
-            ctcIndividualElement = Element(
-              maximumAmount = period.elements.ctcIndividualElement.maximumAmount,
-              netAmount = period.elements.ctcIndividualElement.maximumAmount,
-              taperAmount = BigDecimal(0.00)
-            ),
-            ctcFamilyElement = period.elements.ctcFamilyElement
-          )
-        )
-        (outputPeriod, false)
-      }
-    }
-
-    def taperFourthElement(period: models.output.tc.Period, inputPeriod: models.input.tc.Period, income: BigDecimal, wtcIncomeThreshold: BigDecimal, ctcIncomeThreshold: BigDecimal, continue: Boolean = false): models.output.tc.Period = {
-      if (continue) {
-        val taperRate = inputPeriod.config.thresholds.taperRatePercent
-        val incomeToTaperElementsNil = (period.elements.wtcWorkElement.maximumAmount + period.elements.wtcChildcareElement.maximumAmount + period.elements.ctcIndividualElement.maximumAmount) / taperRate * 100 + wtcIncomeThreshold
-        val roundedIncomeToTaperElementsNil = round(roundDownToThreeDigits(incomeToTaperElementsNil))
-        val taperingThreshold = getHigherAmount(ctcIncomeThreshold, roundedIncomeToTaperElementsNil)
-        models.output.tc.Period(
-          from = period.from,
-          until = period.until,
-          elements = Elements(
-            wtcWorkElement = period.elements.wtcWorkElement,
-            wtcChildcareElement = period.elements.wtcChildcareElement,
-            ctcIndividualElement = period.elements.ctcIndividualElement,
-            ctcFamilyElement = Element(
-              maximumAmount = period.elements.ctcFamilyElement.maximumAmount,
-              netAmount = {
-                if (income.>(taperingThreshold)) {
-                  val fourthTaperAmount = earningsAmountToTaperForPeriod(income, taperingThreshold, inputPeriod)
-                  netAmountPerElementPerPeriod(fourthTaperAmount, period.elements.ctcFamilyElement.maximumAmount)
-                } else {
-                  period.elements.ctcFamilyElement.maximumAmount
-                }
-              },
-              taperAmount = {
-                if (income.>(taperingThreshold)) {
-                  val fourthTaperAmount = earningsAmountToTaperForPeriod(income, taperingThreshold, inputPeriod)
-                  val netAmount = netAmountPerElementPerPeriod(fourthTaperAmount, period.elements.ctcFamilyElement.maximumAmount)
-                  if (netAmount.equals(BigDecimal(0.00))) {
-                    period.elements.ctcFamilyElement.maximumAmount
-                  }
-                  else {
-                    fourthTaperAmount
-                  }
-                } else {
-                  BigDecimal(0.00)
-                }
-              }
-            )
-          )
-        )
-      } else {
-        models.output.tc.Period(
-          from = period.from,
-          until = period.until,
-          elements = Elements(
-            wtcWorkElement = period.elements.wtcWorkElement,
-            wtcChildcareElement = period.elements.wtcChildcareElement,
-            ctcIndividualElement = period.elements.ctcIndividualElement,
-            ctcFamilyElement = Element(
-              netAmount = period.elements.ctcFamilyElement.maximumAmount,
-              maximumAmount = period.elements.ctcFamilyElement.maximumAmount,
-              taperAmount = BigDecimal(0.00)
-            )
-          )
-        )
-      }
-    }
-
-  }
-
   trait TCCalculatorElements {
-    this : TCCalculatorService  =>
+    this: TCCalculatorService =>
 
     def basicElementForPeriod(period: Period): (Boolean, BigDecimal) = {
       if (period.householdElements.basic) {
@@ -524,7 +245,7 @@ trait TCCalculator extends CCCalculator {
       }
     }
 
-    def generateMaximumAmountsForPeriod(period: Period) = {
+    def generateMaximumAmountsForPeriod(period: Period): models.output.tc.Period = {
       val childElement = maxChildElementForPeriod(period)
       val familyElement = maxFamilyElementForPeriod(period)
       val childcareElement = maxChildcareElementForPeriod(period)
@@ -550,6 +271,301 @@ trait TCCalculator extends CCCalculator {
     }
   }
 
+  trait TCCalculatorTapering {
+    this: TCCalculatorService =>
+
+    protected def getPeriodAmount(period: models.output.tc.Period, amount: BigDecimal = 0.00, fullCalculationRequired: Boolean): models.output.tc.Period = {
+      models.output.tc.Period(
+        from = period.from,
+        until = period.until,
+        elements = Elements(
+          wtcWorkElement = Element(
+            maximumAmount = period.elements.wtcWorkElement.maximumAmount,
+            netAmount = period.elements.wtcWorkElement.maximumAmount,
+            taperAmount = BigDecimal(0.00)
+          ),
+          wtcChildcareElement = Element(
+            maximumAmount = period.elements.wtcChildcareElement.maximumAmount,
+            netAmount = period.elements.wtcChildcareElement.maximumAmount,
+            taperAmount = BigDecimal(0.00)
+          ),
+          ctcIndividualElement = Element(
+            maximumAmount = period.elements.ctcIndividualElement.maximumAmount,
+            netAmount = period.elements.ctcIndividualElement.maximumAmount,
+            taperAmount = BigDecimal(0.00)
+          ),
+          ctcFamilyElement = Element(
+            maximumAmount = period.elements.ctcFamilyElement.maximumAmount,
+            netAmount = period.elements.ctcFamilyElement.maximumAmount,
+            taperAmount = BigDecimal(0.00)
+          )
+        ),
+        periodNetAmount = {
+          if(fullCalculationRequired) amount else BigDecimal(0.00)
+        },
+        periodAdviceAmount = {
+          if(fullCalculationRequired) BigDecimal(0.00) else amount
+        }
+      )
+
+    }
+
+    def netAmountPerElementPerPeriod(taperAmount: BigDecimal, maximumAmountPerElement: BigDecimal) : BigDecimal = {
+      if (taperAmount.>(maximumAmountPerElement)) {
+        //WTC work element is nil and further taper is required
+        BigDecimal(0.00)
+      } else {
+        //tapering stops send the difference in amount as WTC element
+        maximumAmountPerElement - taperAmount
+      }
+    }
+
+    def isTaperingRequiredForElements(income: BigDecimal, threshold: BigDecimal) : Boolean = {
+      income > threshold
+    }
+
+    def getHigherAmount(amount1: BigDecimal, amount2: BigDecimal): BigDecimal = {
+      if (amount1.>=(amount2)) {
+        amount1
+      }
+      else {
+        amount2
+      }
+    }
+
+    //In order to maintain consistency across TC logic the amount is truncated to 3 digits after decimal point and rounded up to the nearest pence
+    def earningsAmountToTaperForPeriod(income: BigDecimal, thresholdIncome: BigDecimal, period: Period) : BigDecimal = {
+      val taperRate = period.config.thresholds.taperRatePercent
+      val rawResult = (income - thresholdIncome) * (taperRate / BigDecimal(100.00))
+      round(roundDownToThreeDigits(rawResult))
+    }
+
+    def getPercentOfAmount(amount : BigDecimal, percentage : Int) : BigDecimal = {
+      (amount / 100) * percentage
+    }
+
+    def wtcIncomeThresholdForPeriod(period : Period) : BigDecimal = {
+      val thresholdConfig = period.config.thresholds.wtcIncomeThreshold
+      val thresholdForPeriod = amountForDateRange(thresholdConfig, Periods.Yearly, period.from, period.until)
+      thresholdForPeriod
+    }
+
+    def ctcIncomeThresholdForPeriod(period : Period) : BigDecimal = {
+      val thresholdConfig = period.config.thresholds.ctcIncomeThreshold
+      val thresholdForPeriod = amountForDateRange(thresholdConfig, Periods.Yearly, period.from, period.until)
+      thresholdForPeriod
+    }
+
+    def incomeForPeriod(previousHouseHoldIncome : BigDecimal, period : Period) : BigDecimal = {
+      val incomeForPeriod = amountForDateRange(previousHouseHoldIncome, Periods.Yearly, period.from, period.until)
+      incomeForPeriod
+    }
+
+    def getTaperingThreshold(
+                              inputPeriod: models.input.tc.Period,
+                              incomeToTaper: BigDecimal,
+                              wtcIncomeThreshold: BigDecimal,
+                              ctcIncomeThreshold: BigDecimal
+                              ): BigDecimal = {
+      val taperRate = inputPeriod.config.thresholds.taperRatePercent
+      val incomeToTaperVal = incomeToTaper / taperRate * 100 + wtcIncomeThreshold
+      val roundedIncomeToTaperElementsNil = round(roundDownToThreeDigits(incomeToTaperVal))
+      getHigherAmount(ctcIncomeThreshold, roundedIncomeToTaperElementsNil)
+    }
+
+    def buildTaperingThresholdVal(
+                                   condition: Boolean,
+                                   inputPeriod: models.input.tc.Period,
+                                   income: BigDecimal,
+                                   wtcIncomeThreshold: BigDecimal,
+                                   ctcIncomeThreshold: BigDecimal
+                                   ): Option[BigDecimal] = {
+      if (condition) {
+        Some(getTaperingThreshold(
+          inputPeriod,
+          income,
+          wtcIncomeThreshold,
+          ctcIncomeThreshold
+        ))
+      } else {
+        None
+      }
+    }
+
+    def getNetAmount(taperingThresholdVal: Option[BigDecimal],
+                     maximumAmount: BigDecimal,
+                     income: BigDecimal,
+                     inputPeriod: models.input.tc.Period): BigDecimal = {
+      taperingThresholdVal match {
+        case Some(taperingThreshold) if income.>(taperingThreshold) => {
+          val taperAmount = earningsAmountToTaperForPeriod(income, taperingThreshold, inputPeriod)
+          netAmountPerElementPerPeriod(taperAmount, maximumAmount)
+        }
+        case _ => maximumAmount
+      }
+    }
+
+    def getTaperAmount(taperingThresholdVal: Option[BigDecimal],
+                       maximumAmount: BigDecimal, income: BigDecimal,
+                       inputPeriod: models.input.tc.Period): BigDecimal = {
+      taperingThresholdVal match {
+        case Some(taperingThreshold) if (income.>(taperingThreshold)) => {
+          //further tapering required as income is too high
+          val taperAmount = earningsAmountToTaperForPeriod(income, taperingThreshold, inputPeriod)
+          val netAmount = netAmountPerElementPerPeriod(taperAmount, maximumAmount)
+          if (netAmount.equals(BigDecimal(0.00))) {
+            maximumAmount
+          }
+          else {
+            taperAmount
+          }
+        }
+        //pass maximum amount if taperAmount needs to be used in next tapering
+        case _ => BigDecimal(0.00)
+      }
+    }
+
+    def buildTCPeriod(period: models.output.tc.Period, taperElements: Elements): models.output.tc.Period = {
+      models.output.tc.Period(
+        from = period.from,
+        until = period.until,
+        elements = taperElements
+      )
+    }
+
+    def taperFirstElement(
+                           period: models.output.tc.Period,
+                           inputPeriod: models.input.tc.Period,
+                           income: BigDecimal,
+                           wtcIncomeThreshold: BigDecimal
+                           ): models.output.tc.Period = {
+      val wtcWorkElementMaxAmount = period.elements.wtcWorkElement.maximumAmount
+      val firstTaperThreshold = earningsAmountToTaperForPeriod(income, wtcIncomeThreshold, inputPeriod)
+      val wtcWorkNetAmount = netAmountPerElementPerPeriod(firstTaperThreshold, wtcWorkElementMaxAmount)
+
+      val elements = Elements(
+        wtcWorkElement = Element(
+          maximumAmount = wtcWorkElementMaxAmount,
+          netAmount = wtcWorkNetAmount,
+          taperAmount = {
+            if (wtcWorkNetAmount.equals(BigDecimal(0.00))) {
+              // cannot taper more than maximum amount for current element
+              period.elements.wtcWorkElement.maximumAmount
+            } else {
+              firstTaperThreshold
+            }
+          }
+        ),
+        wtcChildcareElement = period.elements.wtcChildcareElement,
+        ctcIndividualElement = period.elements.ctcIndividualElement,
+        ctcFamilyElement = period.elements.ctcFamilyElement
+      )
+
+      buildTCPeriod(period, elements)
+    }
+
+    def taperSecondElement(
+                            period: models.output.tc.Period,
+                            inputPeriod: models.input.tc.Period,
+                            income: BigDecimal,
+                            wtcIncomeThreshold: BigDecimal
+                            ): models.output.tc.Period = {
+      val secondTaperAmount = earningsAmountToTaperForPeriod(income, wtcIncomeThreshold, inputPeriod)
+      val secondTaperThreshold = secondTaperAmount - period.elements.wtcWorkElement.maximumAmount
+      val wtcChildcareNetAmount = netAmountPerElementPerPeriod(secondTaperThreshold, period.elements.wtcChildcareElement.maximumAmount)
+
+      val elements = Elements(
+        wtcWorkElement = period.elements.wtcWorkElement,
+        wtcChildcareElement = Element(
+          maximumAmount = period.elements.wtcChildcareElement.maximumAmount,
+          netAmount = {
+            if (period.elements.wtcWorkElement.netAmount.equals(BigDecimal(0.00))) {
+              wtcChildcareNetAmount
+            } else {
+              period.elements.wtcChildcareElement.maximumAmount
+            }
+          },
+          taperAmount = {
+            if (period.elements.wtcWorkElement.netAmount.equals(BigDecimal(0.00))) {
+              if (wtcChildcareNetAmount.equals(BigDecimal(0.00))) {
+                // cannot taper more than maximum amount for current element
+                period.elements.wtcChildcareElement.maximumAmount
+              } else {
+                secondTaperThreshold
+              }
+            } else {
+              BigDecimal(0.00)
+            }
+          }
+        ),
+        ctcIndividualElement = period.elements.ctcIndividualElement,
+        ctcFamilyElement = period.elements.ctcFamilyElement
+      )
+
+      buildTCPeriod(period, elements)
+    }
+
+    def taperThirdElement(
+                           period: models.output.tc.Period,
+                           inputPeriod: models.input.tc.Period,
+                           income: BigDecimal,
+                           wtcIncomeThreshold: BigDecimal,
+                           ctcIncomeThreshold: BigDecimal
+                           ): (models.output.tc.Period, Boolean) = {
+
+      val isNetAmountZero: Boolean = period.elements.wtcChildcareElement.netAmount.equals(BigDecimal(0.00))
+
+      val taperingThresholdVal: Option[BigDecimal] = buildTaperingThresholdVal(
+        isNetAmountZero,
+        inputPeriod,
+        period.elements.wtcWorkElement.maximumAmount + period.elements.wtcChildcareElement.maximumAmount,
+        wtcIncomeThreshold,
+        ctcIncomeThreshold
+      )
+
+      val elements = Elements(
+        wtcWorkElement = period.elements.wtcWorkElement,
+        wtcChildcareElement = period.elements.wtcChildcareElement,
+        ctcIndividualElement = Element(
+          maximumAmount = period.elements.ctcIndividualElement.maximumAmount,
+          netAmount = getNetAmount(taperingThresholdVal, period.elements.ctcIndividualElement.maximumAmount, income, inputPeriod),
+          taperAmount = getTaperAmount(taperingThresholdVal, period.elements.ctcIndividualElement.maximumAmount, income, inputPeriod)
+        ),
+        ctcFamilyElement = period.elements.ctcFamilyElement
+      )
+      (buildTCPeriod(period, elements), isNetAmountZero)
+    }
+
+    def taperFourthElement(period: models.output.tc.Period,
+                           inputPeriod: models.input.tc.Period,
+                           income: BigDecimal,
+                           wtcIncomeThreshold: BigDecimal,
+                           ctcIncomeThreshold: BigDecimal,
+                           continue: Boolean = false): models.output.tc.Period = {
+
+      val taperingThresholdVal: Option[BigDecimal] = buildTaperingThresholdVal(
+        continue,
+        inputPeriod,
+        period.elements.wtcWorkElement.maximumAmount + period.elements.wtcChildcareElement.maximumAmount + period.elements.ctcIndividualElement.maximumAmount,
+        wtcIncomeThreshold,
+        ctcIncomeThreshold
+      )
+
+      val elements = Elements(
+        wtcWorkElement = period.elements.wtcWorkElement,
+        wtcChildcareElement = period.elements.wtcChildcareElement,
+        ctcIndividualElement = period.elements.ctcIndividualElement,
+        ctcFamilyElement = Element(
+          maximumAmount = period.elements.ctcFamilyElement.maximumAmount,
+          netAmount = getNetAmount(taperingThresholdVal, period.elements.ctcFamilyElement.maximumAmount, income, inputPeriod),
+          taperAmount = getTaperAmount(taperingThresholdVal, period.elements.ctcFamilyElement.maximumAmount, income, inputPeriod)
+        )
+      )
+
+      buildTCPeriod(period, elements)
+    }
+  }
+
   trait TCCalculatorHelpers {
     this: TCCalculatorService =>
 
@@ -559,7 +575,7 @@ trait TCCalculator extends CCCalculator {
      *
      * For TC uses a different rounding rules, where rounding always increments the digit prior to a non-zero value
      */
-    override def round(value: BigDecimal) = value.setScale(2, RoundingMode.UP)
+    override def round(value: BigDecimal): BigDecimal = value.setScale(2, RoundingMode.UP)
 
     /**
      * Unformatted:   5.001
@@ -567,7 +583,7 @@ trait TCCalculator extends CCCalculator {
      *
      * For TC uses a different rounding rules, where rounding always increments the digit prior to a non-zero value
      */
-    override def roundToPound(value : BigDecimal) = value.setScale(0, RoundingMode.UP)
+    override def roundToPound(value: BigDecimal): BigDecimal = value.setScale(0, RoundingMode.UP)
 
     def amountFromPeriodToDaily(cost: BigDecimal, fromPeriod: Periods.Period, daysInTheYear : Int): BigDecimal = {
       val amount : BigDecimal = fromPeriod match {
@@ -581,7 +597,14 @@ trait TCCalculator extends CCCalculator {
       amount
     }
 
-    def amountForDateRange(cost: BigDecimal, period: Periods.Period, fromDate: LocalDate, toDate: LocalDate, rounded : Boolean = true, truncated : Boolean = true) = {
+    def amountForDateRange(
+                            cost: BigDecimal,
+                            period: Periods.Period,
+                            fromDate: LocalDate,
+                            toDate: LocalDate,
+                            rounded: Boolean = true,
+                            truncated: Boolean = true
+                            ): BigDecimal = {
       if (fromDate.isBefore(toDate)) {
         //determines if the tax year falls in a leap year and uses 366 days instead of 365 in calculation
         val taxYearDates = TCConfig.getCurrentTaxYearDateRange(fromDate)
@@ -594,28 +617,22 @@ trait TCCalculator extends CCCalculator {
         val numberOfDays = daysBetween(fromDate, toDate)
 
         rounded match {
-          case true =>
-            truncated match {
-              case true =>
-                round(round(dailyAmountTruncated) * numberOfDays)
-              case false =>
-                round(dailyAmount) * numberOfDays
-            }
-          case false =>
-            truncated match {
-              case true =>
-                dailyAmountTruncated * numberOfDays
-              case false =>
-                dailyAmount * numberOfDays
-            }
+          case true if truncated => round(round(dailyAmountTruncated) * numberOfDays)
+          case true if !truncated => round(dailyAmount) * numberOfDays
+          case false if truncated => dailyAmountTruncated * numberOfDays
+          case false if !truncated => dailyAmount * numberOfDays
         }
-      } else {
+      }
+      else {
         BigDecimal(0.00)
       }
     }
 
-    def getTotalMaximumAmountPerPeriod(period :models.output.tc.Period) : BigDecimal = {
-      period.elements.wtcWorkElement.maximumAmount + period.elements.wtcChildcareElement.maximumAmount + period.elements.ctcIndividualElement.maximumAmount + period.elements.ctcFamilyElement.maximumAmount
+    def getTotalMaximumAmountPerPeriod(period: models.output.tc.Period): BigDecimal = {
+      period.elements.wtcWorkElement.maximumAmount +
+        period.elements.wtcChildcareElement.maximumAmount +
+        period.elements.ctcIndividualElement.maximumAmount +
+        period.elements.ctcFamilyElement.maximumAmount
     }
 
     def determineTaxYearToProRata(taxYears : List[models.output.tc.TaxYear], proRataEndDate : LocalDate) : (Boolean, Option[models.output.tc.TaxYear]) = {
@@ -663,16 +680,29 @@ trait TCCalculator extends CCCalculator {
         }
       }
 
-      val proRataTotalAward = taxYears.foldLeft(BigDecimal(0.00))((acc, ty) => if (ty.from == proRataTaxYear.from) acc + ty.taxYearAwardProRataAmount else acc + ty.taxYearAwardAmount)
-      val proRataTotalAdvice = taxYears.foldLeft(BigDecimal(0.00))((acc, ty) => if (ty.from == proRataTaxYear.from) acc + ty.taxYearAdviceProRataAmount else acc + ty.taxYearAdviceAmount)
+      val proRataTotalAward = taxYears.foldLeft(BigDecimal(0.00))((acc, ty) => if (ty.from == proRataTaxYear.from) {
+        acc + ty.taxYearAwardProRataAmount
+      }
+      else {
+        acc + ty.taxYearAwardAmount
+      })
+      val proRataTotalAdvice = taxYears.foldLeft(BigDecimal(0.00))((acc, ty) => if (ty.from == proRataTaxYear.from) {
+        acc + ty.taxYearAdviceProRataAmount
+      }
+      else {
+        acc + ty.taxYearAdviceAmount
+      })
 
       // copy the original calculation swapping out the tax year that has been pro-ratard and adjusting the total calculation value
-      val result = award.copy(proRataEnd = proRataTaxYear.proRataEnd, totalAwardProRataAmount = proRataTotalAward, totalHouseHoldAdviceProRataAmount = proRataTotalAdvice, taxYears = taxYears)
+      val result = award.copy(
+        proRataEnd = proRataTaxYear.proRataEnd,
+        totalAwardProRataAmount = proRataTotalAward,
+        totalHouseHoldAdviceProRataAmount = proRataTotalAdvice,
+        taxYears = taxYears
+      )
       result
     }
   }
-
-
 
   class TCCalculatorService extends CCCalculatorService with TCCalculatorElements with TCCalculatorTapering with TCCalculatorHelpers {
     import scala.concurrent.ExecutionContext.Implicits.global
@@ -688,7 +718,13 @@ trait TCCalculator extends CCCalculator {
       adviceAmount
     }
 
-    def generateRequiredAmountsPerPeriod(period : models.output.tc.Period, inputPeriod: models.input.tc.Period, income : BigDecimal, wtcIncomeThreshold: BigDecimal, ctcIncomeThreshold: BigDecimal, fullCalculationRequired : Boolean = true) : models.output.tc.Period = {
+    def generateRequiredAmountsPerPeriod(
+                                          period: models.output.tc.Period,
+                                          inputPeriod: models.input.tc.Period,
+                                          income: BigDecimal,
+                                          wtcIncomeThreshold: BigDecimal,
+                                          ctcIncomeThreshold: BigDecimal,
+                                          fullCalculationRequired: Boolean = true): models.output.tc.Period = {
       val totalMaximumAmount = getTotalMaximumAmountPerPeriod(period)
 
       if(fullCalculationRequired){
@@ -697,7 +733,13 @@ trait TCCalculator extends CCCalculator {
           val taperedFirstElement = taperFirstElement(period, inputPeriod, income, wtcIncomeThreshold)
           val taperedSecondElement = taperSecondElement(taperedFirstElement,inputPeriod,income,wtcIncomeThreshold)
           val taperedThirdElement = taperThirdElement(taperedSecondElement,inputPeriod,income, wtcIncomeThreshold, ctcIncomeThreshold)
-          val taperedFourthElement = taperFourthElement(taperedThirdElement._1,inputPeriod, income, wtcIncomeThreshold, ctcIncomeThreshold, taperedThirdElement._2)
+          val taperedFourthElement = taperFourthElement(
+            taperedThirdElement._1,inputPeriod,
+            income,
+            wtcIncomeThreshold,
+            ctcIncomeThreshold,
+            taperedThirdElement._2
+          )
 
           models.output.tc.Period(
             from = period.from,
@@ -709,7 +751,10 @@ trait TCCalculator extends CCCalculator {
               ctcFamilyElement = taperedFourthElement.elements.ctcFamilyElement
             ),
             periodNetAmount = {
-              taperedFourthElement.elements.wtcWorkElement.netAmount + taperedFourthElement.elements.wtcChildcareElement.netAmount + taperedFourthElement.elements.ctcIndividualElement.netAmount + taperedFourthElement.elements.ctcFamilyElement.netAmount
+              taperedFourthElement.elements.wtcWorkElement.netAmount +
+                taperedFourthElement.elements.wtcChildcareElement.netAmount +
+                taperedFourthElement.elements.ctcIndividualElement.netAmount +
+                taperedFourthElement.elements.ctcFamilyElement.netAmount
             }
           )
         } else { //When no tapering is required
@@ -717,13 +762,17 @@ trait TCCalculator extends CCCalculator {
         }
       }
       else {// if calculating household advice
-      val adviceAmount = getAdviceCalculationRounded(totalMaximumAmount, wtcIncomeThreshold, inputPeriod)
+        val adviceAmount = getAdviceCalculationRounded(totalMaximumAmount, wtcIncomeThreshold, inputPeriod)
         getPeriodAmount(period, adviceAmount, fullCalculationRequired)
       }
 
     }
 
-    def getCalculatedPeriods(taxYear : models.input.tc.TaxYear, previousHouseholdIncome : BigDecimal, fullCalculationRequired : Boolean = true) : List[models.output.tc.Period] = {
+    def getCalculatedPeriods(
+                              taxYear: models.input.tc.TaxYear,
+                              previousHouseholdIncome: BigDecimal,
+                              fullCalculationRequired: Boolean = true
+                              ): List[models.output.tc.Period] = {
       val periods = taxYear.periods
       val calculatedPeriods = for (period <- periods) yield {
         // get all the elements for the period (pro-rota to the number of days) for each household composition
@@ -733,7 +782,14 @@ trait TCCalculator extends CCCalculator {
         // return an award period which contains all the elements and their amounts they can claim for that period
         val maximumAmounts = generateMaximumAmountsForPeriod(period)
         //here we get the model updated with net due and taper and advice amounts
-        val amountForElements = generateRequiredAmountsPerPeriod(maximumAmounts, period, income, wtcIncomeThreshold, ctcIncomeThreshold, fullCalculationRequired)
+        val amountForElements = generateRequiredAmountsPerPeriod(
+          maximumAmounts,
+          period,
+          income,
+          wtcIncomeThreshold,
+          ctcIncomeThreshold,
+          fullCalculationRequired
+        )
         //calculate the net due for period
         amountForElements
       }
@@ -870,3 +926,4 @@ trait TCCalculator extends CCCalculator {
 
   }
 }
+

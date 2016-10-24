@@ -71,11 +71,12 @@ trait CCConfig extends CCFormat {
     januaryCalendar.set(Calendar.DAY_OF_MONTH, 1)
     val january1st = januaryCalendar.getTime
 
+    val aprilCalendarDayOfMonth = 5
     val aprilCalendar = Calendar.getInstance()
     aprilCalendar.clear()
     aprilCalendar.set(Calendar.YEAR, periodYear)
     aprilCalendar.set(Calendar.MONTH, Calendar.APRIL)
-    aprilCalendar.set(Calendar.DAY_OF_MONTH, 5)
+    aprilCalendar.set(Calendar.DAY_OF_MONTH, aprilCalendarDayOfMonth)
     val april5th = aprilCalendar.getTime
 
     if ((periodStart.compareTo(january1st) == 0 || periodStart.after(january1st)) && (periodStart.before(april5th) || periodStart.compareTo(april5th) == 0)) {
@@ -85,7 +86,7 @@ trait CCConfig extends CCFormat {
     }
   }
 
-  def taxYearEndDate(now: LocalDate = LocalDate.now(), schemeName: String) = {
+  def taxYearEndDate(now: LocalDate = LocalDate.now(), schemeName: String): LocalDate = {
     val month = configuration.getInt(s"$schemeName.end-of-tax-year-date.month").getOrElse(0)
     val day = configuration.getInt(s"$schemeName.end-of-tax-year-date.day").getOrElse(0)
     // have to determine the year as this is not a fixed date

@@ -103,7 +103,7 @@ case class Elements(wtcWorkElement: Element,
                      ctcIndividualElement: Element,
                      ctcFamilyElement: Element) {
 
-  def wtcWorkElementNetDueIsNil = {
+  def wtcWorkElementNetDueIsNil: Boolean = {
     wtcWorkElement.netAmount.equals(BigDecimal(0.00))
   }
 

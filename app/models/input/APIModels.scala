@@ -35,19 +35,19 @@ object APIModels extends utils.CCFormat {
   case class Request(
                       payload: Payload
                       ) {
-    def getTaxCreditsEligibility = {
+    def getTaxCreditsEligibility: Try[TCEligibility] = {
       Try {
         payload.eligibility.tc.get
       }
     }
 
-    def getESCEligibility = {
+    def getESCEligibility: Try[ESCEligibility] = {
       Try {
         payload.eligibility.esc.get
       }
     }
 
-    def getTFCEligibility = {
+    def getTFCEligibility: Try[TFCEligibility] = {
       Try{
         payload.eligibility.tfc.get
       }

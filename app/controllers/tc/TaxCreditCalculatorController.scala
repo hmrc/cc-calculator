@@ -42,7 +42,7 @@ trait TaxCreditCalculatorController extends CalculatorController with ServicesCo
 
   val auditEvent : AuditEvents
 
-  def incomeAdvice = Action.async(parse.json) {
+  def incomeAdvice: Action[JsValue] = Action.async(parse.json) {
     implicit request =>
       request.body.validate[Request].fold(
         error => {
@@ -64,13 +64,16 @@ trait TaxCreditCalculatorController extends CalculatorController with ServicesCo
               }
             case _ =>
               Logger.warn(s"\n\n Tax Credits Calculator Exception in TaxCreditCalculatorController.incomeAdvice: Input Request::: ${result.toString}\n\n")
-              Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(play.api.http.Status.BAD_REQUEST, Right(new IllegalArgumentException(Messages("cc.calc.invalid.request.exception"))))))
+              Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(
+                play.api.http.Status.BAD_REQUEST,
+                Right(new IllegalArgumentException(Messages("cc.calc.invalid.request.exception")))
+              )))
           }
         }
       )
   }
 
- override def calculate = Action.async(parse.json) {
+ override def calculate: Action[JsValue] = Action.async(parse.json) {
    implicit request =>
      request.body.validate[Request].fold(
        error => {
@@ -94,7 +97,10 @@ trait TaxCreditCalculatorController extends CalculatorController with ServicesCo
              }
            case _ =>
              Logger.warn(s"\n\n Tax Credits Calculator Exception in TaxCreditCalculatorController.calculate: Input Request::: ${result.toString}\n\n")
-             Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(play.api.http.Status.BAD_REQUEST, Right(new IllegalArgumentException(Messages("cc.calc.invalid.request.exception"))))))
+             Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(
+               play.api.http.Status.BAD_REQUEST,
+               Right(new IllegalArgumentException(Messages("cc.calc.invalid.request.exception")))
+             )))
          }
        }
      )
