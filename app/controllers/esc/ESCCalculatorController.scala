@@ -42,17 +42,15 @@ trait ESCCalculatorController extends CalculatorController with ServicesConfig {
     implicit request =>
       request.body.validate[Request].fold(
         error => {
-          Logger.warn(s"\n\n ESC Calculator Validation JsError in ESCCalculatorController.calculate: ${JsError.toFlatJson(error).toString()}\n\n")
+          Logger.warn(s"\n\n ESC Calculator Validation JsError in ESCCalculatorController.calculate \n\n")
           Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(play.api.http.Status.BAD_REQUEST, Left(error))))
         },
         result => {
           result.getESCEligibility.isSuccess match {
             case true =>
               auditEvent.auditESCRequest(result.toString)
-              Logger.info(s"\n\n ESC Calculator Validation passed in ESCCalculatorController.calculate: ${result.toString}\n\n")
               calculator.award(result).map {
                 response =>
-                  Logger.info(s"\n\n ESC Calculator Result in ESCCalculatorController.calculate: ${response.toString}\n\n")
                   auditEvent.auditESCResponse(utils.JSONFactory.generateResultJson(response).toString())
                   Ok(utils.JSONFactory.generateResultJson(response))
               } recover {
@@ -61,7 +59,7 @@ trait ESCCalculatorController extends CalculatorController with ServicesConfig {
                   InternalServerError(utils.JSONFactory.generateErrorJSON(play.api.http.Status.INTERNAL_SERVER_ERROR, Right(e)))
               }
             case _ =>
-              Logger.warn(s"\n\n ESC Calculator Exception in ESCCalculatorController.calculate: Input Request::: ${result.toString}\n\n")
+              Logger.warn("\n\n ESC Calculator Exception in ESCCalculatorController.calculate \n\n")
               Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(
                 play.api.http.Status.BAD_REQUEST,
                 Right(new IllegalArgumentException(Messages("cc.calc.invalid.request.exception")))

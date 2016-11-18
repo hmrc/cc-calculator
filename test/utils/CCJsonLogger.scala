@@ -28,7 +28,7 @@ trait CCJsonLogger {
   def logResult(result: JsResult[Request]) = {
     result match {
       case JsSuccess(x, _) =>
-        Logger.info(s"\n\n JsSuccess json result: ${Json.toJson(result.toString)} \n\n")
+        Logger.info(s"\n\n JsSuccess json \n\n")
       case e: JsError =>
         val json = JsError.toFlatJson(e)
         Logger.warn(s"\n\n JsError: ${json.toString()}\n\n")

@@ -44,17 +44,15 @@ trait TFCCalculatorController extends CalculatorController with ServicesConfig {
 
       request.body.validate[Request].fold(
         error => {
-          Logger.warn(s"\n\n TFC Calculator Validation JsError in TFCCalculatorController.calculate: ${JsError.toFlatJson(error).toString()}\n\n")
+          Logger.warn(s"\n\n TFC Calculator Validation JsError in TFCCalculatorController.calculate \n\n")
           Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(play.api.http.Status.BAD_REQUEST, Left(error))))
         },
         result => {
           result.getTFCEligibility.isSuccess match {
             case true =>
-              Logger.info(s"\n\n TFC Calculator Validation passed in TFCCalculatorController.calculate: ${result.toString}\n\n")
               auditEvent.auditTFCRequest(result.toString)
               calculator.award(result).map {
                 response =>
-                  Logger.info(s"\n\n TFC Calculator Result in TFCCalculatorController.calculate: ${response.toString}\n\n")
                   auditEvent.auditTFCResponse(utils.JSONFactory.generateResultJson(response).toString())
                   Ok(utils.JSONFactory.generateResultJson(response))
               } recover {
@@ -63,7 +61,7 @@ trait TFCCalculatorController extends CalculatorController with ServicesConfig {
                   InternalServerError(utils.JSONFactory.generateErrorJSON(play.api.http.Status.INTERNAL_SERVER_ERROR, Right(e)))
               }
             case _ =>
-              Logger.warn(s"\n\n TFC Calculator Exception in TFCCalculatorController.calculate: Input Request:::${result.toString}\n\n")
+              Logger.warn(s"\n\n TFC Calculator Exception in TFCCalculatorController.calculate \n\n")
               Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(
                 play.api.http.Status.BAD_REQUEST,
                 Right(new IllegalArgumentException(Messages("cc.calc.invalid.request.exception")))
