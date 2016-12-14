@@ -14,16 +14,16 @@ private object AppDependencies {
   import play.sbt.PlayImport._
   import play.core.PlayVersion
 
-  private val microServiceBootstrapVersion = "4.4.0"
-  private val playConfigVersion = "2.1.0"
-  private val playAuthorisationVersion = "3.3.0"
-  private val playJsonLoggerVersion = "2.1.1"
-  private val playUrlBindersVersion = "1.1.0"
-  private val playSchedulingVersion = "1.1.0"
-  private val playHealthVersion = "1.1.0"
+  private val microServiceBootstrapVersion = "5.7.0"
+  private val playConfigVersion = "3.0.0"
+  private val playAuthorisationVersion = "4.2.0"
+  private val logbackJsonLoggerVersion = "3.1.0"
+  private val playUrlBindersVersion = "2.0.0"
+  private val playSchedulingVersion = "4.0.0"
+  private val playHealthVersion = "2.0.0"
   private val scalaTestVersion = "2.2.6"
   private val pegDownVersion = "1.6.0"
-  private val hmrcTestVersion = "1.8.0"
+  private val hmrcTestVersion = "2.1.0"
   private val jsonSchemaValidator = "2.2.6"
   private val json4s = "3.2.11"
 
@@ -32,7 +32,7 @@ private object AppDependencies {
     "uk.gov.hmrc" %% "microservice-bootstrap" % microServiceBootstrapVersion,
     "uk.gov.hmrc" %% "play-url-binders" % playUrlBindersVersion,
     "uk.gov.hmrc" %% "play-config" % playConfigVersion,
-    "uk.gov.hmrc" %% "play-json-logger" % playJsonLoggerVersion,
+    "uk.gov.hmrc" %% "logback-json-logger" % logbackJsonLoggerVersion,
     "uk.gov.hmrc" %% "play-authorisation" % playAuthorisationVersion,
     "uk.gov.hmrc" %% "play-scheduling" % playSchedulingVersion,
     "uk.gov.hmrc" %% "play-health" % playHealthVersion,
