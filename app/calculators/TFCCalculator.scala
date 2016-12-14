@@ -22,6 +22,8 @@ import models.output.OutputAPIModel.AwardPeriod
 import models.output.tfc._
 import org.joda.time.LocalDate
 import play.api.Logger
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
 import play.api.i18n.Messages
 import utils.{Periods, TFCTaxYearConfig}
 

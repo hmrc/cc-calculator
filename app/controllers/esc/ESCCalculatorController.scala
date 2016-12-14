@@ -20,6 +20,8 @@ import calculators.ESCCalculator
 import controllers.CalculatorController
 import models.input.APIModels.Request
 import play.api.Logger
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
 import play.api.i18n.Messages
 import play.api.libs.json.{JsValue, JsError}
 import play.api.mvc.Action

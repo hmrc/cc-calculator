@@ -1,13 +1,12 @@
 import play.routes.compiler.StaticRoutesGenerator
 import sbt.Keys._
 import sbt._
-import TestPhases._
 import scoverage._
 import uk.gov.hmrc.SbtAutoBuildPlugin
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
 import uk.gov.hmrc.versioning.SbtGitVersioning
-import play.sbt.routes.RoutesKeys.routesGenerato
+import play.sbt.routes.RoutesKeys.routesGenerator
 
 
 trait MicroService {
@@ -35,6 +34,8 @@ trait MicroService {
     .settings(
       libraryDependencies ++= appDependencies,
       retrieveManaged := true,
+      evictionWarningOptions in update := EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
+      routesGenerator := StaticRoutesGenerator,
       resolvers := Seq(
         Resolver.bintrayRepo("hmrc", "releases"),
         Resolver.typesafeRepo("releases"),
