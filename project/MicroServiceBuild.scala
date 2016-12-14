@@ -14,7 +14,7 @@ private object AppDependencies {
   import play.sbt.PlayImport._
   import play.core.PlayVersion
 
-  private val microServiceBootstrapVersion = "5.7.0"
+  private val microServiceBootstrapVersion = "5.8.0"
   private val playConfigVersion = "3.0.0"
   private val playAuthorisationVersion = "4.2.0"
   private val logbackJsonLoggerVersion = "3.1.0"
@@ -26,6 +26,7 @@ private object AppDependencies {
   private val hmrcTestVersion = "2.1.0"
   private val jsonSchemaValidator = "2.2.6"
   private val json4s = "3.2.11"
+  private val mockitoVersion = "1.9.0"
 
   val compile = Seq(
     ws,
@@ -52,7 +53,8 @@ private object AppDependencies {
         "uk.gov.hmrc" %% "hmrctest" % hmrcTestVersion % scope,
         "org.scalatest" %% "scalatest" % scalaTestVersion % scope,
         "org.pegdown" % "pegdown" % pegDownVersion % scope,
-        "com.typesafe.play" %% "play-test" % PlayVersion.current % scope
+        "com.typesafe.play" %% "play-test" % PlayVersion.current % scope,
+        "org.mockito" % "mockito-core" % mockitoVersion % scope
       )
     }.test
   }
