@@ -20,12 +20,13 @@ import play.api.libs.iteratee.Input
 import play.api.libs.json.JsValue
 import play.api.mvc.Action
 import play.api.test.FakeRequest
+import scala.concurrent.ExecutionContext.Implicits.global
 
 object JsonRequestHelper {
 
-  import scala.concurrent.ExecutionContext.Implicits.global
 
-  def executeAction(action: Action[JsValue], request: FakeRequest[_], payload: String) =
-    action(request).feed(Input.El(payload.getBytes)).flatMap(_.run)
+
+//  def executeAction(action: Action[JsValue], request: FakeRequest[_], payload: String) =
+//    action(request).feed(Input.El(payload.getBytes)).flatMap(_.run)
 
 }

@@ -411,9 +411,9 @@ class ESCCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorApplicat
 
     "Return Internal Server Error with error message if an exception is thrown during calculation " in {
       val controller = mockESCCalculatorController
-      val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
       val resource: JsonNode = JsonLoader.fromResource("/json/esc/input/calculator_input_test.json")
       val inputJson: JsValue = Json.parse(resource.toString)
+      val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
       val JsonResult = inputJson.validate[Request]
 
       when(controller.calculator.award(mockEq(JsonResult.get))).thenReturn(Future.failed(new Exception("Something bad happened")))
@@ -433,9 +433,9 @@ class ESCCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorApplicat
 
     "Return Bad Request with error message if a request for a different scheme is passed(e.g. TC) " in {
       val controller = mockESCCalculatorController
-      val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_12.json")
       val inputJson: JsValue = Json.parse(resource.toString)
+      val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
       val result = await(controller.calculate()(request))
 
       val outputJSON = Json.parse(
