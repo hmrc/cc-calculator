@@ -47,20 +47,3 @@ trait MicroService {
     )
 
 }
-
-private object Repositories {
-
-
-  import uk.gov.hmrc.PublishingSettings._
-
-  lazy val playPublishingSettings : Seq[sbt.Setting[_]] = sbtrelease.ReleasePlugin.releaseSettings ++ Seq(
-
-    credentials += SbtCredentials,
-
-    publishArtifact in(Compile, packageDoc) := false,
-    publishArtifact in(Compile, packageSrc) := false
-
-  ) ++
-    publishAllArtefacts
-
-}
