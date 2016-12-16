@@ -27,12 +27,12 @@ import uk.gov.hmrc.play.config.ServicesConfig
 /**
  * Created by user on 22/01/16.
  */
-trait ESCConfig {
-  lazy val upperMonthsLimitValidation = configuration.getInt(s"esc.months-upper-limit").getOrElse(0)
-  lazy val lowerMonthsLimitValidation = configuration.getInt(s"esc.months-lower-limit").getOrElse(0)
-  lazy val lowerPeriodsLimitValidation = configuration.getInt(s"esc.periods-lower-limit").getOrElse(0)
-  lazy val lowerTaxYearsLimitValidation = configuration.getInt(s"esc.tax-years-lower-limit").getOrElse(0)
-  lazy val lowerClaimantsLimitValidation = configuration.getInt(s"esc.claimants-lower-limit").getOrElse(0)
+trait ESCConfig extends ServicesConfig {
+  lazy val upperMonthsLimitValidation = getInt(s"esc.months-upper-limit")
+  lazy val lowerMonthsLimitValidation = getInt(s"esc.months-lower-limit")
+  lazy val lowerPeriodsLimitValidation = getInt(s"esc.periods-lower-limit")
+  lazy val lowerTaxYearsLimitValidation = getInt(s"esc.tax-years-lower-limit")
+  lazy val lowerClaimantsLimitValidation = getInt(s"esc.claimants-lower-limit")
   lazy val pre2011MaxExemptionMonthly = configuration.getDouble(s"esc.pre-2011-maximum-exemption.basic-higher-additional.monthly").getOrElse(0.00)
 }
 
@@ -97,7 +97,7 @@ object ESCConfig extends CCConfig with ServicesConfig {
       post2011MaxExemptionMonthlyBasic = config.getDouble("post-2011-maximum-exemption.basic.monthly").get,
       post2011MaxExemptionMonthlyHigher = config.getDouble("post-2011-maximum-exemption.higher.monthly").get,
       post2011MaxExemptionMonthlyAdditional = config.getDouble("post-2011-maximum-exemption.additional.monthly").get,
-      defaultTaxCode = config.getString("tax.default-tax-code").get,
+      defaultTaxCode = getString("tax.default-tax-code"),
       personalAllowanceRate = config.getDouble("tax.personal-allowance.rate").get,
       defaultPersonalAllowance = config.getDouble("tax.personal-allowance.default-personal-allowance").get,
       taxBasicRate = config.getDouble("tax.basic.rate").get,
