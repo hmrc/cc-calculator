@@ -97,7 +97,7 @@ object ESCConfig extends CCConfig with ServicesConfig {
       post2011MaxExemptionMonthlyBasic = config.getDouble("post-2011-maximum-exemption.basic.monthly").get,
       post2011MaxExemptionMonthlyHigher = config.getDouble("post-2011-maximum-exemption.higher.monthly").get,
       post2011MaxExemptionMonthlyAdditional = config.getDouble("post-2011-maximum-exemption.additional.monthly").get,
-      defaultTaxCode = getString("tax.default-tax-code"),
+      defaultTaxCode = config.getString("tax.default-tax-code").get,
       personalAllowanceRate = config.getDouble("tax.personal-allowance.rate").get,
       defaultPersonalAllowance = config.getDouble("tax.personal-allowance.default-personal-allowance").get,
       taxBasicRate = config.getDouble("tax.basic.rate").get,

@@ -94,7 +94,7 @@ class TaxCreditCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorAp
 
       when(controller.calculator.incomeAdvice(any[Request]())).thenReturn(Future.successful(AwardPeriod()))
       val result = await(controller.incomeAdvice() (request))
-      status(result) shouldBe Status.OK
+      status(result) shouldBe Status.BAD_REQUEST
     }
 
     "Accept invalid json with incorrect data type json and return a Bad request" in {
@@ -104,7 +104,7 @@ class TaxCreditCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorAp
 
       when(controller.calculator.award(any[Request]())).thenReturn(Future.successful(AwardPeriod()))
       val result = await(controller.calculate()(request))
-      status(result) shouldBe Status.OK
+      status(result) shouldBe Status.BAD_REQUEST
     }
 
     "Accept invalid json if child name for more than 25 characters for total award and return 400" in {
@@ -114,7 +114,7 @@ class TaxCreditCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorAp
 
       when(controller.calculator.award(any[Request]())).thenReturn(Future.successful(AwardPeriod()))
       val result = await(controller.calculate()(request))
-      status(result) shouldBe Status.OK
+      status(result) shouldBe Status.BAD_REQUEST
     }
 
     "Accept invalid json if child name for more than 25 characters for income advice and return 400" in {
@@ -124,7 +124,7 @@ class TaxCreditCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorAp
 
       when(controller.calculator.incomeAdvice(any[Request]())).thenReturn(Future.successful(AwardPeriod()))
       val result = await(controller.incomeAdvice() (request))
-      status(result) shouldBe Status.OK
+      status(result) shouldBe Status.BAD_REQUEST
     }
 
     "Accept invalid json if houseHold Income is less than 0.00 and return Bad request" in {
@@ -134,7 +134,7 @@ class TaxCreditCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorAp
 
       when(controller.calculator.incomeAdvice(any[Request]())).thenReturn(Future.successful(AwardPeriod()))
       val result = await(controller.incomeAdvice() (request))
-      status(result) shouldBe Status.OK
+      status(result) shouldBe Status.BAD_REQUEST
     }
 
     "Accept a valid json if houseHold Income amount is 0.00 and return 200" in {

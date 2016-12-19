@@ -99,7 +99,7 @@ object TCConfig extends CCConfig with TCConfig with ServicesConfig {
   def getTaxYear(config : Configuration): TCTaxYearConfig = {
     TCTaxYearConfig(
       wtc = WTC(
-        basicElement = getInt("input-elements.wtc.basic-element"),
+        basicElement = config.getInt("input-elements.wtc.basic-element").get,
         coupleElement = config.getInt("input-elements.wtc.second-adult-element").get,
         loneParentElement = config.getInt("input-elements.wtc.lone-parent-element").get,
         hours30Element = config.getInt("input-elements.wtc.30-hour-element").get,
