@@ -18,14 +18,13 @@ package models.input
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.github.fge.jackson.JsonLoader
-import controllers.FakeCCCalculatorApplication
 import models.input.APIModels.Request
 import models.input.esc.ESCEligibility
 import models.input.tc.TCEligibility
 import models.input.tfc.TFCEligibility
 import play.api.libs.json.{JsSuccess, JsValue, Json}
 import uk.gov.hmrc.play.test.UnitSpec
-import utils.CCJsonLogger
+import utils.{FakeCCCalculatorApplication, CCJsonLogger}
 
 import scala.util.{Failure, Success}
 

@@ -17,17 +17,15 @@
 package utils
 
 import com.typesafe.config.ConfigFactory
-import controllers.FakeCCCalculatorApplication
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import play.api.Configuration
-import uk.gov.hmrc.play.test.UnitSpec
 import utils.ESCConfig._
 
 /**
  * Created by user on 25/01/16.
  */
-class ESCSchemeConfigSpec extends UnitSpec with FakeCCCalculatorApplication with ESCConfig {
+class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with ESCConfig {
   "ESC SchemeConfig" should {
 
     "(ESC) populate upper months limit from config file" in {

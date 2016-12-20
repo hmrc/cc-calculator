@@ -19,7 +19,6 @@ package controllers.esc
 import calculators.ESCCalculator
 import com.fasterxml.jackson.databind.JsonNode
 import com.github.fge.jackson.JsonLoader
-import controllers.FakeCCCalculatorApplication
 import models.input.APIModels.Request
 import models.output.OutputAPIModel.AwardPeriod
 import org.mockito.Matchers.{eq => mockEq, _}
@@ -31,10 +30,10 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import service.AuditEvents
 import play.api.Play
-import utils.CCSpecConfig
+import utils.FakeCCCalculatorApplication
 import scala.concurrent.Future
 
-class ESCCalculatorControllerSpec extends CCSpecConfig with FakeCCCalculatorApplication with MockitoSugar {
+class ESCCalculatorControllerSpec extends FakeCCCalculatorApplication with MockitoSugar {
 
   val mockESCCalculatorController = new ESCCalculatorController with ESCCalculator {
     override val calculator = mock[ESCCalculatorService]

@@ -19,14 +19,13 @@ package models.input
 import calculators.ESCCalculator
 import com.fasterxml.jackson.databind.JsonNode
 import com.github.fge.jackson.JsonLoader
-import controllers.FakeCCCalculatorApplication
 import models.input.APIModels.Request
 import models.input.esc._
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import play.api.libs.json.{JsSuccess, JsValue, Json}
 import uk.gov.hmrc.play.test.UnitSpec
-import utils.{ESCConfig, ESCTaxYearConfig, NiCategory, Periods}
+import utils._
 
 class ESCEligibilitySpec extends UnitSpec with FakeCCCalculatorApplication {
 

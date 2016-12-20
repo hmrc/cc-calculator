@@ -16,17 +16,12 @@
 
 package utils
 
-import controllers.FakeCCCalculatorApplication
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
-import play.api.i18n.Messages
 import play.api.libs.json.{JsString, Json}
-import uk.gov.hmrc.play.test.UnitSpec
 
 /**
  * Created by adamconder on 09/06/15.
  */
-class PeriodsSpec extends UnitSpec with FakeCCCalculatorApplication {
+class PeriodsSpec extends FakeCCCalculatorApplication {
 
   "Periods" should {
 
@@ -52,32 +47,32 @@ class PeriodsSpec extends UnitSpec with FakeCCCalculatorApplication {
 
     "convert Weekly to string" in {
       val weekly = Periods.Weekly
-      Periods.toString(weekly) shouldBe Messages("cc.period.weekly")
+      Periods.toString(weekly) shouldBe messages("cc.period.weekly")
     }
 
     "convert Fortnightly to string" in {
       val fortnightly = Periods.Fortnightly
-      Periods.toString(fortnightly) shouldBe Messages("cc.period.fortnightly")
+      Periods.toString(fortnightly) shouldBe messages("cc.period.fortnightly")
     }
 
     "convert Monthly to string" in {
       val monthly = Periods.Monthly
-      Periods.toString(monthly) shouldBe Messages("cc.period.monthly")
+      Periods.toString(monthly) shouldBe messages("cc.period.monthly")
     }
 
     "convert Quarterly to string" in {
       val quarterly = Periods.Quarterly
-      Periods.toString(quarterly) shouldBe Messages("cc.period.3monthly")
+      Periods.toString(quarterly) shouldBe messages("cc.period.3monthly")
     }
 
     "convert Yearly to string" in {
       val yearly = Periods.Yearly
-      Periods.toString(yearly) shouldBe Messages("cc.period.yearly")
+      Periods.toString(yearly) shouldBe messages("cc.period.yearly")
     }
 
     "convert INVALID to string" in {
       val invalid = Periods.INVALID
-      Periods.toString(invalid) shouldBe Messages("cc.period.invalid")
+      Periods.toString(invalid) shouldBe messages("cc.period.invalid")
     }
 
   }

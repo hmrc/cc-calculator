@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-import controllers.FakeCCCalculatorApplication
 import models.output.OutputAPIModel.{AwardPeriod, Response}
 import models.output.esc.{Income, Savings, TaxAndNI}
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import play.api.libs.json.Json
 import uk.gov.hmrc.play.test.UnitSpec
-import utils.{CCJsonLogger, Periods}
+import utils.{FakeCCCalculatorApplication, CCJsonLogger, Periods}
 
 class OutputAPIModelSpec extends UnitSpec with FakeCCCalculatorApplication with CCJsonLogger {
 

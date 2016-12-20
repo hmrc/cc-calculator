@@ -19,7 +19,6 @@ package controllers.tfc
 import calculators.TFCCalculator
 import com.fasterxml.jackson.databind.JsonNode
 import com.github.fge.jackson.JsonLoader
-import controllers.FakeCCCalculatorApplication
 import models.input.APIModels.Request
 import models.output.OutputAPIModel.AwardPeriod
 import org.mockito.Matchers.{eq => mockEq, _}
@@ -30,13 +29,13 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import service.AuditEvents
-import utils.CCSpecConfig
+import utils.FakeCCCalculatorApplication
 import scala.concurrent.Future
 
 /**
  * Created by roma on 30/12/15.
  */
-class TFCCalculatorControllerSpec extends CCSpecConfig with FakeCCCalculatorApplication with MockitoSugar {
+class TFCCalculatorControllerSpec extends FakeCCCalculatorApplication with MockitoSugar {
 
   val mockTFCCalculatorController = new TFCCalculatorController with TFCCalculator {
     override val calculator = mock[TFCCalculatorService]
