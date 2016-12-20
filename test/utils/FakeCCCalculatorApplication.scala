@@ -14,13 +14,18 @@
  * limitations under the License.
  */
 
-package controllers
+package utils
 
+import akka.stream.Materializer
 import org.scalatest.Suite
-import play.api.test.FakeApplication
-import uk.gov.hmrc.play.test.WithFakeApplication
+import org.scalatestplus.play.OneAppPerSuite
+import play.api.Application
+import play.api.i18n.Messages
+import play.api.i18n.Messages.Implicits._
+import play.api.inject.guice.GuiceApplicationBuilder
+import uk.gov.hmrc.play.test.UnitSpec
 
-trait FakeCCCalculatorApplication extends WithFakeApplication {
+trait FakeCCCalculatorApplication extends UnitSpec with OneAppPerSuite {
   this: Suite =>
 
   val config: Map[String, _] = Map(
@@ -28,5 +33,11 @@ trait FakeCCCalculatorApplication extends WithFakeApplication {
     "govuk-tax.Test.services.contact-frontend.host" -> "localhost",
     "govuk-tax.Test.services.contact-frontend.port" -> "9250"
   )
-  override lazy val fakeApplication = FakeApplication(additionalConfiguration = config)
+
+  implicit override lazy val app: Application = new GuiceApplicationBuilder()
+    .configure(config)
+    .build()
+
+  implicit lazy val mat: Materializer = app.materializer
+  implicit lazy val messages: Messages = applicationMessages
 }

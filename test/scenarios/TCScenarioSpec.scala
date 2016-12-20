@@ -19,13 +19,12 @@ package test
 import calculators.TCCalculator
 import com.fasterxml.jackson.databind.JsonNode
 import com.github.fge.jackson.JsonLoader
-import controllers.FakeCCCalculatorApplication
 import models.input.APIModels.Request
 import models.output.tc.{Element, Period}
 import org.joda.time.LocalDate
 import play.api.libs.json.{JsSuccess, JsValue, Json}
 import uk.gov.hmrc.play.test.UnitSpec
-import utils.CCJsonLogger
+import utils.{FakeCCCalculatorApplication, CCJsonLogger}
 
 
 trait ValidateCalculations {

@@ -19,7 +19,6 @@ package utils
 import calculators.{TCCalculator, TFCCalculator}
 import com.fasterxml.jackson.databind.JsonNode
 import com.github.fge.jackson.JsonLoader
-import controllers.FakeCCCalculatorApplication
 import models.input.APIModels.Request
 import models.output.OutputAPIModel.AwardPeriod
 import models.output.tc.TCCalculation
@@ -27,9 +26,8 @@ import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import play.api.data.validation.ValidationError
 import play.api.libs.json._
-import uk.gov.hmrc.play.test.UnitSpec
 
-class JSONFactorySpec extends UnitSpec with FakeCCCalculatorApplication {
+class JSONFactorySpec extends FakeCCCalculatorApplication {
 
   "JSONFactory" should {
 

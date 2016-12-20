@@ -17,7 +17,6 @@
 package calculators
 
 import calculators.TFCCalculator.TFCCalculatorService
-import controllers.FakeCCCalculatorApplication
 import models.input.APIModels.{Eligibility, Payload, Request}
 import models.input.tfc.{Child, Disability, TFCEligibility}
 import models.output.OutputAPIModel.AwardPeriod
@@ -25,6 +24,7 @@ import models.output.tfc.{Contribution, OutputChild, TFCPeriod}
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import uk.gov.hmrc.play.test.UnitSpec
+import utils.FakeCCCalculatorApplication
 
 import scala.concurrent.Future
 

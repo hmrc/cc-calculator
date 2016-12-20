@@ -20,7 +20,6 @@ import akka.japi.Option.Some
 import calculators.ESCCalculator.ESCCalculatorService
 import com.fasterxml.jackson.databind.JsonNode
 import com.github.fge.jackson.JsonLoader
-import controllers.FakeCCCalculatorApplication
 import models.input.APIModels.{Eligibility, Payload, Request}
 import models.input.esc._
 import models.output.OutputAPIModel.AwardPeriod
@@ -30,7 +29,7 @@ import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import play.api.libs.json.{JsSuccess, JsValue, Json}
 import uk.gov.hmrc.play.test.UnitSpec
-import utils.{ESCConfig, JSONFactory, Periods}
+import utils.{FakeCCCalculatorApplication, ESCConfig, JSONFactory, Periods}
 
 import scala.concurrent.Future
 

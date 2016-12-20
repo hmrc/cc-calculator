@@ -19,8 +19,6 @@ package controllers.tc
 import calculators.TCCalculator
 import com.fasterxml.jackson.databind.JsonNode
 import com.github.fge.jackson.JsonLoader
-import controllers.FakeCCCalculatorApplication
-import helper.JsonRequestHelper._
 import models.input.APIModels.Request
 import models.output.OutputAPIModel.AwardPeriod
 import org.joda.time.LocalDate
@@ -29,22 +27,17 @@ import org.mockito.Matchers.{eq => mockEq, _}
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
 import play.api.Play
-import play.api.Play.current
 import play.api.http.Status
 import play.api.libs.json.{JsValue, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import service.AuditEvents
-import uk.gov.hmrc.play.test.UnitSpec
-import utils.CCJsonLogger
-
+import utils.{FakeCCCalculatorApplication, CCJsonLogger}
 import scala.concurrent.Future
-
-
 /**
  * Created by Ravi on 03/06/15.
  */
-class TaxCreditCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorApplication with MockitoSugar with CCJsonLogger {
+class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with MockitoSugar with CCJsonLogger {
 
   val mockTaxCreditCalculatorController = new TaxCreditCalculatorController with TCCalculator {
     override val calculator =  mock[TCCalculatorService]
@@ -56,13 +49,13 @@ class TaxCreditCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorAp
   "TaxCreditCalculatorController" should {
 
     "not return NOT_FOUND (income-advice) endpoint" in {
-      val result = route(FakeRequest(POST, "/cc-calculator/tax-credits/calculate/income-advice"))
+      val result = route(app, FakeRequest(POST, "/cc-calculator/tax-credits/calculate/income-advice"))
       result.isDefined shouldBe true
       status(result.get) should not be NOT_FOUND
     }
 
     "not return NOT_FOUND (total-award) endpoint" in {
-      val result = route(FakeRequest(POST, "/cc-calculator/tax-credits/calculate/total-award"))
+      val result = route(app, FakeRequest(POST, "/cc-calculator/tax-credits/calculate/total-award"))
       result.isDefined shouldBe true
       status(result.get) should not be NOT_FOUND
     }
@@ -249,7 +242,6 @@ class TaxCreditCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorAp
           |}
         """.stripMargin)
 
-      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputJson
     }
 
@@ -355,7 +347,6 @@ class TaxCreditCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorAp
           |}
         """.stripMargin)
 
-      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputJson
     }
 
@@ -382,7 +373,6 @@ class TaxCreditCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorAp
         }
         """.stripMargin)
 
-      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputResult
     }
 
@@ -409,7 +399,6 @@ class TaxCreditCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorAp
         }
         """.stripMargin)
 
-      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputResult
     }
 
@@ -514,7 +503,6 @@ class TaxCreditCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorAp
         }
         """.stripMargin)
 
-      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputResult
     }
 
@@ -618,7 +606,6 @@ class TaxCreditCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorAp
         """.stripMargin)
 
       status(result) shouldBe Status.OK
-      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputResult
     }
 
@@ -788,7 +775,6 @@ class TaxCreditCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorAp
         """.stripMargin)
 
       status(result) shouldBe Status.OK
-      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputResult
     }
 
@@ -830,7 +816,6 @@ class TaxCreditCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorAp
         """.stripMargin)
 
       status(result) shouldBe Status.BAD_REQUEST
-      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputJSON
     }
 
@@ -871,7 +856,6 @@ class TaxCreditCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorAp
         """.stripMargin)
 
       status(result) shouldBe Status.BAD_REQUEST
-      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputJSON
     }
 
@@ -893,7 +877,6 @@ class TaxCreditCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorAp
         """.stripMargin)
 
       status(result) shouldBe Status.INTERNAL_SERVER_ERROR
-      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputJSON
     }
 
@@ -915,7 +898,6 @@ class TaxCreditCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorAp
         """.stripMargin)
 
       status(result) shouldBe Status.INTERNAL_SERVER_ERROR
-      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputJSON
     }
 
@@ -936,7 +918,6 @@ class TaxCreditCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorAp
         """.stripMargin)
 
       status(result) shouldBe Status.BAD_REQUEST
-      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputJSON
     }
 
@@ -956,7 +937,6 @@ class TaxCreditCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorAp
         """.stripMargin)
 
       status(result) shouldBe Status.BAD_REQUEST
-      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputJSON
     }
 

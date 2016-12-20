@@ -18,7 +18,7 @@ package utils
 
 import models.input.APIModels.Request
 import play.api.Logger
-import play.api.libs.json.{JsError, JsResult, JsSuccess, Json}
+import play.api.libs.json.{JsError, JsResult, JsSuccess}
 
 /**
  * Created by adamconder on 22/06/15.
@@ -30,7 +30,7 @@ trait CCJsonLogger {
       case JsSuccess(x, _) =>
         Logger.info(s"\n\n JsSuccess json \n\n")
       case e: JsError =>
-        val json = JsError.toFlatJson(e)
+        val json = JsError.toJson(e)
         Logger.warn(s"\n\n JsError: ${json.toString()}\n\n")
     }
   }

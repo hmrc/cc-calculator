@@ -16,31 +16,24 @@
 
 package controllers.esc
 
-import akka.stream.ActorMaterializer
 import calculators.ESCCalculator
 import com.fasterxml.jackson.databind.JsonNode
 import com.github.fge.jackson.JsonLoader
-import controllers.FakeCCCalculatorApplication
-import helper.JsonRequestHelper._
 import models.input.APIModels.Request
 import models.output.OutputAPIModel.AwardPeriod
 import org.mockito.Matchers.{eq => mockEq, _}
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
-import org.scalatestplus.play.OneAppPerSuite
 import play.api.http.Status
 import play.api.libs.json.{JsValue, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import play.inject.guice.GuiceApplicationBuilder
 import service.AuditEvents
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import play.api.Play
-import Play.current
+import utils.FakeCCCalculatorApplication
 import scala.concurrent.Future
 
-
-class ESCCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorApplication with MockitoSugar with WithFakeApplication {
+class ESCCalculatorControllerSpec extends FakeCCCalculatorApplication with MockitoSugar {
 
   val mockESCCalculatorController = new ESCCalculatorController with ESCCalculator {
     override val calculator = mock[ESCCalculatorService]
@@ -52,7 +45,7 @@ class ESCCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorApplicat
   "ESCCalculatorController" should {
 
     "not return NOT_FOUND (calculate) endpoint" in {
-      val result = route(FakeRequest(POST, "/cc-calculator/employer-supported-childcare/calculate"))
+      val result = route(app, FakeRequest(POST, "/cc-calculator/employer-supported-childcare/calculate"))
       result.isDefined shouldBe true
       status(result.get) should not be NOT_FOUND
     }
@@ -106,7 +99,6 @@ class ESCCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorApplicat
           |}
         """.stripMargin)
 
-      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputJSON
     }
 
@@ -139,7 +131,6 @@ class ESCCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorApplicat
           |}
         """.stripMargin)
 
-      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputJSON
     }
 
@@ -173,7 +164,6 @@ class ESCCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorApplicat
           |}
         """.stripMargin)
 
-      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputJSON
     }
 
@@ -206,7 +196,6 @@ class ESCCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorApplicat
           |}
         """.stripMargin)
 
-      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputJSON
     }
 
@@ -239,7 +228,6 @@ class ESCCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorApplicat
           |}
         """.stripMargin)
 
-      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputJSON
     }
 
@@ -272,7 +260,6 @@ class ESCCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorApplicat
           |}
         """.stripMargin)
 
-      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputJSON
     }
 
@@ -306,7 +293,6 @@ class ESCCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorApplicat
           |}
         """.stripMargin)
 
-      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputJSON
     }
 
@@ -339,7 +325,6 @@ class ESCCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorApplicat
           |}
         """.stripMargin)
 
-      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputJSON
     }
 
@@ -372,7 +357,6 @@ class ESCCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorApplicat
           |}
         """.stripMargin)
 
-      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputJSON
     }
 
@@ -405,7 +389,6 @@ class ESCCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorApplicat
           |}
         """.stripMargin)
 
-      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputJSON
     }
 
@@ -427,7 +410,6 @@ class ESCCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorApplicat
         """.stripMargin)
 
       status(result) shouldBe Status.INTERNAL_SERVER_ERROR
-      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputJSON
     }
 
@@ -447,7 +429,6 @@ class ESCCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorApplicat
         """.stripMargin)
 
       status(result) shouldBe Status.BAD_REQUEST
-      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputJSON
     }
 

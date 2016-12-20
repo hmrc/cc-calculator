@@ -16,16 +16,10 @@
 
 package utils
 
-import controllers.FakeCCCalculatorApplication
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
-import uk.gov.hmrc.play.test.UnitSpec
 
-/**
- * Created by shridhaarchippaa on 22/06/15.
- */
-
-class TFCSchemeConfigSpec extends UnitSpec with FakeCCCalculatorApplication {
+class TFCSchemeConfigSpec extends FakeCCCalculatorApplication {
 
   "TFC SchemeConfig" should {
 

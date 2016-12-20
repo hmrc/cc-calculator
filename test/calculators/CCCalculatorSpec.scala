@@ -17,13 +17,12 @@
 package calculators
 
 import calculators.TestCalculator.TestCalculatorService
-import controllers.FakeCCCalculatorApplication
 import models.input.APIModels.Request
 import models.output.OutputAPIModel.AwardPeriod
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import uk.gov.hmrc.play.test.UnitSpec
-import utils.Periods
+import utils.{FakeCCCalculatorApplication, Periods}
 
 import scala.concurrent.Future
 
