@@ -26,6 +26,8 @@ import models.output.OutputAPIModel.AwardPeriod
 import org.mockito.Matchers.{eq => mockEq, _}
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
+import play.api.Play
+import play.api.Play.current
 import play.api.http.Status
 import play.api.libs.json.{JsValue, Json}
 import play.api.test.FakeRequest
@@ -57,10 +59,12 @@ class TFCCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorApplicat
 
     "Return Bad Request with error message if a request for a different scheme is passed(e.g. TC) " in {
       val controller = mockTFCCalculatorController
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json")
+
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_12.json")
       val inputJson: JsValue = Json.parse(resource.toString)
-      val result = await(executeAction(controller.calculate(), request, inputJson.toString()))
+      val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
+      val result = await(controller.calculate()(request))
+      status(result) shouldBe Status.BAD_REQUEST
 
       val outputJSON = Json.parse(
         """
@@ -70,19 +74,20 @@ class TFCCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorApplicat
           |}
         """.stripMargin)
 
-      status(result) shouldBe Status.BAD_REQUEST
+      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputJSON
     }
 
     "Return Internal Server Error with error message if an exception is thrown during calculation " in {
       val controller = mockTFCCalculatorController
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json")
       val resource: JsonNode = JsonLoader.fromResource("/json/tfc/input/calculator_input_test.json")
       val inputJson: JsValue = Json.parse(resource.toString)
+      val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
       val JsonResult = inputJson.validate[Request]
 
       when(controller.calculator.award(mockEq(JsonResult.get))).thenReturn(Future.failed(new Exception("Something bad happened")))
-      val result = await(executeAction(controller.calculate(), request, inputJson.toString()))
+      val result = await(controller.calculate()(request))
+      status(result) shouldBe Status.INTERNAL_SERVER_ERROR
       val outputJSON = Json.parse(
         """
           |{
@@ -91,27 +96,28 @@ class TFCCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorApplicat
           |}
         """.stripMargin)
 
-      status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputJSON
     }
 
 
     "Valid JSON at /tax-free-childcare/calculate" in {
       val controller = mockTFCCalculatorController
-      val inputJson = Json.parse(JsonLoader.fromResource("/json/tfc/input/calculator_input_test.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json")
+      val inputJson: JsValue = Json.parse(JsonLoader.fromResource("/json/tfc/input/calculator_input_test.json").toString)
+      val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
+
       when(controller.calculator.award(any[Request]())).thenReturn(Future.successful(AwardPeriod()))
-      val result = await(executeAction(controller.calculate(), request, inputJson.toString()))
+      val result = await(controller.calculate()(request))
       status(result) shouldBe Status.OK
     }
 
     "Accept invalid JSON at /tfc/calculate and return a BadRequest with an error (0 TFC Periods)" in {
       val controller = mockTFCCalculatorController
-      val inputJson = Json.parse(JsonLoader.fromResource("/json/tfc/input/no_period.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json")
+      val inputJson: JsValue = Json.parse(JsonLoader.fromResource("/json/tfc/input/no_period.json").toString)
+      val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
       when(controller.calculator.award(any[Request]())).thenReturn(Future.successful(AwardPeriod()))
-      val result = await(executeAction(controller.calculate(), request, inputJson.toString()))
+      val result = await(controller.calculate()(request))
       status(result) shouldBe Status.BAD_REQUEST
 
       val outputJSON = Json.parse(
@@ -134,16 +140,17 @@ class TFCCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorApplicat
           |}
         """.stripMargin)
 
+      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputJSON
     }
 
     "Accept invalid JSON at /tax-free-childcare/calculate and return a BadRequest with an error (negative value in childcare cost)" in {
       val controller = mockTFCCalculatorController
-      val inputJson = Json.parse(JsonLoader.fromResource("/json/tfc/input/negative_childcareCost.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json")
+      val inputJson: JsValue = Json.parse(JsonLoader.fromResource("/json/tfc/input/negative_childcareCost.json").toString)
+      val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
       when(controller.calculator.award(any[Request]())).thenReturn(Future.successful(AwardPeriod()))
-      val result = await(executeAction(controller.calculate(), request, inputJson.toString()))
+      val result = await(controller.calculate()(request))
       status(result) shouldBe Status.BAD_REQUEST
 
       val outputJSON = Json.parse(
@@ -166,16 +173,17 @@ class TFCCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorApplicat
           |}
         """.stripMargin)
 
+      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputJSON
     }
 
     "Accept invalid JSON at /tfc/calculate and return a BadRequest with an error (no children)" in {
       val controller = mockTFCCalculatorController
-      val inputJson = Json.parse(JsonLoader.fromResource("/json/tfc/input/no_children.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json")
+      val inputJson: JsValue = Json.parse(JsonLoader.fromResource("/json/tfc/input/no_children.json").toString)
+      val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
       when(controller.calculator.award(any[Request]())).thenReturn(Future.successful(AwardPeriod()))
-      val result = await(executeAction(controller.calculate(), request, inputJson.toString()))
+      val result = await(controller.calculate()(request))
       status(result) shouldBe Status.BAD_REQUEST
 
       val outputJSON = Json.parse(
@@ -198,16 +206,17 @@ class TFCCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorApplicat
           |}
         """.stripMargin)
 
+      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputJSON
     }
 
     "Accept invalid JSON at /tax-free-childcare/calculate and return a BadRequest with an error (date missing)" in {
       val controller = mockTFCCalculatorController
-      val inputJson = Json.parse(JsonLoader.fromResource("/json/tfc/input/date_missing.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json")
+      val inputJson: JsValue = Json.parse(JsonLoader.fromResource("/json/tfc/input/date_missing.json").toString)
+      val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
       when(controller.calculator.award(any[Request]())).thenReturn(Future.successful(AwardPeriod()))
-      val result = await(executeAction(controller.calculate(), request, inputJson.toString()))
+      val result = await(controller.calculate()(request))
       status(result) shouldBe Status.BAD_REQUEST
 
       val outputJSON = Json.parse(
@@ -230,16 +239,17 @@ class TFCCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorApplicat
           |}
         """.stripMargin)
 
+      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputJSON
     }
 
     "Accept invalid JSON at /tax-free-childcare/calculate and return a BadRequest with an error (child id negative)" in {
       val controller = mockTFCCalculatorController
-      val inputJson = Json.parse(JsonLoader.fromResource("/json/tfc/input/child_negative_id.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json")
+      val inputJson: JsValue = Json.parse(JsonLoader.fromResource("/json/tfc/input/child_negative_id.json").toString)
+      val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
       when(controller.calculator.award(any[Request]())).thenReturn(Future.successful(AwardPeriod()))
-      val result = await(executeAction(controller.calculate(), request, inputJson.toString()))
+      val result = await(controller.calculate()(request))
       status(result) shouldBe Status.BAD_REQUEST
 
       val outputJSON = Json.parse(
@@ -262,16 +272,17 @@ class TFCCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorApplicat
           |}
         """.stripMargin)
 
+      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputJSON
     }
 
     "Accept invalid JSON at /tax-free-childcare/calculate and return a BadRequest with an error (Invalid data type)" in {
       val controller = mockTFCCalculatorController
-      val inputJson = Json.parse(JsonLoader.fromResource("/json/tfc/input/invalid_data_type.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json")
+      val inputJson: JsValue = Json.parse(JsonLoader.fromResource("/json/tfc/input/invalid_data_type.json").toString)
+      val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
       when(controller.calculator.award(any[Request]())).thenReturn(Future.successful(AwardPeriod()))
-      val result = await(executeAction(controller.calculate(), request, inputJson.toString()))
+      val result = await(controller.calculate()(request))
       status(result) shouldBe Status.BAD_REQUEST
 
       val outputJSON = Json.parse(
@@ -292,43 +303,47 @@ class TFCCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorApplicat
           |}
         """.stripMargin)
 
+      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputJSON
     }
 
     "Valid JSON at /tax-free-childcare/calculate(child from and until date is null)" in {
       val controller = mockTFCCalculatorController
-      val inputJson = Json.parse(JsonLoader.fromResource("/json/tfc/input/child_from_until_date_null.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json")
+      val inputJson: JsValue = Json.parse(JsonLoader.fromResource("/json/tfc/input/child_from_until_date_null.json").toString)
+      val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
+
       when(controller.calculator.award(any[Request]())).thenReturn(Future.successful(AwardPeriod()))
-      val result = await(executeAction(controller.calculate(), request, inputJson.toString()))
+      val result = await(controller.calculate()(request))
       status(result) shouldBe Status.OK
     }
 
     "Valid JSON at /tax-free-childcare/calculate(childname is null)" in {
       val controller = mockTFCCalculatorController
-      val inputJson = Json.parse(JsonLoader.fromResource("/json/tfc/input/childName_none.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json")
+      val inputJson: JsValue = Json.parse(JsonLoader.fromResource("/json/tfc/input/childName_none.json").toString)
+      val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
+
       when(controller.calculator.award(any[Request]())).thenReturn(Future.successful(AwardPeriod()))
-      val result = await(executeAction(controller.calculate(), request, inputJson.toString()))
+      val result = await(controller.calculate()(request))
       status(result) shouldBe Status.OK
     }
 
     "Valid JSON at /tax-free-childcare/calculate(no disability field)" in {
       val controller = mockTFCCalculatorController
-      val inputJson = Json.parse(JsonLoader.fromResource("/json/tfc/input/no_disability.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json")
+      val inputJson: JsValue = Json.parse(JsonLoader.fromResource("/json/tfc/input/no_disability.json").toString)
+      val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
+
       when(controller.calculator.award(any[Request]())).thenReturn(Future.successful(AwardPeriod()))
-      val result = await(executeAction(controller.calculate(), request, inputJson.toString()))
+      val result = await(controller.calculate()(request))
       status(result) shouldBe Status.OK
     }
 
     "Accept invalid JSON at /tax-free-childcare/calculate and return a BadRequest with an error (max child name length > 25)" in {
       val controller = mockTFCCalculatorController
-      val inputJson = Json.parse(JsonLoader.fromResource("/json/tfc/input/childName_length_invalid.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json")
+      val inputJson: JsValue = Json.parse(JsonLoader.fromResource("/json/tfc/input/childName_length_invalid.json").toString)
+      val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
       when(controller.calculator.award(any[Request]())).thenReturn(Future.successful(AwardPeriod()))
-      val result = await(executeAction(controller.calculate(), request, inputJson.toString()))
+      val result = await(controller.calculate()(request))
       status(result) shouldBe Status.BAD_REQUEST
 
       val outputJSON = Json.parse(
@@ -349,24 +364,27 @@ class TFCCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorApplicat
           |}
         """.stripMargin)
 
+      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputJSON
     }
 
     "Valid JSON at /tax-free-childcare/calculate(TFC Award Calculation Wire up)" in {
       val controller = mockTFCCalculatorController
-      val inputJson = Json.parse(JsonLoader.fromResource("/json/tfc/input/wire_up_flow_through.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json")
+      val inputJson: JsValue = Json.parse(JsonLoader.fromResource("/json/tfc/input/wire_up_flow_through.json").toString)
+      val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
+
       when(controller.calculator.award(any[Request]())).thenReturn(Future.successful(AwardPeriod()))
-      val result = await(executeAction(controller.calculate(), request, inputJson.toString()))
+      val result = await(controller.calculate()(request))
       status(result) shouldBe Status.OK
     }
 
     "Accept invalid JSON at /tax-free-childcare/calculate(TFC Award Calculation Wire up - wrong scheme(esc))" in {
       val controller = mockTFCCalculatorController
-      val inputJson = Json.parse(JsonLoader.fromResource("/json/tfc/input/incorrect_scheme_name.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json")
+      val inputJson: JsValue = Json.parse(JsonLoader.fromResource("/json/tfc/input/incorrect_scheme_name.json").toString)
+      val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
+
       when(controller.calculator.award(any[Request]())).thenReturn(Future.successful(AwardPeriod()))
-      val result = await(executeAction(controller.calculate(), request, inputJson.toString()))
+      val result = await(controller.calculate()(request))
       status(result) shouldBe Status.BAD_REQUEST
     }
 

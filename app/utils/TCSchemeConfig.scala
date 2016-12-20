@@ -26,11 +26,11 @@ import uk.gov.hmrc.play.config.ServicesConfig
  * Created by user on 27/01/16.
  */
 
-trait TCConfig {
+trait TCConfig extends ServicesConfig {
   val defaultMaxNameLength: Int = 25
-  lazy val maxNameLength = configuration.getInt(s"tc.max-name-length").getOrElse(defaultMaxNameLength)
-  lazy val taxYearEndMonth = configuration.getInt(s"tc.end-of-tax-year-date.month").getOrElse(0)
-  lazy val taxYearEndDay = configuration.getInt(s"tc.end-of-tax-year-date.day").getOrElse(0)
+  lazy val maxNameLength = getInt(s"tc.max-name-length")
+  lazy val taxYearEndMonth = getInt(s"tc.end-of-tax-year-date.month")
+  lazy val taxYearEndDay = getInt(s"tc.end-of-tax-year-date.day")
 }
 case class WTC(
                 basicElement : Int,

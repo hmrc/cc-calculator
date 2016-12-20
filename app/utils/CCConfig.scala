@@ -23,8 +23,9 @@ import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import play.api.{Logger, Play, Configuration}
 import play.api.Play._
+import uk.gov.hmrc.play.config.ServicesConfig
 
-trait CCConfig extends CCFormat {
+trait CCConfig extends CCFormat with ServicesConfig {
 
   val formatterDatePattern = "dd-MM-yyyy"
 
@@ -87,8 +88,8 @@ trait CCConfig extends CCFormat {
   }
 
   def taxYearEndDate(now: LocalDate = LocalDate.now(), schemeName: String): LocalDate = {
-    val month = configuration.getInt(s"$schemeName.end-of-tax-year-date.month").getOrElse(0)
-    val day = configuration.getInt(s"$schemeName.end-of-tax-year-date.day").getOrElse(0)
+    val month = getInt(s"$schemeName.end-of-tax-year-date.month")
+    val day = getInt(s"$schemeName.end-of-tax-year-date.day")
     // have to determine the year as this is not a fixed date
     val year = {
       val calendar = Calendar.getInstance()

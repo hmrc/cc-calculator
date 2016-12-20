@@ -1,3 +1,4 @@
+import play.routes.compiler.StaticRoutesGenerator
 import sbt.Keys._
 import sbt._
 import scoverage._
@@ -5,6 +6,7 @@ import uk.gov.hmrc.SbtAutoBuildPlugin
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
 import uk.gov.hmrc.versioning.SbtGitVersioning
+import play.sbt.routes.RoutesKeys.routesGenerator
 
 
 trait MicroService {
@@ -26,36 +28,22 @@ trait MicroService {
   }
 
   lazy val microservice = Project(appName, file("."))
-    .enablePlugins(Seq(play.PlayScala, SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin) ++ plugins : _*)
+    .enablePlugins(Seq(play.sbt.PlayScala, SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin) ++ plugins : _*)
     .settings(playSettings ++ scoverageSettings : _*)
     .settings(publishingSettings : _*)
     .settings(
       libraryDependencies ++= appDependencies,
       retrieveManaged := true,
+      evictionWarningOptions in update := EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
+      routesGenerator := StaticRoutesGenerator,
       resolvers := Seq(
         Resolver.bintrayRepo("hmrc", "releases"),
-        Resolver.typesafeRepo("releases")
+        Resolver.typesafeRepo("releases"),
+        Resolver.jcenterRepo
       ),
       scalaVersion := "2.11.7",
       crossScalaVersions := Seq("2.11.7"),
       ivyScala := ivyScala.value map { _.copy(overrideScalaVersion = true) }
     )
-
-}
-
-private object Repositories {
-
-
-  import uk.gov.hmrc.PublishingSettings._
-
-  lazy val playPublishingSettings : Seq[sbt.Setting[_]] = sbtrelease.ReleasePlugin.releaseSettings ++ Seq(
-
-    credentials += SbtCredentials,
-
-    publishArtifact in(Compile, packageDoc) := false,
-    publishArtifact in(Compile, packageSrc) := false
-
-  ) ++
-    publishAllArtefacts
 
 }

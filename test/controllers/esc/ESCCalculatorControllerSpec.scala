@@ -16,6 +16,7 @@
 
 package controllers.esc
 
+import akka.stream.ActorMaterializer
 import calculators.ESCCalculator
 import com.fasterxml.jackson.databind.JsonNode
 import com.github.fge.jackson.JsonLoader
@@ -26,17 +27,20 @@ import models.output.OutputAPIModel.AwardPeriod
 import org.mockito.Matchers.{eq => mockEq, _}
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
+import org.scalatestplus.play.OneAppPerSuite
 import play.api.http.Status
 import play.api.libs.json.{JsValue, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import play.inject.guice.GuiceApplicationBuilder
 import service.AuditEvents
-import uk.gov.hmrc.play.test.UnitSpec
-
+import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+import play.api.Play
+import Play.current
 import scala.concurrent.Future
 
 
-class ESCCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorApplication with MockitoSugar {
+class ESCCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorApplication with MockitoSugar with WithFakeApplication {
 
   val mockESCCalculatorController = new ESCCalculatorController with ESCCalculator {
     override val calculator = mock[ESCCalculatorService]
@@ -55,31 +59,31 @@ class ESCCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorApplicat
 
     "Accept valid JSON at /employer-supported-childcare/calculate" in {
       val controller = mockESCCalculatorController
-      val inputJson = Json.parse(JsonLoader.fromResource("/json/esc/input/calculator_input_test.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json")
+      val inputJson: JsValue = Json.parse(JsonLoader.fromResource("/json/esc/input/calculator_input_test.json").toString)
+      val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
       when(controller.calculator.award(any[Request]())).thenReturn(Future.successful(AwardPeriod()))
-      val result = await(executeAction(controller.calculate(), request, inputJson.toString()))
+      val result = await(controller.calculate()(request))
       status(result) shouldBe Status.OK
     }
 
     "Accept valid JSON at /employer-supported-childcare/calculate (all fields with default values missing)" in {
       val controller = mockESCCalculatorController
-      val inputJson = Json.parse(JsonLoader.fromResource("/json/esc/input/without_default_values.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json")
+      val inputJson: JsValue = Json.parse(JsonLoader.fromResource("/json/esc/input/without_default_values.json").toString)
+      val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
       when(controller.calculator.award(any[Request]())).thenReturn(Future.successful(AwardPeriod()))
-      val result = await(executeAction(controller.calculate(), request, inputJson.toString()))
+      val result = await(controller.calculate()(request))
       status(result) shouldBe Status.OK
     }
 
     "Accept invalid JSON at /employer-supported-childcare/calculate and return a BadRequest with an error (0 Tax Year)" in {
       val controller = mockESCCalculatorController
-      val inputJson = Json.parse(JsonLoader.fromResource("/json/esc/input/no_tax_year.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json")
+      val inputJson: JsValue = Json.parse(JsonLoader.fromResource("/json/esc/input/no_tax_year.json").toString)
+      val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
       when(controller.calculator.award(any[Request]())).thenReturn(Future.successful(AwardPeriod()))
-      val result = await(executeAction(controller.calculate(), request, inputJson.toString()))
+      val result = await(controller.calculate()(request))
       status(result) shouldBe Status.BAD_REQUEST
 
       val outputJSON = Json.parse(
@@ -102,16 +106,17 @@ class ESCCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorApplicat
           |}
         """.stripMargin)
 
+      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputJSON
     }
 
     "Accept invalid JSON at /employer-supported-childcare/calculate and return a BadRequest with an error (negative value in eligible months)" in {
       val controller = mockESCCalculatorController
-      val inputJson = Json.parse(JsonLoader.fromResource("/json/esc/input/negative_eligible_months.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json")
+      val inputJson: JsValue = Json.parse(JsonLoader.fromResource("/json/esc/input/negative_eligible_months.json").toString)
+      val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
       when(controller.calculator.award(any[Request]())).thenReturn(Future.successful(AwardPeriod()))
-      val result = await(executeAction(controller.calculate(), request, inputJson.toString()))
+      val result = await(controller.calculate()(request))
       status(result) shouldBe Status.BAD_REQUEST
 
       val outputJSON = Json.parse(
@@ -134,16 +139,18 @@ class ESCCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorApplicat
           |}
         """.stripMargin)
 
+      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputJSON
     }
 
     "Accept invalid JSON at /employer-supported-childcare/calculate and return a BadRequest with an error (value more than 99 in eligible months)" in {
       val controller = mockESCCalculatorController
-      val inputJson = Json.parse(JsonLoader.fromResource("/json/esc/input/more_than_upper_limit_eligible_months.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json")
+      val inputJson: JsValue = Json.parse(JsonLoader.fromResource("/json/esc/input/more_than_upper_limit_eligible_months.json").toString)
+      val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
+
 
       when(controller.calculator.award(any[Request]())).thenReturn(Future.successful(AwardPeriod()))
-      val result = await(executeAction(controller.calculate(), request, inputJson.toString()))
+      val result = await(controller.calculate()(request))
       status(result) shouldBe Status.BAD_REQUEST
 
       val outputJSON = Json.parse(
@@ -166,16 +173,17 @@ class ESCCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorApplicat
           |}
         """.stripMargin)
 
+      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputJSON
     }
 
     "Accept invalid JSON at /employer-supported-childcare/calculate and return a BadRequest with an error (0 periods)" in {
       val controller = mockESCCalculatorController
       val inputJson = Json.parse(JsonLoader.fromResource("/json/esc/input/no_periods.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json")
+      val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
       when(controller.calculator.award(any[Request]())).thenReturn(Future.successful(AwardPeriod()))
-      val result = await(executeAction(controller.calculate(), request, inputJson.toString()))
+      val result = await(controller.calculate()(request))
       status(result) shouldBe Status.BAD_REQUEST
 
       val outputJSON = Json.parse(
@@ -198,16 +206,17 @@ class ESCCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorApplicat
           |}
         """.stripMargin)
 
+      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputJSON
     }
 
     "Accept invalid JSON at /employer-supported-childcare/calculate and return a BadRequest with an error (0 claimants)" in {
       val controller = mockESCCalculatorController
       val inputJson = Json.parse(JsonLoader.fromResource("/json/esc/input/no_claimants.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json")
+      val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
       when(controller.calculator.award(any[Request]())).thenReturn(Future.successful(AwardPeriod()))
-      val result = await(executeAction(controller.calculate(), request, inputJson.toString()))
+      val result = await(controller.calculate()(request))
       status(result) shouldBe Status.BAD_REQUEST
 
       val outputJSON = Json.parse(
@@ -230,16 +239,17 @@ class ESCCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorApplicat
           |}
         """.stripMargin)
 
+      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputJSON
     }
 
     "Accept invalid JSON at /employer-supported-childcare/calculate and return a BadRequest with an error (negative taxable pay)" in {
       val controller = mockESCCalculatorController
       val inputJson = Json.parse(JsonLoader.fromResource("/json/esc/input/negative_taxable_pay.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json")
+      val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
       when(controller.calculator.award(any[Request]())).thenReturn(Future.successful(AwardPeriod()))
-      val result = await(executeAction(controller.calculate(), request, inputJson.toString()))
+      val result = await(controller.calculate()(request))
       status(result) shouldBe Status.BAD_REQUEST
 
       val outputJSON = Json.parse(
@@ -262,16 +272,17 @@ class ESCCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorApplicat
           |}
         """.stripMargin)
 
+      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputJSON
     }
 
     "Accept invalid JSON at /employer-supported-childcare/calculate and return a BadRequest with an error (negative gross amount)" in {
       val controller = mockESCCalculatorController
       val inputJson = Json.parse(JsonLoader.fromResource("/json/esc/input/negative_gross.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json")
+      val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
       when(controller.calculator.award(any[Request]())).thenReturn(Future.successful(AwardPeriod()))
-      val result = await(executeAction(controller.calculate(), request, inputJson.toString()))
+      val result = await(controller.calculate()(request))
       status(result) shouldBe Status.BAD_REQUEST
 
 
@@ -295,16 +306,17 @@ class ESCCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorApplicat
           |}
         """.stripMargin)
 
+      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputJSON
     }
 
     "Accept invalid JSON at /employer-supported-childcare/calculate and return a BadRequest with an error (negative voucher amount)" in {
       val controller = mockESCCalculatorController
       val inputJson = Json.parse(JsonLoader.fromResource("/json/esc/input/negative_voucher_amount.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json")
+      val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
       when(controller.calculator.award(any[Request]())).thenReturn(Future.successful(AwardPeriod()))
-      val result = await(executeAction(controller.calculate(), request, inputJson.toString()))
+      val result = await(controller.calculate()(request))
       status(result) shouldBe Status.BAD_REQUEST
 
       val outputJSON = Json.parse(
@@ -327,16 +339,17 @@ class ESCCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorApplicat
           |}
         """.stripMargin)
 
+      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputJSON
     }
 
     "Accept invalid JSON at /employer-supported-childcare/calculate and return a BadRequest with an error (date missing)" in {
       val controller = mockESCCalculatorController
       val inputJson = Json.parse(JsonLoader.fromResource("/json/esc/input/date_missing.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json")
+      val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
       when(controller.calculator.award(any[Request]())).thenReturn(Future.successful(AwardPeriod()))
-      val result = await(executeAction(controller.calculate(), request, inputJson.toString()))
+      val result = await(controller.calculate()(request))
       status(result) shouldBe Status.BAD_REQUEST
 
       val outputJSON = Json.parse(
@@ -359,16 +372,17 @@ class ESCCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorApplicat
           |}
         """.stripMargin)
 
+      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputJSON
     }
 
     "Accept invalid JSON at /employer-supported-childcare/calculate and return a BadRequest with an error (incorrect data type)" in {
       val controller = mockESCCalculatorController
       val inputJson = Json.parse(JsonLoader.fromResource("/json/esc/input/incorrect_data_type.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json")
+      val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
       when(controller.calculator.award(any[Request]())).thenReturn(Future.successful(AwardPeriod()))
-      val result = await(executeAction(controller.calculate(), request, inputJson.toString()))
+      val result = await(controller.calculate()(request))
       status(result) shouldBe Status.BAD_REQUEST
 
       val outputJSON = Json.parse(
@@ -391,18 +405,19 @@ class ESCCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorApplicat
           |}
         """.stripMargin)
 
+      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputJSON
     }
 
     "Return Internal Server Error with error message if an exception is thrown during calculation " in {
       val controller = mockESCCalculatorController
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json")
       val resource: JsonNode = JsonLoader.fromResource("/json/esc/input/calculator_input_test.json")
       val inputJson: JsValue = Json.parse(resource.toString)
+      val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
       val JsonResult = inputJson.validate[Request]
 
       when(controller.calculator.award(mockEq(JsonResult.get))).thenReturn(Future.failed(new Exception("Something bad happened")))
-      val result = await(executeAction(controller.calculate(), request, inputJson.toString()))
+      val result = await(controller.calculate()(request))
       val outputJSON = Json.parse(
         """
           |{
@@ -412,15 +427,16 @@ class ESCCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorApplicat
         """.stripMargin)
 
       status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputJSON
     }
 
     "Return Bad Request with error message if a request for a different scheme is passed(e.g. TC) " in {
       val controller = mockESCCalculatorController
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json")
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_12.json")
       val inputJson: JsValue = Json.parse(resource.toString)
-      val result = await(executeAction(controller.calculate(), request, inputJson.toString()))
+      val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
+      val result = await(controller.calculate()(request))
 
       val outputJSON = Json.parse(
         """
@@ -431,6 +447,7 @@ class ESCCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorApplicat
         """.stripMargin)
 
       status(result) shouldBe Status.BAD_REQUEST
+      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputJSON
     }
 

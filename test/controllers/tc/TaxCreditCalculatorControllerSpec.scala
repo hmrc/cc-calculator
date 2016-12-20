@@ -28,6 +28,8 @@ import org.joda.time.format.DateTimeFormat
 import org.mockito.Matchers.{eq => mockEq, _}
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
+import play.api.Play
+import play.api.Play.current
 import play.api.http.Status
 import play.api.libs.json.{JsValue, Json}
 import play.api.test.FakeRequest
@@ -67,123 +69,124 @@ class TaxCreditCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorAp
 
     "Accept valid JSON at /tax-credits/calculate/total-award" in {
       val controller = mockTaxCreditCalculatorController
-      val inputJson = Json.parse(JsonLoader.fromResource("/json/tc/input/2016/scenario_1.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json")
+      val inputJson: JsValue = Json.parse(JsonLoader.fromResource("/json/tc/input/2016/scenario_1.json").toString)
+      val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
       when(controller.calculator.award(any[Request]())).thenReturn(Future.successful(AwardPeriod()))
-      val result = await(executeAction(controller.calculate(), request, inputJson.toString()))
+      val result = await(controller.calculate()(request))
       status(result) shouldBe Status.OK
     }
 
     "Accept valid JSON at /tax-credits/calculate/income-advice" in {
       val controller = mockTaxCreditCalculatorController
-      val inputJson = Json.parse(JsonLoader.fromResource("/json/tc/input/2016/scenario_1.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json")
+      val inputJson: JsValue  = Json.parse(JsonLoader.fromResource("/json/tc/input/2016/scenario_1.json").toString)
+      val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
       when(controller.calculator.incomeAdvice(any[Request]())).thenReturn(Future.successful(AwardPeriod()))
-      val result = await(executeAction(controller.incomeAdvice(), request, inputJson.toString()))
+      val result = await(controller.incomeAdvice() (request))
       status(result) shouldBe Status.OK
     }
 
     "Accept invalid schema json and should return Bad request" in {
       val controller = mockTaxCreditCalculatorController
-      val inputJson = Json.parse(JsonLoader.fromResource("/json/no_payload.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json")
+      val inputJson: JsValue  = Json.parse(JsonLoader.fromResource("/json/no_payload.json").toString)
+      val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
       when(controller.calculator.incomeAdvice(any[Request]())).thenReturn(Future.successful(AwardPeriod()))
-      val result = await(executeAction(controller.incomeAdvice(), request, inputJson.validate.toString()))
+      val result = await(controller.incomeAdvice() (request))
       status(result) shouldBe Status.BAD_REQUEST
     }
 
     "Accept invalid json with incorrect data type json and return a Bad request" in {
       val controller = mockTaxCreditCalculatorController
-      val inputJson = Json.parse(JsonLoader.fromResource("/json/tc/input/2016/incorrect_data_type.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json")
+      val inputJson: JsValue  = Json.parse(JsonLoader.fromResource("/json/tc/input/2016/incorrect_data_type.json").toString)
+      val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
       when(controller.calculator.award(any[Request]())).thenReturn(Future.successful(AwardPeriod()))
-      val result = await(executeAction(controller.calculate(), request, inputJson.toString()))
+      val result = await(controller.calculate()(request))
       status(result) shouldBe Status.BAD_REQUEST
     }
 
     "Accept invalid json if child name for more than 25 characters for total award and return 400" in {
       val controller = mockTaxCreditCalculatorController
-      val inputJson = Json.parse(JsonLoader.fromResource("/json/tc/input/2016/invalid_child_name.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json")
+      val inputJson: JsValue  = Json.parse(JsonLoader.fromResource("/json/tc/input/2016/invalid_child_name.json").toString)
+      val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
       when(controller.calculator.award(any[Request]())).thenReturn(Future.successful(AwardPeriod()))
-      val result = await(executeAction(controller.calculate(), request, inputJson.toString()))
+      val result = await(controller.calculate()(request))
       status(result) shouldBe Status.BAD_REQUEST
     }
 
     "Accept invalid json if child name for more than 25 characters for income advice and return 400" in {
       val controller = mockTaxCreditCalculatorController
-      val inputJson = Json.parse(JsonLoader.fromResource("/json/tc/input/2016/invalid_child_name.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json")
+      val inputJson: JsValue  = Json.parse(JsonLoader.fromResource("/json/tc/input/2016/invalid_child_name.json").toString)
+      val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
       when(controller.calculator.incomeAdvice(any[Request]())).thenReturn(Future.successful(AwardPeriod()))
-      val result = await(executeAction(controller.incomeAdvice(), request, inputJson.toString()))
+      val result = await(controller.incomeAdvice() (request))
       status(result) shouldBe Status.BAD_REQUEST
     }
 
     "Accept invalid json if houseHold Income is less than 0.00 and return Bad request" in {
       val controller = mockTaxCreditCalculatorController
-      val inputJson = Json.parse(JsonLoader.fromResource("/json/tc/input/2016/negative_household_income.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json")
+      val inputJson: JsValue  = Json.parse(JsonLoader.fromResource("/json/tc/input/2016/negative_household_income.json").toString)
+      val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
       when(controller.calculator.incomeAdvice(any[Request]())).thenReturn(Future.successful(AwardPeriod()))
-      val result = await(executeAction(controller.incomeAdvice(), request, inputJson.toString()))
+      val result = await(controller.incomeAdvice() (request))
       status(result) shouldBe Status.BAD_REQUEST
     }
 
     "Accept a valid json if houseHold Income amount is 0.00 and return 200" in {
       val controller = mockTaxCreditCalculatorController
-      val inputJson = Json.parse(JsonLoader.fromResource("/json/tc/input/2016/no_household_income.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json")
+      val inputJson: JsValue  = Json.parse(JsonLoader.fromResource("/json/tc/input/2016/no_household_income.json").toString)
+      val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
       when(controller.calculator.incomeAdvice(any[Request]())).thenReturn(Future.successful(AwardPeriod()))
-      val result = await(executeAction(controller.incomeAdvice(), request, inputJson.toString()))
+      val result = await(controller.incomeAdvice()(request))
       status(result) shouldBe Status.OK
     }
 
     "Accept a valid json if there is no childcare cost and return 200" in {
       val controller = mockTaxCreditCalculatorController
-      val inputJson = Json.parse(JsonLoader.fromResource("/json/no_childcare_cost.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json")
+      val inputJson: JsValue  = Json.parse(JsonLoader.fromResource("/json/no_childcare_cost.json").toString)
+      val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
       when(controller.calculator.award(any[Request]())).thenReturn(Future.successful(AwardPeriod()))
-      val result = await(executeAction(controller.calculate(), request, inputJson.toString()))
+      val result = await(controller.calculate()(request))
       status(result) shouldBe Status.OK
     }
 
     "Accept invalid json if one of the childcare cost amounts is negative and return Bad Request" in {
       val controller = mockTaxCreditCalculatorController
-      val inputJson = Json.parse(JsonLoader.fromResource("/json/childcare_cost_two_children.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json")
+      val inputJson: JsValue  = Json.parse(JsonLoader.fromResource("/json/childcare_cost_two_children.json").toString)
+      val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
       when(controller.calculator.award(any[Request]())).thenReturn(Future.successful(AwardPeriod()))
-      val result = await(executeAction(controller.calculate(), request, inputJson.toString()))
+      val result = await(controller.calculate()(request))
       status(result) shouldBe Status.BAD_REQUEST
     }
 
     "Accept invalid json if both childcare cost amounts are negative and return a Bad Request" in {
       val controller = mockTaxCreditCalculatorController
-      val inputJson = Json.parse(JsonLoader.fromResource("/json/negative_childcare_cost_two_children.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json")
+      val inputJson: JsValue  = Json.parse(JsonLoader.fromResource("/json/negative_childcare_cost_two_children.json").toString)
+      val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
       when(controller.calculator.award(any[Request]())).thenReturn(Future.successful(AwardPeriod()))
-      val result = await(executeAction(controller.calculate(), request, inputJson.toString()))
+      val result = await(controller.calculate()(request))
       status(result) shouldBe Status.BAD_REQUEST
     }
 
     "Accept a valid json object for scenario 1 for total award and return a valid response" in {
       val controller = mockTaxCreditCalculatorController
       val inputJson = Json.parse(JsonLoader.fromResource("/json/tc/input/2016/scenario_1.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json")
+      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
       val JsonResult = inputJson.validate[Request]
       val award = TCCalculator.calculator.award(JsonResult.get)
 
       when(controller.calculator.award(mockEq(JsonResult.get))).thenReturn(Future.successful(award))
-      val result = await(executeAction(controller.calculate(), request, inputJson.toString()))
+      val result = await(controller.calculate()(request))
+      status(result) shouldBe Status.OK
 
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val firstPeriodFrom = LocalDate.parse("2016-09-27", formatter)
@@ -246,19 +249,20 @@ class TaxCreditCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorAp
           |}
         """.stripMargin)
 
-      status(result) shouldBe Status.OK
+      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputJson
     }
 
     "Accept a valid json object for scenario 52 for income advice and return a valid response" in {
       val controller = mockTaxCreditCalculatorController
       val inputJson = Json.parse(JsonLoader.fromResource("/json/tc/input/2016/scenario_52.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json")
+      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
       val JsonResult = inputJson.validate[Request]
       val award = TCCalculator.calculator.incomeAdvice(JsonResult.get)
 
       when(controller.calculator.incomeAdvice(mockEq(JsonResult.get))).thenReturn(Future.successful(award))
-      val result = await(executeAction(controller.incomeAdvice(), request, inputJson.toString()))
+      val result = await(controller.incomeAdvice()(request))
+      status(result) shouldBe Status.OK
 
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val firstPeriodFrom = LocalDate.parse("2016-09-27", formatter)
@@ -351,7 +355,7 @@ class TaxCreditCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorAp
           |}
         """.stripMargin)
 
-      status(result) shouldBe Status.OK
+      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputJson
     }
 
@@ -359,12 +363,13 @@ class TaxCreditCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorAp
       val controller = mockTaxCreditCalculatorController
       val inputJson = Json.parse(JsonLoader.fromResource("/json/tc/input/2016/scenario_62.json").toString)
 
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json")
+      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
       val JsonResult = inputJson.validate[Request]
       val award = TCCalculator.calculator.award(JsonResult.get)
 
       when(controller.calculator.award(mockEq(JsonResult.get))).thenReturn(Future.successful(award))
-      val result = await(executeAction(controller.calculate(), request, inputJson.toString()))
+      val result = await(controller.calculate()(request))
+      status(result) shouldBe Status.OK
 
       val outputResult = Json.parse(
         s"""
@@ -377,7 +382,7 @@ class TaxCreditCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorAp
         }
         """.stripMargin)
 
-      status(result) shouldBe Status.OK
+      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputResult
     }
 
@@ -385,12 +390,13 @@ class TaxCreditCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorAp
       val controller = mockTaxCreditCalculatorController
       val inputJson = Json.parse(JsonLoader.fromResource("/json/tc/input/2016/scenario_62.json").toString)
 
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json")
+      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
       val JsonResult = inputJson.validate[Request]
       val advice = TCCalculator.calculator.incomeAdvice(JsonResult.get)
 
       when(controller.calculator.incomeAdvice(mockEq(JsonResult.get))).thenReturn(Future.successful(advice))
-      val result = await(executeAction(controller.incomeAdvice(), request, inputJson.toString()))
+      val result = await(controller.incomeAdvice()(request))
+      status(result) shouldBe Status.OK
 
       val outputResult = Json.parse(
         s"""
@@ -403,7 +409,7 @@ class TaxCreditCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorAp
         }
         """.stripMargin)
 
-      status(result) shouldBe Status.OK
+      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputResult
     }
 
@@ -412,12 +418,13 @@ class TaxCreditCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorAp
       val controller = mockTaxCreditCalculatorController
       val inputJson = Json.parse(JsonLoader.fromResource("/json/tc/input/2016/scenario_61.json").toString)
 
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json")
+      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
       val JsonResult = inputJson.validate[Request]
       val award = TCCalculator.calculator.award(JsonResult.get)
 
       when(controller.calculator.award(mockEq(JsonResult.get))).thenReturn(Future.successful(award))
-      val result = await(executeAction(controller.calculate(), request, inputJson.toString()))
+      val result = await(controller.calculate()(request))
+      status(result) shouldBe Status.OK
 
       val outputResult = Json.parse(
         s"""
@@ -507,7 +514,7 @@ class TaxCreditCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorAp
         }
         """.stripMargin)
 
-      status(result) shouldBe Status.OK
+      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputResult
     }
 
@@ -515,12 +522,12 @@ class TaxCreditCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorAp
       val controller = mockTaxCreditCalculatorController
       val inputJson = Json.parse(JsonLoader.fromResource("/json/tc/input/2016/scenario_61.json").toString)
 
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json")
+      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
       val JsonResult = inputJson.validate[Request]
       val incomeAdvice = TCCalculator.calculator.incomeAdvice(JsonResult.get)
 
       when(controller.calculator.incomeAdvice(mockEq(JsonResult.get))).thenReturn(Future.successful(incomeAdvice))
-      val result = await(executeAction(controller.incomeAdvice(), request, inputJson.toString()))
+      val result = await(controller.incomeAdvice()(request))
 
       val outputResult = Json.parse(
         s"""
@@ -611,6 +618,7 @@ class TaxCreditCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorAp
         """.stripMargin)
 
       status(result) shouldBe Status.OK
+      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputResult
     }
 
@@ -618,12 +626,12 @@ class TaxCreditCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorAp
       val controller = mockTaxCreditCalculatorController
       val inputJson = Json.parse(JsonLoader.fromResource("/json/tc/input/2017/scenario_5.json").toString)
 
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json")
+      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
       val JsonResult = inputJson.validate[Request]
       val incomeAdvice = TCCalculator.calculator.incomeAdvice(JsonResult.get)
 
       when(controller.calculator.incomeAdvice(mockEq(JsonResult.get))).thenReturn(Future.successful(incomeAdvice))
-      val result = await(executeAction(controller.incomeAdvice(), request, inputJson.toString()))
+      val result = await(controller.incomeAdvice()(request))
 
       val outputResult = Json.parse(
         s"""
@@ -780,6 +788,7 @@ class TaxCreditCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorAp
         """.stripMargin)
 
       status(result) shouldBe Status.OK
+      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputResult
     }
 
@@ -787,8 +796,8 @@ class TaxCreditCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorAp
     "Accept invalid json if childcare spend is less than 0.00 and return a valid response" in {
       val controller = mockTaxCreditCalculatorController
       val inputJson = Json.parse(JsonLoader.fromResource("/json/negative_childcare_cost.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json")
-      val result = await(executeAction(controller.calculate(), request, inputJson.toString()))
+      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
+      val result = await(controller.calculate()(request))
 
       val outputJSON = Json.parse(
         """
@@ -821,14 +830,15 @@ class TaxCreditCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorAp
         """.stripMargin)
 
       status(result) shouldBe Status.BAD_REQUEST
+      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputJSON
     }
 
     "Accept invalid json if child ID index is less than 0 and return a valid response" in {
       val controller = mockTaxCreditCalculatorController
       val inputJson = Json.parse(JsonLoader.fromResource("/json/tc/input/2016/invalid_child_name.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json")
-      val result = await(executeAction(controller.incomeAdvice(), request, inputJson.toString()))
+      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
+      val result = await(controller.incomeAdvice()(request))
 
       val outputJSON = Json.parse(
         """
@@ -861,18 +871,19 @@ class TaxCreditCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorAp
         """.stripMargin)
 
       status(result) shouldBe Status.BAD_REQUEST
+      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputJSON
     }
 
     "Return Internal Server Error with error message if an exception is thrown during income advice calculation " in {
       val controller = mockTaxCreditCalculatorController
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json")
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_23.json")
       val inputJson: JsValue = Json.parse(resource.toString)
       val JsonResult = inputJson.validate[Request]
+      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
       when(controller.calculator.incomeAdvice(mockEq(JsonResult.get))).thenReturn(Future.failed(new Exception("Something bad happened")))
-      val result = await(executeAction(controller.incomeAdvice(), request, inputJson.toString()))
+      val result = await(controller.incomeAdvice()(request))
       val outputJSON = Json.parse(
         """
           |{
@@ -882,18 +893,19 @@ class TaxCreditCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorAp
         """.stripMargin)
 
       status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputJSON
     }
 
     "Return Internal Server Error with error message if an exception is thrown during total reward calculation " in {
       val controller = mockTaxCreditCalculatorController
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json")
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_52.json")
       val inputJson: JsValue = Json.parse(resource.toString)
       val JsonResult = inputJson.validate[Request]
+      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
       when(controller.calculator.award(mockEq(JsonResult.get))).thenReturn(Future.failed(new Exception("Something bad happened")))
-      val result = await(executeAction(controller.calculate(), request, inputJson.toString()))
+      val result = await(controller.calculate()(request))
       val outputJSON = Json.parse(
         """
           |{
@@ -903,15 +915,17 @@ class TaxCreditCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorAp
         """.stripMargin)
 
       status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputJSON
     }
 
     "Return Bad Request with error message if a request for a different scheme is passed (Income Advice)(e.g. ESC) " in {
       val controller = mockTaxCreditCalculatorController
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json")
       val resource: JsonNode = JsonLoader.fromResource("/json/esc/input/scenario_1.json")
       val inputJson: JsValue = Json.parse(resource.toString)
-      val result = await(executeAction(controller.incomeAdvice(), request, inputJson.toString()))
+      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
+      val result = await(controller.incomeAdvice()(request))
+
 
       val outputJSON = Json.parse(
         """
@@ -922,15 +936,16 @@ class TaxCreditCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorAp
         """.stripMargin)
 
       status(result) shouldBe Status.BAD_REQUEST
+      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputJSON
     }
 
     "Return Bad Request with error message if a request for a different scheme is passed (Calculate)(e.g. ESC) " in {
       val controller = mockTaxCreditCalculatorController
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json")
       val resource: JsonNode = JsonLoader.fromResource("/json/esc/input/scenario_12.json")
       val inputJson: JsValue = Json.parse(resource.toString)
-      val result = await(executeAction(controller.calculate(), request, inputJson.toString()))
+      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
+      val result = await(controller.calculate()(request))
 
       val outputJSON = Json.parse(
         """
@@ -941,6 +956,7 @@ class TaxCreditCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorAp
         """.stripMargin)
 
       status(result) shouldBe Status.BAD_REQUEST
+      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputJSON
     }
 
