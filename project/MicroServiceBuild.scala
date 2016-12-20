@@ -2,8 +2,6 @@ import sbt._
 
 object MicroServiceBuild extends Build with MicroService {
 
-  import scala.util.Properties.envOrElse
-
   val appName = "cc-calculator"
 
   override lazy val appDependencies: Seq[ModuleID] = AppDependencies()
@@ -27,6 +25,7 @@ private object AppDependencies {
   private val jsonSchemaValidator = "2.2.6"
   private val json4s = "3.2.11"
   private val mockitoVersion = "1.9.0"
+  private val scalaTestPlusVersion = "1.5.1"
 
   val compile = Seq(
     ws,
@@ -49,7 +48,7 @@ private object AppDependencies {
   object Test {
     def apply() = new TestDependencies {
       override lazy val test = Seq(
-        "org.scalatestplus.play" %% "scalatestplus-play" % "1.5.1" % scope,
+        "org.scalatestplus.play" %% "scalatestplus-play" % scalaTestPlusVersion % scope,
         "uk.gov.hmrc" %% "hmrctest" % hmrcTestVersion % scope,
         "org.scalatest" %% "scalatest" % scalaTestVersion % scope,
         "org.pegdown" % "pegdown" % pegDownVersion % scope,
