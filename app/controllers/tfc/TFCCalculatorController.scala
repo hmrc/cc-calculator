@@ -46,7 +46,7 @@ trait TFCCalculatorController extends CalculatorController with ServicesConfig {
 
       request.body.validate[Request].fold(
         error => {
-          Logger.warn(s"TFC Calculator Validation JsError in TFCCalculatorController.calculate \n\n")
+          Logger.warn(s"TFC Calculator Validation JsError in TFCCalculatorController.calculate")
           Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(play.api.http.Status.BAD_REQUEST, Left(error))))
         },
         result => {
@@ -59,11 +59,11 @@ trait TFCCalculatorController extends CalculatorController with ServicesConfig {
                   Ok(utils.JSONFactory.generateResultJson(response))
               } recover {
                 case e: Exception =>
-                  Logger.warn(s"TFC Calculator Exception in TFCCalculatorController.calculate: ${e.getMessage}\n\n")
+                  Logger.warn(s"TFC Calculator Exception in TFCCalculatorController.calculate: ${e.getMessage}")
                   InternalServerError(utils.JSONFactory.generateErrorJSON(play.api.http.Status.INTERNAL_SERVER_ERROR, Right(e)))
               }
             case _ =>
-              Logger.warn(s"TFC Calculator Exception in TFCCalculatorController.calculate \n\n")
+              Logger.warn(s"TFC Calculator Exception in TFCCalculatorController.calculate")
               Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(
                 play.api.http.Status.BAD_REQUEST,
                 Right(new IllegalArgumentException(Messages("cc.calc.invalid.request.exception")))
