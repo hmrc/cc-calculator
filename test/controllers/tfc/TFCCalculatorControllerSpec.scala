@@ -20,27 +20,23 @@ import calculators.TFCCalculator
 import com.fasterxml.jackson.databind.JsonNode
 import com.github.fge.jackson.JsonLoader
 import controllers.FakeCCCalculatorApplication
-import helper.JsonRequestHelper._
 import models.input.APIModels.Request
 import models.output.OutputAPIModel.AwardPeriod
 import org.mockito.Matchers.{eq => mockEq, _}
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
-import play.api.Play
-import play.api.Play.current
 import play.api.http.Status
 import play.api.libs.json.{JsValue, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import service.AuditEvents
-import uk.gov.hmrc.play.test.UnitSpec
-
+import utils.CCSpecConfig
 import scala.concurrent.Future
 
 /**
  * Created by roma on 30/12/15.
  */
-class TFCCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorApplication with MockitoSugar {
+class TFCCalculatorControllerSpec extends CCSpecConfig with FakeCCCalculatorApplication with MockitoSugar {
 
   val mockTFCCalculatorController = new TFCCalculatorController with TFCCalculator {
     override val calculator = mock[TFCCalculatorService]
@@ -52,7 +48,7 @@ class TFCCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorApplicat
   "TFCCalculatorController" should {
 
     "not return NOT_FOUND (calculate) endpoint" in {
-      val result = route(FakeRequest(POST, "/cc-calculator/tax-free-childcare/calculate"))
+      val result = route(app, FakeRequest(POST, "/cc-calculator/tax-free-childcare/calculate"))
       result.isDefined shouldBe true
       status(result.get) should not be NOT_FOUND
     }
@@ -74,7 +70,6 @@ class TFCCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorApplicat
           |}
         """.stripMargin)
 
-      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputJSON
     }
 
@@ -96,7 +91,6 @@ class TFCCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorApplicat
           |}
         """.stripMargin)
 
-      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputJSON
     }
 
@@ -140,7 +134,6 @@ class TFCCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorApplicat
           |}
         """.stripMargin)
 
-      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputJSON
     }
 
@@ -173,7 +166,6 @@ class TFCCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorApplicat
           |}
         """.stripMargin)
 
-      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputJSON
     }
 
@@ -206,7 +198,6 @@ class TFCCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorApplicat
           |}
         """.stripMargin)
 
-      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputJSON
     }
 
@@ -239,7 +230,6 @@ class TFCCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorApplicat
           |}
         """.stripMargin)
 
-      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputJSON
     }
 
@@ -272,7 +262,6 @@ class TFCCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorApplicat
           |}
         """.stripMargin)
 
-      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputJSON
     }
 
@@ -303,7 +292,6 @@ class TFCCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorApplicat
           |}
         """.stripMargin)
 
-      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputJSON
     }
 
@@ -364,7 +352,6 @@ class TFCCalculatorControllerSpec extends UnitSpec with FakeCCCalculatorApplicat
           |}
         """.stripMargin)
 
-      implicit val materializer = Play.application.materializer
       jsonBodyOf(result) shouldBe outputJSON
     }
 
