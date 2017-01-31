@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 HM Revenue & Customs
+ * Copyright 2017 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -135,7 +135,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-04-2016", formatter)
       //String representation in order to test the whole value
-      val result = TCCalculator.calculator.amountForDateRange(BigDecimal(0.00), Periods.Weekly, fromDate, toDate, rounded = false, truncated = false)
+      val result = TCCalculator.calculator.amountForDateRange(BigDecimal(0.00), Periods.Weekly, fromDate, toDate)
       result shouldBe BigDecimal(0.00)
     }
 
@@ -145,7 +145,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
       val fromDate = LocalDate.parse("01-05-2017", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       //String representation in order to test the whole value
-      val result: String = TCCalculator.calculator.amountForDateRange(cost, Periods.Weekly, fromDate, toDate, rounded = false, truncated = false).toString()
+      val result: String = TCCalculator.calculator.amountForDateRange(cost, Periods.Weekly, fromDate, toDate).toString()
       result shouldBe "2849.315068493150684931506849315068"
     }
 
@@ -155,7 +155,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
       val fromDate = LocalDate.parse("01-05-2017", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       //String representation in order to test the whole value
-      val result: String = TCCalculator.calculator.amountForDateRange(cost, Periods.Fortnightly, fromDate, toDate, rounded = false, truncated = false).toString()
+      val result: String = TCCalculator.calculator.amountForDateRange(cost, Periods.Fortnightly, fromDate, toDate).toString()
       result shouldBe "474.8953424657534246575342465753424"
     }
 
@@ -165,7 +165,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
       val fromDate = LocalDate.parse("01-05-2017", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       //String representation in order to test the whole value
-      val result: String = TCCalculator.calculator.amountForDateRange(cost, Periods.Monthly, fromDate, toDate, rounded = false, truncated = false).toString()
+      val result: String = TCCalculator.calculator.amountForDateRange(cost, Periods.Monthly, fromDate, toDate).toString()
       result shouldBe "66.40438356164383561643835616438356"
     }
 
@@ -175,7 +175,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
       val fromDate = LocalDate.parse("01-05-2017", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       //String representation in order to test the whole value
-      val result: String = TCCalculator.calculator.amountForDateRange(cost, Periods.Quarterly, fromDate, toDate, rounded = false, truncated = false).toString()
+      val result: String = TCCalculator.calculator.amountForDateRange(cost, Periods.Quarterly, fromDate, toDate).toString()
       result shouldBe "438.3561643835616438356164383561644"
     }
 
@@ -185,7 +185,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
       val fromDate = LocalDate.parse("01-05-2017", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       //String representation in order to test the whole value
-      val result: String = TCCalculator.calculator.amountForDateRange(cost, Periods.Yearly, fromDate, toDate, rounded = false, truncated = false).toString()
+      val result: String = TCCalculator.calculator.amountForDateRange(cost, Periods.Yearly, fromDate, toDate).toString()
       result shouldBe "547.8909589041095890410958904109590"
     }
 
@@ -194,7 +194,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2017", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
-      val result: BigDecimal = TCCalculator.calculator.amountForDateRange(cost, Periods.Weekly, fromDate, toDate, rounded = false, truncated = true)
+      val result: BigDecimal = TCCalculator.calculator.amountForDateRange(cost, Periods.Weekly, fromDate, toDate)
       result shouldBe 2849.300
     }
 
@@ -203,7 +203,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2017", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
-      val result: BigDecimal = TCCalculator.calculator.amountForDateRange(cost, Periods.Fortnightly, fromDate, toDate, rounded = false, truncated = true)
+      val result: BigDecimal = TCCalculator.calculator.amountForDateRange(cost, Periods.Fortnightly, fromDate, toDate)
       result shouldBe 474.880
     }
 
@@ -212,7 +212,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2017", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
-      val result: BigDecimal = TCCalculator.calculator.amountForDateRange(cost, Periods.Monthly, fromDate, toDate, rounded = false, truncated = true)
+      val result: BigDecimal = TCCalculator.calculator.amountForDateRange(cost, Periods.Monthly, fromDate, toDate)
       result shouldBe 66.400
     }
 
@@ -221,7 +221,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2017", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
-      val result: BigDecimal = TCCalculator.calculator.amountForDateRange(cost, Periods.Quarterly, fromDate, toDate, rounded = false, truncated = true)
+      val result: BigDecimal = TCCalculator.calculator.amountForDateRange(cost, Periods.Quarterly, fromDate, toDate)
       result shouldBe 438.340
     }
 
@@ -230,7 +230,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2017", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
-      val result: BigDecimal = TCCalculator.calculator.amountForDateRange(cost, Periods.Yearly, fromDate, toDate, rounded = false, truncated = true)
+      val result: BigDecimal = TCCalculator.calculator.amountForDateRange(cost, Periods.Yearly, fromDate, toDate)
       result shouldBe 547.880
     }
 
@@ -239,7 +239,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2017", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
-      val result: BigDecimal = TCCalculator.calculator.amountForDateRange(cost, Periods.Weekly, fromDate, toDate, rounded = true, truncated = true)
+      val result: BigDecimal = TCCalculator.calculator.amountForDateRange(cost, Periods.Weekly, fromDate, toDate)
       result shouldBe 2849.40
     }
 
@@ -248,7 +248,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2017", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
-      val result: BigDecimal = TCCalculator.calculator.amountForDateRange(cost, Periods.Fortnightly, fromDate, toDate, rounded = true, truncated = true)
+      val result: BigDecimal = TCCalculator.calculator.amountForDateRange(cost, Periods.Fortnightly, fromDate, toDate)
       result shouldBe 475.00
     }
 
@@ -257,7 +257,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2017", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
-      val result: BigDecimal = TCCalculator.calculator.amountForDateRange(cost, Periods.Monthly, fromDate, toDate, rounded = true, truncated = true)
+      val result: BigDecimal = TCCalculator.calculator.amountForDateRange(cost, Periods.Monthly, fromDate, toDate)
       result shouldBe 66.40
     }
 
@@ -266,7 +266,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2017", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
-      val result: BigDecimal = TCCalculator.calculator.amountForDateRange(cost, Periods.Quarterly, fromDate, toDate, rounded = true, truncated = true)
+      val result: BigDecimal = TCCalculator.calculator.amountForDateRange(cost, Periods.Quarterly, fromDate, toDate)
       result shouldBe 438.40
     }
 
@@ -275,7 +275,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2017", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
-      val result: BigDecimal = TCCalculator.calculator.amountForDateRange(cost, Periods.Yearly, fromDate, toDate, rounded = true, truncated = true)
+      val result: BigDecimal = TCCalculator.calculator.amountForDateRange(cost, Periods.Yearly, fromDate, toDate)
       result shouldBe 548.00
     }
 
@@ -284,7 +284,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2017", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
-      val result: BigDecimal = TCCalculator.calculator.amountForDateRange(cost, Periods.Weekly, fromDate, toDate, rounded = true, truncated = false)
+      val result: BigDecimal = TCCalculator.calculator.amountForDateRange(cost, Periods.Weekly, fromDate, toDate)
       result shouldBe 2849.40
     }
 
@@ -293,7 +293,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2017", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
-      val result: BigDecimal = TCCalculator.calculator.amountForDateRange(cost, Periods.Fortnightly, fromDate, toDate, rounded = true, truncated = false)
+      val result: BigDecimal = TCCalculator.calculator.amountForDateRange(cost, Periods.Fortnightly, fromDate, toDate)
       result shouldBe 475.00
     }
 
@@ -302,7 +302,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2017", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
-      val result: BigDecimal = TCCalculator.calculator.amountForDateRange(cost, Periods.Monthly, fromDate, toDate, rounded = true, truncated = false)
+      val result: BigDecimal = TCCalculator.calculator.amountForDateRange(cost, Periods.Monthly, fromDate, toDate)
       result shouldBe 66.60
     }
 
@@ -311,7 +311,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2017", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
-      val result: BigDecimal = TCCalculator.calculator.amountForDateRange(cost, Periods.Quarterly, fromDate, toDate, rounded = true, truncated = false)
+      val result: BigDecimal = TCCalculator.calculator.amountForDateRange(cost, Periods.Quarterly, fromDate, toDate)
       result shouldBe 438.40
     }
 
@@ -320,7 +320,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2017", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
-      val result: BigDecimal = TCCalculator.calculator.amountForDateRange(cost, Periods.Yearly, fromDate, toDate, rounded = true, truncated = false)
+      val result: BigDecimal = TCCalculator.calculator.amountForDateRange(cost, Periods.Yearly, fromDate, toDate)
       result shouldBe 548.00
     }
 
@@ -375,7 +375,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
       val fromDate = LocalDate.parse("12-12-2016", formatter)
       val toDate = LocalDate.parse("06-04-2017", formatter)
       //String representation in order to test the whole value
-      val result: String = TCCalculator.calculator.amountForDateRange(cost, Periods.Monthly, fromDate, toDate, rounded = false).toString()
+      val result: String = TCCalculator.calculator.amountForDateRange(cost, Periods.Monthly, fromDate, toDate).toString()
       result shouldBe "3780.740"
     }
 
