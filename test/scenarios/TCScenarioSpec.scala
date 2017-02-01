@@ -2132,7 +2132,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
                      val wtcWorkElement = Element(netAmount = 92.27, maximumAmount = 995.60, taperAmount = 903.33)
                      val wtcChildcareElement = Element(netAmount = 1224.13, maximumAmount = 1224.13, taperAmount = 0.00)
                      val ctcChildElement = Element(netAmount = 1737.36, maximumAmount = 1737.36, taperAmount = 0.00)
-                     val ctcFamilyElement = Element(netAmount = 114.00, maximumAmount = 114.00, taperAmount = 0.00)
+                     val ctcFamilyElement = Element(netAmount = 113.24, maximumAmount = 113.24, taperAmount = 0.00)
                      val periodNetAmount = 3171.46
                      verifyAmountsPerPeriod(period, fromDate, toDate, wtcWorkElement, wtcChildcareElement, ctcChildElement, ctcFamilyElement, periodNetAmount)
                    case 1 =>
@@ -2161,7 +2161,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
                     val wtcWorkElement = Element(netAmount = 179.68, maximumAmount = 1938.80, taperAmount = 1759.12)
                     val wtcChildcareElement = Element(netAmount = 1372.63, maximumAmount = 1372.63, taperAmount = 0.00)
                     val ctcChildElement = Element(netAmount = 2255.52, maximumAmount = 2255.52, taperAmount = 0.00)
-                    val ctcFamilyElement = Element(netAmount = 222, maximumAmount = 222, taperAmount = 0.00)
+                    val ctcFamilyElement = Element(netAmount = 220.52, maximumAmount = 220.52, taperAmount = 0.00)
                     val periodNetAmount = 4029.83
                     verifyAmountsPerPeriod(period, fromDate, toDate, wtcWorkElement, wtcChildcareElement, ctcChildElement, ctcFamilyElement, periodNetAmount)
                   case 1 =>
@@ -2274,7 +2274,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
       incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
     }
 
-    "(Proratering) (TY 2016/2017 - 2017/2018 Scenario 5) Generate total award with periods with elements" in {
+    "(Pro-ratering) (TY 2016/2017 - 2017/2018 Scenario 5) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2017/scenario_5.json")
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[Request]
