@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package test
+package scenarios
 
 import calculators.TFCCalculator
 import com.fasterxml.jackson.databind.JsonNode
