@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 HM Revenue & Customs
+ * Copyright 2017 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -71,6 +71,7 @@ trait CCCalculator {
     def roundup (value: BigDecimal): BigDecimal = value.setScale(2, RoundingMode.UP)
 
     def roundDownToThreeDigits(value: BigDecimal): BigDecimal = value.setScale(3, RoundingMode.DOWN)
+    def roundDownToTwoDigits(value: BigDecimal): BigDecimal = value.setScale(2, RoundingMode.HALF_EVEN)
 
     def verifyPenceDifference(amount: BigDecimal, originalSpend: BigDecimal): (BigDecimal, Boolean) = {
 

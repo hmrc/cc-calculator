@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 HM Revenue & Customs
+ * Copyright 2017 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package test
+package scenarios
 
 import calculators.TCCalculator
 import com.fasterxml.jackson.databind.JsonNode
@@ -76,10 +76,10 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
               val fromDate : LocalDate = period.from
               val toDate : LocalDate = period.until
               val wtcWorkElement = Element(netAmount = 0.00, maximumAmount = 2078.08, taperAmount = 2078.08)
-              val wtcChildcareElement = Element(netAmount = 703.11, maximumAmount = 895.24, taperAmount = 192.13)
+              val wtcChildcareElement = Element(netAmount = 686.28, maximumAmount = 878.41, taperAmount = 192.13)
               val ctcChildElement = Element(netAmount = 1455.42, maximumAmount = 1455.42, taperAmount = 0.00)
-              val ctcFamilyElement = Element(netAmount = 286.50, maximumAmount = 286.50, taperAmount = 0.00)
-              val periodNetAmount = 2445.03
+              val ctcFamilyElement = Element(netAmount = 284.59, maximumAmount = 284.59, taperAmount = 0.00)
+              val periodNetAmount = 2426.29
               verifyAmountsPerPeriod(period, fromDate, toDate, wtcWorkElement, wtcChildcareElement, ctcChildElement, ctcFamilyElement, periodNetAmount)
             case _ => throw new Exception // fail test
           }
@@ -89,9 +89,9 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
           throw e
       }
 
-      award.tc.get.totalAwardAmount shouldBe 2445.03
+      award.tc.get.totalAwardAmount shouldBe 2426.29
       award.tc.get.houseHoldAdviceAmount shouldBe 0.00
-      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 14860.17
+      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 14819.1500
       incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
     }
 
@@ -115,10 +115,10 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
               val fromDate : LocalDate = period.from
               val toDate : LocalDate = period.until
               val wtcWorkElement = Element(netAmount = 0.00, maximumAmount = 2078.08, taperAmount = 2078.08)
-              val wtcChildcareElement = Element(netAmount = 0.00, maximumAmount = 3333.35, taperAmount = 3333.35)
-              val ctcChildElement = Element(netAmount = 949.74, maximumAmount = 1455.42, taperAmount = 505.68)
-              val ctcFamilyElement = Element(netAmount = 286.50, maximumAmount = 286.50, taperAmount = 0.00)
-              val periodNetAmount = 1236.24
+              val wtcChildcareElement = Element(netAmount = 0.00, maximumAmount = 3333.14, taperAmount = 3333.14)
+              val ctcChildElement = Element(netAmount = 949.54, maximumAmount = 1455.42, taperAmount = 505.88)
+              val ctcFamilyElement = Element(netAmount = 284.59, maximumAmount = 284.59, taperAmount = 0.00)
+              val periodNetAmount = 1234.13
               verifyAmountsPerPeriod(period, fromDate, toDate, wtcWorkElement, wtcChildcareElement, ctcChildElement, ctcFamilyElement, periodNetAmount)
             case _ => throw new Exception // fail test
           }
@@ -128,9 +128,9 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
           throw e
       }
 
-      award.tc.get.totalAwardAmount shouldBe 1236.24
+      award.tc.get.totalAwardAmount shouldBe 1234.13
       award.tc.get.houseHoldAdviceAmount shouldBe 0.00
-      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 20806.72
+      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 20808.6912
       incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
     }
 
@@ -151,7 +151,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
             case 0 =>
               val fromDate : LocalDate = period.from
               val toDate : LocalDate = period.until
-              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 2078.08, 895.24, 3099.93, 286.50)
+              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 2078.08, 878.41, 3098.02, 284.59)
             case _ => throw new Exception // fail test
           }
         }
@@ -178,7 +178,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
             case 0 =>
               val fromDate : LocalDate = period.from
               val toDate : LocalDate = period.until
-              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 2078.08, 895.24, 3099.93, 286.50)
+              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 2078.08, 878.41, 3098.02, 284.59)
             case _ => throw new Exception // fail test
           }
         }
@@ -205,7 +205,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
             case 0 =>
               val fromDate : LocalDate = period.from
               val toDate : LocalDate = period.until
-              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 2078.08, 895.24, 3768.43, 286.50)
+              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 2078.08, 878.41, 3764.61, 284.59)
             case _ => throw new Exception // fail test
           }
         }
@@ -232,7 +232,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
             case 0 =>
               val fromDate : LocalDate = period.from
               val toDate : LocalDate = period.until
-              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 2078.08, 895.24, 3768.43, 286.50)
+              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 2078.08, 878.41, 3764.61, 284.59)
             case _ => throw new Exception // fail test
           }
         }
@@ -261,10 +261,10 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
               val fromDate : LocalDate = period.from
               val toDate : LocalDate = period.until
               val wtcWorkElement = Element(netAmount = 231.89, maximumAmount = 2502.10, taperAmount = 2270.21)
-              val wtcChildcareElement = Element(netAmount = 895.24, maximumAmount = 895.24, taperAmount = 0.00)
+              val wtcChildcareElement = Element(netAmount = 878.41, maximumAmount = 878.41, taperAmount = 0.00)
               val ctcChildElement = Element(netAmount = 1455.42, maximumAmount = 1455.42, taperAmount = 0.00)
-              val ctcFamilyElement = Element(netAmount = 286.50, maximumAmount = 286.50, taperAmount = 0.00)
-              val periodNetAmount = 2869.05
+              val ctcFamilyElement = Element(netAmount = 284.59, maximumAmount = 284.59, taperAmount = 0.00)
+              val periodNetAmount = 2850.31
               verifyAmountsPerPeriod(period, fromDate, toDate, wtcWorkElement, wtcChildcareElement, ctcChildElement, ctcFamilyElement, periodNetAmount)
             case _ => throw new Exception // fail test
           }
@@ -273,9 +273,9 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
         case e: Exception =>
           throw e
       }
-      award.tc.get.totalAwardAmount shouldBe 2869.05
+      award.tc.get.totalAwardAmount shouldBe 2850.31
       award.tc.get.houseHoldAdviceAmount shouldBe 0.00
-      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 15894.35
+      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 15853.7588
       incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
 
     }
@@ -299,9 +299,9 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
               val fromDate : LocalDate = period.from
               val toDate : LocalDate = period.until
               val wtcWorkElement = Element(netAmount = 0.00, maximumAmount = 2502.10, taperAmount = 2502.10)
-              val wtcChildcareElement = Element(netAmount = 0.00, maximumAmount = 895.24, taperAmount = 895.24)
+              val wtcChildcareElement = Element(netAmount = 0.00, maximumAmount = 878.41, taperAmount = 878.41)
               val ctcChildElement = Element(netAmount = 0.00, maximumAmount = 1455.42, taperAmount = 1455.42)
-              val ctcFamilyElement = Element(netAmount = 0.00, maximumAmount = 286.50, taperAmount = 286.50)
+              val ctcFamilyElement = Element(netAmount = 0.00, maximumAmount = 284.59, taperAmount = 284.59)
               val periodNetAmount = 0.00
               verifyAmountsPerPeriod(period, fromDate, toDate, wtcWorkElement, wtcChildcareElement, ctcChildElement, ctcFamilyElement, periodNetAmount)
             case _ => throw new Exception // fail test
@@ -313,7 +313,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
       }
       award.tc.get.totalAwardAmount shouldBe 0.00
       award.tc.get.houseHoldAdviceAmount shouldBe 0.00
-      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 15894.35
+      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 15853.7588
       incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
     }
 
@@ -334,7 +334,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
             case 0 =>
               val fromDate : LocalDate = period.from
               val toDate : LocalDate = period.until
-              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 2502.10, 895.24, 3099.93, 286.50)
+              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 2502.10, 878.41, 3098.02, 284.59)
             case _ => throw new Exception // fail test
           }
         }
@@ -360,7 +360,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
             case 0 =>
               val fromDate : LocalDate = period.from
               val toDate : LocalDate = period.until
-              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 2502.10, 895.24, 3099.93, 286.50)
+              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 2502.10, 878.41, 3098.02, 284.59)
             case _ => throw new Exception // fail test
           }
         }
@@ -387,7 +387,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
             case 0 =>
               val fromDate : LocalDate = period.from
               val toDate : LocalDate = period.until
-              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 2502.10, 895.24, 3768.43, 286.50)
+              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 2502.10, 878.41, 3764.61, 284.59)
             case _ => throw new Exception // fail test
           }
         }
@@ -413,7 +413,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
             case 0 =>
               val fromDate : LocalDate = period.from
               val toDate : LocalDate = period.until
-              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 2502.10, 895.24, 3768.43, 286.50)
+              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 2502.10, 878.41, 3764.61, 284.59)
             case _ => throw new Exception // fail test
           }
         }
@@ -442,10 +442,10 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
               val fromDate : LocalDate = period.from
               val toDate : LocalDate = period.until
               val wtcWorkElement = Element(netAmount = 1362.61, maximumAmount = 3632.82, taperAmount = 2270.21)
-              val wtcChildcareElement = Element(netAmount = 895.24, maximumAmount = 895.24, taperAmount = 0.00)
+              val wtcChildcareElement = Element(netAmount = 878.41, maximumAmount = 878.41, taperAmount = 0.00)
               val ctcChildElement = Element(netAmount = 1455.42, maximumAmount = 1455.42, taperAmount = 0.00)
-              val ctcFamilyElement = Element(netAmount = 286.50, maximumAmount = 286.50, taperAmount = 0.00)
-              val periodNetAmount = 3999.77
+              val ctcFamilyElement = Element(netAmount = 284.59, maximumAmount = 284.59, taperAmount = 0.00)
+              val periodNetAmount = 3981.03
               verifyAmountsPerPeriod(period, fromDate, toDate, wtcWorkElement, wtcChildcareElement, ctcChildElement, ctcFamilyElement, periodNetAmount)
             case _ => throw new Exception // fail test
           }
@@ -454,9 +454,9 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
         case e: Exception =>
           throw e
       }
-      award.tc.get.totalAwardAmount shouldBe 3999.77
+      award.tc.get.totalAwardAmount shouldBe 3981.03
       award.tc.get.houseHoldAdviceAmount shouldBe 0.00
-      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 18652.18
+      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 18612.7156
       incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
     }
 
@@ -479,10 +479,10 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
               val fromDate : LocalDate = period.from
               val toDate : LocalDate = period.until
               val wtcWorkElement = Element(netAmount = 0.00, maximumAmount = 5187.56, taperAmount = 5187.56)
-              val wtcChildcareElement = Element(netAmount = 165.69, maximumAmount = 895.24, taperAmount = 729.55)
+              val wtcChildcareElement = Element(netAmount = 148.87, maximumAmount = 878.41, taperAmount = 729.54)
               val ctcChildElement = Element(netAmount = 1455.42, maximumAmount = 1455.42, taperAmount = 0.00)
-              val ctcFamilyElement = Element(netAmount = 286.50, maximumAmount = 286.50, taperAmount = 0.00)
-              val periodNetAmount = 1907.61
+              val ctcFamilyElement = Element(netAmount = 284.59, maximumAmount = 284.59, taperAmount = 0.00)
+              val periodNetAmount = 1888.88
               verifyAmountsPerPeriod(period, fromDate, toDate, wtcWorkElement, wtcChildcareElement, ctcChildElement, ctcFamilyElement, periodNetAmount)
             case _ => throw new Exception // fail test
           }
@@ -491,9 +491,9 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
         case e: Exception =>
           throw e
       }
-      award.tc.get.totalAwardAmount shouldBe 1907.61
+      award.tc.get.totalAwardAmount shouldBe 1888.88
       award.tc.get.houseHoldAdviceAmount shouldBe 0.00
-      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 22444.19
+      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 22406.2812
       incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
     }
 
@@ -513,7 +513,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
             case 0 =>
               val fromDate : LocalDate = period.from
               val toDate : LocalDate = period.until
-              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 3632.82,  895.24, 3099.93, 286.50)
+              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 3632.82,  878.41, 3098.02, 284.59)
             case _ => throw new Exception // fail test
           }
         }
@@ -540,7 +540,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
             case 0 =>
               val fromDate : LocalDate = period.from
               val toDate : LocalDate = period.until
-              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 5187.56, 895.24, 3099.93, 286.50)
+              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 5187.56, 878.41, 3098.02, 284.59)
             case _ => throw new Exception // fail test
           }
         }
@@ -567,7 +567,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
             case 0 =>
               val fromDate : LocalDate = period.from
               val toDate : LocalDate = period.until
-              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 3632.82, 895.24, 3768.43, 286.50)
+              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 3632.82, 878.41, 3764.61, 284.59)
             case _ => throw new Exception // fail test
           }
         }
@@ -594,7 +594,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
             case 0 =>
               val fromDate : LocalDate = period.from
               val toDate : LocalDate = period.until
-              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 5187.56, 895.24, 3768.43, 286.50)
+              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 5187.56, 878.41, 3764.61, 284.59)
             case _ => throw new Exception // fail test
           }
         }
@@ -622,11 +622,11 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
             case 0 =>
               val fromDate : LocalDate = period.from
               val toDate : LocalDate = period.until
-              val wtcWorkElement = Element(netAmount = 2031.11, maximumAmount = 4301.32, taperAmount = 2270.21)
-              val wtcChildcareElement = Element(netAmount = 895.24, maximumAmount = 895.24, taperAmount = 0.00)
+              val wtcWorkElement = Element(netAmount = 2029.20, maximumAmount = 4299.41, taperAmount = 2270.21)
+              val wtcChildcareElement = Element(netAmount = 878.41, maximumAmount = 878.41, taperAmount = 0.00)
               val ctcChildElement = Element(netAmount = 1455.42, maximumAmount = 1455.42, taperAmount = 0.00)
-              val ctcFamilyElement = Element(netAmount = 286.50, maximumAmount = 286.50, taperAmount = 0.00)
-              val periodNetAmount = 4668.27
+              val ctcFamilyElement = Element(netAmount = 284.59, maximumAmount = 284.59, taperAmount = 0.00)
+              val periodNetAmount = 4647.62
               verifyAmountsPerPeriod(period, fromDate, toDate, wtcWorkElement, wtcChildcareElement, ctcChildElement, ctcFamilyElement, periodNetAmount)
             case _ => throw new Exception // fail test
           }
@@ -635,9 +635,9 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
         case e: Exception =>
           throw e
       }
-      award.tc.get.totalAwardAmount shouldBe 4668.27
+      award.tc.get.totalAwardAmount shouldBe 4647.62
       award.tc.get.houseHoldAdviceAmount shouldBe 0.00
-      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 20282.65
+      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 20239.1952
       incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
     }
 
@@ -659,11 +659,11 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
             case 0 =>
               val fromDate : LocalDate = period.from
               val toDate : LocalDate = period.until
-              val wtcWorkElement = Element(netAmount = 607.45, maximumAmount = 6524.56, taperAmount = 5917.11)
-              val wtcChildcareElement = Element(netAmount = 895.24, maximumAmount = 895.24, taperAmount = 0.00)
+              val wtcWorkElement = Element(netAmount = 603.64, maximumAmount = 6520.74, taperAmount = 5917.10)
+              val wtcChildcareElement = Element(netAmount = 878.41, maximumAmount = 878.41, taperAmount = 0.00)
               val ctcChildElement = Element(netAmount = 1455.42, maximumAmount = 1455.42, taperAmount = 0.00)
-              val ctcFamilyElement = Element(netAmount = 286.50, maximumAmount = 286.50, taperAmount = 0.00)
-              val periodNetAmount = 3244.61
+              val ctcFamilyElement = Element(netAmount = 284.59, maximumAmount = 284.59, taperAmount = 0.00)
+              val periodNetAmount = 3222.06
               verifyAmountsPerPeriod(period, fromDate, toDate, wtcWorkElement, wtcChildcareElement, ctcChildElement, ctcFamilyElement, periodNetAmount)
             case _ => throw new Exception // fail test
           }
@@ -672,9 +672,9 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
         case e: Exception =>
           throw e
       }
-      award.tc.get.totalAwardAmount shouldBe 3244.61
+      award.tc.get.totalAwardAmount shouldBe 3222.06
       award.tc.get.houseHoldAdviceAmount shouldBe 0.00
-      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 25705.13
+      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 25659.2404
       incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
     }
 
@@ -695,7 +695,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
             case 0 =>
               val fromDate : LocalDate = period.from
               val toDate : LocalDate = period.until
-              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 4301.32, 895.24, 3099.93, 286.50)
+              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 4299.41, 878.41, 3098.02, 284.59)
             case _ => throw new Exception // fail test
           }
         }
@@ -722,7 +722,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
             case 0 =>
               val fromDate : LocalDate = period.from
               val toDate : LocalDate = period.until
-              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 6524.56, 895.24, 3099.93, 286.50)
+              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 6520.74, 878.41, 3098.02, 284.59)
             case _ => throw new Exception // fail test
           }
         }
@@ -749,7 +749,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
             case 0 =>
               val fromDate : LocalDate = period.from
               val toDate : LocalDate = period.until
-              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 4301.32, 895.24, 3768.43, 286.50)
+              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 4299.41, 878.41, 3764.61, 284.59)
             case _ => throw new Exception // fail test
           }
         }
@@ -777,7 +777,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
             case 0 =>
               val fromDate : LocalDate = period.from
               val toDate : LocalDate = period.until
-              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 6524.56, 895.24, 3768.43, 286.50)
+              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 6520.74, 878.41, 3764.61, 284.59)
             case _ => throw new Exception // fail test
           }
         }
@@ -804,7 +804,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
             case 0 =>
               val fromDate : LocalDate = period.from
               val toDate : LocalDate = period.until
-              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 4056.84, 895.24, 1455.42, 286.50)
+              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 4056.84, 878.41, 1455.42, 284.59)
             case _ => throw new Exception // fail test
           }
         }
@@ -831,7 +831,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
             case 0 =>
               val fromDate : LocalDate = period.from
               val toDate : LocalDate = period.until
-              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 5611.58, 895.24, 1455.42, 286.50)
+              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 5611.58, 878.41, 1455.42, 284.59)
             case _ => throw new Exception // fail test
           }
         }
@@ -858,7 +858,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
             case 0 =>
               val fromDate : LocalDate = period.from
               val toDate : LocalDate = period.until
-              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 4056.84, 895.24, 3099.93, 286.50)
+              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 4056.84, 878.41, 3098.02, 284.59)
             case _ => throw new Exception // fail test
           }
         }
@@ -885,7 +885,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
             case 0 =>
               val fromDate : LocalDate = period.from
               val toDate : LocalDate = period.until
-              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 5611.58, 895.24, 3099.93, 286.50)
+              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 5611.58, 878.41, 3098.02, 284.59)
             case _ => throw new Exception // fail test
           }
         }
@@ -912,7 +912,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
             case 0 =>
               val fromDate : LocalDate = period.from
               val toDate : LocalDate = period.until
-              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 4056.84,  895.24, 3768.43, 286.50)
+              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 4056.84,  878.41, 3764.61, 284.59)
             case _ => throw new Exception // fail test
           }
         }
@@ -939,7 +939,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
             case 0 =>
               val fromDate : LocalDate = period.from
               val toDate : LocalDate = period.until
-              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 5611.58, 895.24, 3768.43, 286.50)
+              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 5611.58, 878.41, 3764.61, 284.59)
             case _ => throw new Exception // fail test
           }
         }
@@ -966,7 +966,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
             case 0 =>
               val fromDate : LocalDate = period.from
               val toDate : LocalDate = period.until
-              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 4725.34, 895.24, 1455.42, 286.50)
+              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 4723.43, 878.41, 1455.42, 284.59)
             case _ => throw new Exception // fail test
           }
         }
@@ -993,7 +993,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
             case 0 =>
               val fromDate : LocalDate = period.from
               val toDate : LocalDate = period.until
-              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 6948.58, 895.24, 1455.42, 286.50)
+              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 6944.76, 878.41, 1455.42, 284.59)
             case _ => throw new Exception // fail test
           }
         }
@@ -1020,7 +1020,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
             case 0 =>
               val fromDate : LocalDate = period.from
               val toDate : LocalDate = period.until
-              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 4725.34, 895.24, 3099.93, 286.50)
+              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 4723.43, 878.41, 3098.02, 284.59)
             case _ => throw new Exception // fail test
           }
         }
@@ -1047,7 +1047,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
             case 0 =>
               val fromDate : LocalDate = period.from
               val toDate : LocalDate = period.until
-              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 6948.58, 895.24, 3099.93, 286.50)
+              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 6944.76, 878.41, 3098.02, 284.59)
             case _ => throw new Exception // fail test
           }
         }
@@ -1075,11 +1075,11 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
             case 0 =>
               val fromDate : LocalDate = period.from
               val toDate : LocalDate = period.until
-              val wtcWorkElement = Element(netAmount = 2455.13, maximumAmount = 4725.34, taperAmount = 2270.21)
-              val wtcChildcareElement = Element(netAmount = 895.24, maximumAmount = 895.24, taperAmount = 0.00)
-              val ctcChildElement = Element(netAmount = 3768.43, maximumAmount = 3768.43, taperAmount = 0.00)
-              val ctcFamilyElement = Element(netAmount = 286.50, maximumAmount = 286.50, taperAmount = 0.00)
-              val periodNetAmount = 7405.30
+              val wtcWorkElement = Element(netAmount = 2453.22, maximumAmount = 4723.43, taperAmount = 2270.21)
+              val wtcChildcareElement = Element(netAmount = 878.41, maximumAmount = 878.41, taperAmount = 0.00)
+              val ctcChildElement = Element(netAmount = 3764.61, maximumAmount = 3764.61, taperAmount = 0.00)
+              val ctcFamilyElement = Element(netAmount = 284.59, maximumAmount = 284.59, taperAmount = 0.00)
+              val periodNetAmount = 7380.83
               verifyAmountsPerPeriod(period, fromDate, toDate, wtcWorkElement, wtcChildcareElement, ctcChildElement, ctcFamilyElement, periodNetAmount)
             case _ => throw new Exception // fail test
           }
@@ -1088,9 +1088,9 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
         case e: Exception =>
           throw e
       }
-      award.tc.get.totalAwardAmount shouldBe 7405.30
+      award.tc.get.totalAwardAmount shouldBe 7380.83
       award.tc.get.houseHoldAdviceAmount shouldBe 0.00
-      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 26958.26
+      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 26908.2276
       incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
     }
 
@@ -1112,11 +1112,11 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
             case 0 =>
               val fromDate : LocalDate = period.from
               val toDate : LocalDate = period.until
-              val wtcWorkElement = Element(netAmount = 1031.47, maximumAmount = 6948.58, taperAmount = 5917.11)
-              val wtcChildcareElement = Element(netAmount = 895.24, maximumAmount = 895.24, taperAmount = 0.00)
-              val ctcChildElement = Element(netAmount = 3768.43, maximumAmount = 3768.43, taperAmount = 0.00)
-              val ctcFamilyElement = Element(netAmount = 286.50, maximumAmount = 286.50, taperAmount = 0.00)
-              val periodNetAmount = 5981.64
+              val wtcWorkElement = Element(netAmount = 1027.66, maximumAmount = 6944.76, taperAmount = 5917.10)
+              val wtcChildcareElement = Element(netAmount = 878.41, maximumAmount = 878.41, taperAmount = 0.00)
+              val ctcChildElement = Element(netAmount = 3764.61, maximumAmount = 3764.61, taperAmount = 0.00)
+              val ctcFamilyElement = Element(netAmount = 284.59, maximumAmount = 284.59, taperAmount = 0.00)
+              val periodNetAmount = 5955.27
               verifyAmountsPerPeriod(period, fromDate, toDate, wtcWorkElement, wtcChildcareElement, ctcChildElement, ctcFamilyElement, periodNetAmount)
             case _ => throw new Exception // fail test
           }
@@ -1125,9 +1125,9 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
         case e: Exception =>
           throw e
       }
-      award.tc.get.totalAwardAmount shouldBe 5981.64
+      award.tc.get.totalAwardAmount shouldBe 5955.27
       award.tc.get.houseHoldAdviceAmount shouldBe 0.00
-      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 32380.75
+      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 32328.2728
       incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
     }
 
@@ -1148,7 +1148,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
             case 0 =>
               val fromDate : LocalDate = period.from
               val toDate : LocalDate = period.until
-              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 2502.10, 5714.31 , 2910.84, 286.50)
+              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 2502.10, 5714.34, 2910.84, 284.59)
             case _ => throw new Exception // fail test
           }
         }
@@ -1176,7 +1176,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
             case 0 =>
               val fromDate : LocalDate = period.from
               val toDate : LocalDate = period.until
-              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 2502.10, 5714.31 , 4555.35, 286.50)
+              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 2502.10, 5700.97, 4553.44, 284.59)
             case _ => throw new Exception // fail test
           }
         }
@@ -1203,7 +1203,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
             case 0 =>
               val fromDate : LocalDate = period.from
               val toDate : LocalDate = period.until
-              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 2502.10, 5695.26, 5223.85, 286.50)
+              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 2502.10, 5687.60, 5220.03, 284.59)
             case _ => throw new Exception // fail test
           }
         }
@@ -1230,7 +1230,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
             case 0 =>
               val fromDate : LocalDate = period.from
               val toDate : LocalDate = period.until
-              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 2502.10, 1771.44, 6199.86, 286.50)
+              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 2502.10, 1758.16, 6196.04, 284.59)
             case _ => throw new Exception // fail test
           }
         }
@@ -1257,7 +1257,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
             case 0 =>
               val fromDate : LocalDate = period.from
               val toDate : LocalDate = period.until
-              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 2502.10, 1771.44, 6868.36, 286.50)
+              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 2502.10, 1758.16, 6862.63, 284.59)
             case _ => throw new Exception // fail test
           }
         }
@@ -1284,7 +1284,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
             case 0 =>
               val fromDate : LocalDate = period.from
               val toDate : LocalDate = period.until
-              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 2502.10, 1771.44, 7536.86, 286.50)
+              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 2502.10, 1758.16, 7529.22, 284.59)
             case _ => throw new Exception // fail test
           }
         }
@@ -1311,7 +1311,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
             case 0 =>
               val fromDate : LocalDate = period.from
               val toDate : LocalDate = period.until
-              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 2502.10, 2647.63, 6010.77, 286.50)
+              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 2502.10, 2637.90, 6008.86, 284.59)
             case _ => throw new Exception // fail test
           }
         }
@@ -1339,11 +1339,11 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
             case 0 =>
               val fromDate : LocalDate = period.from
               val toDate : LocalDate = period.until
-              val wtcWorkElement = Element(netAmount = 2031.11, maximumAmount = 4301.32, taperAmount = 2270.21)
-              val wtcChildcareElement = Element(netAmount = 5714.31 , maximumAmount = 5714.31 , taperAmount = 0.00)
-              val ctcChildElement = Element(netAmount = 8323.78, maximumAmount = 8323.78, taperAmount = 0.00)
-              val ctcFamilyElement = Element(netAmount = 286.50, maximumAmount = 286.50, taperAmount = 0.00)
-              val periodNetAmount = 16355.70
+              val wtcWorkElement = Element(netAmount = 2029.20, maximumAmount = 4299.41, taperAmount = 2270.21)
+              val wtcChildcareElement = Element(netAmount = 5714.34 , maximumAmount = 5714.34 , taperAmount = 0.00)
+              val ctcChildElement = Element(netAmount = 8318.05, maximumAmount = 8318.05, taperAmount = 0.00)
+              val ctcFamilyElement = Element(netAmount = 284.59, maximumAmount = 284.59, taperAmount = 0.00)
+              val periodNetAmount = 16346.18
               verifyAmountsPerPeriod(period, fromDate, toDate, wtcWorkElement, wtcChildcareElement, ctcChildElement, ctcFamilyElement, periodNetAmount)
             case _ => throw new Exception // fail test
           }
@@ -1352,9 +1352,9 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
         case e: Exception =>
           throw e
       }
-      award.tc.get.totalAwardAmount shouldBe 16355.70
+      award.tc.get.totalAwardAmount shouldBe 16346.18
       award.tc.get.houseHoldAdviceAmount shouldBe 0.00
-      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 48788.29
+      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 48783.6816
       incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
     }
 
@@ -1375,7 +1375,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
             case 0 =>
               val fromDate : LocalDate = period.from
               val toDate : LocalDate = period.until
-              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 4301.32, 2647.63, 6679.27, 286.50)
+              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 4299.41, 2637.90, 6675.45, 284.59)
             case _ => throw new Exception // fail test
           }
         }
@@ -1402,7 +1402,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
             case 0 =>
               val fromDate : LocalDate = period.from
               val toDate : LocalDate = period.until
-              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 2502.10, 2647.63, 9968.29, 286.50)
+              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 2502.10, 2637.90, 9960.65, 284.59)
             case _ => throw new Exception // fail test
           }
         }
@@ -1416,7 +1416,6 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_47.json")
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[Request]
-      logResult(result)
       result.isInstanceOf[JsSuccess[Request]] shouldBe true
 
       val award = TCCalculator.calculator.award(result.get)
@@ -1429,7 +1428,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
             case 0 =>
               val fromDate : LocalDate = period.from
               val toDate : LocalDate = period.until
-              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 6948.58, 1771.44, 5223.85, 286.50)
+              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 6944.76, 1758.16, 5220.03, 284.59)
             case _ => throw new Exception // fail test
           }
         }
@@ -1444,7 +1443,6 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_48.json")
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[Request]
-      logResult(result)
       result.isInstanceOf[JsSuccess[Request]] shouldBe true
 
       val award = TCCalculator.calculator.award(result.get)
@@ -1457,7 +1455,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
             case 0 =>
               val fromDate : LocalDate = period.from
               val toDate : LocalDate = period.until
-              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 4301.32, 1771.44, 6868.36, 286.50)
+              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 4299.41, 1758.16, 6862.63, 284.59)
             case _ => throw new Exception // fail test
           }
         }
@@ -1471,7 +1469,6 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_49.json")
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[Request]
-      logResult(result)
       result.isInstanceOf[JsSuccess[Request]] shouldBe true
 
       val award = TCCalculator.calculator.award(result.get)
@@ -1484,7 +1481,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
             case 0 =>
               val fromDate : LocalDate = period.from
               val toDate : LocalDate = period.until
-              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 4056.84, 1771.44, 7536.86, 286.50)
+              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 4056.84, 1758.16, 7529.22, 284.59)
             case _ => throw new Exception // fail test
           }
         }
@@ -1511,11 +1508,11 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
             case 0 =>
               val fromDate : LocalDate = period.from
               val toDate : LocalDate = period.until
-              verifyMaximumAmountsPerPeriod(period, fromDate, toDate,995.60, 704.87,  1158.24,  114.00)
+              verifyMaximumAmountsPerPeriod(period, fromDate, toDate,995.60, 699.58,  1158.24,  113.24)
             case 1 =>
               val fromDate : LocalDate = period.from
               val toDate : LocalDate = period.until
-              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 1506.50, 539.02, 876.30, 172.50)
+              verifyMaximumAmountsPerPeriod(period, fromDate, toDate, 1506.50, 528.88, 876.30, 171.35)
             case _ => throw new Exception // fail test
           }
         }
@@ -1529,7 +1526,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_51.json")
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[Request]
-      logResult(result)
+//      logResult(result)
       result.isInstanceOf[JsSuccess[Request]] shouldBe true
 
       val award = TCCalculator.calculator.award(result.get)
@@ -1544,10 +1541,10 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
               val fromDate : LocalDate = period.from
               val toDate : LocalDate = period.until
               val wtcWorkElement = Element(maximumAmount = 995.60, netAmount = 92.27, taperAmount = 903.33)
-              val wtcChildcareElement = Element(maximumAmount = 704.87, netAmount = 704.87, taperAmount = 0.00)
-              val ctcChildElement = Element(maximumAmount = 2078.60, netAmount = 2078.60, taperAmount = 0.00)
-              val ctcFamilyElement = Element(maximumAmount = 114.00, netAmount = 114.00, taperAmount = 0.00)
-              val periodNetAmount = 2989.74
+              val wtcChildcareElement = Element(maximumAmount = 699.58, netAmount = 699.58, taperAmount = 0.00)
+              val ctcChildElement = Element(maximumAmount = 2077.08, netAmount = 2077.08, taperAmount = 0.00)
+              val ctcFamilyElement = Element(maximumAmount = 113.24, netAmount = 113.24, taperAmount = 0.00)
+              val periodNetAmount = 2982.17
               verifyAmountsPerPeriod(period, fromDate, toDate, wtcWorkElement, wtcChildcareElement, ctcChildElement, ctcFamilyElement, periodNetAmount)
             case 1 =>
               val fromDate : LocalDate = period.from
@@ -1565,9 +1562,9 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
         case e: Exception =>
           throw e
       }
-      award.tc.get.totalAwardAmount shouldBe 2989.74
+      award.tc.get.totalAwardAmount shouldBe 2982.17
       award.tc.get.houseHoldAdviceAmount shouldBe 0.00
-      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 14983.78
+      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 14970.0640
       incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
     }
 
@@ -1590,10 +1587,10 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
               val fromDate : LocalDate = period.from
               val toDate : LocalDate = period.until
               val wtcWorkElement = Element(maximumAmount = 995.60, netAmount = 92.27, taperAmount = 903.33)
-              val wtcChildcareElement = Element(maximumAmount = 356.23, netAmount = 356.23, taperAmount = 0.00)
-              val ctcChildElement = Element(maximumAmount = 1233.48, netAmount = 1233.48, taperAmount = 0.00)
-              val ctcFamilyElement = Element(maximumAmount = 114.00, netAmount = 114.00, taperAmount = 0.00)
-              val periodNetAmount = 1795.98
+              val wtcChildcareElement = Element(maximumAmount = 349.52, netAmount = 349.52, taperAmount = 0.00)
+              val ctcChildElement = Element(maximumAmount = 1232.72, netAmount = 1232.72, taperAmount = 0.00)
+              val ctcFamilyElement = Element(maximumAmount = 113.24, netAmount = 113.24, taperAmount = 0.00)
+              val periodNetAmount = 1787.75
               verifyAmountsPerPeriod(period, fromDate, toDate, wtcWorkElement, wtcChildcareElement, ctcChildElement, ctcFamilyElement, periodNetAmount)
             case 1 =>
               val fromDate : LocalDate = period.from
@@ -1611,9 +1608,9 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
         case e: Exception =>
           throw e
       }
-      award.tc.get.totalAwardAmount shouldBe 1795.98
+      award.tc.get.totalAwardAmount shouldBe 1787.75
       award.tc.get.houseHoldAdviceAmount shouldBe 0.00
-      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 12072.20
+      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 12055.6792
       incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
     }
 
@@ -1636,10 +1633,10 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
               val fromDate : LocalDate = period.from
               val toDate : LocalDate = period.until
               val wtcWorkElement = Element(maximumAmount = 1614.24, netAmount = 0.00, taperAmount = 1614.24)
-              val wtcChildcareElement = Element(maximumAmount = 356.23, netAmount = 0.00, taperAmount = 356.23)
-              val ctcChildElement = Element(maximumAmount = 1233.48, netAmount = 849.50, taperAmount = 383.98)
-              val ctcFamilyElement = Element(maximumAmount = 114.00, netAmount = 114.00, taperAmount = 0.00)
-              val periodNetAmount = 963.50
+              val wtcChildcareElement = Element(maximumAmount = 349.52, netAmount = 0.00, taperAmount = 349.52)
+              val ctcChildElement = Element(maximumAmount = 1232.72, netAmount = 842.03, taperAmount = 390.69)
+              val ctcFamilyElement = Element(maximumAmount = 113.24, netAmount = 113.24, taperAmount = 0.00)
+              val periodNetAmount = 955.27
               verifyAmountsPerPeriod(period, fromDate, toDate, wtcWorkElement, wtcChildcareElement, ctcChildElement, ctcFamilyElement, periodNetAmount)
             case 1 =>
               val fromDate : LocalDate = period.from
@@ -1657,9 +1654,9 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
         case e: Exception =>
           throw e
       }
-      award.tc.get.totalAwardAmount shouldBe 963.50
+      award.tc.get.totalAwardAmount shouldBe 955.27
       award.tc.get.houseHoldAdviceAmount shouldBe 0.00
-      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 17409.69
+      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 17395.3508
       incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
     }
 
@@ -1696,7 +1693,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
       }
       award.tc.get.totalAwardAmount shouldBe 0.00
       award.tc.get.houseHoldAdviceAmount shouldBe 0.00
-      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 5861.30
+      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 5862.3248
       incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
     }
 
@@ -1734,7 +1731,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
       }
       award.tc.get.totalAwardAmount shouldBe 0.00
       award.tc.get.houseHoldAdviceAmount shouldBe 0.00
-      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 9653.31
+      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 9655.8904
       incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
     }
 
@@ -1772,7 +1769,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
       }
       award.tc.get.totalAwardAmount shouldBe 1025.67
       award.tc.get.houseHoldAdviceAmount shouldBe 0.00
-      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 5861.30
+      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 5862.3248
       incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
     }
 
@@ -1810,7 +1807,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
       }
       award.tc.get.totalAwardAmount shouldBe 1025.67
       award.tc.get.houseHoldAdviceAmount shouldBe 0.00
-      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 5861.30
+      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 5862.3248
       incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
     }
 
@@ -1842,9 +1839,9 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
               val fromDate : LocalDate = period.from
               val toDate : LocalDate = period.until
               val wtcWorkElement = Element(netAmount = 0.00, maximumAmount = 3589.40, taperAmount = 3589.40)
-              val wtcChildcareElement = Element(netAmount = 0.00, maximumAmount = 1284.28, taperAmount = 1284.28)
+              val wtcChildcareElement = Element(netAmount = 0.00, maximumAmount = 1260.13, taperAmount = 1260.13)
               val ctcChildElement = Element(netAmount = 0.00, maximumAmount = 2087.88, taperAmount = 2087.88)
-              val ctcFamilyElement = Element(netAmount = 0.00, maximumAmount = 411.00, taperAmount = 411.00)
+              val ctcFamilyElement = Element(netAmount = 0.00, maximumAmount = 408.26, taperAmount = 408.26)
               val periodNetAmount = 0.00
               verifyAmountsPerPeriod(period, fromDate, toDate, wtcWorkElement, wtcChildcareElement, ctcChildElement, ctcFamilyElement, periodNetAmount)
             case _ => throw new Exception // fail test
@@ -1857,7 +1854,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
       award.tc.get.totalAwardAmount shouldBe 0.00
       award.tc.get.houseHoldAdviceAmount shouldBe 0.00
 
-      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 23247.21
+      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 23189.0808
       incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
     }
 
@@ -1889,10 +1886,10 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
               val fromDate : LocalDate = period.from
               val toDate : LocalDate = period.until
               val wtcWorkElement = Element(netAmount = 3589.40, maximumAmount = 3589.40, taperAmount = 0.00)
-              val wtcChildcareElement = Element(netAmount = 1284.28, maximumAmount = 1284.28, taperAmount = 0.00)
+              val wtcChildcareElement = Element(netAmount = 1260.13, maximumAmount = 1260.13, taperAmount = 0.00)
               val ctcChildElement = Element(netAmount = 2087.88, maximumAmount = 2087.88, taperAmount = 0.00)
-              val ctcFamilyElement = Element(netAmount = 411.00, maximumAmount = 411.00, taperAmount = 0.00)
-              val periodNetAmount = 7372.56
+              val ctcFamilyElement = Element(netAmount = 408.26, maximumAmount = 408.26, taperAmount = 0.00)
+              val periodNetAmount = 7345.67
               verifyAmountsPerPeriod(period, fromDate, toDate, wtcWorkElement, wtcChildcareElement, ctcChildElement, ctcFamilyElement, periodNetAmount)
             case _ => throw new Exception // fail test
           }
@@ -1901,10 +1898,10 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
         case e: Exception =>
           throw e
       }
-      award.tc.get.totalAwardAmount shouldBe 7490.46
+      award.tc.get.totalAwardAmount shouldBe 7463.57
       award.tc.get.houseHoldAdviceAmount shouldBe 0.00
 
-      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 23247.21
+      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 23189.0808
       incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
     }
 
@@ -1936,9 +1933,9 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
               val fromDate : LocalDate = period.from
               val toDate : LocalDate = period.until
               val wtcWorkElement = Element(netAmount = 0.00, maximumAmount = 3589.40, taperAmount = 3589.40)
-              val wtcChildcareElement = Element(netAmount = 0.00, maximumAmount = 1284.28, taperAmount = 1284.28)
+              val wtcChildcareElement = Element(netAmount = 0.00, maximumAmount = 1260.13, taperAmount = 1260.13)
               val ctcChildElement = Element(netAmount = 0.00, maximumAmount = 2087.88, taperAmount = 2087.88)
-              val ctcFamilyElement = Element(netAmount = 0.00, maximumAmount = 411.00, taperAmount = 411.00)
+              val ctcFamilyElement = Element(netAmount = 0.00, maximumAmount = 408.26, taperAmount = 408.26)
               val periodNetAmount = 0.00
               verifyAmountsPerPeriod(period, fromDate, toDate, wtcWorkElement, wtcChildcareElement, ctcChildElement, ctcFamilyElement, periodNetAmount)
             case _ => throw new Exception // fail test
@@ -1951,7 +1948,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
       award.tc.get.totalAwardAmount shouldBe 0.00
       award.tc.get.houseHoldAdviceAmount shouldBe 0.00
 
-      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 23247.21
+      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 23189.0808
       incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
     }
 
@@ -1974,10 +1971,10 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
               val fromDate : LocalDate = period.from
               val toDate : LocalDate = period.until
               val wtcWorkElement = Element(maximumAmount = 995.60, netAmount = 92.27, taperAmount = 903.33)
-              val wtcChildcareElement = Element(maximumAmount = 704.87, netAmount = 704.87, taperAmount = 0.00)
-              val ctcChildElement = Element(maximumAmount = 2078.60, netAmount = 2078.60, taperAmount = 0.00)
-              val ctcFamilyElement = Element(maximumAmount = 114.00, netAmount = 114.00, taperAmount = 0.00)
-              val periodNetAmount = 2989.74
+              val wtcChildcareElement = Element(maximumAmount = 699.58, netAmount = 699.58, taperAmount = 0.00)
+              val ctcChildElement = Element(maximumAmount = 2077.08, netAmount = 2077.08, taperAmount = 0.00)
+              val ctcFamilyElement = Element(maximumAmount = 113.24, netAmount = 113.24, taperAmount = 0.00)
+              val periodNetAmount = 2982.17
               verifyAmountsPerPeriod(period, fromDate, toDate, wtcWorkElement, wtcChildcareElement, ctcChildElement, ctcFamilyElement, periodNetAmount)
             case 1 =>
               val fromDate : LocalDate = period.from
@@ -1995,15 +1992,15 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
         case e: Exception =>
           throw e
       }
-      taxYearProRataAward.tc.get.totalAwardAmount shouldBe 2989.74
-      taxYearProRataAward.tc.get.totalAwardProRataAmount shouldBe 626.13
+      taxYearProRataAward.tc.get.totalAwardAmount shouldBe 2982.17
+      taxYearProRataAward.tc.get.totalAwardProRataAmount shouldBe 624.54
       taxYearProRataAward.tc.get.houseHoldAdviceAmount shouldBe 0.00
-      taxYearProRataIncomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 14983.78
-      taxYearProRataIncomeAdvice.tc.get.totalHouseHoldAdviceProRataAmount shouldBe 3137.97
+      taxYearProRataIncomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 14970.0640
+      taxYearProRataIncomeAdvice.tc.get.totalHouseHoldAdviceProRataAmount shouldBe 3135.09
       taxYearProRataIncomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
     }
 
-    "(TY 2017/2018 Scenario 1) Generate total award with periods with elements" in {
+    "(TY 2017/2018 Scenario 62) Generate total award with periods with elements" in {
         val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2017/scenario_1.json")
         val json: JsValue = Json.parse(resource.toString)
         val result = json.validate[Request]
@@ -2020,7 +2017,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
               i match {
                 case 0 =>
                   ty.taxYearAdviceAmount shouldBe BigDecimal(0.00)
-                  ty.taxYearAwardAmount shouldBe BigDecimal(2445.03)
+                  ty.taxYearAwardAmount shouldBe BigDecimal(2426.29)
 
                  // loop over each period checking it's values
                 val periods: List[Period] = ty.periods
@@ -2030,10 +2027,10 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
                     val fromDate : LocalDate = period.from
                     val toDate : LocalDate = period.until
                     val wtcWorkElement = Element(netAmount = 0.00, maximumAmount = 2078.08, taperAmount = 2078.08)
-                    val wtcChildcareElement = Element(netAmount = 703.11, maximumAmount = 895.24, taperAmount = 192.13)
+                    val wtcChildcareElement = Element(netAmount = 686.28, maximumAmount = 878.41, taperAmount = 192.13)
                     val ctcChildElement = Element(netAmount = 1455.42, maximumAmount = 1455.42, taperAmount = 0.00)
-                    val ctcFamilyElement = Element(netAmount = 286.50, maximumAmount = 286.50, taperAmount = 0.00) // no taper rate?
-                    val periodNetAmount = 2445.03
+                    val ctcFamilyElement = Element(netAmount = 284.59, maximumAmount = 284.59, taperAmount = 0.00) // no taper rate?
+                    val periodNetAmount = 2426.29
                     verifyAmountsPerPeriod(period, fromDate, toDate, wtcWorkElement, wtcChildcareElement, ctcChildElement, ctcFamilyElement, periodNetAmount)
                  case _ => throw new Exception // fail test
                  }
@@ -2046,14 +2043,14 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
               throw e
         }
 
-       award.tc.get.totalAwardAmount shouldBe 2445.03
+       award.tc.get.totalAwardAmount shouldBe 2426.29
        award.tc.get.houseHoldAdviceAmount shouldBe 0.00
 
-       incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 14860.17
+       incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 14819.1500
        incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
     }
 
-    "(TY 2017/2018 Scenario 2) Generate total award with periods with elements" in {
+    "(TY 2017/2018 Scenario 63) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2017/scenario_2.json")
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[Request]
@@ -2073,20 +2070,20 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
               val toDate : LocalDate = period.until
 
               val wtcWorkElement = Element(netAmount = 92.27, maximumAmount = 995.6, taperAmount = 903.33)
-              val wtcChildcareElement = Element(netAmount = 704.87, maximumAmount = 704.87, taperAmount = 0.00)
+              val wtcChildcareElement = Element(netAmount = 699.58, maximumAmount = 699.58, taperAmount = 0.00)
               val ctcChildElement = Element(netAmount = 1158.24, maximumAmount = 1158.24, taperAmount = 0.00)
-              val ctcFamilyElement = Element(netAmount = 114.00, maximumAmount = 114.00, taperAmount = 0.00)
-              val periodNetAmount = 2069.38
+              val ctcFamilyElement = Element(netAmount = 113.24, maximumAmount = 113.24, taperAmount = 0.00)
+              val periodNetAmount = 2063.33
               verifyAmountsPerPeriod(period, fromDate, toDate, wtcWorkElement, wtcChildcareElement, ctcChildElement, ctcFamilyElement, periodNetAmount)
             case 1 =>
               val fromDate : LocalDate = period.from
               val toDate : LocalDate = period.until
 
               val wtcWorkElement = Element(netAmount = 139.62, maximumAmount = 1506.50, taperAmount = 1366.88)
-              val wtcChildcareElement = Element(netAmount = 539.02, maximumAmount = 539.02, taperAmount = 0.00)
+              val wtcChildcareElement = Element(netAmount = 528.88, maximumAmount = 528.88, taperAmount = 0.00)
               val ctcChildElement = Element(netAmount = 876.30, maximumAmount = 876.30, taperAmount = 0.00)
-              val ctcFamilyElement = Element(netAmount = 172.50, maximumAmount = 172.50, taperAmount = 0.00)
-              val periodNetAmount = 1727.44
+              val ctcFamilyElement = Element(netAmount = 171.35, maximumAmount = 171.35, taperAmount = 0.00)
+              val periodNetAmount = 1716.15
               verifyAmountsPerPeriod(period, fromDate, toDate, wtcWorkElement, wtcChildcareElement, ctcChildElement, ctcFamilyElement, periodNetAmount)
             case _ => throw new Exception // fail test
           }
@@ -2096,14 +2093,14 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
           throw e
       }
 
-      award.tc.get.totalAwardAmount shouldBe 3796.82
+      award.tc.get.totalAwardAmount shouldBe 3779.48
       award.tc.get.houseHoldAdviceAmount shouldBe 0.00
 
-      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 18157.18
+      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 18120.9336
       incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
     }
 
-    "(TY 2016/2017 - 2017/2018 Scenario 3) Generate total award with periods with elements" in {
+    "(TY 2016/2017 - 2017/2018 Scenario 64) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2017/scenario_3.json")
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[Request]
@@ -2114,7 +2111,6 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
       val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
 
       try {
-
         val taxYears = award.tc.get.taxYears
 
         for ((ty, ti) <- taxYears.zipWithIndex) {
@@ -2128,23 +2124,21 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
                      // first period
                      val fromDate : LocalDate = period.from
                      val toDate : LocalDate = period.until
-
                      val wtcWorkElement = Element(netAmount = 92.27, maximumAmount = 995.60, taperAmount = 903.33)
-                     val wtcChildcareElement = Element(netAmount = 1227.83, maximumAmount = 1227.83, taperAmount = 0.00)
+                     val wtcChildcareElement = Element(netAmount = 1224.13, maximumAmount = 1224.13, taperAmount = 0.00)
                      val ctcChildElement = Element(netAmount = 1737.36, maximumAmount = 1737.36, taperAmount = 0.00)
-                     val ctcFamilyElement = Element(netAmount = 114.00, maximumAmount = 114.00, taperAmount = 0.00)
-                     val periodNetAmount = 3171.46
+                     val ctcFamilyElement = Element(netAmount = 113.24, maximumAmount = 113.24, taperAmount = 0.00)
+                     val periodNetAmount = 3167
                      verifyAmountsPerPeriod(period, fromDate, toDate, wtcWorkElement, wtcChildcareElement, ctcChildElement, ctcFamilyElement, periodNetAmount)
                    case 1 =>
                      // second period
                      val fromDate : LocalDate = period.from
                      val toDate : LocalDate = period.until
-
                      val wtcWorkElement = Element(netAmount = 139.62, maximumAmount = 1506.50, taperAmount = 1366.88)
-                     val wtcChildcareElement = Element(netAmount = 1066.57, maximumAmount = 1066.57, taperAmount = 0.00)
+                     val wtcChildcareElement = Element(netAmount = 1058.58, maximumAmount = 1058.58, taperAmount = 0.00)
                      val ctcChildElement = Element(netAmount = 1752.60, maximumAmount = 1752.60, taperAmount = 0.00)
-                     val ctcFamilyElement = Element(netAmount = 172.50, maximumAmount = 172.50, taperAmount = 0.00)
-                     val periodNetAmount = 3131.29
+                     val ctcFamilyElement = Element(netAmount = 171.35, maximumAmount = 171.35, taperAmount = 0.00)
+                     val periodNetAmount = 3122.15
                      verifyAmountsPerPeriod(period, fromDate, toDate, wtcWorkElement, wtcChildcareElement, ctcChildElement, ctcFamilyElement, periodNetAmount)
                  }
               }
@@ -2157,18 +2151,16 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
                     // first period
                     val fromDate : LocalDate = period.from
                     val toDate : LocalDate = period.until
-
-                    val wtcWorkElement = Element(netAmount = 179.68, maximumAmount = 1938.80, taperAmount = 1759.12)
-                    val wtcChildcareElement = Element(netAmount = 1372.63, maximumAmount = 1372.63, taperAmount = 0.00)
+                    val wtcWorkElement = Element(netAmount = 179.69, maximumAmount = 1938.80, taperAmount = 1759.11)
+                    val wtcChildcareElement = Element(netAmount = 1362.34, maximumAmount = 1362.34, taperAmount = 0.00)
                     val ctcChildElement = Element(netAmount = 2255.52, maximumAmount = 2255.52, taperAmount = 0.00)
-                    val ctcFamilyElement = Element(netAmount = 222, maximumAmount = 222, taperAmount = 0.00)
-                    val periodNetAmount = 4029.83
+                    val ctcFamilyElement = Element(netAmount = 220.52, maximumAmount = 220.52, taperAmount = 0.00)
+                    val periodNetAmount = 4018.07
                     verifyAmountsPerPeriod(period, fromDate, toDate, wtcWorkElement, wtcChildcareElement, ctcChildElement, ctcFamilyElement, periodNetAmount)
                   case 1 =>
                   // first period
                     val fromDate : LocalDate = period.from
                     val toDate : LocalDate = period.until
-
                     val wtcWorkElement = Element(netAmount = 0.00, maximumAmount = 0.00, taperAmount = 0.00)
                     val wtcChildcareElement = Element(netAmount = 0.00, maximumAmount = 0.00, taperAmount = 0.00)
                     val ctcChildElement = Element(netAmount = 0.00, maximumAmount = 0.00, taperAmount = 0.00)
@@ -2184,14 +2176,14 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
           throw e
       }
 
-      award.tc.get.totalAwardAmount shouldBe 10332.58
+      award.tc.get.totalAwardAmount shouldBe 10307.22
       award.tc.get.houseHoldAdviceAmount shouldBe 0.00
 
-      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 40991.72
+      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 40944.1676
       incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
     }
 
-    "(TY 2016/2017 - 2017/2018 Scenario 4) Generate total award with periods with elements" in {
+    "(TY 2016/2017 - 2017/2018 Scenario 65) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2017/scenario_4.json")
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[Request]
@@ -2215,23 +2207,21 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
                     // first period
                     val fromDate : LocalDate = period.from
                     val toDate : LocalDate = period.until
-
-                    val wtcWorkElement = Element(netAmount = 0.00, maximumAmount = 1880.24, taperAmount = 1880.24)
-                    val wtcChildcareElement = Element(netAmount = 0.00, maximumAmount = 1227.83, taperAmount = 1227.83)
-                    val ctcChildElement = Element(netAmount = 1124.92, maximumAmount = 1737.36, taperAmount = 612.44)
-                    val ctcFamilyElement = Element(netAmount = 114.00, maximumAmount = 114.00, taperAmount = 0.00)
-                    val periodNetAmount = 1238.92
+                    val wtcWorkElement = Element(netAmount = 0.00, maximumAmount = 1879.48, taperAmount = 1879.48)
+                    val wtcChildcareElement = Element(netAmount = 0.00, maximumAmount = 1224.13, taperAmount = 1224.13)
+                    val ctcChildElement = Element(netAmount = 1120.47, maximumAmount = 1737.36, taperAmount = 616.89)
+                    val ctcFamilyElement = Element(netAmount = 113.24, maximumAmount = 113.24, taperAmount = 0.00)
+                    val periodNetAmount = 1233.71
                     verifyAmountsPerPeriod(period, fromDate, toDate, wtcWorkElement, wtcChildcareElement, ctcChildElement, ctcFamilyElement, periodNetAmount)
                   case 1 =>
                     // second period
                     val fromDate : LocalDate = period.from
                     val toDate : LocalDate = period.until
-
-                    val wtcWorkElement = Element(netAmount = 0.00, maximumAmount = 2845.10, taperAmount = 2845.10)
-                    val wtcChildcareElement = Element(netAmount = 0.00, maximumAmount = 1066.57, taperAmount = 1066.57)
-                    val ctcChildElement = Element(netAmount = 34.56, maximumAmount = 1752.60, taperAmount = 1718.04)
-                    val ctcFamilyElement = Element(netAmount = 172.50, maximumAmount = 172.50, taperAmount = 0.00)
-                    val periodNetAmount = 207.06
+                    val wtcWorkElement = Element(netAmount = 0.00, maximumAmount = 2843.95, taperAmount = 2843.95)
+                    val wtcChildcareElement = Element(netAmount = 0.00, maximumAmount = 1058.58, taperAmount = 1058.58)
+                    val ctcChildElement = Element(netAmount = 25.42, maximumAmount = 1752.60, taperAmount = 1727.18)
+                    val ctcFamilyElement = Element(netAmount = 171.35, maximumAmount = 171.35, taperAmount = 0.00)
+                    val periodNetAmount = 196.77
                     verifyAmountsPerPeriod(period, fromDate, toDate, wtcWorkElement, wtcChildcareElement, ctcChildElement, ctcFamilyElement, periodNetAmount)
                 }
               }
@@ -2244,23 +2234,21 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
                     // first period
                     val fromDate : LocalDate = period.from
                     val toDate : LocalDate = period.until
-
-                    val wtcWorkElement = Element(netAmount = 0.00, maximumAmount = 3661.52, taperAmount = 3661.52)
-                    val wtcChildcareElement = Element(netAmount = 282.90, maximumAmount = 1372.63, taperAmount = 1089.73)
-                    val ctcChildElement = Element(netAmount = 2255.52, maximumAmount = 2255.52, taperAmount =  0.00)
-                    val ctcFamilyElement = Element(netAmount = 222, maximumAmount = 222, taperAmount = 0.00)
-                    val periodNetAmount = 2760.42
+                    val wtcWorkElement = Element(netAmount = 0.00, maximumAmount = 3660.04, taperAmount = 3660.04)
+                    val wtcChildcareElement = Element(netAmount = 271.14, maximumAmount = 1362.34, taperAmount = 1091.20)
+                    val ctcChildElement = Element(netAmount = 2255.52, maximumAmount = 2255.52, taperAmount = 0.00)
+                    val ctcFamilyElement = Element(netAmount = 220.52, maximumAmount = 220.52, taperAmount = 0.00)
+                    val periodNetAmount = 2747.18
                     verifyAmountsPerPeriod(period, fromDate, toDate, wtcWorkElement, wtcChildcareElement, ctcChildElement, ctcFamilyElement, periodNetAmount)
                   case 1 =>
                     // first period
                     val fromDate : LocalDate = period.from
                     val toDate : LocalDate = period.until
-
-                    val wtcWorkElement = Element(netAmount = 0.00, maximumAmount = 4131.58, taperAmount = 4131.58)
-                    val wtcChildcareElement = Element(netAmount = 0.00, maximumAmount = 782.75, taperAmount = 782.75)
-                    val ctcChildElement = Element(netAmount = 825.66, maximumAmount = 1272.54, taperAmount = 446.88)
-                    val ctcFamilyElement = Element(netAmount = 250.50, maximumAmount = 250.5, taperAmount = 0.00)
-                    val periodNetAmount = 1076.16
+                    val wtcWorkElement = Element(netAmount = 0.00, maximumAmount = 4129.91, taperAmount = 4129.91)
+                    val wtcChildcareElement = Element(netAmount = 0.00, maximumAmount = 768.03, taperAmount = 768.03)
+                    val ctcChildElement = Element(netAmount = 809.28, maximumAmount = 1272.54, taperAmount = 463.26)
+                    val ctcFamilyElement = Element(netAmount = 248.83, maximumAmount = 248.83, taperAmount = 0.00)
+                    val periodNetAmount = 1058.11
                     verifyAmountsPerPeriod(period, fromDate, toDate, wtcWorkElement, wtcChildcareElement, ctcChildElement, ctcFamilyElement, periodNetAmount)
                 }
               }
@@ -2271,14 +2259,14 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
           throw e
       }
 
-      award.tc.get.totalAwardAmount shouldBe 5282.56
+      award.tc.get.totalAwardAmount shouldBe 5235.77
       award.tc.get.houseHoldAdviceAmount shouldBe 0.00
 
-      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 69254.20
+      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 69164.6848
       incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
     }
 
-    "(Proratering) (TY 2016/2017 - 2017/2018 Scenario 5) Generate total award with periods with elements" in {
+    "(Proratering) (TY 2016/2017 - 2017/2018 Scenario 66) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2017/scenario_5.json")
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[Request]
@@ -2304,23 +2292,21 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
                     // first period
                     val fromDate : LocalDate = period.from
                     val toDate : LocalDate = period.until
-
-                    val wtcWorkElement = Element(netAmount = 0.00, maximumAmount = 1880.24, taperAmount = 1880.24)
-                    val wtcChildcareElement = Element(netAmount = 0.00, maximumAmount = 1227.83, taperAmount = 1227.83)
-                    val ctcChildElement = Element(netAmount = 1124.92, maximumAmount = 1737.36, taperAmount = 612.44)
-                    val ctcFamilyElement = Element(netAmount = 114.00, maximumAmount = 114.00, taperAmount = 0.00)
-                    val periodNetAmount = 1238.92
+                    val wtcWorkElement = Element(netAmount = 0.00, maximumAmount = 1879.48, taperAmount = 1879.48)
+                    val wtcChildcareElement = Element(netAmount = 0.00, maximumAmount = 1224.13, taperAmount = 1224.13)
+                    val ctcChildElement = Element(netAmount = 1120.47, maximumAmount = 1737.36, taperAmount = 616.89)
+                    val ctcFamilyElement = Element(netAmount = 113.24, maximumAmount = 113.24, taperAmount = 0.00)
+                    val periodNetAmount = 1233.71
                     verifyAmountsPerPeriod(period, fromDate, toDate, wtcWorkElement, wtcChildcareElement, ctcChildElement, ctcFamilyElement, periodNetAmount)
                   case 1 =>
                     // second period
                     val fromDate : LocalDate = period.from
                     val toDate : LocalDate = period.until
-
-                    val wtcWorkElement = Element(netAmount = 0.00, maximumAmount = 2845.10, taperAmount = 2845.10)
-                    val wtcChildcareElement = Element(netAmount = 0.00, maximumAmount = 1066.57, taperAmount = 1066.57)
-                    val ctcChildElement = Element(netAmount = 34.56, maximumAmount = 1752.60, taperAmount = 1718.04)
-                    val ctcFamilyElement = Element(netAmount = 172.50, maximumAmount = 172.50, taperAmount = 0.00)
-                    val periodNetAmount = 207.06
+                    val wtcWorkElement = Element(netAmount = 0.00, maximumAmount = 2843.95, taperAmount = 2843.95)
+                    val wtcChildcareElement = Element(netAmount = 0.00, maximumAmount = 1058.58, taperAmount = 1058.58)
+                    val ctcChildElement = Element(netAmount = 25.42, maximumAmount = 1752.60, taperAmount = 1727.18)
+                    val ctcFamilyElement = Element(netAmount = 171.35, maximumAmount = 171.35, taperAmount = 0.00)
+                    val periodNetAmount = 196.77
                     verifyAmountsPerPeriod(period, fromDate, toDate, wtcWorkElement, wtcChildcareElement, ctcChildElement, ctcFamilyElement, periodNetAmount)
                 }
               }
@@ -2333,23 +2319,21 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
                     // first period
                     val fromDate : LocalDate = period.from
                     val toDate : LocalDate = period.until
-
-                    val wtcWorkElement = Element(netAmount = 0.00, maximumAmount = 3661.52, taperAmount = 3661.52)
-                    val wtcChildcareElement = Element(netAmount = 282.90, maximumAmount = 1372.63, taperAmount = 1089.73)
+                    val wtcWorkElement = Element(netAmount = 0.00, maximumAmount = 3660.04, taperAmount = 3660.04)
+                    val wtcChildcareElement = Element(netAmount = 271.14, maximumAmount = 1362.34, taperAmount = 1091.20)
                     val ctcChildElement = Element(netAmount = 2255.52, maximumAmount = 2255.52, taperAmount = 0.00)
-                    val ctcFamilyElement = Element(netAmount = 222, maximumAmount = 222, taperAmount = 0.00)
-                    val periodNetAmount = 2760.42
+                    val ctcFamilyElement = Element(netAmount = 220.52, maximumAmount = 220.52, taperAmount = 0.00)
+                    val periodNetAmount = 2747.18
                     verifyAmountsPerPeriod(period, fromDate, toDate, wtcWorkElement, wtcChildcareElement, ctcChildElement, ctcFamilyElement, periodNetAmount)
                   case 1 =>
                     // second period
                     val fromDate : LocalDate = period.from
                     val toDate : LocalDate = period.until
-
-                    val wtcWorkElement = Element(netAmount = 0.00, maximumAmount = 4131.58, taperAmount = 4131.58)
-                    val wtcChildcareElement = Element(netAmount = 0.00, maximumAmount = 782.75, taperAmount = 782.75)
-                    val ctcChildElement = Element(netAmount = 825.66, maximumAmount = 1272.54, taperAmount = 446.88)
-                    val ctcFamilyElement = Element(netAmount = 250.50, maximumAmount = 250.5, taperAmount = 0.00)
-                    val periodNetAmount = 1076.16
+                    val wtcWorkElement = Element(netAmount = 0.00, maximumAmount = 4129.91, taperAmount = 4129.91)
+                    val wtcChildcareElement = Element(netAmount = 0.00, maximumAmount = 768.03, taperAmount = 768.03)
+                    val ctcChildElement = Element(netAmount = 809.28, maximumAmount = 1272.54, taperAmount = 463.26)
+                    val ctcFamilyElement = Element(netAmount = 248.83, maximumAmount = 248.83, taperAmount = 0.00)
+                    val periodNetAmount = 1058.11
                     verifyAmountsPerPeriod(period, fromDate, toDate, wtcWorkElement, wtcChildcareElement, ctcChildElement, ctcFamilyElement, periodNetAmount)
                 }
               }
@@ -2360,15 +2344,15 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
           throw e
       }
 
-      award.tc.get.totalAwardAmount shouldBe 5282.56
-      award.tc.get.taxYears.tail.head.taxYearAwardProRataAmount shouldBe 1400.66
-      award.tc.get.totalAwardProRataAmount shouldBe 2846.64
+      award.tc.get.totalAwardAmount shouldBe 5235.77
+      award.tc.get.taxYears.tail.head.taxYearAwardProRataAmount shouldBe 1389.23
+      award.tc.get.totalAwardProRataAmount shouldBe 2819.71
       award.tc.get.houseHoldAdviceAmount shouldBe 0.00
 
-      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 69254.20
-      incomeAdvice.tc.get.taxYears.head.taxYearAdviceAmount shouldBe 29691.63
-      incomeAdvice.tc.get.taxYears.tail.head.taxYearAdviceAmount shouldBe 39562.57 //11820.95
-      incomeAdvice.tc.get.totalHouseHoldAdviceProRataAmount shouldBe 44135.11
+      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 69164.6848
+      incomeAdvice.tc.get.taxYears.head.taxYearAdviceAmount shouldBe 29664.5736
+      incomeAdvice.tc.get.taxYears.tail.head.taxYearAdviceAmount shouldBe 39500.1112 //11820.95
+      incomeAdvice.tc.get.totalHouseHoldAdviceProRataAmount shouldBe 44085.2536
       incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
     }
 

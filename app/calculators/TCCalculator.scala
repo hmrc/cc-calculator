@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 HM Revenue & Customs
+ * Copyright 2017 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -221,27 +221,26 @@ trait TCCalculator extends CCCalculator {
             acc
           }
       }
-      roundDownToThreeDigits(amountPerWeek)
+      roundDownToTwoDigits(amountPerWeek)
     }
 
     def maxChildcareElementForPeriod(period: Period) : (Boolean, BigDecimal) = {
 
       val totalCostPerWeek = getTotalChildcarePerWeek(period)
-      val totalCostPerWeekRounded = roundToPound(totalCostPerWeek)
       // check threshold amounts
-      val amountForPeriod = amountForDateRange(totalCostPerWeekRounded, Periods.Weekly, period.from, period.until, rounded = false, truncated = false)
+      val amountForPeriod = amountForDateRange(totalCostPerWeek, Periods.Weekly, period.from, period.until)
 
       val percent = period.config.wtc.eligibleCostCoveredPercent
-      val percentOfActualAmountTapered = roundDownToThreeDigits(getPercentOfAmount(amountForPeriod, percent))
+      val percentOfActualAmountTapered = roundDownToTwoDigits(getPercentOfAmount(amountForPeriod, percent))
 
       val thresholdAmount = getChildcareThresholdPerWeek(period)
-      val thresholdIntoAPeriod = amountForDateRange(thresholdAmount, Periods.Weekly, period.from, period.until, rounded = false, truncated = false)
-      val percentOfThresholdAmountTapered = roundDownToThreeDigits(getPercentOfAmount(thresholdIntoAPeriod, percent))
+      val thresholdIntoAPeriod = amountForDateRange(thresholdAmount, Periods.Weekly, period.from, period.until)
+      val percentOfThresholdAmountTapered = roundDownToTwoDigits(getPercentOfAmount(thresholdIntoAPeriod, percent))
 
       if(percentOfActualAmountTapered >= percentOfThresholdAmountTapered) {
-        (true, round(percentOfThresholdAmountTapered))
+        (true, roundDownToTwoDigits(percentOfThresholdAmountTapered))
       } else {
-        (true, round(percentOfActualAmountTapered))
+        (true, roundDownToTwoDigits(percentOfActualAmountTapered))
       }
     }
 
@@ -337,7 +336,7 @@ trait TCCalculator extends CCCalculator {
     def earningsAmountToTaperForPeriod(income: BigDecimal, thresholdIncome: BigDecimal, period: Period) : BigDecimal = {
       val taperRate = period.config.thresholds.taperRatePercent
       val rawResult = (income - thresholdIncome) * (taperRate / BigDecimal(100.00))
-      round(roundDownToThreeDigits(rawResult))
+      roundDownToTwoDigits(rawResult)
     }
 
     def getPercentOfAmount(amount : BigDecimal, percentage : Int) : BigDecimal = {
@@ -369,7 +368,7 @@ trait TCCalculator extends CCCalculator {
                               ): BigDecimal = {
       val taperRate = inputPeriod.config.thresholds.taperRatePercent
       val incomeToTaperVal = incomeToTaper / taperRate * 100 + wtcIncomeThreshold
-      val roundedIncomeToTaperElementsNil = round(roundDownToThreeDigits(incomeToTaperVal))
+      val roundedIncomeToTaperElementsNil = round(roundDownToTwoDigits(incomeToTaperVal))
       getHigherAmount(ctcIncomeThreshold, roundedIncomeToTaperElementsNil)
     }
 
@@ -561,7 +560,6 @@ trait TCCalculator extends CCCalculator {
           taperAmount = getTaperAmount(taperingThresholdVal, period.elements.ctcFamilyElement.maximumAmount, income, inputPeriod)
         )
       )
-
       buildTCPeriod(period, elements)
     }
   }
@@ -601,27 +599,17 @@ trait TCCalculator extends CCCalculator {
                             cost: BigDecimal,
                             period: Periods.Period,
                             fromDate: LocalDate,
-                            toDate: LocalDate,
-                            rounded: Boolean = true,
-                            truncated: Boolean = true
+                            toDate: LocalDate
                             ): BigDecimal = {
       if (fromDate.isBefore(toDate)) {
         //determines if the tax year falls in a leap year and uses 366 days instead of 365 in calculation
         val taxYearDates = TCConfig.getCurrentTaxYearDateRange(fromDate)
         val numberOfDaysInTaxYear = daysBetween(taxYearDates._1, taxYearDates._2)
         //daily amount currently is not rounded
-
         val dailyAmount = amountFromPeriodToDaily(cost, period, numberOfDaysInTaxYear)
-        val dailyAmountTruncated = roundDownToThreeDigits(dailyAmount)
-
+        val dailyAmountRounded = roundDownToTwoDigits(dailyAmount)
         val numberOfDays = daysBetween(fromDate, toDate)
-
-        rounded match {
-          case true if truncated => round(round(dailyAmountTruncated) * numberOfDays)
-          case true if !truncated => round(dailyAmount) * numberOfDays
-          case false if truncated => dailyAmountTruncated * numberOfDays
-          case false if !truncated => dailyAmount * numberOfDays
-        }
+        dailyAmountRounded * numberOfDays
       }
       else {
         BigDecimal(0.00)
@@ -654,10 +642,9 @@ trait TCCalculator extends CCCalculator {
       val numberofDaysProRata = daysBetween(proRataStartDate, proRataEndDate)
       //daily amount currently is not rounded
       val dailyAwardAmount = taxYear.taxYearAwardAmount/numberOfDaysInTaxYear
-      val proRataAwardAmount = round(roundDownToThreeDigits(dailyAwardAmount  * numberofDaysProRata))
-
+      val proRataAwardAmount = roundDownToTwoDigits(dailyAwardAmount  * numberofDaysProRata)
       val dailyAdviceAmount = taxYear.taxYearAdviceAmount/numberOfDaysInTaxYear
-      val proRataAdviceAmount =  round(roundDownToThreeDigits(dailyAdviceAmount * numberofDaysProRata))
+      val proRataAdviceAmount =  roundDownToTwoDigits(dailyAdviceAmount * numberofDaysProRata)
 
       models.output.tc.TaxYear(
         from = taxYear.from,
@@ -713,8 +700,8 @@ trait TCCalculator extends CCCalculator {
 
       val taperPercentage = period.config.thresholds.taperRatePercent
       val reverseTaperRate = BigDecimal(100.00) / BigDecimal(taperPercentage)
-      val reverseTaperRateRounded = roundDownToThreeDigits(reverseTaperRate)
-      val adviceAmount= round((reverseTaperRateRounded * totalAmount) + wtcIncomeThreshold)
+      val reverseTaperRateRounded = roundDownToTwoDigits(reverseTaperRate)
+      val adviceAmount= (reverseTaperRateRounded * totalAmount) + wtcIncomeThreshold
       adviceAmount
     }
 
@@ -857,7 +844,6 @@ trait TCCalculator extends CCCalculator {
                 val taxYearToProRata : (Boolean, Option[TaxYear]) = determineTaxYearToProRata(calculatedTaxYears, d)
                 if (taxYearToProRata._1) {
                   val proRateredTaxYear = proRataTaxYear(taxYearToProRata._2.get, taxYearToProRata._2.get.from, d)
-
                   AwardPeriod(
                     tc = Some(adjustAwardWithProRata(createTCCalculation(calculatedTaxYears, annualAward(calculatedTaxYears)), proRateredTaxYear))
                   )
@@ -926,4 +912,3 @@ trait TCCalculator extends CCCalculator {
 
   }
 }
-

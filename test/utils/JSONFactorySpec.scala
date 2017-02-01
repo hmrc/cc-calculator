@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 HM Revenue & Customs
+ * Copyright 2017 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -143,7 +143,7 @@ class JSONFactorySpec extends FakeCCCalculatorApplication {
           | "tc": {
           |   "from": "${firstPeriodFrom.toString("yyyy-MM-dd")}",
           |   "until": "${secondPeriodTo.toString("yyyy-MM-dd")}",
-          |   "totalAwardAmount": 2989.74,
+          |   "totalAwardAmount": 2982.17,
           |   "totalAwardProRataAmount" :0.00,
           |   "houseHoldAdviceAmount": 0.00,
           |  "totalHouseHoldAdviceProRataAmount" :0.00,
@@ -151,7 +151,7 @@ class JSONFactorySpec extends FakeCCCalculatorApplication {
           |   {
               |   "from": "${firstPeriodFrom.toString("yyyy-MM-dd")}",
               |   "until": "${secondPeriodTo.toString("yyyy-MM-dd")}",
-              |   "taxYearAwardAmount": 2989.74,
+              |   "taxYearAwardAmount": 2982.17,
               |    "taxYearAwardProRataAmount" : 0.00,
               |   "taxYearAdviceAmount": 0.00,
               |    "taxYearAdviceProRataAmount" : 0.00,
@@ -159,7 +159,7 @@ class JSONFactorySpec extends FakeCCCalculatorApplication {
               |     {
               |      "from": "${firstPeriodFrom.toString("yyyy-MM-dd")}",
               |      "until": "${firstPeriodTo.toString("yyyy-MM-dd")}",
-              |       "periodNetAmount": 2989.74,
+              |       "periodNetAmount": 2982.17,
              |       "periodAdviceAmount": 0.00,
              |       "elements": {
              |           "wtcWorkElement": {
@@ -168,18 +168,18 @@ class JSONFactorySpec extends FakeCCCalculatorApplication {
              |             "taperAmount": 903.33
              |           },
              |           "wtcChildcareElement": {
-             |             "netAmount": 704.87,
-             |             "maximumAmount": 704.87,
+             |             "netAmount": 699.58,
+             |             "maximumAmount": 699.58,
              |             "taperAmount": 0.00
              |           },
              |           "ctcIndividualElement": {
-             |             "netAmount": 2078.60,
-             |             "maximumAmount": 2078.60,
+             |             "netAmount": 2077.08,
+             |             "maximumAmount": 2077.08,
              |             "taperAmount": 0.00
              |           },
              |           "ctcFamilyElement": {
-             |             "netAmount": 114.00,
-             |             "maximumAmount": 114.00,
+             |             "netAmount": 113.24,
+             |             "maximumAmount": 113.24,
              |             "taperAmount": 0.00
              |           }
              |         }
@@ -250,7 +250,7 @@ class JSONFactorySpec extends FakeCCCalculatorApplication {
           |   "until": "${secondPeriodTo.toString("yyyy-MM-dd")}",
           |   "totalAwardAmount": 0.00,
           |   "totalAwardProRataAmount" : 0.00,
-          |   "houseHoldAdviceAmount": 14983.78,
+          |   "houseHoldAdviceAmount": 14970.064,
           |   "totalHouseHoldAdviceProRataAmount" :0.00,
           |   "taxYears": [
           |   {
@@ -258,14 +258,14 @@ class JSONFactorySpec extends FakeCCCalculatorApplication {
               |   "until": "${secondPeriodTo.toString("yyyy-MM-dd")}",
               |   "taxYearAwardAmount": 0.00,
               |   "taxYearAwardProRataAmount" : 0.00,
-              |   "taxYearAdviceAmount": 14983.78,
+              |   "taxYearAdviceAmount": 14970.064,
               |   "taxYearAdviceProRataAmount" : 0.00,
               |   "periods": [
               |     {
               |      "from": "${firstPeriodFrom.toString("yyyy-MM-dd")}",
               |      "until": "${firstPeriodTo.toString("yyyy-MM-dd")}",
               |      "periodNetAmount": 0.00,
-             |       "periodAdviceAmount": 10832.04,
+             |       "periodAdviceAmount": 10817.46,
              |       "elements": {
              |           "wtcWorkElement": {
              |             "netAmount": 995.60,
@@ -273,18 +273,18 @@ class JSONFactorySpec extends FakeCCCalculatorApplication {
              |             "taperAmount": 0.00
              |           },
              |           "wtcChildcareElement": {
-             |             "netAmount": 704.87,
-             |             "maximumAmount": 704.87,
+             |             "netAmount": 699.58,
+             |             "maximumAmount": 699.58,
              |             "taperAmount": 0.00
              |           },
              |           "ctcIndividualElement": {
-             |             "netAmount": 2078.60,
-             |             "maximumAmount": 2078.60,
+             |             "netAmount": 2077.08,
+             |             "maximumAmount": 2077.08,
              |             "taperAmount": 0.00
              |           },
              |           "ctcFamilyElement": {
-             |             "netAmount": 114.00,
-             |             "maximumAmount": 114.00,
+             |             "netAmount": 113.24,
+             |             "maximumAmount": 113.24,
              |             "taperAmount": 0.00
              |           }
              |         }
@@ -293,7 +293,7 @@ class JSONFactorySpec extends FakeCCCalculatorApplication {
              |       "from": "${secondPeriodFrom.toString("yyyy-MM-dd")}",
              |       "until": "${secondPeriodTo.toString("yyyy-MM-dd")}",
              |       "periodNetAmount": 0.00,
-             |       "periodAdviceAmount": 4151.74,
+             |       "periodAdviceAmount": 4152.604,
              |       "elements": {
              |         "wtcWorkElement": {
              |             "netAmount": 872.85,
