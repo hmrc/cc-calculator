@@ -191,7 +191,7 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
           | "tc": {
           |   "from": "${firstPeriodFrom.toString("yyyy-MM-dd")}",
           |   "until": "${firstPeriodTo.toString("yyyy-MM-dd")}",
-          |   "totalAwardAmount": 2445.03,
+          |   "totalAwardAmount": 2426.29,
           |   "totalAwardProRataAmount" :0.00,
           |   "houseHoldAdviceAmount": 0.00,
           |   "totalHouseHoldAdviceProRataAmount" :0.00,
@@ -199,7 +199,7 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
             |   {
             |      "from": "${firstPeriodFrom.toString("yyyy-MM-dd")}",
             |      "until": "${firstPeriodTo.toString("yyyy-MM-dd")}",
-            |      "taxYearAwardAmount": 2445.03,
+            |      "taxYearAwardAmount": 2426.29,
             |      "taxYearAwardProRataAmount" : 0.00,
             |      "taxYearAdviceAmount": 0.00,
             |       "taxYearAdviceProRataAmount" : 0.00,
@@ -207,7 +207,7 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
               |     {
                 |      "from": "${firstPeriodFrom.toString("yyyy-MM-dd")}",
                 |      "until": "${firstPeriodTo.toString("yyyy-MM-dd")}",
-                 |     "periodNetAmount": 2445.03,
+                 |     "periodNetAmount": 2426.29,
                |       "periodAdviceAmount": 0.00,
                |       "elements": {
                |           "wtcWorkElement": {
@@ -216,8 +216,8 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
                  |             "taperAmount": 2078.08
                |           },
                |           "wtcChildcareElement": {
-                 |             "netAmount": 703.11,
-                 |             "maximumAmount": 895.24,
+                 |             "maximumAmount": 878.41,
+                 |             "netAmount": 686.28,
                  |             "taperAmount": 192.13
                |           },
                |           "ctcIndividualElement": {
@@ -226,8 +226,8 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
                  |             "taperAmount": 0.00
                |           },
                |           "ctcFamilyElement": {
-                 |             "netAmount": 286.50,
-                 |             "maximumAmount": 286.50,
+                 |             "netAmount": 284.59,
+                 |             "maximumAmount": 284.59,
                  |             "taperAmount": 0.00
                |           }
              |          }
@@ -270,7 +270,7 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
           | "until": "${secondPeriodTo.toString("yyyy-MM-dd")}",
           | "totalAwardAmount": 0.00,
           | "totalAwardProRataAmount": 0.0,
-          | "houseHoldAdviceAmount": 12072.20,
+          | "houseHoldAdviceAmount": 12055.6792,
           | "totalHouseHoldAdviceProRataAmount": 0.0,
           | "taxYears": [
           | {
@@ -278,14 +278,14 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
           |   "until": "${secondPeriodTo.toString("yyyy-MM-dd")}",
           |   "taxYearAwardAmount": 0.00,
           |   "taxYearAwardProRataAmount" : 0.00,
-          |   "taxYearAdviceAmount": 12072.20,
+          |   "taxYearAdviceAmount": 12055.6792,
           |   "taxYearAdviceProRataAmount" : 0.00,
           |   "periods": [
           |     {
           |      "from": "${firstPeriodFrom.toString("yyyy-MM-dd")}",
           |      "until": "${firstPeriodTo.toString("yyyy-MM-dd")}",
           |     "periodNetAmount": 0.00,
-         |       "periodAdviceAmount": 7920.46,
+         |       "periodAdviceAmount": 7903.0752,
          |       "elements": {
          |           "wtcWorkElement": {
          |             "netAmount": 995.60,
@@ -293,18 +293,18 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
          |             "taperAmount": 0.00
          |           },
          |           "wtcChildcareElement": {
-         |             "netAmount": 356.23,
-         |             "maximumAmount": 356.23,
+         |             "netAmount": 349.52,
+         |             "maximumAmount": 349.52,
          |             "taperAmount": 0.00
          |           },
          |           "ctcIndividualElement": {
-         |             "netAmount": 1233.48,
-         |             "maximumAmount": 1233.48,
+         |             "netAmount": 1232.72,
+         |             "maximumAmount": 1232.72,
          |             "taperAmount": 0.00
          |           },
          |           "ctcFamilyElement": {
-         |             "netAmount": 114.00,
-         |             "maximumAmount": 114.00,
+         |             "netAmount": 113.24,
+         |             "maximumAmount": 113.24,
          |             "taperAmount": 0.00
          |           }
          |         }
@@ -313,7 +313,7 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
          |       "from": "${secondPeriodFrom.toString("yyyy-MM-dd")}",
          |       "until": "${secondPeriodTo.toString("yyyy-MM-dd")}",
          |       "periodNetAmount": 0.00,
-         |       "periodAdviceAmount": 4151.74,
+         |       "periodAdviceAmount": 4152.604,
          |       "elements": {
          |         "wtcWorkElement": {
          |             "netAmount": 872.85,
@@ -423,8 +423,8 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
              "from": "2016-09-27",
              "until": "2017-04-06",
              "proRataEnd": "2016-11-06",
-             "totalAwardAmount": 2989.74,
-             "totalAwardProRataAmount": 626.13,
+             "totalAwardAmount": 2982.17,
+             "totalAwardProRataAmount": 624.54,
              "houseHoldAdviceAmount": 0.00,
              "totalHouseHoldAdviceProRataAmount" :0.00,
              "taxYears": [
@@ -432,15 +432,15 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
                      "from": "2016-09-27",
                      "until": "2017-04-06",
                      "proRataEnd": "2016-11-06",
-                     "taxYearAwardAmount": 2989.74,
-                     "taxYearAwardProRataAmount" : 626.13,
+                     "taxYearAwardAmount": 2982.17,
+                     "taxYearAwardProRataAmount" : 624.54,
                      "taxYearAdviceAmount": 0.00,
                       "taxYearAdviceProRataAmount" : 0.00,
                       "periods": [
                        {
                         "from": "2016-09-27",
                         "until":"2016-12-12",
-                         "periodNetAmount": 2989.74,
+                         "periodNetAmount": 2982.17,
                          "periodAdviceAmount": 0.00,
                          "elements": {
                              "wtcWorkElement": {
@@ -449,18 +449,18 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
                                "taperAmount": 903.33
                              },
                              "wtcChildcareElement": {
-                               "netAmount": 704.87,
-                               "maximumAmount": 704.87,
+                               "netAmount": 699.58,
+                               "maximumAmount": 699.58,
                                "taperAmount": 0.00
                              },
                              "ctcIndividualElement": {
-                               "netAmount": 2078.60,
-                               "maximumAmount": 2078.60,
+                               "netAmount": 2077.08,
+                               "maximumAmount": 2077.08,
                                "taperAmount": 0.00
                              },
                              "ctcFamilyElement": {
-                               "netAmount": 114.00,
-                               "maximumAmount": 114.00,
+                               "netAmount": 113.24,
+                               "maximumAmount": 113.24,
                                "taperAmount": 0.00
                              }
                            }
@@ -527,8 +527,8 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
              "proRataEnd": "2016-11-06",
              "totalAwardAmount": 0.00,
              "totalAwardProRataAmount" :0.00,
-             "houseHoldAdviceAmount": 14983.78,
-             "totalHouseHoldAdviceProRataAmount":3137.97,
+             "houseHoldAdviceAmount": 14970.064,
+             "totalHouseHoldAdviceProRataAmount":3135.09,
              "taxYears": [
                  {
                      "from": "2016-09-27",
@@ -536,14 +536,14 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
                      "proRataEnd": "2016-11-06",
                      "taxYearAwardAmount": 0.00,
                      "taxYearAwardProRataAmount" : 0.00,
-                     "taxYearAdviceAmount": 14983.78,
-                      "taxYearAdviceProRataAmount": 3137.97,
+                     "taxYearAdviceAmount": 14970.064,
+                      "taxYearAdviceProRataAmount": 3135.09,
                       "periods": [
                        {
                         "from": "2016-09-27",
                         "until":"2016-12-12",
                          "periodNetAmount": 0.00,
-                         "periodAdviceAmount": 10832.04,
+                         "periodAdviceAmount": 10817.46,
                          "elements": {
                              "wtcWorkElement": {
                                "netAmount": 995.60,
@@ -551,18 +551,18 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
                                "taperAmount": 0.00
                              },
                              "wtcChildcareElement": {
-                               "netAmount": 704.87,
-                               "maximumAmount": 704.87,
+                               "netAmount": 699.58,
+                               "maximumAmount": 699.58,
                                "taperAmount": 0.00
                              },
                              "ctcIndividualElement": {
-                               "netAmount": 2078.60,
-                               "maximumAmount": 2078.60,
+                               "netAmount": 2077.08,
+                               "maximumAmount": 2077.08,
                                "taperAmount": 0.00
                              },
                              "ctcFamilyElement": {
-                               "netAmount": 114.00,
-                               "maximumAmount": 114.00,
+                               "netAmount": 113.24,
+                               "maximumAmount": 113.24,
                                "taperAmount": 0.00
                              }
                            }
@@ -571,7 +571,7 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
                          "from": "2016-12-12",
                          "until": "2017-04-06",
                          "periodNetAmount": 0.00,
-                         "periodAdviceAmount": 4151.74,
+                         "periodAdviceAmount": 4152.604,
                          "elements": {
                            "wtcWorkElement": {
                                "netAmount": 872.85,
@@ -630,31 +630,31 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
              "proRataEnd": "2017-07-30",
              "totalAwardAmount": 0.00,
              "totalAwardProRataAmount": 0.00,
-             "houseHoldAdviceAmount": 69254.20,
-             "totalHouseHoldAdviceProRataAmount": 44135.11,
+             "houseHoldAdviceAmount": 69164.6848,
+             "totalHouseHoldAdviceProRataAmount": 44085.2536,
              "taxYears": [
                  {
                      "from": "2016-09-27",
                      "until": "2017-04-06",
                      "taxYearAwardAmount": 0.00,
                      "taxYearAwardProRataAmount" : 0.00,
-                     "taxYearAdviceAmount": 29691.63,
+                     "taxYearAdviceAmount": 29664.5736,
                       "taxYearAdviceProRataAmount" :0.00,
                       "periods": [
                        {
                         "from": "2016-09-27",
                         "until":"2016-12-12",
                          "periodNetAmount": 0.0,
-                         "periodAdviceAmount": 13432.89,
+                         "periodAdviceAmount": 13425.1124,
                          "elements": {
                              "wtcWorkElement": {
-                               "netAmount": 1880.24,
-                               "maximumAmount": 1880.24,
+                               "netAmount": 1879.48,
+                               "maximumAmount": 1879.48,
                                "taperAmount": 0.00
                              },
                              "wtcChildcareElement": {
-                               "netAmount": 1227.83,
-                               "maximumAmount": 1227.83,
+                               "netAmount": 1224.13,
+                               "maximumAmount": 1224.13,
                                "taperAmount": 0.00
                              },
                              "ctcIndividualElement": {
@@ -663,8 +663,8 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
                                "taperAmount": 0.00
                              },
                              "ctcFamilyElement": {
-                               "netAmount": 114.00,
-                               "maximumAmount": 114.00,
+                               "netAmount": 113.24,
+                               "maximumAmount": 113.24,
                                "taperAmount": 0.00
                              }
                            }
@@ -673,16 +673,16 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
                          "from": "2016-12-12",
                          "until": "2017-04-06",
                          "periodNetAmount": 0.00,
-                         "periodAdviceAmount": 16258.74,
+                         "periodAdviceAmount": 16239.4612,
                          "elements": {
                            "wtcWorkElement": {
-                               "netAmount": 2845.10,
-                               "maximumAmount": 2845.10,
+                               "netAmount": 2843.95,
+                               "maximumAmount": 2843.95,
                                "taperAmount": 0.00
                              },
                              "wtcChildcareElement": {
-                               "netAmount": 1066.57,
-                               "maximumAmount": 1066.57,
+                               "netAmount": 1058.58,
+                               "maximumAmount": 1058.58,
                                "taperAmount": 0.00
                              },
                              "ctcIndividualElement": {
@@ -691,8 +691,8 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
                                "taperAmount": 0.00
                                },
                              "ctcFamilyElement": {
-                               "maximumAmount": 172.50,
-                               "netAmount": 172.50,
+                               "maximumAmount": 171.35,
+                               "netAmount": 171.35,
                                "taperAmount": 0.00
                              }
                            }
@@ -705,23 +705,23 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
                      "proRataEnd": "2017-07-30",
                      "taxYearAwardAmount": 0.00,
                      "taxYearAwardProRataAmount" : 0.00,
-                     "taxYearAdviceAmount": 39562.57,
-                      "taxYearAdviceProRataAmount": 14443.48,
+                     "taxYearAdviceAmount": 39500.1112,
+                      "taxYearAdviceProRataAmount": 14420.68,
                       "periods": [
                        {
                         "from": "2017-04-06",
                         "until":"2017-09-01",
                          "periodNetAmount": 0.00,
-                         "periodAdviceAmount": 20924.29,
+                         "periodAdviceAmount": 20899.4648,
                          "elements": {
                              "wtcWorkElement": {
-                               "netAmount": 3661.52,
-                               "maximumAmount": 3661.52,
+                               "netAmount": 3660.04,
+                               "maximumAmount": 3660.04,
                                "taperAmount": 0.00
                              },
                              "wtcChildcareElement": {
-                               "netAmount": 1372.63,
-                               "maximumAmount": 1372.63,
+                               "netAmount": 1362.34,
+                               "maximumAmount": 1362.34,
                                "taperAmount": 0.00
                              },
                              "ctcIndividualElement": {
@@ -730,8 +730,8 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
                                "taperAmount": 0.00
                              },
                              "ctcFamilyElement": {
-                               "netAmount": 222.00,
-                               "maximumAmount": 222.00,
+                               "netAmount": 220.52,
+                               "maximumAmount": 220.52,
                                "taperAmount": 0.00
                              }
                            }
@@ -740,16 +740,16 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
                          "from": "2017-09-01",
                          "until": "2018-02-15",
                          "periodNetAmount": 0.00,
-                         "periodAdviceAmount": 18638.28,
+                         "periodAdviceAmount": 18600.6464,
                          "elements": {
                            "wtcWorkElement": {
-                               "netAmount": 4131.58,
-                               "maximumAmount": 4131.58,
+                               "netAmount": 4129.91,
+                               "maximumAmount": 4129.91,
                                "taperAmount": 0.00
                              },
                              "wtcChildcareElement": {
-                               "netAmount": 782.75,
-                               "maximumAmount": 782.75,
+                               "netAmount": 768.03,
+                               "maximumAmount": 768.03,
                                "taperAmount": 0.00
                              },
                              "ctcIndividualElement": {
@@ -758,8 +758,8 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
                                "taperAmount": 0.00
                                },
                              "ctcFamilyElement": {
-                                "netAmount": 250.50,
-                               "maximumAmount": 250.50,
+                                "netAmount": 248.83,
+                               "maximumAmount": 248.83,
                                "taperAmount": 0.00
                              }
                            }
