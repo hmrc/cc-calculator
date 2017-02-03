@@ -630,8 +630,8 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
              "proRataEnd": "2017-07-30",
              "totalAwardAmount": 0.00,
              "totalAwardProRataAmount": 0.00,
-             "houseHoldAdviceAmount": 69164.6848,
-             "totalHouseHoldAdviceProRataAmount": 44085.2536,
+             "houseHoldAdviceAmount": 69256.9168,
+             "totalHouseHoldAdviceProRataAmount": 44118.9236,
              "taxYears": [
                  {
                      "from": "2016-09-27",
@@ -705,18 +705,18 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
                      "proRataEnd": "2017-07-30",
                      "taxYearAwardAmount": 0.00,
                      "taxYearAwardProRataAmount" : 0.00,
-                     "taxYearAdviceAmount": 39500.1112,
-                      "taxYearAdviceProRataAmount": 14420.68,
+                     "taxYearAdviceAmount": 39592.3432,
+                      "taxYearAdviceProRataAmount": 14454.35,
                       "periods": [
                        {
                         "from": "2017-04-06",
                         "until":"2017-09-01",
                          "periodNetAmount": 0.00,
-                         "periodAdviceAmount": 20899.4648,
+                         "periodAdviceAmount": 20942.7992,
                          "elements": {
                              "wtcWorkElement": {
-                               "netAmount": 3660.04,
-                               "maximumAmount": 3660.04,
+                               "netAmount": 3677.8,
+                               "maximumAmount": 3677.8,
                                "taperAmount": 0.00
                              },
                              "wtcChildcareElement": {
@@ -740,11 +740,11 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
                          "from": "2017-09-01",
                          "until": "2018-02-15",
                          "periodNetAmount": 0.00,
-                         "periodAdviceAmount": 18600.6464,
+                         "periodAdviceAmount": 18649.544,
                          "elements": {
                            "wtcWorkElement": {
-                               "netAmount": 4129.91,
-                               "maximumAmount": 4129.91,
+                               "netAmount": 4149.95,
+                               "maximumAmount": 4149.95,
                                "taperAmount": 0.00
                              },
                              "wtcChildcareElement": {
