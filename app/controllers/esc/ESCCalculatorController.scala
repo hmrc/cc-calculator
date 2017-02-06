@@ -44,11 +44,10 @@ class ESCCalculatorController @Inject()(val messagesApi: MessagesApi) extends Ba
         },
         result => {
           auditEvent.auditESCRequest(result.toString)
-//          println("------------- eligibility: " + result)
           calculator.award(result).map {
             response =>
               val jsonResponse = Json.toJson[ESCCalculatorOutput](response)
-              println("------------- calculator: " + jsonResponse)
+              println("---------------- jsonResponse: " + jsonResponse)
               auditEvent.auditESCResponse(jsonResponse.toString())
               Ok(jsonResponse)
           } recover {
