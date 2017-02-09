@@ -30,7 +30,7 @@
               "income": {
                 "taxablePay": 50000,
                 "gross": 50000,
-                "taxCode": "1100L",
+                "taxCode": "1150L",
                 "niCategory": "A"
               },
               "elements": {
@@ -42,12 +42,12 @@
                 "niSaving": 4.96
               },
               "taxAndNIBeforeSacrifice": {
-                "taxPaid": 766.60,
-                "niPaid": 361
+                "taxPaid": 725.20,
+                "niPaid": 377.04
               },
               "taxAndNIAfterSacrifice": {
-                "taxPaid": 717.0,
-                "niPaid": 358.52
+                "taxPaid": 675.6,
+                "niPaid": 374.56
               }
             }
           ]

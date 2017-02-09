@@ -42,12 +42,12 @@
                 "niSaving": 12.4
               },
               "taxAndNIBeforeSacrifice": {
-                "taxPaid": 1766.6,
-                "niPaid": 411.0
+                "taxPaid": 1725.2,
+                "niPaid": 427.04
               },
               "taxAndNIAfterSacrifice": {
-                "taxPaid": 1717.0,
-                "niPaid": 408.52
+                "taxPaid": 1675.60,
+                "niPaid": 424.56
               }
             }
           ]

@@ -120,11 +120,11 @@
               "maximumReliefPeriod":"Month",
               "taxAndNIBeforeSacrifice":{
                 "taxPaid":500.00,
-                "niPaid":329.40
+                "niPaid":328.44
               },
               "taxAndNIAfterSacrifice":{
                 "taxPaid":452.00,
-                "niPaid":300.60
+                "niPaid":299.64
               }
             },
             {

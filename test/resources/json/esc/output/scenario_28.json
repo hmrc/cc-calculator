@@ -118,11 +118,11 @@
               },
               "taxAndNIBeforeSacrifice": {
                 "taxPaid": 833.4,
-                "niPaid": 361.0
+                "niPaid": 377.04
               },
               "taxAndNIAfterSacrifice": {
                 "taxPaid": 784.8,
-                "niPaid": 356.14
+                "niPaid": 372.18
               }
             },
             {
@@ -150,11 +150,11 @@
               },
               "taxAndNIBeforeSacrifice": {
                 "taxPaid": 416.6,
-                "niPaid": 136.19
+                "niPaid": 135.72
               },
               "taxAndNIAfterSacrifice": {
                 "taxPaid": 368.0,
-                "niPaid": 121.97
+                "niPaid": 121.5
               }
             }
           ]

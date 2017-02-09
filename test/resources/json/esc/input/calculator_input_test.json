@@ -18,7 +18,7 @@
                     "income": {
                       "taxablePay": 50000.00,
                       "gross": 50000.00,
-                      "taxCode": "1100L",
+                      "taxCode": "1150L",
                       "niCategory": "A"
                     },
                     "elements": {

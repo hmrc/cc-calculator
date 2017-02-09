@@ -117,12 +117,12 @@
                 "niSaving": 9.92
               },
               "taxAndNIBeforeSacrifice": {
-                "taxPaid": 933.00,
-                "niPaid": 369.32
+                "taxPaid": 908.00,
+                "niPaid": 385.36
               },
               "taxAndNIAfterSacrifice": {
-                "taxPaid": 883.40,
-                "niPaid": 366.84
+                "taxPaid": 858.40,
+                "niPaid": 382.88
               }
             },
             {
@@ -137,7 +137,7 @@
               "income": {
                 "taxablePay": 42000,
                 "gross": 42000,
-                  "taxCode": "1100L",
+                "taxCode": "1100L",
                 "niCategory": "B"
               },
               "elements": {
@@ -150,11 +150,11 @@
               },
               "taxAndNIBeforeSacrifice": {
                 "taxPaid": 516.60,
-                "niPaid": 165.44
+                "niPaid": 164.97
               },
               "taxAndNIAfterSacrifice": {
                 "taxPaid": 468.00,
-                "niPaid": 151.22
+                "niPaid": 150.75
               }
             }
           ]

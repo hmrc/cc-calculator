@@ -42,12 +42,12 @@
           "maximumRelief": 243.0,
           "maximumReliefPeriod": "Month",
           "taxAndNIBeforeSacrifice": {
-            "taxPaid": 233.20,
-            "niPaid": 169.32
+            "taxPaid": 225,
+            "niPaid": 168.36
           },
           "taxAndNIAfterSacrifice": {
-            "taxPaid": 184.60,
-            "niPaid": 140.16
+            "taxPaid": 176.40,
+            "niPaid": 139.2
           }
         }, {
           "qualifying": true,
@@ -73,12 +73,12 @@
           "maximumRelief": 243.0,
           "maximumReliefPeriod": "Month",
           "taxAndNIBeforeSacrifice": {
-            "taxPaid": 150.00,
-            "niPaid": 119.40
+            "taxPaid": 141.80,
+            "niPaid": 118.44
           },
           "taxAndNIAfterSacrifice": {
-            "taxPaid": 101.40,
-            "niPaid": 90.24
+            "taxPaid": 93.20,
+            "niPaid": 89.28
           }
         }]
       }]

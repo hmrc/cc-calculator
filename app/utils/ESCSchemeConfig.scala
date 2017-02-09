@@ -44,12 +44,9 @@ case class NiCategory(
           lelPtMonthlyLowerLimitForCat : Double,
           lelPtMonthlyUpperLimitForCat: Double,
           lelPtRateForCat: Double,
-          ptUapMonthlyLowerLimitForCat: Double,
-          ptUapMonthlyUpperLimitForCat: Double,
-          ptUapRateForCat: Double,
-          uapUelMonthlyLowerLimitForCat: Double,
-          uapUelMonthlyUpperLimitForCat: Double,
-          uapUelRateForCat: Double,
+          ptUelMonthlyLowerLimitForCat: Double,
+          ptUelMonthlyUpperLimitForCat: Double,
+          ptUelRateForCat: Double,
           aboveUelMonthlyLowerLimitForCat: Double,
           aboveUelRateForCat: Double
                        )
@@ -82,10 +79,8 @@ object ESCConfig extends CCConfig with ServicesConfig {
     val result = getConfigForTaxYear(currentDate, configs)
 
     val config : ESCTaxYearConfig = result match {
-      case Some(x) =>
-        getTaxYear(niCategoryCode, x)
-      case _ =>
-        getTaxYear(niCategoryCode, defaultConfig)
+      case Some(x) => getTaxYear(niCategoryCode, x)
+      case _ => getTaxYear(niCategoryCode, defaultConfig)
     }
     config
   }
@@ -117,8 +112,8 @@ object ESCConfig extends CCConfig with ServicesConfig {
       case cat if cat.equals("A") || cat.equals("B") || cat.equals("C") => cat
       case _ => throw new NoSuchElementException(Messages("cc.scheme.config.invalid.ni.category"))
     }
-    val output = getNiCategoryHelper(niCode,config.getConfigSeq("niCategories").get , None)
-    val niCat  = output
+//    val output = getNiCategoryHelper(niCode,config.getConfigSeq("niCategories").get , None)
+    val niCat  = getNiCategoryHelper(niCode, config.getConfigSeq("niCategories").get , None)
     match {
       case Some(z) => z
       case _ =>   throw new NoSuchElementException(Messages("cc.scheme.config.ni.category.not.found"))
@@ -126,32 +121,29 @@ object ESCConfig extends CCConfig with ServicesConfig {
     niCat
   }
 
-  def getNiCategoryHelper(cat: String, niCategories: Seq[play.api.Configuration], acc: Option[NiCategory]): Option[NiCategory] = {
+  def getNiCategoryHelper(code: String, niCategories: Seq[play.api.Configuration], acc: Option[NiCategory]): Option[NiCategory] = {
     niCategories match {
       case Nil =>  acc
       case head :: tail =>
-        if (head.getString("ni-cat-code").get.equals(cat)) {
+        if (head.getString("ni-cat-code").get.equals(code)) {
           val niCat = NiCategory(
-            niCategoryCode = cat,
+            niCategoryCode = code,
             lelMonthlyLowerLimitForCat = head.getDouble("LEL.monthly-lower-limit").get,
             lelMonthlyUpperLimitForCat = head.getDouble("LEL.monthly-upper-limit").get,
             lelRateForCat = head.getDouble("LEL.rate").get,
             lelPtMonthlyLowerLimitForCat = head.getDouble("LEL-PT.monthly-lower-limit").get,
             lelPtMonthlyUpperLimitForCat = head.getDouble("LEL-PT.monthly-upper-limit").get,
             lelPtRateForCat = head.getDouble("LEL-PT.rate").get,
-            ptUapMonthlyLowerLimitForCat = head.getDouble("PT-UAP.monthly-lower-limit").get,
-            ptUapMonthlyUpperLimitForCat = head.getDouble("PT-UAP.monthly-upper-limit").get,
-            ptUapRateForCat = head.getDouble("PT-UAP.rate").get,
-            uapUelMonthlyLowerLimitForCat = head.getDouble("UAP-UEL.monthly-lower-limit").get,
-            uapUelMonthlyUpperLimitForCat = head.getDouble("UAP-UEL.monthly-upper-limit").get,
-            uapUelRateForCat = head.getDouble("UAP-UEL.rate").get,
+            ptUelMonthlyLowerLimitForCat = head.getDouble("PT-UEL.monthly-lower-limit").get,
+            ptUelMonthlyUpperLimitForCat = head.getDouble("PT-UEL.monthly-upper-limit").get,
+            ptUelRateForCat = head.getDouble("PT-UEL.rate").get,
             aboveUelMonthlyLowerLimitForCat = head.getDouble("above-UEL.monthly-lower-limit").get,
             aboveUelRateForCat = head.getDouble("above-UEL.rate").get
           )
-          getNiCategoryHelper(cat, Nil, Some(niCat))
+          getNiCategoryHelper(code, Nil, Some(niCat))
         }
         else {
-          getNiCategoryHelper(cat, tail, acc)
+          getNiCategoryHelper(code, tail, acc)
         }
     }
   }

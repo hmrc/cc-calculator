@@ -142,15 +142,13 @@ object Claimant extends CCFormat with ESCConfig {
   implicit val claimantReads : Reads[Claimant] = (
     (JsPath \ "qualifying").read[Boolean].orElse(Reads.pure(false)) and
       (JsPath \ "isPartner").read[Boolean].orElse(Reads.pure(false)) and
-        (JsPath \ "eligibleMonthsInPeriod").read[Int].filter(
-          ValidationError(Messages("cc.calc.invalid.number.of.months"))
-        )(months => months >= lowerMonthsLimitValidation && months < upperMonthsLimitValidation) and
+        (JsPath \ "eligibleMonthsInPeriod").read[Int].filter(ValidationError(Messages("cc.calc.invalid.number.of.months"))
+                                                      )(months => months >= lowerMonthsLimitValidation && months < upperMonthsLimitValidation) and
           (JsPath \ "income").read[Income] and
             (JsPath \ "elements").read[ClaimantElements] and
               (JsPath \ "escStartDate").read[LocalDate](jodaLocalDateReads(datePattern)) and
-                (JsPath \ "escAmount").read[BigDecimal].filter(
-                  ValidationError(Messages("cc.calc.voucher.amount.less.than.0"))
-                )(income => income >= BigDecimal(0.00)) and
+                (JsPath \ "escAmount").read[BigDecimal].filter(ValidationError(Messages("cc.calc.voucher.amount.less.than.0"))
+                                                        )(income => income >= BigDecimal(0.00)) and
                   (JsPath \ "escAmountPeriod").read[Periods.Period]
     )(Claimant.apply _)
 }
