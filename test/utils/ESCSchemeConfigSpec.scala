@@ -67,12 +67,12 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with ESCConfig {
         lelPtMonthlyLowerLimitForCat = 486.00,
         lelPtMonthlyUpperLimitForCat = 672.00,
         lelPtRateForCat = 0.00,
-        ptUapMonthlyLowerLimitForCat = 673.00,
-        ptUapMonthlyUpperLimitForCat = 3337.00,
-        ptUapRateForCat = 12.00,
-        uapUelMonthlyLowerLimitForCat = 3338.00,
-        uapUelMonthlyUpperLimitForCat = 3583.00,
-        uapUelRateForCat = 12.00,
+        ptUelMonthlyLowerLimitForCat = 673.00,
+        ptUelMonthlyUpperLimitForCat = 3583.00,
+        ptUelRateForCat = 12.00,
+//        uapUelMonthlyLowerLimitForCat = 3338.00,
+//        uapUelMonthlyUpperLimitForCat = 3583.00,
+//        uapUelRateForCat = 12.00,
         aboveUelMonthlyLowerLimitForCat = 3584.00,
         aboveUelRateForCat = 2.00
       )
@@ -140,12 +140,9 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with ESCConfig {
         lelPtMonthlyLowerLimitForCat = 486.00,
         lelPtMonthlyUpperLimitForCat = 672.00,
         lelPtRateForCat = 0.00,
-        ptUapMonthlyLowerLimitForCat = 673.00,
-        ptUapMonthlyUpperLimitForCat = 3337.00,
-        ptUapRateForCat = 12.00,
-        uapUelMonthlyLowerLimitForCat = 3338.00,
-        uapUelMonthlyUpperLimitForCat = 3583.00,
-        uapUelRateForCat = 12.00,
+        ptUelMonthlyLowerLimitForCat = 673.00,
+        ptUelMonthlyUpperLimitForCat = 3583.00,
+        ptUelRateForCat = 12.00,
         aboveUelMonthlyLowerLimitForCat = 3584.00,
         aboveUelRateForCat = 2.00
       )
@@ -179,12 +176,9 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with ESCConfig {
         lelPtMonthlyLowerLimitForCat = 486.00,
         lelPtMonthlyUpperLimitForCat = 672.00,
         lelPtRateForCat = 0.00,
-        ptUapMonthlyLowerLimitForCat = 673.00,
-        ptUapMonthlyUpperLimitForCat = 3337.00,
-        ptUapRateForCat = 12.00,
-        uapUelMonthlyLowerLimitForCat = 3338.00,
-        uapUelMonthlyUpperLimitForCat = 3583.00,
-        uapUelRateForCat = 12.00,
+        ptUelMonthlyLowerLimitForCat = 673.00,
+        ptUelMonthlyUpperLimitForCat = 3583.00,
+        ptUelRateForCat = 12.00,
         aboveUelMonthlyLowerLimitForCat = 3584.00,
         aboveUelRateForCat = 2.00
       )
@@ -203,7 +197,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with ESCConfig {
         taxAdditionalBandLowerLimit= 150000.01,
         niCategory = niCat
       )
-      config shouldBe taxYear    
+      config shouldBe taxYear
     }
 
     "(2016) ESC SchemeConfig - NI cat B" in {
@@ -219,12 +213,9 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with ESCConfig {
         lelPtMonthlyLowerLimitForCat = 486.00,
         lelPtMonthlyUpperLimitForCat = 672.00,
         lelPtRateForCat = 0.00,
-        ptUapMonthlyLowerLimitForCat = 673.00,
-        ptUapMonthlyUpperLimitForCat = 3337.00,
-        ptUapRateForCat = 5.85,
-        uapUelMonthlyLowerLimitForCat = 3338.00,
-        uapUelMonthlyUpperLimitForCat = 3583.00,
-        uapUelRateForCat = 5.85,
+        ptUelMonthlyLowerLimitForCat = 673.00,
+        ptUelMonthlyUpperLimitForCat = 3583.00,
+        ptUelRateForCat = 5.85,
         aboveUelMonthlyLowerLimitForCat = 3584.00,
         aboveUelRateForCat = 2.00
       )
@@ -254,29 +245,26 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with ESCConfig {
       val niCat = NiCategory(
         niCategoryCode = "C",
         lelMonthlyLowerLimitForCat = 0.00,
-        lelMonthlyUpperLimitForCat = 485.00,
+        lelMonthlyUpperLimitForCat = 490.00,
         lelRateForCat = 0.00,
-        lelPtMonthlyLowerLimitForCat = 486.00,
-        lelPtMonthlyUpperLimitForCat = 672.00,
+        lelPtMonthlyLowerLimitForCat = 491.00,
+        lelPtMonthlyUpperLimitForCat = 680.00,
         lelPtRateForCat = 0.00,
-        ptUapMonthlyLowerLimitForCat = 673.00,
-        ptUapMonthlyUpperLimitForCat = 3337.00,
-        ptUapRateForCat = 0.00,
-        uapUelMonthlyLowerLimitForCat = 3338.00,
-        uapUelMonthlyUpperLimitForCat = 3583.00,
-        uapUelRateForCat = 0.00,
-        aboveUelMonthlyLowerLimitForCat = 3584.00,
+        ptUelMonthlyLowerLimitForCat = 681.00,
+        ptUelMonthlyUpperLimitForCat = 3753.00,
+        ptUelRateForCat = 0.00,
+        aboveUelMonthlyLowerLimitForCat = 3754.00,
         aboveUelRateForCat = 0.00
       )
       val taxYear = ESCTaxYearConfig(
         post2011MaxExemptionMonthlyBasic = 243.00,
         post2011MaxExemptionMonthlyHigher = 124.00,
         post2011MaxExemptionMonthlyAdditional = 110.00,
-        defaultTaxCode = "1100L",
+        defaultTaxCode = "1150L",
         personalAllowanceRate =0.00,
-        defaultPersonalAllowance = 11000,
+        defaultPersonalAllowance = 11500,
         taxBasicRate = 20.00,
-        taxBasicBandCapacity = 32000.00,
+        taxBasicBandCapacity = 33500.00,
         taxHigherRate = 40.00,
         taxHigherBandUpperLimit = 150000.00,
         taxAdditionalRate = 45.00,
@@ -294,29 +282,26 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with ESCConfig {
       val niCat = NiCategory(
         niCategoryCode = "A",
         lelMonthlyLowerLimitForCat = 0.00,
-        lelMonthlyUpperLimitForCat = 485.00,
+        lelMonthlyUpperLimitForCat = 490.00,
         lelRateForCat = 0.00,
-        lelPtMonthlyLowerLimitForCat = 486.00,
-        lelPtMonthlyUpperLimitForCat = 672.00,
+        lelPtMonthlyLowerLimitForCat = 491.00,
+        lelPtMonthlyUpperLimitForCat = 680.00,
         lelPtRateForCat = 0.00,
-        ptUapMonthlyLowerLimitForCat = 673.00,
-        ptUapMonthlyUpperLimitForCat = 3337.00,
-        ptUapRateForCat = 12.00,
-        uapUelMonthlyLowerLimitForCat = 3338.00,
-        uapUelMonthlyUpperLimitForCat = 3583.00,
-        uapUelRateForCat = 12.00,
-        aboveUelMonthlyLowerLimitForCat = 3584.00,
+        ptUelMonthlyLowerLimitForCat = 681.00,
+        ptUelMonthlyUpperLimitForCat = 3753.00,
+        ptUelRateForCat = 12.00,
+        aboveUelMonthlyLowerLimitForCat = 3754.00,
         aboveUelRateForCat = 2.00
       )
       val taxYear = ESCTaxYearConfig(
         post2011MaxExemptionMonthlyBasic = 243.00,
         post2011MaxExemptionMonthlyHigher = 124.00,
         post2011MaxExemptionMonthlyAdditional = 110.00,
-        defaultTaxCode = "1100L",
+        defaultTaxCode = "1150L",
         personalAllowanceRate =0.00,
-        defaultPersonalAllowance = 11000,
+        defaultPersonalAllowance = 11500,
         taxBasicRate = 20.00,
-        taxBasicBandCapacity = 32000.00,
+        taxBasicBandCapacity = 33500.00,
         taxHigherRate = 40.00,
         taxHigherBandUpperLimit = 150000.00,
         taxAdditionalRate = 45.00,
@@ -326,10 +311,10 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with ESCConfig {
       config shouldBe taxYear
     }
 
-    "(2017) ESC SchemeConfig - Default NI cat " in {
+    "(2016) ESC SchemeConfig - Default NI cat " in {
       val pattern = "dd-MM-yyyy"
       val formatter = DateTimeFormat.forPattern(pattern)
-      val now = LocalDate.parse("23-07-2017", formatter)
+      val now = LocalDate.parse("05-04-2017", formatter)
       val config = ESCConfig.getConfig(now, "")
       val niCat = NiCategory(
         niCategoryCode = "A",
@@ -339,12 +324,9 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with ESCConfig {
         lelPtMonthlyLowerLimitForCat = 486.00,
         lelPtMonthlyUpperLimitForCat = 672.00,
         lelPtRateForCat = 0.00,
-        ptUapMonthlyLowerLimitForCat = 673.00,
-        ptUapMonthlyUpperLimitForCat = 3337.00,
-        ptUapRateForCat = 12.00,
-        uapUelMonthlyLowerLimitForCat = 3338.00,
-        uapUelMonthlyUpperLimitForCat = 3583.00,
-        uapUelRateForCat = 12.00,
+        ptUelMonthlyLowerLimitForCat = 673.00,
+        ptUelMonthlyUpperLimitForCat = 3583.00,
+        ptUelRateForCat = 12.00,
         aboveUelMonthlyLowerLimitForCat = 3584.00,
         aboveUelRateForCat = 2.00
       )
@@ -366,37 +348,34 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with ESCConfig {
       config shouldBe taxYear
     }
 
-    "ESC SchemeConfig - 2017 Tax Year" in {
+    "ESC SchemeConfig - 2018 Tax Year" in {
       val pattern = "dd-MM-yyyy"
       val formatter = DateTimeFormat.forPattern(pattern)
-      val now = LocalDate.parse("23-03-2018", formatter)
-      val config = ESCConfig.getConfig(now,"A")
+      val now = LocalDate.parse("06-04-2018", formatter)
+      val config = ESCConfig.getConfig(now,"B")
       val niCat = NiCategory(
-        niCategoryCode = "A",
+        niCategoryCode = "B",
         lelMonthlyLowerLimitForCat = 0.00,
-        lelMonthlyUpperLimitForCat = 485.00,
+        lelMonthlyUpperLimitForCat = 490.00,
         lelRateForCat = 0.00,
-        lelPtMonthlyLowerLimitForCat = 486.00,
-        lelPtMonthlyUpperLimitForCat = 672.00,
+        lelPtMonthlyLowerLimitForCat = 491.00,
+        lelPtMonthlyUpperLimitForCat = 680.00,
         lelPtRateForCat = 0.00,
-        ptUapMonthlyLowerLimitForCat = 673.00,
-        ptUapMonthlyUpperLimitForCat = 3337.00,
-        ptUapRateForCat = 12.00,
-        uapUelMonthlyLowerLimitForCat = 3338.00,
-        uapUelMonthlyUpperLimitForCat = 3583.00,
-        uapUelRateForCat = 12.00,
-        aboveUelMonthlyLowerLimitForCat = 3584.00,
+        ptUelMonthlyLowerLimitForCat = 681.00,
+        ptUelMonthlyUpperLimitForCat = 3753.00,
+        ptUelRateForCat = 5.85,
+        aboveUelMonthlyLowerLimitForCat = 3754.00,
         aboveUelRateForCat = 2.00
       )
       val taxYear = ESCTaxYearConfig(
         post2011MaxExemptionMonthlyBasic = 243.00,
         post2011MaxExemptionMonthlyHigher = 124.00,
         post2011MaxExemptionMonthlyAdditional = 110.00,
-        defaultTaxCode = "1100L",
+        defaultTaxCode = "1150L",
         personalAllowanceRate =0.00,
-        defaultPersonalAllowance = 11000,
+        defaultPersonalAllowance = 11500,
         taxBasicRate = 20.00,
-        taxBasicBandCapacity = 32000.00,
+        taxBasicBandCapacity = 33500.00,
         taxHigherRate = 40.00,
         taxHigherBandUpperLimit = 150000.00,
         taxAdditionalRate = 45.00,
@@ -406,18 +385,18 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with ESCConfig {
       config shouldBe taxYear
     }
 
-    "accessing ptUapMonthlyUpperLimitForCat" in {
+    "accessing 2017-2018 ptUelMonthlyUpperLimitForCat" in {
       val pattern = "dd-MM-yyyy"
       val formatter = DateTimeFormat.forPattern(pattern)
-      val fromDate = LocalDate.parse("06-07-2016", formatter)
+      val fromDate = LocalDate.parse("06-09-2017", formatter)
       val escTaxYearConfig = ESCConfig.getConfig(fromDate,"A")
-      escTaxYearConfig.niCategory.ptUapMonthlyUpperLimitForCat shouldBe 3337.00
+      escTaxYearConfig.niCategory.ptUelMonthlyUpperLimitForCat shouldBe 3753.00
     }
 
     "accessing taxBasicBandCapacity" in {
       val pattern = "dd-MM-yyyy"
       val formatter = DateTimeFormat.forPattern(pattern)
-      val fromDate = LocalDate.parse("06-07-2016", formatter)
+      val fromDate = LocalDate.parse("06-12-2016", formatter)
       val escTaxYearConfig = ESCConfig.getConfig(fromDate,"A")
       escTaxYearConfig.taxBasicBandCapacity shouldBe 32000.00
     }

@@ -37,7 +37,6 @@ object CalculationTaxBands {
 case class CalculationNIBands (
                               aboveUpperEarningsBand : BigDecimal = BigDecimal(0.00),
                               upperEarningsBand : BigDecimal = BigDecimal(0.00),
-                              upperAccrualEarningsBand : BigDecimal = BigDecimal(0.00),
                               primaryEarningsBand : BigDecimal = BigDecimal(0.00),
                               lowerEarningsBand : BigDecimal = BigDecimal(0.00)
                                 )

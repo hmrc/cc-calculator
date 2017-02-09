@@ -330,13 +330,10 @@ trait ESCCalculator extends CCCalculator {
       val taxPerBandBeforeSacrifice: CalculationTaxBands =
         calculateTaxPerBand(allocateAmountToTaxBands(taxablePay, personalAllowance, period, calcPeriod, taxCode, config), period, config)
       val totalTaxDueBeforeSacrifice: BigDecimal = totalTaxDue(taxPerBandBeforeSacrifice, Periods.Yearly)
-
       val postSalarySacrificeEarnings: BigDecimal =  subtractActualReliefFromIncome(taxablePay, reliefAmount, Periods.Yearly)
-
       val taxPerBandAfterSacrifice: CalculationTaxBands =
         calculateTaxPerBand(allocateAmountToTaxBands(postSalarySacrificeEarnings, personalAllowance, period, calcPeriod, taxCode, config), period, config)
       val totalTaxDueAfterSacrifice: BigDecimal = totalTaxDue(taxPerBandAfterSacrifice, Periods.Yearly)
-
       //Total tax savings per one month
       val taxSavingAmountPerMonth = determineTotalSavings(totalTaxDueBeforeSacrifice, totalTaxDueAfterSacrifice)
 
@@ -349,11 +346,9 @@ trait ESCCalculator extends CCCalculator {
     def allocateAmountToNIBands(grossPay: BigDecimal, period: ESCPeriod, config: ESCTaxYearConfig): CalculationNIBands = {
       val lowerEarningsLimit: BigDecimal = config.niCategory.lelMonthlyUpperLimitForCat
       val primaryEarningsLimit: BigDecimal = config.niCategory.lelPtMonthlyUpperLimitForCat
-      val upperAccrualEarningsLimit: BigDecimal = config.niCategory.ptUapMonthlyUpperLimitForCat
-      val upperEarningsLimit: BigDecimal = config.niCategory.uapUelMonthlyUpperLimitForCat
+      val upperEarningsLimit: BigDecimal = config.niCategory.ptUelMonthlyUpperLimitForCat
       val lelPTBandCapacity: BigDecimal = primaryEarningsLimit - lowerEarningsLimit
-      val ptUAPBandCapacity: BigDecimal = upperAccrualEarningsLimit - primaryEarningsLimit
-      val uapUElBandCapacity: BigDecimal = upperEarningsLimit - upperAccrualEarningsLimit
+      val ptUELBandCapacity: BigDecimal = upperEarningsLimit - primaryEarningsLimit
 
       if(grossPay <= lowerEarningsLimit) {
         CalculationNIBands(
@@ -366,28 +361,19 @@ trait ESCCalculator extends CCCalculator {
           primaryEarningsBand = grossPay - lowerEarningsLimit
         )
       }
-      else if (grossPay > primaryEarningsLimit && grossPay <= upperAccrualEarningsLimit) {
+      else if (grossPay > primaryEarningsLimit && grossPay <= upperEarningsLimit) {
         CalculationNIBands(
           lowerEarningsBand = lowerEarningsLimit,
           primaryEarningsBand = lelPTBandCapacity,
-          upperAccrualEarningsBand = grossPay - (lowerEarningsLimit + lelPTBandCapacity)
-        )
-      }
-      else if (grossPay > upperAccrualEarningsLimit && grossPay <= upperEarningsLimit) {
-        CalculationNIBands(
-          lowerEarningsBand = lowerEarningsLimit,
-          primaryEarningsBand = lelPTBandCapacity,
-          upperAccrualEarningsBand = ptUAPBandCapacity,
-          upperEarningsBand = grossPay - (lowerEarningsLimit + lelPTBandCapacity + ptUAPBandCapacity)
+          upperEarningsBand = grossPay - (lowerEarningsLimit + lelPTBandCapacity)
         )
       }
       else {
         CalculationNIBands(
           lowerEarningsBand = lowerEarningsLimit,
           primaryEarningsBand = lelPTBandCapacity,
-          upperAccrualEarningsBand = ptUAPBandCapacity,
-          upperEarningsBand = uapUElBandCapacity,
-          aboveUpperEarningsBand = grossPay - (lowerEarningsLimit + lelPTBandCapacity + ptUAPBandCapacity + uapUElBandCapacity)
+          upperEarningsBand = ptUELBandCapacity,
+          aboveUpperEarningsBand = grossPay - (lowerEarningsLimit + lelPTBandCapacity + ptUELBandCapacity)
         )
       }
     }
@@ -395,15 +381,13 @@ trait ESCCalculator extends CCCalculator {
     def calculateNIPerBand(grossAmountPerBand : CalculationNIBands, period : ESCPeriod, config: ESCTaxYearConfig) : CalculationNIBands = {
       val lelBandRate : BigDecimal = config.niCategory.lelRateForCat
       val lelPTBandRate : BigDecimal = config.niCategory.lelPtRateForCat
-      val ptUAPBandRate : BigDecimal = config.niCategory.ptUapRateForCat
-      val uapUELBandRate : BigDecimal = config.niCategory.uapUelRateForCat
+      val ptUELBandRate : BigDecimal = config.niCategory.ptUelRateForCat
       val aboveUelBandRate : BigDecimal = config.niCategory.aboveUelRateForCat
 
       CalculationNIBands (
         lowerEarningsBand =  grossAmountPerBand.lowerEarningsBand * (lelBandRate / 100),
         primaryEarningsBand = grossAmountPerBand.primaryEarningsBand * (lelPTBandRate / 100),
-        upperAccrualEarningsBand = grossAmountPerBand.upperAccrualEarningsBand * (ptUAPBandRate / 100),
-        upperEarningsBand = grossAmountPerBand.upperEarningsBand * (uapUELBandRate / 100),
+        upperEarningsBand = grossAmountPerBand.upperEarningsBand * (ptUELBandRate / 100),
         aboveUpperEarningsBand = grossAmountPerBand.aboveUpperEarningsBand * (aboveUelBandRate / 100)
       )
     }
@@ -411,10 +395,9 @@ trait ESCCalculator extends CCCalculator {
     def totalNIDue(niAmountPerBand: CalculationNIBands, calcPeriod: Periods.Period): BigDecimal = {
       val annualNIAmount =
         niAmountPerBand.lowerEarningsBand +
-          niAmountPerBand.primaryEarningsBand +
-          niAmountPerBand.upperAccrualEarningsBand +
-          niAmountPerBand.upperEarningsBand +
-          niAmountPerBand.aboveUpperEarningsBand
+        niAmountPerBand.primaryEarningsBand +
+        niAmountPerBand.upperEarningsBand +
+        niAmountPerBand.aboveUpperEarningsBand
       round(annualAmountToPeriod(annualNIAmount, calcPeriod))
     }
 
@@ -427,13 +410,9 @@ trait ESCCalculator extends CCCalculator {
                             ): (BigDecimal, BigDecimal, BigDecimal) = {
       val niPerBandBeforeSacrifice : CalculationNIBands = calculateNIPerBand(allocateAmountToNIBands(grossPay, period, config), period, config)
       val totalNIDueBeforeSacrifice : BigDecimal = totalNIDue(niPerBandBeforeSacrifice, Periods.Yearly)
-
       val postSalarySacrificeEarnings : BigDecimal =  subtractActualReliefFromIncome(grossPay, reliefAmount, Periods.Yearly)
-
-      val niPerBandAfterSacrifice: CalculationNIBands =
-        calculateNIPerBand(allocateAmountToNIBands(postSalarySacrificeEarnings, period, config), period, config)
+      val niPerBandAfterSacrifice: CalculationNIBands = calculateNIPerBand(allocateAmountToNIBands(postSalarySacrificeEarnings, period, config), period, config)
       val totalNIDueAfterSacrifice: BigDecimal = totalNIDue(niPerBandAfterSacrifice, Periods.Yearly)
-
       //Total tax savings per one month
       val niSavingAmountPerMonth = determineTotalSavings(totalNIDueBeforeSacrifice, totalNIDueAfterSacrifice)
 
@@ -450,17 +429,14 @@ trait ESCCalculator extends CCCalculator {
         val calcPeriod = Periods.Monthly
         val config = ESCConfig.getConfig(period.from, claimant.income.niCategory.toUpperCase.trim)
         val taxCode = getTaxCode(period, claimant.income, config)
-
         val relevantEarningsAmount: BigDecimal = getAnnualRelevantEarnings(claimant.income, period, config)
         val personalAllowanceAmount: BigDecimal = getPersonalAllowance(period, claimant.income, config)
         val maximumReliefAmount: BigDecimal =
           determineMaximumIncomeRelief(period, claimant.isESCStartDateBefore2011, relevantEarningsAmount, calcPeriod, taxCode, config)
         val actualReliefAmount: BigDecimal = determineActualIncomeRelief(claimant.escAmount, maximumReliefAmount)
-
         val taxablePayMonthly: BigDecimal = roundToPound(annualAmountToPeriod(claimant.income.taxablePay, calcPeriod))
         val grossPayMonthly: BigDecimal = roundToPound(annualAmountToPeriod(claimant.income.gross, calcPeriod))
         val personalAllowanceMonthly: BigDecimal = roundToPound(annualAmountToPeriod(personalAllowanceAmount, calcPeriod))
-
         val taxSavingAmounts: (BigDecimal, BigDecimal, BigDecimal) =
           calculateTaxSavings(period, taxablePayMonthly, personalAllowanceMonthly, actualReliefAmount, calcPeriod, taxCode, config)
         val niSavingAmounts: (BigDecimal, BigDecimal, BigDecimal) =
