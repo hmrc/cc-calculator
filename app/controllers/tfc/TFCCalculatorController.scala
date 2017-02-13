@@ -43,7 +43,6 @@ trait TFCCalculatorController extends CalculatorController with ServicesConfig {
 
   override def calculate: Action[JsValue] = Action.async(parse.json) {
     implicit request =>
-
       request.body.validate[Request].fold(
         error => {
           Logger.warn(s"TFC Calculator Validation JsError in TFCCalculatorController.calculate")

@@ -34,11 +34,9 @@ class ESCScenarioSpec extends UnitSpec with CCJsonLogger with FakeCCCalculatorAp
       val inputJson = json.validate[Request]
       inputJson.isInstanceOf[JsSuccess[Request]] shouldBe true
 
-      val result : AwardPeriod = ESCCalculator.calculator.award(inputJson.get)
-
+      val result: AwardPeriod = ESCCalculator.calculator.award(inputJson.get)
       val resourceJson = JsonLoader.fromResource("/json/esc/output/scenario_1.json")
       val outputJson: JsValue = Json.parse(resourceJson.toString)
-
       JSONFactory.generateResultJson(result) shouldBe outputJson
     }
 
@@ -503,8 +501,6 @@ class ESCScenarioSpec extends UnitSpec with CCJsonLogger with FakeCCCalculatorAp
 
      JSONFactory.generateResultJson(result) shouldBe outputJson
     }
-
-
 
   }
 }

@@ -18,11 +18,117 @@ package utils
 
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
+import org.scalatest.prop.TableDrivenPropertyChecks.forAll
+import org.scalatest.prop.Tables.Table
 
-/**
- * Created by ben on 27/01/16.
- */
 class TCSchemeConfigSpec extends FakeCCCalculatorApplication with TCConfig {
+
+  val pattern = "dd-MM-yyyy"
+  val formatter = DateTimeFormat.forPattern(pattern)
+
+  val defaultTaxYearConfig = TCTaxYearConfig(
+    wtc = WTC(
+      basicElement = 1960,
+      coupleElement = 2010,
+      loneParentElement = 2010,
+      hours30Element = 810,
+      disabledWorkerElement = 3000,
+      severeDisabilityWorkerElement = 1290,
+      maxChildcareOneChildElement = 175,
+      maxChildcareMoreChildrenElement = 300,
+      eligibleCostCoveredPercent = 70
+    ),
+    ctc = CTC(
+      youngPersonElement = 2780,
+      childElement = 2780,
+      disabledChildElement = 3175,
+      severeDisabilityChildElement = 1290,
+      familyElement = 545
+    ),
+    thresholds = Thresholds(
+      wtcIncomeThreshold = 6420,
+      ctcIncomeThreshold = 16105,
+      taperRatePercent = 41
+    )
+  )
+
+  val taxYearConfig2016 = TCTaxYearConfig(
+    wtc = WTC(
+      basicElement = 1960,
+      coupleElement = 2010,
+      loneParentElement = 2010,
+      hours30Element = 810,
+      disabledWorkerElement =  2970,
+      severeDisabilityWorkerElement = 1275,
+      maxChildcareOneChildElement = 175,
+      maxChildcareMoreChildrenElement = 300,
+      eligibleCostCoveredPercent = 70
+    ),
+    ctc = CTC(
+      youngPersonElement = 2780,
+      childElement = 2780,
+      disabledChildElement = 3140,
+      severeDisabilityChildElement = 1275,
+      familyElement = 545
+    ),
+    thresholds = Thresholds(
+      wtcIncomeThreshold = 6420,
+      ctcIncomeThreshold = 16105,
+      taperRatePercent = 41
+    )
+  )
+
+  val taxYearConfig2017 = TCTaxYearConfig(
+    wtc = WTC(
+      basicElement = 1960,
+      coupleElement = 2010,
+      loneParentElement = 2010,
+      hours30Element = 810,
+      disabledWorkerElement = 3000,
+      severeDisabilityWorkerElement = 1290,
+      maxChildcareOneChildElement = 175,
+      maxChildcareMoreChildrenElement = 300,
+      eligibleCostCoveredPercent = 70
+    ),
+    ctc = CTC(
+      youngPersonElement = 2780,
+      childElement = 2780,
+      disabledChildElement = 3175,
+      severeDisabilityChildElement = 1290,
+      familyElement = 545
+    ),
+    thresholds = Thresholds(
+      wtcIncomeThreshold = 6420,
+      ctcIncomeThreshold = 16105,
+      taperRatePercent = 41
+    )
+  )
+
+  val taxYearConfig2018 = TCTaxYearConfig(
+    wtc = WTC(
+      basicElement = 1960,
+      coupleElement = 2010,
+      loneParentElement = 2010,
+      hours30Element = 810,
+      disabledWorkerElement = 3000,
+      severeDisabilityWorkerElement = 1290,
+      maxChildcareOneChildElement = 175,
+      maxChildcareMoreChildrenElement = 300,
+      eligibleCostCoveredPercent = 70
+    ),
+    ctc = CTC(
+      youngPersonElement = 2780,
+      childElement = 2780,
+      disabledChildElement = 3175,
+      severeDisabilityChildElement = 1290,
+      familyElement = 545
+    ),
+    thresholds = Thresholds(
+      wtcIncomeThreshold = 6420,
+      ctcIncomeThreshold = 16105,
+      taperRatePercent = 41
+    )
+  )
 
   "TC SchemeConfig" should {
 
@@ -38,269 +144,48 @@ class TCSchemeConfigSpec extends FakeCCCalculatorApplication with TCConfig {
       TCConfig.taxYearEndDay shouldBe 6
     }
 
-    "return Default TC taxYear Config for a date 23-07-2016" in {
-      val pattern = "dd-MM-yyyy"
-      val formatter = DateTimeFormat.forPattern(pattern)
-      val fromDate = LocalDate.parse("23-07-2016", formatter)
-      val config = TCConfig.getConfig(fromDate)
-      val tcTaxYear = TCTaxYearConfig(
-        wtc = WTC(
-          basicElement = 1960,
-          coupleElement = 2010,
-          loneParentElement = 2010,
-          hours30Element = 810,
-          disabledWorkerElement =  2970,
-          severeDisabilityWorkerElement = 1275,
-          maxChildcareOneChildElement = 175,
-          maxChildcareMoreChildrenElement = 300,
-          eligibleCostCoveredPercent = 70
-        ),
-        ctc = CTC(
-          youngPersonElement = 2780,
-          childElement = 2780,
-          disabledChildElement = 3140,
-          severeDisabilityChildElement = 1275,
-          familyElement = 545
-        ),
-        thresholds = Thresholds(
-          wtcIncomeThreshold = 6420,
-          ctcIncomeThreshold = 16105,
-          taperRatePercent = 41
-        )
-      )
-      config shouldBe tcTaxYear
-    }
+    val configTestCases = Table(
+      ("taxYear", "date", "taxYearConfig"),
+      ("default", "07-07-2014", defaultTaxYearConfig),
+      ("default", "05-04-2016", defaultTaxYearConfig),
+      ("2016", "23-07-2016", taxYearConfig2016),
+      ("2016", "07-01-2017", taxYearConfig2016),
+      ("2017", "23-07-2017", taxYearConfig2017),
+      ("2017", "06-04-2017", taxYearConfig2017),
+      ("2017", "06-01-2018", taxYearConfig2017),
+      ("2017", "05-04-2018", taxYearConfig2017),
+      ("2018", "06-04-2018", taxYearConfig2018),
+      ("2018", "23-07-2018", taxYearConfig2018)
+    )
 
-    "return 2017 TC taxYear Config for a date 23-07-2017" in {
-      val pattern = "dd-MM-yyyy"
-      val formatter = DateTimeFormat.forPattern(pattern)
-      val fromDate = LocalDate.parse("23-07-2017", formatter)
-      val config = TCConfig.getConfig(fromDate)
-      val tcTaxYear = TCTaxYearConfig(
-        wtc = WTC(
-          basicElement = 1960,
-          coupleElement = 2010,
-          loneParentElement = 2010,
-          hours30Element = 810,
-          disabledWorkerElement =  2970,
-          severeDisabilityWorkerElement = 1275,
-          maxChildcareOneChildElement = 175,
-          maxChildcareMoreChildrenElement = 300,
-          eligibleCostCoveredPercent = 70
-        ),
-        ctc = CTC(
-          youngPersonElement = 2780,
-          childElement = 2780,
-          disabledChildElement = 3140,
-          severeDisabilityChildElement = 1275,
-          familyElement = 545
-        ),
-        thresholds = Thresholds(
-          wtcIncomeThreshold = 6420,
-          ctcIncomeThreshold = 16105,
-          taperRatePercent = 41
-        )
-      )
-      config shouldBe tcTaxYear
-    }
+    forAll(configTestCases) { case (taxYear, date, taxYearConfig) =>
 
-    "return Default TC taxYear Config for a date 07-07-2014" in {
-      val pattern = "dd-MM-yyyy"
-      val formatter = DateTimeFormat.forPattern(pattern)
-      val fromDate = LocalDate.parse("07-07-2014", formatter)
-      val config = TCConfig.getConfig(fromDate)
-      val tcTaxYear = TCTaxYearConfig(
-        wtc = WTC(
-          basicElement = 1960,
-          coupleElement = 2010,
-          loneParentElement = 2010,
-          hours30Element = 810,
-          disabledWorkerElement =  2970,
-          severeDisabilityWorkerElement = 1275,
-          maxChildcareOneChildElement = 175,
-          maxChildcareMoreChildrenElement = 300,
-          eligibleCostCoveredPercent = 70
-        ),
-        ctc = CTC(
-          youngPersonElement = 2780,
-          childElement = 2780,
-          disabledChildElement = 3140,
-          severeDisabilityChildElement = 1275,
-          familyElement = 545
-        ),
-        thresholds = Thresholds(
-          wtcIncomeThreshold = 6420,
-          ctcIncomeThreshold = 16105,
-          taperRatePercent = 41
-        )
-      )
-      config shouldBe tcTaxYear
+      s"return ${taxYear} TC taxYear Config for a date ${date}" in {
+        val fromDate = LocalDate.parse(date, formatter)
+        val config = TCConfig.getConfig(fromDate)
+        config shouldBe taxYearConfig
+      }
 
     }
 
-    "return Default TC taxYear Config for a date 05-04-2016" in {
-      val pattern = "dd-MM-yyyy"
-      val formatter = DateTimeFormat.forPattern(pattern)
-      val fromDate = LocalDate.parse("05-04-2016", formatter)
-      val config = TCConfig.getConfig(fromDate)
-      val tcTaxYear = TCTaxYearConfig(
-        wtc = WTC(
-          basicElement = 1960,
-          coupleElement = 2010,
-          loneParentElement = 2010,
-          hours30Element = 810,
-          disabledWorkerElement =  2970,
-          severeDisabilityWorkerElement = 1275,
-          maxChildcareOneChildElement = 175,
-          maxChildcareMoreChildrenElement = 300,
-          eligibleCostCoveredPercent = 70
-        ),
-        ctc = CTC(
-          youngPersonElement = 2780,
-          childElement = 2780,
-          disabledChildElement = 3140,
-          severeDisabilityChildElement = 1275,
-          familyElement = 545
-        ),
-        thresholds = Thresholds(
-          wtcIncomeThreshold = 6420,
-          ctcIncomeThreshold = 16105,
-          taperRatePercent = 41
-        )
-      )
-      config shouldBe tcTaxYear
-    }
+    val datesTestCases = Table(
+      ("test date", "ty start date", "ty end date"),
+      ("01-01-2017", "06-04-2016", "06-04-2017"),
+      ("06-04-2017", "06-04-2017", "06-04-2018"),
+      ("05-04-2017", "06-04-2016", "06-04-2017")
+    )
 
-    "return 2017 TC taxYear Config - 06-04-2017" in {
-      val pattern = "dd-MM-yyyy"
-      val formatter = DateTimeFormat.forPattern(pattern)
-      val fromDate = LocalDate.parse("06-04-2017", formatter)
-      val config = TCConfig.getConfig(fromDate)
-      val tcTaxYear = TCTaxYearConfig(
-        wtc = WTC(
-          basicElement = 1960,
-          coupleElement = 2010,
-          loneParentElement = 2010,
-          hours30Element = 810,
-          disabledWorkerElement =  2970,
-          severeDisabilityWorkerElement = 1275,
-          maxChildcareOneChildElement = 175,
-          maxChildcareMoreChildrenElement = 300,
-          eligibleCostCoveredPercent = 70
-        ),
-        ctc = CTC(
-          youngPersonElement = 2780,
-          childElement = 2780,
-          disabledChildElement = 3140,
-          severeDisabilityChildElement = 1275,
-          familyElement = 545
-        ),
-        thresholds = Thresholds(
-          wtcIncomeThreshold = 6420,
-          ctcIncomeThreshold = 16105,
-          taperRatePercent = 41
-        )
-      )
-      config shouldBe tcTaxYear
-    }
+    forAll(datesTestCases) { case (testDate, startDate, endDate) =>
 
-    "return 2017 TC taxYear Config - 06-01-2018" in {
-      val pattern = "dd-MM-yyyy"
-      val formatter = DateTimeFormat.forPattern(pattern)
-      val fromDate = LocalDate.parse("06-01-2018", formatter)
-      val config = TCConfig.getConfig(fromDate)
-      val tcTaxYear = TCTaxYearConfig(
-        wtc = WTC(
-          basicElement = 1960,
-          coupleElement = 2010,
-          loneParentElement = 2010,
-          hours30Element = 810,
-          disabledWorkerElement =  2970,
-          severeDisabilityWorkerElement = 1275,
-          maxChildcareOneChildElement = 175,
-          maxChildcareMoreChildrenElement = 300,
-          eligibleCostCoveredPercent = 70
-        ),
-        ctc = CTC(
-          youngPersonElement = 2780,
-          childElement = 2780,
-          disabledChildElement = 3140,
-          severeDisabilityChildElement = 1275,
-          familyElement = 545
-        ),
-        thresholds = Thresholds(
-          wtcIncomeThreshold = 6420,
-          ctcIncomeThreshold = 16105,
-          taperRatePercent = 41
-        )
-      )
-      config shouldBe tcTaxYear
-    }
+      s"return tax year start date: ${startDate} and end date ${endDate} when passed date is ${testDate}" in {
+        val today = LocalDate.parse(testDate, formatter)
+        val taxYearStartDate = LocalDate.parse(startDate, formatter)
+        val taxYearEndDate = LocalDate.parse(endDate, formatter)
+        val resultTuple = TCConfig.getCurrentTaxYearDateRange(today)
+        resultTuple._1 shouldBe taxYearStartDate
+        resultTuple._2 shouldBe taxYearEndDate
+      }
 
-    "return Default TC taxYear Config for a date 07-01-2017" in {
-      val pattern = "dd-MM-yyyy"
-      val formatter = DateTimeFormat.forPattern(pattern)
-      val fromDate = LocalDate.parse("07-01-2017", formatter)
-      val config = TCConfig.getConfig(fromDate)
-      val tcTaxYear = TCTaxYearConfig(
-        wtc = WTC(
-          basicElement = 1960,
-          coupleElement = 2010,
-          loneParentElement = 2010,
-          hours30Element = 810,
-          disabledWorkerElement =  2970,
-          severeDisabilityWorkerElement = 1275,
-          maxChildcareOneChildElement = 175,
-          maxChildcareMoreChildrenElement = 300,
-          eligibleCostCoveredPercent = 70
-        ),
-        ctc = CTC(
-          youngPersonElement = 2780,
-          childElement = 2780,
-          disabledChildElement = 3140,
-          severeDisabilityChildElement = 1275,
-          familyElement = 545
-        ),
-        thresholds = Thresholds(
-          wtcIncomeThreshold = 6420,
-          ctcIncomeThreshold = 16105,
-          taperRatePercent = 41
-        )
-      )
-      config shouldBe tcTaxYear
-    }
-
-    "return tax year start and end dates for tax year 2016/2017 when a date is passed (date in calendar year 2017)" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
-      val today = LocalDate.parse("2017-01-01", formatter)
-      val taxYearStartDate = LocalDate.parse("2016-04-06", formatter)
-      val taxYearEndDate = LocalDate.parse("2017-04-06", formatter)
-
-      val resultTuple = TCConfig.getCurrentTaxYearDateRange(today)
-      resultTuple._1 shouldBe taxYearStartDate
-      resultTuple._2 shouldBe taxYearEndDate
-    }
-
-    "return tax year start and end dates for tax year 2017/2018 when a date is passed (date in calendar year 2017)" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
-      val today = LocalDate.parse("2017-04-06", formatter)
-      val taxYearStartDate = LocalDate.parse("2017-04-06", formatter)
-      val taxYearEndDate = LocalDate.parse("2018-04-06", formatter)
-
-      val resultTuple = TCConfig.getCurrentTaxYearDateRange(today)
-      resultTuple._1 shouldBe taxYearStartDate
-      resultTuple._2 shouldBe taxYearEndDate
-    }
-
-    "return tax year start and end dates for tax year 2016/2017 when a date is passed (date in calendar year 2017, one day before the end of tax year)" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
-      val today = LocalDate.parse("2017-04-05", formatter)
-      val taxYearStartDate = LocalDate.parse("2016-04-06", formatter)
-      val taxYearEndDate = LocalDate.parse("2017-04-06", formatter)
-
-      val resultTuple = TCConfig.getCurrentTaxYearDateRange(today)
-      resultTuple._1 shouldBe taxYearStartDate
-      resultTuple._2 shouldBe taxYearEndDate
     }
   }
 }

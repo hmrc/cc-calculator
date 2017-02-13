@@ -625,7 +625,7 @@ trait TCCalculator extends CCCalculator {
 
     def determineTaxYearToProRata(taxYears : List[models.output.tc.TaxYear], proRataEndDate : LocalDate) : (Boolean, Option[models.output.tc.TaxYear]) = {
       val result = for (ty <- taxYears) yield {
-        if (proRataEndDate.toDate.after(ty.from.toDate) && proRataEndDate.toDate.before(ty.until.toDate)) {
+        if ((proRataEndDate.toDate.equals(ty.from.toDate) || proRataEndDate.toDate.after(ty.from.toDate)) && proRataEndDate.toDate.before(ty.until.toDate)) {
           (true, Some(ty))
         } else {
           (false, None)
@@ -864,7 +864,7 @@ trait TCCalculator extends CCCalculator {
 
     def incomeAdvice(request : Request) : Future[models.output.OutputAPIModel.AwardPeriod] = {
 
-      def createTCCalculation(calculatedTaxYears : List[TaxYear], annualAdvice: BigDecimal) = {
+      def createTCCalculation(calculatedTaxYears: List[TaxYear], annualAdvice: BigDecimal) = {
         TCCalculation(
           from = calculatedTaxYears.head.from,
           until = {
@@ -879,9 +879,10 @@ trait TCCalculator extends CCCalculator {
         )
       }
 
-      def annualAdvice(taxYears : List[TaxYear]) : BigDecimal = {
+      def annualAdvice(taxYears: List[TaxYear]): BigDecimal = {
         taxYears.foldLeft(BigDecimal(0.00))((acc, taxYear) => acc + taxYear.taxYearAdviceAmount)
       }
+
 
       Future {
         request.getTaxCreditsEligibility match {
@@ -889,7 +890,7 @@ trait TCCalculator extends CCCalculator {
             val calculatedTaxYears = getCalculatedTaxYears(result, incomeAdviceCalculation = true)
             result.proRataEnd match {
               case Some(d) =>
-                val taxYearToProRata : (Boolean, Option[TaxYear]) = determineTaxYearToProRata(calculatedTaxYears, d)
+                val taxYearToProRata: (Boolean, Option[TaxYear]) = determineTaxYearToProRata(calculatedTaxYears, d)
                 if (taxYearToProRata._1) {
                   val proRateredTaxYear = proRataTaxYear(taxYearToProRata._2.get, taxYearToProRata._2.get.from, d)
                   AwardPeriod(

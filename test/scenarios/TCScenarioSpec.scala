@@ -2234,21 +2234,21 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
                     // first period
                     val fromDate : LocalDate = period.from
                     val toDate : LocalDate = period.until
-                    val wtcWorkElement = Element(netAmount = 0.00, maximumAmount = 3660.04, taperAmount = 3660.04)
-                    val wtcChildcareElement = Element(netAmount = 271.14, maximumAmount = 1362.34, taperAmount = 1091.20)
+                    val wtcWorkElement = Element(netAmount = 0.00, maximumAmount = 3677.80, taperAmount = 3677.80)
+                    val wtcChildcareElement = Element(netAmount = 288.90, maximumAmount = 1362.34, taperAmount = 1073.44)
                     val ctcChildElement = Element(netAmount = 2255.52, maximumAmount = 2255.52, taperAmount = 0.00)
                     val ctcFamilyElement = Element(netAmount = 220.52, maximumAmount = 220.52, taperAmount = 0.00)
-                    val periodNetAmount = 2747.18
+                    val periodNetAmount = 2764.94
                     verifyAmountsPerPeriod(period, fromDate, toDate, wtcWorkElement, wtcChildcareElement, ctcChildElement, ctcFamilyElement, periodNetAmount)
                   case 1 =>
                     // first period
                     val fromDate : LocalDate = period.from
                     val toDate : LocalDate = period.until
-                    val wtcWorkElement = Element(netAmount = 0.00, maximumAmount = 4129.91, taperAmount = 4129.91)
+                    val wtcWorkElement = Element(netAmount = 0.00, maximumAmount = 4149.95, taperAmount = 4149.95)
                     val wtcChildcareElement = Element(netAmount = 0.00, maximumAmount = 768.03, taperAmount = 768.03)
-                    val ctcChildElement = Element(netAmount = 809.28, maximumAmount = 1272.54, taperAmount = 463.26)
+                    val ctcChildElement = Element(netAmount = 829.32, maximumAmount = 1272.54, taperAmount = 443.22)
                     val ctcFamilyElement = Element(netAmount = 248.83, maximumAmount = 248.83, taperAmount = 0.00)
-                    val periodNetAmount = 1058.11
+                    val periodNetAmount = 1078.15
                     verifyAmountsPerPeriod(period, fromDate, toDate, wtcWorkElement, wtcChildcareElement, ctcChildElement, ctcFamilyElement, periodNetAmount)
                 }
               }
@@ -2259,10 +2259,10 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
           throw e
       }
 
-      award.tc.get.totalAwardAmount shouldBe 5235.77
+      award.tc.get.totalAwardAmount shouldBe 5273.57
       award.tc.get.houseHoldAdviceAmount shouldBe 0.00
 
-      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 69164.6848
+      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 69256.9168
       incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
     }
 
@@ -2319,21 +2319,21 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
                     // first period
                     val fromDate : LocalDate = period.from
                     val toDate : LocalDate = period.until
-                    val wtcWorkElement = Element(netAmount = 0.00, maximumAmount = 3660.04, taperAmount = 3660.04)
-                    val wtcChildcareElement = Element(netAmount = 271.14, maximumAmount = 1362.34, taperAmount = 1091.20)
+                    val wtcWorkElement = Element(netAmount = 0.00, maximumAmount = 3677.80, taperAmount = 3677.80)
+                    val wtcChildcareElement = Element(netAmount = 288.90, maximumAmount = 1362.34, taperAmount = 1073.44)
                     val ctcChildElement = Element(netAmount = 2255.52, maximumAmount = 2255.52, taperAmount = 0.00)
                     val ctcFamilyElement = Element(netAmount = 220.52, maximumAmount = 220.52, taperAmount = 0.00)
-                    val periodNetAmount = 2747.18
+                    val periodNetAmount = 2764.94
                     verifyAmountsPerPeriod(period, fromDate, toDate, wtcWorkElement, wtcChildcareElement, ctcChildElement, ctcFamilyElement, periodNetAmount)
                   case 1 =>
                     // second period
                     val fromDate : LocalDate = period.from
                     val toDate : LocalDate = period.until
-                    val wtcWorkElement = Element(netAmount = 0.00, maximumAmount = 4129.91, taperAmount = 4129.91)
+                    val wtcWorkElement = Element(netAmount = 0.00, maximumAmount = 4149.95, taperAmount = 4149.95)
                     val wtcChildcareElement = Element(netAmount = 0.00, maximumAmount = 768.03, taperAmount = 768.03)
-                    val ctcChildElement = Element(netAmount = 809.28, maximumAmount = 1272.54, taperAmount = 463.26)
+                    val ctcChildElement = Element(netAmount = 829.32, maximumAmount = 1272.54, taperAmount = 443.22)
                     val ctcFamilyElement = Element(netAmount = 248.83, maximumAmount = 248.83, taperAmount = 0.00)
-                    val periodNetAmount = 1058.11
+                    val periodNetAmount = 1078.15
                     verifyAmountsPerPeriod(period, fromDate, toDate, wtcWorkElement, wtcChildcareElement, ctcChildElement, ctcFamilyElement, periodNetAmount)
                 }
               }
@@ -2344,15 +2344,371 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
           throw e
       }
 
-      award.tc.get.totalAwardAmount shouldBe 5235.77
-      award.tc.get.taxYears.tail.head.taxYearAwardProRataAmount shouldBe 1389.23
-      award.tc.get.totalAwardProRataAmount shouldBe 2819.71
+      award.tc.get.totalAwardAmount shouldBe 5273.57
+      award.tc.get.taxYears.tail.head.taxYearAwardProRataAmount shouldBe 1403.03
+      award.tc.get.totalAwardProRataAmount shouldBe 2833.51
       award.tc.get.houseHoldAdviceAmount shouldBe 0.00
 
-      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 69164.6848
+      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 69256.9168
       incomeAdvice.tc.get.taxYears.head.taxYearAdviceAmount shouldBe 29664.5736
-      incomeAdvice.tc.get.taxYears.tail.head.taxYearAdviceAmount shouldBe 39500.1112 //11820.95
-      incomeAdvice.tc.get.totalHouseHoldAdviceProRataAmount shouldBe 44085.2536
+      incomeAdvice.tc.get.taxYears.tail.head.taxYearAdviceAmount shouldBe 39592.3432
+      incomeAdvice.tc.get.totalHouseHoldAdviceProRataAmount shouldBe 44118.9236
+      incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
+    }
+
+    "(TY 2018/2019 Scenario 67) Generate total award with periods with elements" in {
+      val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2018/scenario_1.json")
+      val json: JsValue = Json.parse(resource.toString)
+      val result = json.validate[Request]
+      logResult(result)
+      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+
+      val award = TCCalculator.calculator.award(result.get)
+      val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
+
+      try {
+        val tys = award.tc.get.taxYears.zipWithIndex
+
+        for ((ty, i) <- tys) {
+          i match {
+            case 0 =>
+              ty.taxYearAdviceAmount shouldBe BigDecimal(0.00)
+              ty.taxYearAwardAmount shouldBe BigDecimal(2426.29)
+
+              // loop over each period checking it's values
+              val periods: List[Period] = ty.periods
+              for ((period, i) <- periods.zipWithIndex) {
+                i match {
+                  case 0 =>
+                    val fromDate : LocalDate = period.from
+                    val toDate : LocalDate = period.until
+                    val wtcWorkElement = Element(netAmount = 0.00, maximumAmount = 2078.08, taperAmount = 2078.08)
+                    val wtcChildcareElement = Element(netAmount = 686.28, maximumAmount = 878.41, taperAmount = 192.13)
+                    val ctcChildElement = Element(netAmount = 1455.42, maximumAmount = 1455.42, taperAmount = 0.00)
+                    val ctcFamilyElement = Element(netAmount = 284.59, maximumAmount = 284.59, taperAmount = 0.00) // no taper rate?
+                  val periodNetAmount = 2426.29
+                    verifyAmountsPerPeriod(period, fromDate, toDate, wtcWorkElement, wtcChildcareElement, ctcChildElement, ctcFamilyElement, periodNetAmount)
+                  case _ => throw new Exception // fail test
+                }
+              }
+            case _ => throw new Exception
+          }
+        }
+      } catch {
+        case e: Exception =>
+          throw e
+      }
+
+      award.tc.get.totalAwardAmount shouldBe 2426.29
+      award.tc.get.houseHoldAdviceAmount shouldBe 0.00
+
+      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 14819.1500
+      incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
+    }
+
+    "(TY 2018/2019 Scenario 68) Generate total award with periods with elements" in {
+      val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2018/scenario_2.json")
+      val json: JsValue = Json.parse(resource.toString)
+      val result = json.validate[Request]
+      logResult(result)
+      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+
+      val award = TCCalculator.calculator.award(result.get)
+      val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
+
+      try {
+        // loop over each period checking it's values
+        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        for ((period, i) <- periods.zipWithIndex) {
+          i match {
+            case 0 =>
+              val fromDate : LocalDate = period.from
+              val toDate : LocalDate = period.until
+
+              val wtcWorkElement = Element(netAmount = 92.27, maximumAmount = 995.6, taperAmount = 903.33)
+              val wtcChildcareElement = Element(netAmount = 699.58, maximumAmount = 699.58, taperAmount = 0.00)
+              val ctcChildElement = Element(netAmount = 1158.24, maximumAmount = 1158.24, taperAmount = 0.00)
+              val ctcFamilyElement = Element(netAmount = 113.24, maximumAmount = 113.24, taperAmount = 0.00)
+              val periodNetAmount = 2063.33
+              verifyAmountsPerPeriod(period, fromDate, toDate, wtcWorkElement, wtcChildcareElement, ctcChildElement, ctcFamilyElement, periodNetAmount)
+            case 1 =>
+              val fromDate : LocalDate = period.from
+              val toDate : LocalDate = period.until
+
+              val wtcWorkElement = Element(netAmount = 139.62, maximumAmount = 1506.50, taperAmount = 1366.88)
+              val wtcChildcareElement = Element(netAmount = 528.88, maximumAmount = 528.88, taperAmount = 0.00)
+              val ctcChildElement = Element(netAmount = 876.30, maximumAmount = 876.30, taperAmount = 0.00)
+              val ctcFamilyElement = Element(netAmount = 171.35, maximumAmount = 171.35, taperAmount = 0.00)
+              val periodNetAmount = 1716.15
+              verifyAmountsPerPeriod(period, fromDate, toDate, wtcWorkElement, wtcChildcareElement, ctcChildElement, ctcFamilyElement, periodNetAmount)
+            case _ => throw new Exception // fail test
+          }
+        }
+      } catch {
+        case e: Exception =>
+          throw e
+      }
+
+      award.tc.get.totalAwardAmount shouldBe 3779.48
+      award.tc.get.houseHoldAdviceAmount shouldBe 0.00
+
+      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 18120.9336
+      incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
+    }
+
+    "(TY 2017/2018 - 2018/2019 Scenario 69) Generate total award with periods with elements" in {
+      val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2018/scenario_3.json")
+      val json: JsValue = Json.parse(resource.toString)
+      val result = json.validate[Request]
+      logResult(result)
+      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+
+      val award = TCCalculator.calculator.award(result.get)
+      val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
+
+      try {
+        val taxYears = award.tc.get.taxYears
+
+        for ((ty, ti) <- taxYears.zipWithIndex) {
+          ti match {
+            case 0 =>
+              // first tax year
+              val periods = ty.periods.zipWithIndex
+              for ((period, pi) <- periods) {
+                pi match {
+                  case 0 =>
+                    // first period
+                    val fromDate : LocalDate = period.from
+                    val toDate : LocalDate = period.until
+                    val wtcWorkElement = Element(netAmount = 92.27, maximumAmount = 995.60, taperAmount = 903.33)
+                    val wtcChildcareElement = Element(netAmount = 1224.13, maximumAmount = 1224.13, taperAmount = 0.00)
+                    val ctcChildElement = Element(netAmount = 1737.36, maximumAmount = 1737.36, taperAmount = 0.00)
+                    val ctcFamilyElement = Element(netAmount = 113.24, maximumAmount = 113.24, taperAmount = 0.00)
+                    val periodNetAmount = 3167
+                    verifyAmountsPerPeriod(period, fromDate, toDate, wtcWorkElement, wtcChildcareElement, ctcChildElement, ctcFamilyElement, periodNetAmount)
+                  case 1 =>
+                    // second period
+                    val fromDate : LocalDate = period.from
+                    val toDate : LocalDate = period.until
+                    val wtcWorkElement = Element(netAmount = 139.62, maximumAmount = 1506.50, taperAmount = 1366.88)
+                    val wtcChildcareElement = Element(netAmount = 1058.58, maximumAmount = 1058.58, taperAmount = 0.00)
+                    val ctcChildElement = Element(netAmount = 1752.60, maximumAmount = 1752.60, taperAmount = 0.00)
+                    val ctcFamilyElement = Element(netAmount = 171.35, maximumAmount = 171.35, taperAmount = 0.00)
+                    val periodNetAmount = 3122.15
+                    verifyAmountsPerPeriod(period, fromDate, toDate, wtcWorkElement, wtcChildcareElement, ctcChildElement, ctcFamilyElement, periodNetAmount)
+                }
+              }
+            case 1 =>
+              // second tax year
+              val periods = ty.periods.zipWithIndex
+              for ((period, pi) <- periods) {
+                pi match {
+                  case 0 =>
+                    // first period
+                    val fromDate : LocalDate = period.from
+                    val toDate : LocalDate = period.until
+                    val wtcWorkElement = Element(netAmount = 178.62, maximumAmount = 1932.88, taperAmount = 1754.26)
+                    val wtcChildcareElement = Element(netAmount = 1359.23, maximumAmount = 1359.23, taperAmount = 0.00)
+                    val ctcChildElement = Element(netAmount = 2249.60, maximumAmount = 2249.60, taperAmount = 0.00)
+                    val ctcFamilyElement = Element(netAmount = 220.52, maximumAmount = 220.52, taperAmount = 0.00)
+                    val periodNetAmount = 4007.97
+                    verifyAmountsPerPeriod(period, fromDate, toDate, wtcWorkElement, wtcChildcareElement, ctcChildElement, ctcFamilyElement, periodNetAmount)
+                  case 1 =>
+                    // first period
+                    val fromDate : LocalDate = period.from
+                    val toDate : LocalDate = period.until
+                    val wtcWorkElement = Element(netAmount = 0.00, maximumAmount = 0.00, taperAmount = 0.00)
+                    val wtcChildcareElement = Element(netAmount = 0.00, maximumAmount = 0.00, taperAmount = 0.00)
+                    val ctcChildElement = Element(netAmount = 0.00, maximumAmount = 0.00, taperAmount = 0.00)
+                    val ctcFamilyElement = Element(netAmount = 0.00, maximumAmount = 0.00, taperAmount = 0.00)
+                    val periodNetAmount = 0.00
+                    verifyAmountsPerPeriod(period, fromDate, toDate, wtcWorkElement, wtcChildcareElement, ctcChildElement, ctcFamilyElement, periodNetAmount)
+                }
+              }
+          }
+        }
+      } catch {
+        case e: Exception =>
+          throw e
+      }
+
+      award.tc.get.totalAwardAmount shouldBe 10297.12
+      award.tc.get.houseHoldAdviceAmount shouldBe 0.00
+
+      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 40900.2896
+      incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
+    }
+
+    "(TY 2017/2018 - 2018/2019 Scenario 70) Generate total award with periods with elements" in {
+      val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2018/scenario_4.json")
+      val json: JsValue = Json.parse(resource.toString)
+      val result = json.validate[Request]
+      logResult(result)
+      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+
+      val award = TCCalculator.calculator.award(result.get)
+      val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
+
+      try {
+        val taxYears = award.tc.get.taxYears
+
+        for ((ty, ti) <- taxYears.zipWithIndex) {
+          ti match {
+            case 0 =>
+              // first tax year
+              val periods = ty.periods.zipWithIndex
+              for ((period, pi) <- periods) {
+                pi match {
+                  case 0 =>
+                    // first period
+                    val fromDate : LocalDate = period.from
+                    val toDate : LocalDate = period.until
+                    val wtcWorkElement = Element(netAmount = 0.00, maximumAmount = 1888.60, taperAmount = 1888.60)
+                    val wtcChildcareElement = Element(netAmount = 0.00, maximumAmount = 1224.13, taperAmount = 1224.13)
+                    val ctcChildElement = Element(netAmount = 1129.58, maximumAmount = 1737.36, taperAmount = 607.78)
+                    val ctcFamilyElement = Element(netAmount = 113.24, maximumAmount = 113.24, taperAmount = 0.00)
+                    val periodNetAmount = 1242.82
+                    verifyAmountsPerPeriod(period, fromDate, toDate, wtcWorkElement, wtcChildcareElement, ctcChildElement, ctcFamilyElement, periodNetAmount)
+                  case 1 =>
+                    // second period
+                    val fromDate : LocalDate = period.from
+                    val toDate : LocalDate = period.until
+                    val wtcWorkElement = Element(netAmount = 0.00, maximumAmount = 2857.75, taperAmount = 2857.75)
+                    val wtcChildcareElement = Element(netAmount = 0.00, maximumAmount = 1058.58, taperAmount = 1058.58)
+                    val ctcChildElement = Element(netAmount = 39.22, maximumAmount = 1752.60, taperAmount = 1713.38)
+                    val ctcFamilyElement = Element(netAmount = 171.35, maximumAmount = 171.35, taperAmount = 0.00)
+                    val periodNetAmount = 210.57
+                    verifyAmountsPerPeriod(period, fromDate, toDate, wtcWorkElement, wtcChildcareElement, ctcChildElement, ctcFamilyElement, periodNetAmount)
+                }
+              }
+            case 1 =>
+              // second tax year
+              val periods = ty.periods.zipWithIndex
+              for ((period, pi) <- periods) {
+                pi match {
+                  case 0 =>
+                    // first period
+                    val fromDate : LocalDate = period.from
+                    val toDate : LocalDate = period.until
+                    val wtcWorkElement = Element(netAmount = 0.00, maximumAmount = 3677.80, taperAmount = 3677.80)
+                    val wtcChildcareElement = Element(netAmount = 288.90, maximumAmount = 1362.34, taperAmount = 1073.44)
+                    val ctcChildElement = Element(netAmount = 2255.52, maximumAmount = 2255.52, taperAmount = 0.00)
+                    val ctcFamilyElement = Element(netAmount = 220.52, maximumAmount = 220.52, taperAmount = 0.00)
+                    val periodNetAmount = 2764.94
+                    verifyAmountsPerPeriod(period, fromDate, toDate, wtcWorkElement, wtcChildcareElement, ctcChildElement, ctcFamilyElement, periodNetAmount)
+                  case 1 =>
+                    // first period
+                    val fromDate : LocalDate = period.from
+                    val toDate : LocalDate = period.until
+                    val wtcWorkElement = Element(netAmount = 0.00, maximumAmount = 4149.95, taperAmount = 4149.95)
+                    val wtcChildcareElement = Element(netAmount = 0.00, maximumAmount = 768.03, taperAmount = 768.03)
+                    val ctcChildElement = Element(netAmount = 829.32, maximumAmount = 1272.54, taperAmount = 443.22)
+                    val ctcFamilyElement = Element(netAmount = 248.83, maximumAmount = 248.83, taperAmount = 0.00)
+                    val periodNetAmount = 1078.15
+                    verifyAmountsPerPeriod(period, fromDate, toDate, wtcWorkElement, wtcChildcareElement, ctcChildElement, ctcFamilyElement, periodNetAmount)
+                }
+              }
+          }
+        }
+      } catch {
+        case e: Exception =>
+          throw e
+      }
+
+      award.tc.get.totalAwardAmount shouldBe 5296.48
+      award.tc.get.houseHoldAdviceAmount shouldBe 0.00
+
+      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 69312.8416
+      incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
+    }
+
+    "(Proratering) (TY 2017/2018 - 2018/2019 Scenario 71) Generate total award with periods with elements" in {
+      val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2018/scenario_5.json")
+      val json: JsValue = Json.parse(resource.toString)
+      val result = json.validate[Request]
+      logResult(result)
+      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+
+      val award = TCCalculator.calculator.award(result.get)
+
+      val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
+
+      try {
+
+        val taxYears = award.tc.get.taxYears
+
+        for ((ty, ti) <- taxYears.zipWithIndex) {
+          ti match {
+            case 0 =>
+              // first tax year
+              val periods = ty.periods.zipWithIndex
+              for ((period, pi) <- periods) {
+                pi match {
+                  case 0 =>
+                    // first period
+                    val fromDate : LocalDate = period.from
+                    val toDate : LocalDate = period.until
+                    val wtcWorkElement = Element(netAmount = 0.00, maximumAmount = 1888.60, taperAmount = 1888.60)
+                    val wtcChildcareElement = Element(netAmount = 0.00, maximumAmount = 1224.13, taperAmount = 1224.13)
+                    val ctcChildElement = Element(netAmount = 1129.58, maximumAmount = 1737.36, taperAmount = 607.78)
+                    val ctcFamilyElement = Element(netAmount = 113.24, maximumAmount = 113.24, taperAmount = 0.00)
+                    val periodNetAmount = 1242.82
+                    verifyAmountsPerPeriod(period, fromDate, toDate, wtcWorkElement, wtcChildcareElement, ctcChildElement, ctcFamilyElement, periodNetAmount)
+                  case 1 =>
+                    // second period
+                    val fromDate : LocalDate = period.from
+                    val toDate : LocalDate = period.until
+                    val wtcWorkElement = Element(netAmount = 0.00, maximumAmount = 2857.75, taperAmount = 2857.75)
+                    val wtcChildcareElement = Element(netAmount = 0.00, maximumAmount = 1058.58, taperAmount = 1058.58)
+                    val ctcChildElement = Element(netAmount = 39.22, maximumAmount = 1752.60, taperAmount = 1713.38)
+                    val ctcFamilyElement = Element(netAmount = 171.35, maximumAmount = 171.35, taperAmount = 0.00)
+                    val periodNetAmount = 210.57
+                    verifyAmountsPerPeriod(period, fromDate, toDate, wtcWorkElement, wtcChildcareElement, ctcChildElement, ctcFamilyElement, periodNetAmount)
+                }
+              }
+            case 1 =>
+              // second tax year
+              val periods = ty.periods.zipWithIndex
+              for ((period, pi) <- periods) {
+                pi match {
+                  case 0 =>
+                    // first period
+                    val fromDate : LocalDate = period.from
+                    val toDate : LocalDate = period.until
+                    val wtcWorkElement = Element(netAmount = 0.00, maximumAmount = 3677.80, taperAmount = 3677.80)
+                    val wtcChildcareElement = Element(netAmount = 288.90, maximumAmount = 1362.34, taperAmount = 1073.44)
+                    val ctcChildElement = Element(netAmount = 2255.52, maximumAmount = 2255.52, taperAmount = 0.00)
+                    val ctcFamilyElement = Element(netAmount = 220.52, maximumAmount = 220.52, taperAmount = 0.00)
+                    val periodNetAmount = 2764.94
+                    verifyAmountsPerPeriod(period, fromDate, toDate, wtcWorkElement, wtcChildcareElement, ctcChildElement, ctcFamilyElement, periodNetAmount)
+                  case 1 =>
+                    // second period
+                    val fromDate : LocalDate = period.from
+                    val toDate : LocalDate = period.until
+                    val wtcWorkElement = Element(netAmount = 0.00, maximumAmount = 4149.95, taperAmount = 4149.95)
+                    val wtcChildcareElement = Element(netAmount = 0.00, maximumAmount = 768.03, taperAmount = 768.03)
+                    val ctcChildElement = Element(netAmount = 829.32, maximumAmount = 1272.54, taperAmount = 443.22)
+                    val ctcFamilyElement = Element(netAmount = 248.83, maximumAmount = 248.83, taperAmount = 0.00)
+                    val periodNetAmount = 1078.15
+                    verifyAmountsPerPeriod(period, fromDate, toDate, wtcWorkElement, wtcChildcareElement, ctcChildElement, ctcFamilyElement, periodNetAmount)
+                }
+              }
+          }
+        }
+      } catch {
+        case e: Exception =>
+          throw e
+      }
+
+      award.tc.get.totalAwardAmount shouldBe 5296.48
+      award.tc.get.taxYears.tail.head.taxYearAwardProRataAmount shouldBe 1403.03
+      award.tc.get.totalAwardProRataAmount shouldBe 2856.42
+      award.tc.get.houseHoldAdviceAmount shouldBe 0.00
+
+      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 69312.8416
+      incomeAdvice.tc.get.taxYears.head.taxYearAdviceAmount shouldBe 29720.4984
+      incomeAdvice.tc.get.taxYears.tail.head.taxYearAdviceAmount shouldBe 39592.3432
+      incomeAdvice.tc.get.totalHouseHoldAdviceProRataAmount shouldBe 44174.8484
       incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
     }
 
