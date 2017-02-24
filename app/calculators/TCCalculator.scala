@@ -225,22 +225,26 @@ trait TCCalculator extends CCCalculator {
     }
 
     def maxChildcareElementForPeriod(period: Period) : (Boolean, BigDecimal) = {
+      if(period.getChildCareForPeriod) {
+        val totalCostPerWeek = getTotalChildcarePerWeek(period)
+        // check threshold amounts
+        val amountForPeriod = amountForDateRange(totalCostPerWeek, Periods.Weekly, period.from, period.until)
 
-      val totalCostPerWeek = getTotalChildcarePerWeek(period)
-      // check threshold amounts
-      val amountForPeriod = amountForDateRange(totalCostPerWeek, Periods.Weekly, period.from, period.until)
+        val percent = period.config.wtc.eligibleCostCoveredPercent
+        val percentOfActualAmountTapered = roundDownToTwoDigits(getPercentOfAmount(amountForPeriod, percent))
 
-      val percent = period.config.wtc.eligibleCostCoveredPercent
-      val percentOfActualAmountTapered = roundDownToTwoDigits(getPercentOfAmount(amountForPeriod, percent))
+        val thresholdAmount = getChildcareThresholdPerWeek(period)
+        val thresholdIntoAPeriod = amountForDateRange(thresholdAmount, Periods.Weekly, period.from, period.until)
+        val percentOfThresholdAmountTapered = roundDownToTwoDigits(getPercentOfAmount(thresholdIntoAPeriod, percent))
 
-      val thresholdAmount = getChildcareThresholdPerWeek(period)
-      val thresholdIntoAPeriod = amountForDateRange(thresholdAmount, Periods.Weekly, period.from, period.until)
-      val percentOfThresholdAmountTapered = roundDownToTwoDigits(getPercentOfAmount(thresholdIntoAPeriod, percent))
-
-      if(percentOfActualAmountTapered >= percentOfThresholdAmountTapered) {
-        (true, roundDownToTwoDigits(percentOfThresholdAmountTapered))
-      } else {
-        (true, roundDownToTwoDigits(percentOfActualAmountTapered))
+        if (percentOfActualAmountTapered >= percentOfThresholdAmountTapered) {
+          (true, roundDownToTwoDigits(percentOfThresholdAmountTapered))
+        } else {
+          (true, roundDownToTwoDigits(percentOfActualAmountTapered))
+        }
+      }
+      else {
+        (true, 0)
       }
     }
 
