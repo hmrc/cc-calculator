@@ -77,7 +77,7 @@ trait TaxCreditCalculatorController extends CalculatorController with ServicesCo
    implicit request =>
      request.body.validate[Request].fold(
        error => {
-         Logger.warn(s"\n\n TC Calculator Validation JsError in TaxCreditCalculatorController.calculate \n\n")
+         Logger.warn(s"TC Calculator Validation JsError in TaxCreditCalculatorController.calculate \n\n")
          Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(play.api.http.Status.BAD_REQUEST, Left(error))))
        },
        result => {
@@ -90,11 +90,11 @@ trait TaxCreditCalculatorController extends CalculatorController with ServicesCo
                  Ok(utils.JSONFactory.generateResultJson(response))
              } recover {
                case e: Exception =>
-                 Logger.warn(s"\n\n Tax Credits Calculator Exception in TaxCreditCalculatorController.calculate: ${e.getMessage}\n\n")
+                 Logger.warn(s"Tax Credits Calculator Exception in TaxCreditCalculatorController.calculate: ${e.getMessage}\n\n")
                  InternalServerError(utils.JSONFactory.generateErrorJSON(play.api.http.Status.INTERNAL_SERVER_ERROR, Right(e)))
              }
            case _ =>
-             Logger.warn(s"\n\n Tax Credits Calculator Exception in TaxCreditCalculatorController.calculate \n\n")
+             Logger.warn(s"Tax Credits Calculator Exception in TaxCreditCalculatorController.calculate \n\n")
              Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(
                play.api.http.Status.BAD_REQUEST,
                Right(new IllegalArgumentException(Messages("cc.calc.invalid.request.exception")))

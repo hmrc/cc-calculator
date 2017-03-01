@@ -40,170 +40,130 @@ trait TCCalculator extends CCCalculator {
   trait TCCalculatorElements {
     this: TCCalculatorService =>
 
-    def basicElementForPeriod(period: Period): (Boolean, BigDecimal) = {
+    def basicElementForPeriod(period: Period): BigDecimal = {
       if (period.householdElements.basic) {
         val basicElement = period.config.wtc.basicElement
-        val basicElementForPeriod = amountForDateRange(basicElement, Periods.Yearly, period.from, period.until)
-        (period.householdElements.basic, basicElementForPeriod)
+        (amountForDateRange(basicElement, Periods.Yearly, period.from, period.until))
       } else {
-        (period.householdElements.basic, BigDecimal(0.00))
+        BigDecimal(0.00)
       }
     }
 
-    def hours30ElementForPeriod(period: Period): (Boolean, BigDecimal) = {
+    def hours30ElementForPeriod(period: Period): BigDecimal = {
       if (period.householdElements.hours30) {
         val hours30Element = period.config.wtc.hours30Element
-        val hours30ElementForPeriod = amountForDateRange(hours30Element, Periods.Yearly, period.from, period.until)
-        (period.householdElements.hours30, hours30ElementForPeriod)
+        (amountForDateRange(hours30Element, Periods.Yearly, period.from, period.until))
       } else {
-        (period.householdElements.hours30, BigDecimal(0.00))
+        BigDecimal(0.00)
       }
     }
 
-    def loneParentElementForPeriod(period: Period): (Boolean, BigDecimal) = {
+    def loneParentElementForPeriod(period: Period): BigDecimal = {
       if (period.householdElements.loneParent) {
         val loneParentElementMaximumAmount = period.config.wtc.loneParentElement
-        val maximumAmountForDays = amountForDateRange(loneParentElementMaximumAmount, Periods.Yearly, period.from, period.until)
-        (period.householdElements.loneParent, maximumAmountForDays)
+        (amountForDateRange(loneParentElementMaximumAmount, Periods.Yearly, period.from, period.until))
       } else {
-        (period.householdElements.loneParent, BigDecimal(0.00))
+        BigDecimal(0.00)
       }
     }
 
-    def secondAdultElementForPeriod(period: Period): (Boolean, BigDecimal) = {
+    def secondAdultElementForPeriod(period: Period): BigDecimal = {
       if (period.householdElements.secondParent) {
         val coupleElementMaximumAmount = period.config.wtc.coupleElement
-        val maximumAmountForDays = amountForDateRange(coupleElementMaximumAmount, Periods.Yearly, period.from, period.until)
-        (period.householdElements.secondParent, maximumAmountForDays)
+        (amountForDateRange(coupleElementMaximumAmount, Periods.Yearly, period.from, period.until))
       } else {
-        (period.householdElements.secondParent, BigDecimal(0.00))
+        BigDecimal(0.00)
       }
     }
 
-    def maxFamilyElementForPeriod(period: Period): (Boolean, BigDecimal) = {
+    def maxFamilyElementForPeriod(period: Period): BigDecimal = {
       if (period.householdElements.family) {
         val familyElementMaximumAmount = period.config.ctc.familyElement
-        val maximumAmountForDays = amountForDateRange(familyElementMaximumAmount, Periods.Yearly, period.from, period.until)
-        (period.householdElements.family, maximumAmountForDays)
+        (amountForDateRange(familyElementMaximumAmount, Periods.Yearly, period.from, period.until))
       } else {
-        (period.householdElements.family, BigDecimal(0.00))
+        BigDecimal(0.00)
       }
     }
 
-    def disabledWorkerElementForPeriod(period: Period, claimant: Claimant): (Boolean, BigDecimal) = {
-      val element = claimant.getsDisabilityElement
-      if (element) {
+    def disabledWorkerElementForPeriod(period: Period, claimant: Claimant): BigDecimal = {
+      if (claimant.getsDisabilityElement) {
         val disabledWorkerElement = period.config.wtc.disabledWorkerElement
-        val maximumAmountForDays = amountForDateRange(disabledWorkerElement, Periods.Yearly, period.from, period.until)
-        (element, maximumAmountForDays)
+        (amountForDateRange(disabledWorkerElement, Periods.Yearly, period.from, period.until))
       } else {
-        (element, BigDecimal(0.00))
+        BigDecimal(0.00)
       }
     }
 
-    def severelyDisabledWorkerElementForPeriod(period: Period, claimant: Claimant): (Boolean, BigDecimal) = {
-      val element = claimant.getsSevereDisabilityElement
-      if (element) {
+    def severelyDisabledWorkerElementForPeriod(period: Period, claimant: Claimant): BigDecimal = {
+      if (claimant.getsSevereDisabilityElement) {
         val severeDisabilityWorkerElement = period.config.wtc.severeDisabilityWorkerElement
-        val maximumAmountForDays = amountForDateRange(severeDisabilityWorkerElement, Periods.Yearly, period.from, period.until)
-        (element, maximumAmountForDays)
+        (amountForDateRange(severeDisabilityWorkerElement, Periods.Yearly, period.from, period.until))
       } else {
-        (element, BigDecimal(0.00))
+        BigDecimal(0.00)
       }
     }
 
-    def childOrYoungAdultBasicElementForPeriod(period: Period, child: Child): (Boolean, BigDecimal) = {
-      val element = child.isQualifyingCTC
-      if (element) {
+    def childOrYoungAdultBasicElementForPeriod(period: Period, child: Child):  BigDecimal = {
+      if (child.isQualifyingCTC) {
         val childElementMaximumAmount = period.config.ctc.childElement
-        val maximumAmountForDays = amountForDateRange(childElementMaximumAmount, Periods.Yearly, period.from, period.until)
-        (element, maximumAmountForDays)
+        (amountForDateRange(childElementMaximumAmount, Periods.Yearly, period.from, period.until))
       } else {
-        (element, BigDecimal(0.00))
+        BigDecimal(0.00)
       }
     }
 
-    def childOrYoungAdultDisabilityElementForPeriod(period: Period, child: Child): (Boolean, BigDecimal) = {
-      val element = child.getsDisabilityElement
-      if (element) {
+    def childOrYoungAdultDisabilityElementForPeriod(period: Period, child: Child): BigDecimal = {
+      if (child.getsDisabilityElement) {
         val maximumAmount = period.config.ctc.disabledChildElement
-        val maximumAmountForDays = amountForDateRange(maximumAmount, Periods.Yearly, period.from, period.until)
-        (element, maximumAmountForDays)
+        (amountForDateRange(maximumAmount, Periods.Yearly, period.from, period.until))
       } else {
-        (element, BigDecimal(0.00))
+        BigDecimal(0.00)
       }
     }
 
-    def childOrYoungAdultSevereDisabilityElementForPeriod(period: Period, child: Child): (Boolean, BigDecimal) = {
-      val element = child.getsSevereDisabilityElement
-      if (element) {
+    def childOrYoungAdultSevereDisabilityElementForPeriod(period: Period, child: Child): BigDecimal = {
+      if (child.getsSevereDisabilityElement) {
         val maximumAmount = period.config.ctc.severeDisabilityChildElement
-        val maximumAmountForDays = amountForDateRange(maximumAmount, Periods.Yearly, period.from, period.until)
-        (element, maximumAmountForDays)
+        (amountForDateRange(maximumAmount, Periods.Yearly, period.from, period.until))
       } else {
-        (element, BigDecimal(0.00))
+        BigDecimal(0.00)
       }
     }
 
-    def maxChildElementForPeriod(period: Period): (Boolean, BigDecimal) = {
+    def maxChildElementForPeriod(period: Period): BigDecimal = {
       period.children match {
         case head :: tail =>
           // get an amount List[(Boolean, BigDecimal)] for each child (including disability and severe if it applies)
-          val elements = for (child <- period.children) yield {
+          period.children.foldLeft(BigDecimal(0.00))((acc, child) => {
             val basic = childOrYoungAdultBasicElementForPeriod(period, child)
             val disabled = childOrYoungAdultDisabilityElementForPeriod(period, child)
             val severeDisabled = childOrYoungAdultSevereDisabilityElementForPeriod(period, child)
-            val amount = basic._2 + disabled._2 + severeDisabled._2
-            (child.isQualifyingCTC, amount)
-          }
-          val amount = elements.foldLeft(BigDecimal(0.00))((acc, element) => acc + element._2)
-          val numberOfQualifyingChildren = elements.foldLeft(0)((acc, element) => if (element._1) acc + 1 else acc)
-          val hasQualifyingChildren = numberOfQualifyingChildren > 0
-          (hasQualifyingChildren, amount)
-        case Nil => (false, BigDecimal(0.00))
+            (acc + basic + disabled + severeDisabled)
+          })
+        case Nil => BigDecimal(0.00)
       }
     }
 
-    private def claimantWorkElementsForPeriod(houseHoldElement: HouseHoldElements): Boolean = {
-      val loneOrSecond = (houseHoldElement.basic, houseHoldElement.hours30, houseHoldElement.loneParent, houseHoldElement.secondParent)
-      loneOrSecond match {
-        case (hh, ho, false, true) =>
-          // second
-          true
-        case (hh, ho, true, false) =>
-          // lone
-          true
-        case _ => false
-      }
-    }
-
-    def maxWorkElementForPeriod(period: Period): (Boolean, BigDecimal) = {
+    def maxWorkElementForPeriod(period: Period): BigDecimal = {
       val basic = basicElementForPeriod(period)
       val hours30 = hours30ElementForPeriod(period)
       val loneParent = loneParentElementForPeriod(period)
       val secondAdult = secondAdultElementForPeriod(period)
-      val houseHoldAmt = basic._2 + hours30._2 + loneParent._2 + secondAdult._2
+      val houseHoldAmt = basic + hours30 + loneParent + secondAdult
       // get an amount List[(Boolean, BigDecimal)] for each claimant (including disability and severe if it applies)
-      val elements = for (claimant <- period.claimants) yield {
+      val claimantAmount = period.claimants.foldLeft(BigDecimal(0.00))((acc, claimant) => {
         val disabled = disabledWorkerElementForPeriod(period, claimant)
         val severeDisabled = severelyDisabledWorkerElementForPeriod(period, claimant)
-        val amount = disabled._2 + severeDisabled._2
-        (claimantWorkElementsForPeriod(period.householdElements), amount)
-      }
-      val amount = elements.foldLeft(BigDecimal(0.00))((acc, element) => acc + element._2)
-      val totalWTC = amount + houseHoldAmt
-      val numberOfQualifyingClaimant = elements.foldLeft(0)((acc, element) => if (element._1) acc + 1 else acc)
-      val hasQualifyingClaimant = numberOfQualifyingClaimant > 0
-      (hasQualifyingClaimant, totalWTC)
+        (acc + disabled + severeDisabled)
+      })
+      (claimantAmount + houseHoldAmt)
     }
 
     protected def getChildcareThresholdPerWeek(period: models.input.tc.Period) : BigDecimal = {
       if (period.children.length > 1) {
-        val threshold = period.config.wtc.maxChildcareMoreChildrenElement
-        threshold
+        (period.config.wtc.maxChildcareMoreChildrenElement)
       } else if(period.children.length == 1) {
-        val threshold = period.config.wtc.maxChildcareOneChildElement
-        threshold
+        (period.config.wtc.maxChildcareOneChildElement)
       } else {
         BigDecimal(0.00)
       }
@@ -224,23 +184,26 @@ trait TCCalculator extends CCCalculator {
       roundDownToTwoDigits(amountPerWeek)
     }
 
-    def maxChildcareElementForPeriod(period: Period) : (Boolean, BigDecimal) = {
+    def maxChildcareElementForPeriod(period: Period) : BigDecimal = {
+      if(period.getChildCareForPeriod) {
+        val totalCostPerWeek = getTotalChildcarePerWeek(period)
+        // check threshold amounts
+        val amountForPeriod = amountForDateRange(totalCostPerWeek, Periods.Weekly, period.from, period.until)
 
-      val totalCostPerWeek = getTotalChildcarePerWeek(period)
-      // check threshold amounts
-      val amountForPeriod = amountForDateRange(totalCostPerWeek, Periods.Weekly, period.from, period.until)
+        val percent = period.config.wtc.eligibleCostCoveredPercent
+        val percentOfActualAmountTapered = roundDownToTwoDigits(getPercentOfAmount(amountForPeriod, percent))
 
-      val percent = period.config.wtc.eligibleCostCoveredPercent
-      val percentOfActualAmountTapered = roundDownToTwoDigits(getPercentOfAmount(amountForPeriod, percent))
+        val thresholdAmount = getChildcareThresholdPerWeek(period)
+        val thresholdIntoAPeriod = amountForDateRange(thresholdAmount, Periods.Weekly, period.from, period.until)
+        val percentOfThresholdAmountTapered = roundDownToTwoDigits(getPercentOfAmount(thresholdIntoAPeriod, percent))
 
-      val thresholdAmount = getChildcareThresholdPerWeek(period)
-      val thresholdIntoAPeriod = amountForDateRange(thresholdAmount, Periods.Weekly, period.from, period.until)
-      val percentOfThresholdAmountTapered = roundDownToTwoDigits(getPercentOfAmount(thresholdIntoAPeriod, percent))
-
-      if(percentOfActualAmountTapered >= percentOfThresholdAmountTapered) {
-        (true, roundDownToTwoDigits(percentOfThresholdAmountTapered))
+        if (percentOfActualAmountTapered >= percentOfThresholdAmountTapered) {
+          roundDownToTwoDigits(percentOfThresholdAmountTapered)
+        } else {
+          roundDownToTwoDigits(percentOfActualAmountTapered)
+        }
       } else {
-        (true, roundDownToTwoDigits(percentOfActualAmountTapered))
+        BigDecimal(0.00)
       }
     }
 
@@ -248,22 +211,22 @@ trait TCCalculator extends CCCalculator {
       val childElement = maxChildElementForPeriod(period)
       val familyElement = maxFamilyElementForPeriod(period)
       val childcareElement = maxChildcareElementForPeriod(period)
-      val workingTaxElement = maxWorkElementForPeriod(period) // this contains basic, 30 hour, claimant disability/severe disability + lone/second parent
+      val workingTaxElement = maxWorkElementForPeriod(period) //this contains basic, 30 hour, claimant disability/severe disability + lone/second parent
       models.output.tc.Period(
         from = period.from,
         until = period.until,
         elements = Elements(
           wtcWorkElement = Element(
-            maximumAmount = workingTaxElement._2
+            maximumAmount = workingTaxElement
           ),
           wtcChildcareElement = Element(
-            maximumAmount = childcareElement._2
+            maximumAmount = childcareElement
           ),
           ctcIndividualElement = Element(
-            maximumAmount = childElement._2
+            maximumAmount = childElement
           ),
           ctcFamilyElement = Element(
-            maximumAmount = familyElement._2
+            maximumAmount = familyElement
           )
         )
       )
