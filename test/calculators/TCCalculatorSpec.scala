@@ -832,12 +832,10 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
           // first period
           val period = x.payload.eligibility.tc.get.taxYears.head.periods
           val period1ChildElement = TCCalculator.calculator.maxChildElementForPeriod(period.head)
-          period1ChildElement._1 shouldBe true
-          period1ChildElement._2 shouldBe BigDecimal(1232.72)
+          period1ChildElement shouldBe BigDecimal(1232.72)
           // second period
           val period2ChildElement = TCCalculator.calculator.maxChildElementForPeriod(period.tail.head)
-          period2ChildElement._1 shouldBe false
-          period2ChildElement._2 shouldBe BigDecimal(0.00)
+          period2ChildElement shouldBe BigDecimal(0.00)
         case JsError(e) => throw new RuntimeException(e.toList.toString)
       }
     }
@@ -852,8 +850,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
           // first period
           val period = x.payload.eligibility.tc.get.taxYears.head.periods
           val period1ChildElement = TCCalculator.calculator.maxChildElementForPeriod(period.head)
-          period1ChildElement._1 shouldBe false
-          period1ChildElement._2 shouldBe BigDecimal(0.00)
+          period1ChildElement shouldBe BigDecimal(0.00)
         case JsError(e) => throw new RuntimeException(e.toList.toString)
       }
     }
@@ -867,8 +864,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
         case JsSuccess(x, _) =>
           val period = x.payload.eligibility.tc.get.taxYears.head.periods
           val workElement = TCCalculator.calculator.maxWorkElementForPeriod(period.head)
-          workElement._1 shouldBe true
-          workElement._2 shouldBe BigDecimal(5187.56)
+          workElement shouldBe BigDecimal(5187.56)
         case JsError(e) => throw new RuntimeException(e.toList.toString)
       }
     }
@@ -882,8 +878,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
         case JsSuccess(x, _) =>
           val period = x.payload.eligibility.tc.get.taxYears.head.periods
           val workElement = TCCalculator.calculator.maxWorkElementForPeriod(period.head)
-          workElement._1 shouldBe true
-          workElement._2 shouldBe BigDecimal(4056.84)
+          workElement shouldBe BigDecimal(4056.84)
         case JsError(e) => throw new RuntimeException(e.toList.toString)
       }
     }
@@ -897,8 +892,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
         case JsSuccess(x, _) =>
           val period = x.payload.eligibility.tc.get.taxYears.head.periods
           val workElement = TCCalculator.calculator.maxWorkElementForPeriod(period.head)
-          workElement._1 shouldBe true
-          workElement._2 shouldBe BigDecimal(6944.76)
+          workElement shouldBe BigDecimal(6944.76)
         case JsError(e) => throw new RuntimeException(e.toList.toString)
       }
     }
@@ -912,8 +906,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
         case JsSuccess(x, _) =>
           val period = x.payload.eligibility.tc.get.taxYears.head.periods
           val workElement = TCCalculator.calculator.maxWorkElementForPeriod(period.head)
-          workElement._1 shouldBe false
-          workElement._2 shouldBe BigDecimal(1025.67)
+          workElement shouldBe BigDecimal(1025.67)
         case JsError(e) => throw new RuntimeException(e.toList.toString)
       }
     }
@@ -927,8 +920,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
         case JsSuccess(x, _) =>
           val period = x.payload.eligibility.tc.get.taxYears.head.periods
           val workElement = TCCalculator.calculator.maxWorkElementForPeriod(period.head)
-          workElement._1 shouldBe false
-          workElement._2 shouldBe BigDecimal(2580.41)
+          workElement shouldBe BigDecimal(2580.41)
         case JsError(e) => throw new RuntimeException(e.toList.toString)
       }
     }
@@ -942,8 +934,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
         case JsSuccess(x, _) =>
           val period = x.payload.eligibility.tc.get.taxYears.head.periods
           val wtcChildcareElement = TCCalculator.calculator.maxChildcareElementForPeriod(period.head)
-          wtcChildcareElement._1 shouldBe true
-          wtcChildcareElement._2 shouldBe BigDecimal(878.41)
+          wtcChildcareElement shouldBe BigDecimal(878.41)
         case JsError(e) => throw new RuntimeException(e.toList.toString)
       }
     }
@@ -957,8 +948,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
         case JsSuccess(x, _) =>
           val period = x.payload.eligibility.tc.get.taxYears.head.periods
           val wtcChildcareElement = TCCalculator.calculator.maxChildcareElementForPeriod(period.head)
-          wtcChildcareElement._1 shouldBe true
-          wtcChildcareElement._2 shouldBe BigDecimal(3333.14)
+          wtcChildcareElement shouldBe BigDecimal(3333.14)
         case JsError(e) => throw new RuntimeException(e.toList.toString)
       }
     }
@@ -972,8 +962,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
         case JsSuccess(x, _) =>
           val period = x.payload.eligibility.tc.get.taxYears.head.periods
           val wtcChildcareElement = TCCalculator.calculator.maxChildcareElementForPeriod(period.head)
-          wtcChildcareElement._1 shouldBe true
-          wtcChildcareElement._2 shouldBe BigDecimal(5687.60)
+          wtcChildcareElement shouldBe BigDecimal(5687.60)
         case JsError(e) => throw new RuntimeException(e.toList.toString)
       }
     }
@@ -987,8 +976,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
         case JsSuccess(x, _) =>
           val period = x.payload.eligibility.tc.get.taxYears.head.periods
           val wtcChildcareElement = TCCalculator.calculator.maxChildcareElementForPeriod(period.head)
-          wtcChildcareElement._1 shouldBe true
-          wtcChildcareElement._2 shouldBe BigDecimal(5700.97)
+          wtcChildcareElement shouldBe BigDecimal(5700.97)
         case JsError(e) => throw new RuntimeException(e.toList.toString)
       }
     }
@@ -1002,8 +990,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
         case JsSuccess(x, _) =>
           val period = x.payload.eligibility.tc.get.taxYears.head.periods
           val wtcChildcareElement = TCCalculator.calculator.maxChildcareElementForPeriod(period.head)
-          wtcChildcareElement._1 shouldBe true
-          wtcChildcareElement._2 shouldBe BigDecimal(5714.34)
+          wtcChildcareElement shouldBe BigDecimal(5714.34)
         case JsError(e) => throw new RuntimeException(e.toList.toString)
       }
     }
@@ -1017,8 +1004,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
         case JsSuccess(x, _) =>
           val period = x.payload.eligibility.tc.get.taxYears.head.periods
           val wtcChildcareElement = TCCalculator.calculator.maxChildcareElementForPeriod(period.head)
-          wtcChildcareElement._1 shouldBe true
-          wtcChildcareElement._2 shouldBe BigDecimal(2637.90)
+          wtcChildcareElement shouldBe BigDecimal(2637.90)
         case JsError(e) => throw new RuntimeException(e.toList.toString)
       }
     }
@@ -1032,8 +1018,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
         case JsSuccess(x, _) =>
           val period = x.payload.eligibility.tc.get.taxYears.head.periods
           val wtcChildcareElement = TCCalculator.calculator.maxChildcareElementForPeriod(period.head)
-          wtcChildcareElement._1 shouldBe true
-          wtcChildcareElement._2 shouldBe BigDecimal(5714.34)
+          wtcChildcareElement shouldBe BigDecimal(5714.34)
         case JsError(e) => throw new RuntimeException(e.toList.toString)
       }
     }
