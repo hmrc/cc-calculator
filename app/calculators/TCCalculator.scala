@@ -144,19 +144,6 @@ trait TCCalculator extends CCCalculator {
       }
     }
 
-    /*private def claimantWorkElementsForPeriod(houseHoldElement: HouseHoldElements): Boolean = {
-      val loneOrSecond = (houseHoldElement.basic, houseHoldElement.hours30, houseHoldElement.loneParent, houseHoldElement.secondParent)
-      loneOrSecond match {
-        case (hh, ho, false, true) =>
-          // second
-          true
-        case (hh, ho, true, false) =>
-          // lone
-          true
-        case _ => false
-      }
-    }*/
-
     def maxWorkElementForPeriod(period: Period): BigDecimal = {
       val basic = basicElementForPeriod(period)
       val hours30 = hours30ElementForPeriod(period)
