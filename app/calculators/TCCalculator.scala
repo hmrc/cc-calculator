@@ -160,6 +160,7 @@ trait TCCalculator extends CCCalculator {
     }
 
     protected def getChildcareThresholdPerWeek(period: models.input.tc.Period) : BigDecimal = {
+      //check childcarecost > 0 and childcare element is true
       val childcareCosts = period.children.filter(child => (child.childcareCost > 0 && child.childElements.childcare)).length
       if (childcareCosts > 1) {
         (period.config.wtc.maxChildcareMoreChildrenElement)
