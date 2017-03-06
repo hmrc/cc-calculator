@@ -52,14 +52,14 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
       result shouldBe 12.01
     }
 
-    "round up for double numbers if more than 5 (.945)" in {
+    "round up for double numbers if more than 5 (.9599)" in {
       val cost: BigDecimal = 12.9599231531231
       val result: BigDecimal = TCCalculator.calculator.round(cost)
       result shouldBe 12.96
     }
 
     "round up for double numbers if less than 5 (.4444)" in {
-      val cost: BigDecimal = 12.44000000000001
+      val cost: BigDecimal = 12.4444000000001
       val result: BigDecimal = TCCalculator.calculator.round(cost)
       result shouldBe 12.45
     }
@@ -783,39 +783,63 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
       val fromDate = LocalDate.parse("2016-05-01", formatter)
       val untilDate = LocalDate.parse("2016-05-21", formatter)
 
-      val inputPeriod = models.input.tc.Period(from = fromDate, until = untilDate, householdElements = HouseHoldElements(), claimants = List(), children = List())
+      val inputPeriod = models.input.tc.Period(from = fromDate, until = untilDate, householdElements = HouseHoldElements(), claimants = List(),
+        children = List())
 
       val decoratedChildCareThreshold = PrivateMethod[BigDecimal]('getChildcareThresholdPerWeek)
       val result = TCCalculator.calculator invokePrivate decoratedChildCareThreshold(inputPeriod)
       result shouldBe BigDecimal(0.00)
     }
 
-    "(1 child) return BigDecimal(0.00) when checking weekly threshold spend for children" in {
+    "(1 child) return 1 child threshold when checking weekly threshold spend for children" in {
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val fromDate = LocalDate.parse("2016-05-01", formatter)
       val untilDate = LocalDate.parse("2016-05-21", formatter)
 
-      val child = Child(id = 0, name = "Child 1", childcareCost = BigDecimal(2000.00), childcareCostPeriod = Periods.Monthly, childElements = ChildElements())
+      val child = Child(id = 0, name = "Child 1", childcareCost = BigDecimal(2000.00), childcareCostPeriod = Periods.Monthly,
+        childElements = ChildElements(childcare = true))
 
-      val inputPeriod = models.input.tc.Period(from = fromDate, until = untilDate, householdElements = HouseHoldElements(), claimants = List(), children = List(child))
+      val inputPeriod = models.input.tc.Period(from = fromDate, until = untilDate, householdElements = HouseHoldElements(), claimants = List(),
+        children = List(child))
 
       val decoratedChildCareThreshold = PrivateMethod[BigDecimal]('getChildcareThresholdPerWeek)
       val result = TCCalculator.calculator invokePrivate decoratedChildCareThreshold(inputPeriod)
       result shouldBe BigDecimal(175.00)
     }
 
-    "(5 children) return BigDecimal(0.00) when checking weekly threshold spend for children" in {
+    "(2 children) return 1 child threshold when 1 child has no childcare cost when checking weekly threshold spend for children" in {
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val fromDate = LocalDate.parse("2016-05-01", formatter)
       val untilDate = LocalDate.parse("2016-05-21", formatter)
 
-      val child1 = Child(id = 0, name = "Child 1", childcareCost = BigDecimal(500.00), childcareCostPeriod = Periods.Monthly, childElements = ChildElements())
+      val child1 = Child(id = 1, name = "Child 1", childcareCost = BigDecimal(2000.00), childcareCostPeriod = Periods.Monthly,
+        childElements = ChildElements(childcare = true))
+      val child2 = Child(id = 2, name = "Child 2", childcareCost = BigDecimal(0.00), childcareCostPeriod = Periods.Monthly,
+        childElements = ChildElements(childcare = true))
+
+      val inputPeriod = models.input.tc.Period(from = fromDate, until = untilDate, householdElements = HouseHoldElements(), claimants = List(),
+        children = List(child1, child2))
+
+      val decoratedChildCareThreshold = PrivateMethod[BigDecimal]('getChildcareThresholdPerWeek)
+      val result = TCCalculator.calculator invokePrivate decoratedChildCareThreshold(inputPeriod)
+      result shouldBe BigDecimal(175.00)
+    }
+
+    "(5 children) return multiple child threshold when checking weekly threshold spend for children" in {
+      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val fromDate = LocalDate.parse("2016-05-01", formatter)
+      val untilDate = LocalDate.parse("2016-05-21", formatter)
+
+      val child1 = Child(id = 0, name = "Child 1", childcareCost = BigDecimal(500.00), childcareCostPeriod = Periods.Monthly,
+        childElements = ChildElements(childcare = true))
       val child2 = Child(id = 0, name = "Child 1", childcareCost = BigDecimal(2000.00), childcareCostPeriod = Periods.Monthly, childElements = ChildElements())
       val child3 = Child(id = 0, name = "Child 1", childcareCost = BigDecimal(300.00), childcareCostPeriod = Periods.Monthly, childElements = ChildElements())
-      val child4 = Child(id = 0, name = "Child 1", childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, childElements = ChildElements())
+      val child4 = Child(id = 0, name = "Child 1", childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly,
+        childElements = ChildElements(childcare = true))
       val child5 = Child(id = 0, name = "Child 1", childcareCost = BigDecimal(100.00), childcareCostPeriod = Periods.Monthly, childElements = ChildElements())
 
-      val inputPeriod = models.input.tc.Period(from = fromDate, until = untilDate, householdElements = HouseHoldElements(), claimants = List(), children = List(child1, child2, child3, child4, child5))
+      val inputPeriod = models.input.tc.Period(from = fromDate, until = untilDate, householdElements = HouseHoldElements(), claimants = List(),
+        children = List(child1, child2, child3, child4, child5))
 
       val decoratedChildCareThreshold = PrivateMethod[BigDecimal]('getChildcareThresholdPerWeek)
       val result = TCCalculator.calculator invokePrivate decoratedChildCareThreshold(inputPeriod)
