@@ -160,9 +160,11 @@ trait TCCalculator extends CCCalculator {
     }
 
     protected def getChildcareThresholdPerWeek(period: models.input.tc.Period) : BigDecimal = {
-      if (period.children.length > 1) {
+      //check childcarecost > 0 and childcare element is true
+      val childcareCosts = period.children.filter(child => (child.childcareCost > 0 && child.childElements.childcare)).length
+      if (childcareCosts > 1) {
         (period.config.wtc.maxChildcareMoreChildrenElement)
-      } else if(period.children.length == 1) {
+      } else if(childcareCosts == 1) {
         (period.config.wtc.maxChildcareOneChildElement)
       } else {
         BigDecimal(0.00)
@@ -676,7 +678,6 @@ trait TCCalculator extends CCCalculator {
                                           ctcIncomeThreshold: BigDecimal,
                                           fullCalculationRequired: Boolean = true): models.output.tc.Period = {
       val totalMaximumAmount = getTotalMaximumAmountPerPeriod(period)
-
       if(fullCalculationRequired){
         if(isTaperingRequiredForElements(income, wtcIncomeThreshold) && !inputPeriod.atLeastOneClaimantIsClaimingSocialSecurityBenefit) {
           //call taper 1, taper 2, taper 3, taper 4
