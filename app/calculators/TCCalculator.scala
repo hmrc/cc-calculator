@@ -678,7 +678,6 @@ trait TCCalculator extends CCCalculator {
                                           ctcIncomeThreshold: BigDecimal,
                                           fullCalculationRequired: Boolean = true): models.output.tc.Period = {
       val totalMaximumAmount = getTotalMaximumAmountPerPeriod(period)
-      println(s"*********totalMaximumAmount >>>>>>> $totalMaximumAmount")
       if(fullCalculationRequired){
         if(isTaperingRequiredForElements(income, wtcIncomeThreshold) && !inputPeriod.atLeastOneClaimantIsClaimingSocialSecurityBenefit) {
           //call taper 1, taper 2, taper 3, taper 4
@@ -743,10 +742,8 @@ trait TCCalculator extends CCCalculator {
           fullCalculationRequired
         )
         //calculate the net due for period
-        println(s"*************************amountForElements>>>>>>>>>>>>>>>>>$amountForElements")
         amountForElements
       }
-      println(s"*************************calculatedPeriods>>>>>>>>>>>>>>>>>$calculatedPeriods")
       calculatedPeriods
     }
 
