@@ -27,15 +27,19 @@ import play.api.libs.json.{JsValue, JsError}
 import play.api.mvc.Action
 import service.AuditEvents
 import uk.gov.hmrc.play.config.ServicesConfig
+import play.api.i18n.{I18nSupport, MessagesApi}
+import javax.inject.{Inject, Singleton}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-object ESCCalculatorController extends ESCCalculatorController with ESCCalculator {
-  override val auditEvent = AuditEvents
-}
+@Singleton
 
-trait ESCCalculatorController extends CalculatorController with ServicesConfig {
+class ESCCalculatorController @Inject()(val messagesApi: MessagesApi) extends
+  CalculatorController with ESCCalculator with I18nSupport {
+   val auditEvent = AuditEvents
+
+
   this: ESCCalculator =>
 
   val auditEvent : AuditEvents
