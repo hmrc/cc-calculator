@@ -31,13 +31,14 @@ import play.api.test.Helpers._
 import service.AuditEvents
 import utils.FakeCCCalculatorApplication
 import scala.concurrent.Future
+import play.api.i18n.Messages.Implicits._
 
 /**
  * Created by roma on 30/12/15.
  */
 class TFCCalculatorControllerSpec extends FakeCCCalculatorApplication with MockitoSugar {
 
-  val mockTFCCalculatorController = new TFCCalculatorController with TFCCalculator {
+  val mockTFCCalculatorController = new TFCCalculatorController(applicationMessagesApi) with TFCCalculator {
     override val calculator = mock[TFCCalculatorService]
     override val auditEvent = mock[AuditEvents]
   }

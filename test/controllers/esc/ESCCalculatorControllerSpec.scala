@@ -32,10 +32,11 @@ import service.AuditEvents
 import play.api.Play
 import utils.FakeCCCalculatorApplication
 import scala.concurrent.Future
+import play.api.i18n.Messages.Implicits._
 
 class ESCCalculatorControllerSpec extends FakeCCCalculatorApplication with MockitoSugar {
 
-  val mockESCCalculatorController = new ESCCalculatorController with ESCCalculator {
+  val mockESCCalculatorController = new ESCCalculatorController(applicationMessagesApi) with ESCCalculator {
     override val calculator = mock[ESCCalculatorService]
     override val auditEvent = mock[AuditEvents]
   }

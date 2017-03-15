@@ -23,17 +23,16 @@ import models.output.esc.{ESCCalculation, Savings}
 import models.utility.{CalculationNIBands, CalculationTaxBands}
 import org.joda.time.LocalDate
 import play.api.Logger
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
-import play.api.i18n.Messages
 import utils.{ESCConfig, ESCTaxYearConfig, Periods}
+import play.api.i18n.{I18nSupport, MessagesApi, Messages}
+import javax.inject.{Inject, Singleton}
 
 import scala.concurrent.Future
 import scala.util.Success
 
-object ESCCalculator extends ESCCalculator
+@Singleton
+class ESCCalculator @Inject()(val messagesApi: MessagesApi) extends CCCalculator with I18nSupport {
 
-trait ESCCalculator extends CCCalculator {
 
   val calculator = new ESCCalculatorService
 
