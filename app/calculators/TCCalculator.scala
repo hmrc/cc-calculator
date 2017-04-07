@@ -105,7 +105,12 @@ trait TCCalculator extends CCCalculator {
 
     def childOrYoungAdultBasicElementForPeriod(period: Period, child: Child):  BigDecimal = {
       if (child.isQualifyingCTC) {
-        val childElementMaximumAmount = period.config.ctc.childElement
+        val childElementMaximumAmount = if(child.childElements.youngAdult) {
+          period.config.ctc.youngPersonElement
+        }
+        else {
+          period.config.ctc.childElement
+        }
         (amountForDateRange(childElementMaximumAmount, Periods.Yearly, period.from, period.until))
       } else {
         BigDecimal(0.00)

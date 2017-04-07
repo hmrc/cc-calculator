@@ -34,12 +34,13 @@ import play.api.test.Helpers._
 import service.AuditEvents
 import utils.{FakeCCCalculatorApplication, CCJsonLogger}
 import scala.concurrent.Future
+import play.api.i18n.Messages.Implicits._
 /**
  * Created by Ravi on 03/06/15.
  */
 class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with MockitoSugar with CCJsonLogger {
 
-  val mockTaxCreditCalculatorController = new TaxCreditCalculatorController with TCCalculator {
+  val mockTaxCreditCalculatorController = new TaxCreditCalculatorController(applicationMessagesApi) with TCCalculator {
     override val calculator =  mock[TCCalculatorService]
     override val auditEvent = mock[AuditEvents]
   }
