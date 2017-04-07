@@ -52,15 +52,10 @@ object TFCConfig extends CCConfig with TFCConfig with ServicesConfig {
       x.getString("rule-date").equals(Some("default"))
     }).head
     // fetch the config if it matches the particular year
-    val result = getConfigForTaxYear(currentDate, configs)
-
-    val config : TFCTaxYearConfig = result match {
-      case Some(x) =>
-        getTaxYear(x)
-      case _ =>
-        getTaxYear(defaultConfig)
+    getConfigForTaxYear(currentDate, configs) match {
+      case Some(x) => getTaxYear(x)
+      case _ => getTaxYear(defaultConfig)
     }
-    config
   }
 
   def getTaxYear(config : Configuration): TFCTaxYearConfig = {

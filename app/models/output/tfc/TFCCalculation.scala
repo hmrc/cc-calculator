@@ -64,7 +64,7 @@ case class OutputChild(
                         name: Option[String],
                         childCareCost : BigDecimal = BigDecimal(0.00),
                         childContribution : Contribution,
-                        timeToMaximizeTopUp : Short,
+                        timeToMaximizeTopUp : Short = 0,
                         failures: List[String]
                         )
 
