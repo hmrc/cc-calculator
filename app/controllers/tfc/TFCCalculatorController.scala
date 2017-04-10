@@ -21,12 +21,11 @@ import controllers.CalculatorController
 import models.input.APIModels.Request
 import play.api.Logger
 import play.api.i18n.Messages
-import play.api.libs.json.{JsValue, JsError}
+import play.api.libs.json.JsValue
 import play.api.mvc.Action
 import service.AuditEvents
 import play.api.i18n.{I18nSupport, MessagesApi}
 import javax.inject.{Inject, Singleton}
-
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -40,7 +39,6 @@ class TFCCalculatorController @Inject()(val messagesApi: MessagesApi) extends
 
   override def calculate: Action[JsValue] = Action.async(parse.json) {
     implicit request =>
-      println(s"********* REQUEST >>>>$request")
       request.body.validate[Request].fold(
         error => {
           Logger.warn(s"TFC Calculator Validation JsError in TFCCalculatorController.calculate")
@@ -52,7 +50,6 @@ class TFCCalculatorController @Inject()(val messagesApi: MessagesApi) extends
               auditEvent.auditTFCRequest(result.toString)
               calculator.award(result).map {
                 response =>
-                  println(s"********************** RESPONSE>>>> $response")
                   auditEvent.auditTFCResponse(utils.JSONFactory.generateResultJson(response).toString())
                   Ok(utils.JSONFactory.generateResultJson(response))
               } recover {

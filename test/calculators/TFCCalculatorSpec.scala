@@ -25,27 +25,30 @@ import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import uk.gov.hmrc.play.test.UnitSpec
 import utils.FakeCCCalculatorApplication
-
 import scala.concurrent.Future
-
 
 class TFCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
 
   "TFCCalculatorService" should {
 
     "return an instance of TFCCalculatorService" in {
-      val service = TFCCalculator
-      service.calculator shouldBe a[TFCCalculatorService]
+      TFCCalculator.calculator shouldBe a[TFCCalculatorService]
     }
 
-    "return a Future[AwardPeriod] result" in {
-      val service = TFCCalculator
+    "return a Future[AwardPeriod] result when household eligibility is true" in {
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
       val fromDate = LocalDate.parse("2016-05-01T18:46:17", formatter)
       val untilDate = LocalDate.parse("2016-05-21T18:46:17", formatter)
 
-      val result = service.calculator.award(Request(payload = Payload(eligibility = Eligibility(tfc = Some(TFCEligibility(from = fromDate, until = untilDate, householdEligibility = true, periods = List())), tc = None, esc = None))))
+      val result = TFCCalculator.calculator.award(Request(payload = Payload(eligibility = Eligibility(tfc = Some(TFCEligibility(from = fromDate,
+        until = untilDate, householdEligibility = true, periods = List())), tc = None, esc = None))))
       result.isInstanceOf[Future[AwardPeriod]] shouldBe true
+    }
+
+    "return an empty Future[AwardPeriod] result when household eligibility is false" in {
+      val result = await(TFCCalculator.calculator.award(Request(payload = Payload(eligibility = Eligibility(tfc = Some(TFCEligibility(from = null,
+        until = null, householdEligibility = false, periods = List())), tc = None, esc = None)))))
+      result shouldBe AwardPeriod()
     }
 
     "Generate total award with claimants (Total Award test - empty award period)" in {
