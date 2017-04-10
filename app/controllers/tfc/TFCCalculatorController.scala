@@ -21,12 +21,11 @@ import controllers.CalculatorController
 import models.input.APIModels.Request
 import play.api.Logger
 import play.api.i18n.Messages
-import play.api.libs.json.{JsValue, JsError}
+import play.api.libs.json.JsValue
 import play.api.mvc.Action
 import service.AuditEvents
 import play.api.i18n.{I18nSupport, MessagesApi}
 import javax.inject.{Inject, Singleton}
-
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 

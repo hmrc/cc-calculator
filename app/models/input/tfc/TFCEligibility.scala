@@ -61,10 +61,9 @@ object TFCPeriod extends CCFormat{
     (JsPath \ "from").read[LocalDate](jodaLocalDateReads(datePattern)) and
       (JsPath \ "until").read[LocalDate](jodaLocalDateReads(datePattern)) and
         (JsPath \ "periodEligibility").read[Boolean] and
-          (JsPath \ "children").read[List[Child]].filter(
-          ValidationError(Messages("cc.calc.invalid.number.of.children"))
-          )(children => children.length > 0 && children.length <= TFCConfig.maxNoOfChildren)
-    )(TFCPeriod.apply _)
+          (JsPath \ "children").read[List[Child]].filter(ValidationError(Messages("cc.calc.invalid.number.of.children"))
+            )(children => children.length > 0 && children.length <= TFCConfig.maxNoOfChildren)
+  )(TFCPeriod.apply _)
 }
 
 case class Child(
@@ -114,5 +113,5 @@ object Disability {
   implicit val disabilityReads: Reads[Disability] = (
     (JsPath \ "disabled").read[Boolean].orElse(Reads.pure(false)) and
       (JsPath \ "severelyDisabled").read[Boolean].orElse(Reads.pure(false))
-    )(Disability.apply _)
+  )(Disability.apply _)
 }
