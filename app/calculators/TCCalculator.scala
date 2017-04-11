@@ -607,7 +607,6 @@ trait TCCalculator extends CCCalculator {
     }
 
     def proRataTaxYear(taxYear : models.output.tc.TaxYear, proRataStartDate : LocalDate, proRataEndDate : LocalDate) : models.output.tc.TaxYear = {
-
       val numberOfDaysInTaxYear = daysBetween(taxYear.from, taxYear.until)
       val numberofDaysProRata = daysBetween(proRataStartDate, proRataEndDate)
       //daily amount currently is not rounded
@@ -851,7 +850,6 @@ trait TCCalculator extends CCCalculator {
       def annualAdvice(taxYears: List[TaxYear]): BigDecimal = {
         taxYears.foldLeft(BigDecimal(0.00))((acc, taxYear) => acc + taxYear.taxYearAdviceAmount)
       }
-
 
       Future {
         request.getTaxCreditsEligibility match {
