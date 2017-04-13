@@ -18,22 +18,20 @@ package utils
 
 import org.joda.time.LocalDate
 import play.api.Play._
-import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
-import play.api.i18n.Messages
 import play.api.{Configuration, Play}
 import uk.gov.hmrc.play.config.ServicesConfig
 
 /**
  * Created by user on 22/01/16.
  */
-trait ESCConfig extends ServicesConfig {
+trait ESCConfig extends ServicesConfig with LoadConfig {
   lazy val upperMonthsLimitValidation = getInt(s"esc.months-upper-limit")
   lazy val lowerMonthsLimitValidation = getInt(s"esc.months-lower-limit")
   lazy val lowerPeriodsLimitValidation = getInt(s"esc.periods-lower-limit")
   lazy val lowerTaxYearsLimitValidation = getInt(s"esc.tax-years-lower-limit")
   lazy val lowerClaimantsLimitValidation = getInt(s"esc.claimants-lower-limit")
-  lazy val pre2011MaxExemptionMonthly = configuration.getDouble(s"esc.pre-2011-maximum-exemption.basic-higher-additional.monthly").getOrElse(0.00)
+  lazy val pre2011MaxExemptionMonthly = conf.getDouble(s"esc.pre-2011-maximum-exemption.basic-higher-additional.monthly").getOrElse(0.00)
 }
 
 case class NiCategory(
@@ -66,10 +64,10 @@ case class ESCTaxYearConfig (
                              niCategory: NiCategory
                              )
 
-object ESCConfig extends CCConfig with ServicesConfig {
+object ESCConfig extends CCConfig with ServicesConfig with MessagesObject with LoadConfig {
 
   def getConfig(currentDate: LocalDate, niCategoryCode : String): ESCTaxYearConfig = {
-    val configs: Seq[play.api.Configuration] = Play.application.configuration.getConfigSeq("esc.rule-change").get
+    val configs: Seq[play.api.Configuration] = conf.getConfigSeq("esc.rule-change").get
 
     // get the default config and keep
     val defaultConfig = configs.filter(x => {
@@ -110,13 +108,13 @@ object ESCConfig extends CCConfig with ServicesConfig {
     val niCode = niCategoryCode match {
       case cat if cat.isEmpty => config.getString("default-ni-code").get
       case cat if cat.equals("A") || cat.equals("B") || cat.equals("C") => cat
-      case _ => throw new NoSuchElementException(Messages("cc.scheme.config.invalid.ni.category"))
+      case _ => throw new NoSuchElementException(messages("cc.scheme.config.invalid.ni.category"))
     }
 //    val output = getNiCategoryHelper(niCode,config.getConfigSeq("niCategories").get , None)
     val niCat  = getNiCategoryHelper(niCode, config.getConfigSeq("niCategories").get , None)
     match {
       case Some(z) => z
-      case _ =>   throw new NoSuchElementException(Messages("cc.scheme.config.ni.category.not.found"))
+      case _ =>   throw new NoSuchElementException(messages("cc.scheme.config.ni.category.not.found"))
     }
     niCat
   }

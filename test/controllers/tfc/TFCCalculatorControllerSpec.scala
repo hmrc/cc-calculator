@@ -38,22 +38,29 @@ import play.api.i18n.Messages.Implicits._
  */
 class TFCCalculatorControllerSpec extends FakeCCCalculatorApplication with MockitoSugar {
 
-  val mockTFCCalculatorController = new TFCCalculatorController(applicationMessagesApi) with TFCCalculator {
-    override val calculator = mock[TFCCalculatorService]
-    override val auditEvent = mock[AuditEvents]
-  }
-
   implicit val request = FakeRequest()
 
   "TFCCalculatorController" should {
 
     "not return NOT_FOUND (calculate) endpoint" in {
+
+      val mockTFCCalculatorController = new TFCCalculatorController(applicationMessagesApi) with TFCCalculator {
+        override val calculator = mock[TFCCalculatorService]
+        override val auditEvent = mock[AuditEvents]
+      }
+
       val result = route(app, FakeRequest(POST, "/cc-calculator/tax-free-childcare/calculate"))
       result.isDefined shouldBe true
       status(result.get) should not be NOT_FOUND
     }
 
     "Return Bad Request with error message if a request for a different scheme is passed(e.g. TC) " in {
+
+      val mockTFCCalculatorController = new TFCCalculatorController(applicationMessagesApi) with TFCCalculator {
+        override val calculator = mock[TFCCalculatorService]
+        override val auditEvent = mock[AuditEvents]
+      }
+
       val controller = mockTFCCalculatorController
 
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_12.json")
@@ -74,6 +81,12 @@ class TFCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
     }
 
     "Return Internal Server Error with error message if an exception is thrown during calculation " in {
+
+      val mockTFCCalculatorController = new TFCCalculatorController(applicationMessagesApi) with TFCCalculator {
+        override val calculator = mock[TFCCalculatorService]
+        override val auditEvent = mock[AuditEvents]
+      }
+
       val controller = mockTFCCalculatorController
       val resource: JsonNode = JsonLoader.fromResource("/json/tfc/input/calculator_input_test.json")
       val inputJson: JsValue = Json.parse(resource.toString)
@@ -96,6 +109,12 @@ class TFCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
 
 
     "Valid JSON at /tax-free-childcare/calculate" in {
+
+      val mockTFCCalculatorController = new TFCCalculatorController(applicationMessagesApi) with TFCCalculator {
+        override val calculator = mock[TFCCalculatorService]
+        override val auditEvent = mock[AuditEvents]
+      }
+
       val controller = mockTFCCalculatorController
       val inputJson: JsValue = Json.parse(JsonLoader.fromResource("/json/tfc/input/calculator_input_test.json").toString)
       val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
@@ -106,6 +125,12 @@ class TFCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
     }
 
     "Accept invalid JSON at /tfc/calculate and return a BadRequest with an error (0 TFC Periods)" in {
+
+      val mockTFCCalculatorController = new TFCCalculatorController(applicationMessagesApi) with TFCCalculator {
+        override val calculator = mock[TFCCalculatorService]
+        override val auditEvent = mock[AuditEvents]
+      }
+
       val controller = mockTFCCalculatorController
       val inputJson: JsValue = Json.parse(JsonLoader.fromResource("/json/tfc/input/no_period.json").toString)
       val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
@@ -138,6 +163,12 @@ class TFCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
     }
 
     "Accept invalid JSON at /tax-free-childcare/calculate and return a BadRequest with an error (negative value in childcare cost)" in {
+
+      val mockTFCCalculatorController = new TFCCalculatorController(applicationMessagesApi) with TFCCalculator {
+        override val calculator = mock[TFCCalculatorService]
+        override val auditEvent = mock[AuditEvents]
+      }
+
       val controller = mockTFCCalculatorController
       val inputJson: JsValue = Json.parse(JsonLoader.fromResource("/json/tfc/input/negative_childcareCost.json").toString)
       val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
@@ -170,6 +201,12 @@ class TFCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
     }
 
     "Accept invalid JSON at /tfc/calculate and return a BadRequest with an error (no children)" in {
+
+      val mockTFCCalculatorController = new TFCCalculatorController(applicationMessagesApi) with TFCCalculator {
+        override val calculator = mock[TFCCalculatorService]
+        override val auditEvent = mock[AuditEvents]
+      }
+
       val controller = mockTFCCalculatorController
       val inputJson: JsValue = Json.parse(JsonLoader.fromResource("/json/tfc/input/no_children.json").toString)
       val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
@@ -202,6 +239,12 @@ class TFCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
     }
 
     "Accept invalid JSON at /tax-free-childcare/calculate and return a BadRequest with an error (date missing)" in {
+
+      val mockTFCCalculatorController = new TFCCalculatorController(applicationMessagesApi) with TFCCalculator {
+        override val calculator = mock[TFCCalculatorService]
+        override val auditEvent = mock[AuditEvents]
+      }
+
       val controller = mockTFCCalculatorController
       val inputJson: JsValue = Json.parse(JsonLoader.fromResource("/json/tfc/input/date_missing.json").toString)
       val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
@@ -234,6 +277,12 @@ class TFCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
     }
 
     "Accept invalid JSON at /tax-free-childcare/calculate and return a BadRequest with an error (child id negative)" in {
+
+      val mockTFCCalculatorController = new TFCCalculatorController(applicationMessagesApi) with TFCCalculator {
+        override val calculator = mock[TFCCalculatorService]
+        override val auditEvent = mock[AuditEvents]
+      }
+
       val controller = mockTFCCalculatorController
       val inputJson: JsValue = Json.parse(JsonLoader.fromResource("/json/tfc/input/child_negative_id.json").toString)
       val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
@@ -266,6 +315,12 @@ class TFCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
     }
 
     "Accept invalid JSON at /tax-free-childcare/calculate and return a BadRequest with an error (Invalid data type)" in {
+
+      val mockTFCCalculatorController = new TFCCalculatorController(applicationMessagesApi) with TFCCalculator {
+        override val calculator = mock[TFCCalculatorService]
+        override val auditEvent = mock[AuditEvents]
+      }
+
       val controller = mockTFCCalculatorController
       val inputJson: JsValue = Json.parse(JsonLoader.fromResource("/json/tfc/input/invalid_data_type.json").toString)
       val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
@@ -296,6 +351,12 @@ class TFCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
     }
 
     "Valid JSON at /tax-free-childcare/calculate(child from and until date is null)" in {
+
+      val mockTFCCalculatorController = new TFCCalculatorController(applicationMessagesApi) with TFCCalculator {
+        override val calculator = mock[TFCCalculatorService]
+        override val auditEvent = mock[AuditEvents]
+      }
+
       val controller = mockTFCCalculatorController
       val inputJson: JsValue = Json.parse(JsonLoader.fromResource("/json/tfc/input/child_from_until_date_null.json").toString)
       val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
@@ -306,6 +367,12 @@ class TFCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
     }
 
     "Valid JSON at /tax-free-childcare/calculate(childname is null)" in {
+
+      val mockTFCCalculatorController = new TFCCalculatorController(applicationMessagesApi) with TFCCalculator {
+        override val calculator = mock[TFCCalculatorService]
+        override val auditEvent = mock[AuditEvents]
+      }
+
       val controller = mockTFCCalculatorController
       val inputJson: JsValue = Json.parse(JsonLoader.fromResource("/json/tfc/input/childName_none.json").toString)
       val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
@@ -316,6 +383,12 @@ class TFCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
     }
 
     "Valid JSON at /tax-free-childcare/calculate(no disability field)" in {
+
+      val mockTFCCalculatorController = new TFCCalculatorController(applicationMessagesApi) with TFCCalculator {
+        override val calculator = mock[TFCCalculatorService]
+        override val auditEvent = mock[AuditEvents]
+      }
+
       val controller = mockTFCCalculatorController
       val inputJson: JsValue = Json.parse(JsonLoader.fromResource("/json/tfc/input/no_disability.json").toString)
       val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
@@ -326,6 +399,12 @@ class TFCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
     }
 
     "Accept invalid JSON at /tax-free-childcare/calculate and return a BadRequest with an error (max child name length > 25)" in {
+
+      val mockTFCCalculatorController = new TFCCalculatorController(applicationMessagesApi) with TFCCalculator {
+        override val calculator = mock[TFCCalculatorService]
+        override val auditEvent = mock[AuditEvents]
+      }
+
       val controller = mockTFCCalculatorController
       val inputJson: JsValue = Json.parse(JsonLoader.fromResource("/json/tfc/input/childName_length_invalid.json").toString)
       val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
@@ -356,6 +435,12 @@ class TFCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
     }
 
     "Valid JSON at /tax-free-childcare/calculate(TFC Award Calculation Wire up)" in {
+
+      val mockTFCCalculatorController = new TFCCalculatorController(applicationMessagesApi) with TFCCalculator {
+        override val calculator = mock[TFCCalculatorService]
+        override val auditEvent = mock[AuditEvents]
+      }
+
       val controller = mockTFCCalculatorController
       val inputJson: JsValue = Json.parse(JsonLoader.fromResource("/json/tfc/input/wire_up_flow_through.json").toString)
       val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
@@ -366,6 +451,12 @@ class TFCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
     }
 
     "Accept invalid JSON at /tax-free-childcare/calculate(TFC Award Calculation Wire up - wrong scheme(esc))" in {
+
+      val mockTFCCalculatorController = new TFCCalculatorController(applicationMessagesApi) with TFCCalculator {
+        override val calculator = mock[TFCCalculatorService]
+        override val auditEvent = mock[AuditEvents]
+      }
+
       val controller = mockTFCCalculatorController
       val inputJson: JsValue = Json.parse(JsonLoader.fromResource("/json/tfc/input/incorrect_scheme_name.json").toString)
       val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)

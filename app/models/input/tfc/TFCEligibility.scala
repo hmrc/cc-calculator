@@ -18,9 +18,6 @@ package models.input.tfc
 
 import org.joda.time.LocalDate
 import play.api.data.validation.ValidationError
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
-import play.api.i18n.Messages
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Reads._
 import play.api.libs.json._
@@ -37,12 +34,12 @@ case class TFCEligibility(
                            )
 
 
-object TFCEligibility extends CCFormat{
+object TFCEligibility extends CCFormat with MessagesObject {
   implicit val tfcEligibilityFormat: Reads[TFCEligibility] = (
     (JsPath \ "from").read[LocalDate](jodaLocalDateReads(datePattern)) and
       (JsPath \ "until").read[LocalDate](jodaLocalDateReads(datePattern)) and
         (JsPath \ "householdEligibility").read[Boolean] and
-          (JsPath \ "periods").read[List[TFCPeriod]].filter(ValidationError(Messages("cc.calc.invalid.number.of.periods")))(periods => periods.length > 0)
+          (JsPath \ "periods").read[List[TFCPeriod]].filter(ValidationError(messages("cc.calc.invalid.number.of.periods")))(periods => periods.length > 0)
     )(TFCEligibility.apply _)
 }
 
@@ -55,14 +52,14 @@ case class TFCPeriod(
   def configRule : TFCTaxYearConfig = TFCConfig.getConfig(from)
 }
 
-object TFCPeriod extends CCFormat{
+object TFCPeriod extends CCFormat with MessagesObject {
 
   implicit val periodFormat : Reads[TFCPeriod] = (
     (JsPath \ "from").read[LocalDate](jodaLocalDateReads(datePattern)) and
       (JsPath \ "until").read[LocalDate](jodaLocalDateReads(datePattern)) and
         (JsPath \ "periodEligibility").read[Boolean] and
           (JsPath \ "children").read[List[Child]].filter(
-          ValidationError(Messages("cc.calc.invalid.number.of.children"))
+          ValidationError(messages("cc.calc.invalid.number.of.children"))
           )(children => children.length > 0 && children.length <= TFCConfig.maxNoOfChildren)
     )(TFCPeriod.apply _)
 }
@@ -86,7 +83,7 @@ case class Child(
 
 }
 
-object Child extends CCFormat {
+object Child extends CCFormat with MessagesObject {
   def validID(id: Short): Boolean = {
     id >= 0
   }
@@ -95,12 +92,12 @@ object Child extends CCFormat {
     cost >= BigDecimal(0.00)
   }
   implicit val childFormat : Reads[Child] = (
-    (JsPath \ "id").read[Short].filter(ValidationError(Messages("cc.calc.id.should.not.be.less.than.0")))(x => validID(x)) and
+    (JsPath \ "id").read[Short].filter(ValidationError(messages("cc.calc.id.should.not.be.less.than.0")))(x => validID(x)) and
       (JsPath \ "name").readNullable[String](maxLength[String](TFCConfig.maxNameLength)) and
         (JsPath \ "qualifying").read[Boolean] and
           ((JsPath \ "from").readNullable[LocalDate](jodaLocalDateReads(datePattern)) or Reads.optionWithNull(jodaLocalDateReads(datePattern))) and
             ((JsPath \ "until").readNullable[LocalDate](jodaLocalDateReads(datePattern)) or Reads.optionWithNull(jodaLocalDateReads(datePattern))) and
-              (JsPath \ "childcareCost").read[BigDecimal].filter(ValidationError(Messages("cc.calc.childcare.spend.too.low")))(x => childSpendValidation(x)) and
+              (JsPath \ "childcareCost").read[BigDecimal].filter(ValidationError(messages("cc.calc.childcare.spend.too.low")))(x => childSpendValidation(x)) and
                 (JsPath \ "disability").read[Disability]
     )(Child.apply _)
 }

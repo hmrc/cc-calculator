@@ -23,10 +23,7 @@ import models.output.esc.{ESCCalculation, Savings}
 import models.utility.{CalculationNIBands, CalculationTaxBands}
 import org.joda.time.LocalDate
 import play.api.Logger
-import utils.{ESCConfig, ESCTaxYearConfig, Periods}
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
-import play.api.i18n.Messages
+import utils.{MessagesObject, ESCConfig, ESCTaxYearConfig, Periods}
 import scala.concurrent.Future
 import scala.util.Success
 
@@ -38,7 +35,7 @@ trait ESCCalculator extends CCCalculator {
 
   val calculator = new ESCCalculatorService
 
-  trait ESCCalculatorHelpers extends ESCConfig with CCCalculatorService {
+  trait ESCCalculatorHelpers extends ESCConfig with CCCalculatorService with MessagesObject {
 
     private def isEmpty(string : String) : Boolean = string.trim.isEmpty
 
@@ -67,11 +64,11 @@ trait ESCCalculator extends CCCalculator {
               (number * 10, code)
             case None =>
               Logger.warn(s"ESCCalculator.ESCCalculatorHelpers.validateTaxCode - Exception case None")
-              throw new NoSuchElementException(Messages("cc.scheme.config.invalid.tax.code"))
+              throw new NoSuchElementException(messages("cc.scheme.config.invalid.tax.code"))
           }
         case _ =>
           Logger.warn(s"ESCCalculator.ESCCalculatorHelpers.validateTaxCode - Exception case others")
-          throw new NoSuchElementException(Messages("cc.scheme.config.invalid.tax.code"))
+          throw new NoSuchElementException(messages("cc.scheme.config.invalid.tax.code"))
       }
     }
 

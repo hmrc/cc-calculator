@@ -25,30 +25,30 @@ import utils.ESCConfig._
 /**
  * Created by user on 25/01/16.
  */
-class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with ESCConfig {
+class ESCSchemeConfigSpec extends FakeCCCalculatorApplication {
   "ESC SchemeConfig" should {
 
-    "(ESC) populate upper months limit from config file" in {
+    "(ESC) populate upper months limit from config file" in new ESCConfig {
       upperMonthsLimitValidation shouldBe 100
     }
 
-    "(ESC) populate lower months limit from config file" in {
+    "(ESC) populate lower months limit from config file" in new ESCConfig {
       lowerMonthsLimitValidation shouldBe 0
     }
 
-    "(ESC) populate lower claimants limit from config file" in {
+    "(ESC) populate lower claimants limit from config file" in new ESCConfig {
       lowerClaimantsLimitValidation shouldBe 1
     }
 
-    "(ESC) populate lower periods limit from config file" in {
+    "(ESC) populate lower periods limit from config file" in new ESCConfig {
       lowerPeriodsLimitValidation shouldBe 1
     }
 
-    "(ESC) populate lower tax years limit from config file" in {
+    "(ESC) populate lower tax years limit from config file" in new ESCConfig {
       lowerTaxYearsLimitValidation shouldBe 1
     }
 
-    "(ESC) populate maximum monthly exemption pre-2011 from config file" in {
+    "(ESC) populate maximum monthly exemption pre-2011 from config file" in new ESCConfig {
       pre2011MaxExemptionMonthly shouldBe 243
     }
 

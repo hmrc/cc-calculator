@@ -63,7 +63,7 @@ case class TCTaxYearConfig(
                             ctc: CTC,
                             thresholds: Thresholds
                             )
-object TCConfig extends CCConfig with TCConfig with ServicesConfig {
+object TCConfig extends CCConfig with TCConfig with ServicesConfig with LoadConfig {
 
   def getCurrentTaxYearDateRange(fromDate : LocalDate) : (LocalDate, LocalDate) = {
     val pattern = "dd-MM-yyyy"
@@ -79,7 +79,7 @@ object TCConfig extends CCConfig with TCConfig with ServicesConfig {
 
   def getConfig(currentDate: LocalDate) : TCTaxYearConfig  = {
 
-    val configs: Seq[play.api.Configuration] = Play.application.configuration.getConfigSeq("tc.rule-change").get
+    val configs: Seq[play.api.Configuration] = conf.getConfigSeq("tc.rule-change").get
     // get the default config and keep
     val defaultConfig = configs.filter(x => {
       x.getString("rule-date").equals(Some("default"))
