@@ -91,7 +91,6 @@ object ESCConfig extends CCConfig with ServicesConfig with ESCConfig {
     else {
       config.getConfig("tax.default").get
     }
-
     ESCTaxYearConfig(
       post2011MaxExemptionMonthlyBasic = config.getDouble("post-2011-maximum-exemption.basic.monthly").get,
       post2011MaxExemptionMonthlyHigher = config.getDouble("post-2011-maximum-exemption.higher.monthly").get,

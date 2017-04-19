@@ -97,7 +97,6 @@ trait ESCCalculator extends CCCalculator {
     def getAnnualRelevantEarnings(income: Income, period : ESCPeriod, config :ESCTaxYearConfig) : BigDecimal = {
       val higherRateCeiling = config.taxHigherBandUpperLimit
       val personalAllowance = config.defaultPersonalAllowance
-
       income.gross match {
         case gross if gross <= personalAllowance =>
           BigDecimal(0.00)
