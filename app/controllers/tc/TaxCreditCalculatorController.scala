@@ -80,12 +80,14 @@ class TaxCreditCalculatorController @Inject()(val messagesApi: MessagesApi) exte
          Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(play.api.http.Status.BAD_REQUEST, Left(error))))
        },
        result => {
+         println(s"*****result>>>>$result")
          result.getTaxCreditsEligibility.isSuccess match {
            case true =>
              auditEvent.auditTCRequest(result.toString)
              calculator.award(result).map {
                response =>
                  auditEvent.auditTCResponse(utils.JSONFactory.generateResultJson(response).toString())
+                 println(s"*****response>>>>${utils.JSONFactory.generateResultJson(response)}")
                  Ok(utils.JSONFactory.generateResultJson(response))
              } recover {
                case e: Exception =>

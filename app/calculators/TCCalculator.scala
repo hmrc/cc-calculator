@@ -810,13 +810,17 @@ trait TCCalculator extends CCCalculator {
             result.proRataEnd match {
               case Some(d) =>
                 val taxYearToProRata : (Boolean, Option[TaxYear]) = determineTaxYearToProRata(calculatedTaxYears, d)
+                println(s"********taxYearToProRata>>>>$taxYearToProRata")
                 if (taxYearToProRata._1) {
                   val proRateredTaxYear = proRataTaxYear(taxYearToProRata._2.get, taxYearToProRata._2.get.from, d)
+                  println(s"********proRateredTaxYear>>>>$proRateredTaxYear")
                   AwardPeriod(
                     tc = Some(adjustAwardWithProRata(createTCCalculation(calculatedTaxYears, annualAward(calculatedTaxYears)), proRateredTaxYear))
                   )
                 } else {
-                  AwardPeriod()
+                  AwardPeriod(
+                    tc = Some(createTCCalculation(calculatedTaxYears, annualAward(calculatedTaxYears)))
+                  )
                 }
               case _ =>
                 AwardPeriod(
