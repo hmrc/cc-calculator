@@ -31,7 +31,8 @@ trait FakeCCCalculatorApplication extends UnitSpec with OneAppPerSuite {
   val config: Map[String, _] = Map(
     "csrf.sign.tokens" -> false,
     "govuk-tax.Test.services.contact-frontend.host" -> "localhost",
-    "govuk-tax.Test.services.contact-frontend.port" -> "9250"
+    "govuk-tax.Test.services.contact-frontend.port" -> "9250",
+    "esc.local-tax-enabled" -> true
   )
 
   implicit override lazy val app: Application = new GuiceApplicationBuilder()
