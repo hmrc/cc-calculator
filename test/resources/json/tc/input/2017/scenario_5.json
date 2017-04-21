@@ -2,7 +2,6 @@
   "payload": {
     "eligibility": {
       "tc": {
-        "proRataEnd" :"2017-07-30",
         "taxYears": [
           {
             "from": "2016-09-27",

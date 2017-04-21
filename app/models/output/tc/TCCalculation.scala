@@ -21,10 +21,6 @@ import play.api.libs.functional.syntax._
 import play.api.libs.json.Writes._
 import play.api.libs.json._
 
-/**
- * Created by shridhaarchippaa on 18/06/15.
- */
-
 object TCCalculation extends utils.CCFormat {
   implicit val TCCalculationWrites: Writes[TCCalculation] = (
     (JsPath \ "from").write[LocalDate](jodaLocalDateWrites(datePattern)) and

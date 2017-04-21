@@ -4,9 +4,9 @@
       "tc": {
       "taxYears":[
         {
-         "from": "2016-06-27",
-        "until": "2017-04-06",
-         "houseHoldIncome" : 34000.00,
+          "from": "2016-06-27",
+          "until": "2017-04-06",
+          "houseHoldIncome" : 34000.00,
 
         "periods": [
           {
