@@ -12,6 +12,7 @@
                 "until": "2016-08-27",
                 "claimants": [
                   {
+                    "location": "england",
                     "eligibleMonthsInPeriod": 2,
                     "income": {
                       "taxablePay": 0.00,

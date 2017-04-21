@@ -97,7 +97,6 @@ trait ESCCalculator extends CCCalculator {
     def getAnnualRelevantEarnings(income: Income, period : ESCPeriod, config :ESCTaxYearConfig) : BigDecimal = {
       val higherRateCeiling = config.taxHigherBandUpperLimit
       val personalAllowance = config.defaultPersonalAllowance
-
       income.gross match {
         case gross if gross <= personalAllowance =>
           BigDecimal(0.00)
@@ -424,11 +423,11 @@ trait ESCCalculator extends CCCalculator {
   class ESCCalculatorService extends CCCalculatorService with ESCCalculatorHelpers with ESCCalculatorTax with ESCCalculatorNi {
     import scala.concurrent.ExecutionContext.Implicits.global
 
-    def determineSavingsPerClaimant(claimants : List[Claimant], period : ESCPeriod) : List[models.output.esc.Claimant] = {
+    def determineSavingsPerClaimant(claimants: List[Claimant], period: ESCPeriod): List[models.output.esc.Claimant] = {
       for(claimant <- claimants) yield {
         //Use monthly values for calculation
         val calcPeriod = Periods.Monthly
-        val config = ESCConfig.getConfig(period.from, claimant.income.niCategory.toUpperCase.trim)
+        val config = ESCConfig.getConfig(period.from, claimant.income.niCategory.toUpperCase.trim, claimant.location)
         val taxCode = getTaxCode(period, claimant.income, config)
         val relevantEarningsAmount: BigDecimal = getAnnualRelevantEarnings(claimant.income, period, config)
         val personalAllowanceAmount: BigDecimal = getPersonalAllowance(period, claimant.income, config)
@@ -469,7 +468,7 @@ trait ESCCalculator extends CCCalculator {
       }
     }
 
-    private def determineCalculatedListOfClaimantsPairs(periods : List[ESCPeriod]) : List[models.output.esc.Claimant] = {
+    private def determineCalculatedListOfClaimantsPairs(periods: List[ESCPeriod]): List[models.output.esc.Claimant] = {
       val listOfPairs = for(period <- periods) yield {
         //if one of the claimant income falls below the personal allowance then assign the entire childcare spend to the other claimant.
         val claimantList = createClaimantList(period)
@@ -478,10 +477,10 @@ trait ESCCalculator extends CCCalculator {
       listOfPairs.flatten
     }
 
-    private def createClaimantList(period : ESCPeriod) :  List[Claimant]= {
+    private def createClaimantList(period: ESCPeriod):  List[Claimant]= {
       val calcPeriod = Periods.Monthly
-      def calcReliefAmount(income: Income, isESCStartDateBefore2011: Boolean, escAmount: BigDecimal) = {
-        val config = ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim)
+      def calcReliefAmount(income: Income, isESCStartDateBefore2011: Boolean, escAmount: BigDecimal, location: String) = {
+        val config = ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location)
         val taxCode = getTaxCode(period, income, config)
         val personalAllowanceAmountMonthly: BigDecimal = annualAmountToPeriod(getPersonalAllowance(period, income, config), calcPeriod)
         val relevantEarningsAmount: BigDecimal = getAnnualRelevantEarnings(income, period, config)
@@ -497,9 +496,9 @@ trait ESCCalculator extends CCCalculator {
       }
       def selectClaimant(parent: Claimant, partner: Claimant) = {
         val (parentPersonalAllowanceAmountMonthly, parentActualReliefAmount) =
-          calcReliefAmount(parent.income, parent.isESCStartDateBefore2011, parent.escAmount)
+          calcReliefAmount(parent.income, parent.isESCStartDateBefore2011, parent.escAmount, parent.location)
         val (partnerPersonalAllowanceAmountMonthly, partnerActualReliefAmount) =
-          calcReliefAmount(partner.income, partner.isESCStartDateBefore2011, partner.escAmount)
+          calcReliefAmount(partner.income, partner.isESCStartDateBefore2011, partner.escAmount, partner.location)
         (
           (annualAmountToPeriod(parent.income.taxablePay, calcPeriod) - parentActualReliefAmount),
           (annualAmountToPeriod(partner.income.taxablePay, calcPeriod) - partnerActualReliefAmount)
