@@ -26,7 +26,6 @@ import org.joda.time.format.DateTimeFormat
 import org.mockito.Matchers.{eq => mockEq, _}
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
-import play.api.Play
 import play.api.http.Status
 import play.api.libs.json.{JsValue, Json}
 import play.api.test.FakeRequest

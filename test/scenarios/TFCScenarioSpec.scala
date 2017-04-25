@@ -25,7 +25,6 @@ import play.api.libs.json.{JsSuccess, JsValue, Json}
 import uk.gov.hmrc.play.test.UnitSpec
 import utils.{FakeCCCalculatorApplication, CCJsonLogger, JSONFactory}
 
-
 class TFCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJsonLogger with ValidateCalculations {
 
   "TFCScenarioSpec" should {
