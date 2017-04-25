@@ -724,18 +724,10 @@ trait TCCalculator extends CCCalculator {
       for (period <- taxYear.periods) yield {
         // get all the elements for the period (pro-rota to the number of days) for each household composition
         val income = incomeForPeriod(previousHouseholdIncome, period)
-        println(s"***********TAX YEAR >>>>>$taxYear")
-        println(s"***********period >>>>>$period")
-        println(s"***********previousHouseholdIncome >>>>>$previousHouseholdIncome")
-        println(s"***********income >>>>>$income")
         val wtcIncomeThreshold = wtcIncomeThresholdForPeriod(period)
         val ctcIncomeThreshold = ctcIncomeThresholdForPeriod(period)
         // return an award period which contains all the elements and their amounts they can claim for that period
         val maximumAmounts = generateMaximumAmountsForPeriod(period)
-        println(s"***********wtcIncomeThreshold >>>>>$wtcIncomeThreshold")
-        println(s"***********ctcIncomeThreshold >>>>>$ctcIncomeThreshold")
-        println(s"***********maximumAmounts >>>>>$maximumAmounts")
-        //here we get the model updated with net due and taper and advice amounts
         //here we get the model updated with net due and taper and advice amounts
         //calculate the net due for period
         generateRequiredAmountsPerPeriod(
@@ -817,7 +809,7 @@ trait TCCalculator extends CCCalculator {
           case Success(result) =>
             val calculatedTaxYears = getCalculatedTaxYears(result, incomeAdvice)
             AwardPeriod(
-              tc = Some(createTCCalculation(calculatedTaxYears, annualIncome(calculatedTaxYears)))
+              tc = Some(createTCCalculation(calculatedTaxYears, annualIncome(calculatedTaxYears, incomeAdvice), incomeAdvice))
             )
           case Failure(e) =>
             Logger.warn(s"TCCalculator.TCCalculatorService.awardPeriod - Exception")

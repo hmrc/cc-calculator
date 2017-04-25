@@ -193,17 +193,13 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
           |   "from": "${firstPeriodFrom.toString("yyyy-MM-dd")}",
           |   "until": "${firstPeriodTo.toString("yyyy-MM-dd")}",
           |   "totalAwardAmount": 2426.29,
-          |   "totalAwardProRataAmount" :0.00,
           |   "houseHoldAdviceAmount": 0.00,
-          |   "totalHouseHoldAdviceProRataAmount" :0.00,
             | "taxYears": [
             |   {
             |      "from": "${firstPeriodFrom.toString("yyyy-MM-dd")}",
             |      "until": "${firstPeriodTo.toString("yyyy-MM-dd")}",
             |      "taxYearAwardAmount": 2426.29,
-            |      "taxYearAwardProRataAmount" : 0.00,
             |      "taxYearAdviceAmount": 0.00,
-            |       "taxYearAdviceProRataAmount" : 0.00,
             |      "periods": [
               |     {
                 |      "from": "${firstPeriodFrom.toString("yyyy-MM-dd")}",
@@ -270,17 +266,13 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
           | "from": "${firstPeriodFrom.toString("yyyy-MM-dd")}",
           | "until": "${secondPeriodTo.toString("yyyy-MM-dd")}",
           | "totalAwardAmount": 0.00,
-          | "totalAwardProRataAmount": 0.0,
           | "houseHoldAdviceAmount": 12055.6792,
-          | "totalHouseHoldAdviceProRataAmount": 0.0,
           | "taxYears": [
           | {
           |   "from": "${firstPeriodFrom.toString("yyyy-MM-dd")}",
           |   "until": "${secondPeriodTo.toString("yyyy-MM-dd")}",
           |   "taxYearAwardAmount": 0.00,
-          |   "taxYearAwardProRataAmount" : 0.00,
           |   "taxYearAdviceAmount": 12055.6792,
-          |   "taxYearAdviceProRataAmount" : 0.00,
           |   "periods": [
           |     {
           |      "from": "${firstPeriodFrom.toString("yyyy-MM-dd")}",
@@ -351,59 +343,6 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
       jsonBodyOf(result) shouldBe outputJson
     }
 
-    "(ProRatering)(Award) Accept a valid json object but where the pro-rata end date is outside both tax years" in {
-      val controller = mockTaxCreditCalculatorController
-      val inputJson = Json.parse(JsonLoader.fromResource("/json/tc/input/2016/scenario_62.json").toString)
-
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
-      val JsonResult = inputJson.validate[Request]
-      val award = TCCalculator.calculator.award(JsonResult.get)
-
-      when(controller.calculator.award(mockEq(JsonResult.get))).thenReturn(Future.successful(award))
-      val result = await(controller.calculate()(request))
-      status(result) shouldBe Status.OK
-
-      val outputResult = Json.parse(
-        s"""
-        {
-          "calculation": {
-           "tc": null,
-           "tfc": null,
-           "esc": null
-          }
-        }
-        """.stripMargin)
-
-      jsonBodyOf(result) shouldBe outputResult
-    }
-
-    "(ProRatering)(Advice) Accept a valid json object but where the pro-rata end date is outside both tax years" in {
-      val controller = mockTaxCreditCalculatorController
-      val inputJson = Json.parse(JsonLoader.fromResource("/json/tc/input/2016/scenario_62.json").toString)
-
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
-      val JsonResult = inputJson.validate[Request]
-      val advice = TCCalculator.calculator.incomeAdvice(JsonResult.get)
-
-      when(controller.calculator.incomeAdvice(mockEq(JsonResult.get))).thenReturn(Future.successful(advice))
-      val result = await(controller.incomeAdvice()(request))
-      status(result) shouldBe Status.OK
-
-      val outputResult = Json.parse(
-        s"""
-        {
-          "calculation": {
-           "tc": null,
-           "tfc": null,
-           "esc": null
-          }
-        }
-        """.stripMargin)
-
-      jsonBodyOf(result) shouldBe outputResult
-    }
-
-
     "(Proratering) Accept a valid json object for scenario 61 for total award and return a valid response" in {
       val controller = mockTaxCreditCalculatorController
       val inputJson = Json.parse(JsonLoader.fromResource("/json/tc/input/2016/scenario_61.json").toString)
@@ -423,20 +362,14 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
            "tc": {
              "from": "2016-09-27",
              "until": "2017-04-06",
-             "proRataEnd": "2016-11-06",
              "totalAwardAmount": 2982.17,
-             "totalAwardProRataAmount": 624.54,
              "houseHoldAdviceAmount": 0.00,
-             "totalHouseHoldAdviceProRataAmount" :0.00,
              "taxYears": [
                  {
                      "from": "2016-09-27",
                      "until": "2017-04-06",
-                     "proRataEnd": "2016-11-06",
                      "taxYearAwardAmount": 2982.17,
-                     "taxYearAwardProRataAmount" : 624.54,
                      "taxYearAdviceAmount": 0.00,
-                      "taxYearAdviceProRataAmount" : 0.00,
                       "periods": [
                        {
                         "from": "2016-09-27",
@@ -525,20 +458,14 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
            "tc": {
              "from": "2016-09-27",
              "until": "2017-04-06",
-             "proRataEnd": "2016-11-06",
              "totalAwardAmount": 0.00,
-             "totalAwardProRataAmount" :0.00,
              "houseHoldAdviceAmount": 14970.064,
-             "totalHouseHoldAdviceProRataAmount":3135.09,
              "taxYears": [
                  {
                      "from": "2016-09-27",
                      "until": "2017-04-06",
-                     "proRataEnd": "2016-11-06",
                      "taxYearAwardAmount": 0.00,
-                     "taxYearAwardProRataAmount" : 0.00,
                      "taxYearAdviceAmount": 14970.064,
-                      "taxYearAdviceProRataAmount": 3135.09,
                       "periods": [
                        {
                         "from": "2016-09-27",
@@ -628,19 +555,14 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
            "tc": {
              "from": "2016-09-27",
              "until": "2018-02-15",
-             "proRataEnd": "2017-07-30",
              "totalAwardAmount": 0.00,
-             "totalAwardProRataAmount": 0.00,
              "houseHoldAdviceAmount": 69256.9168,
-             "totalHouseHoldAdviceProRataAmount": 44118.9236,
              "taxYears": [
                  {
                      "from": "2016-09-27",
                      "until": "2017-04-06",
                      "taxYearAwardAmount": 0.00,
-                     "taxYearAwardProRataAmount" : 0.00,
                      "taxYearAdviceAmount": 29664.5736,
-                      "taxYearAdviceProRataAmount" :0.00,
                       "periods": [
                        {
                         "from": "2016-09-27",
@@ -703,11 +625,8 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
                  {
                      "from": "2017-04-06",
                      "until": "2018-02-15",
-                     "proRataEnd": "2017-07-30",
                      "taxYearAwardAmount": 0.00,
-                     "taxYearAwardProRataAmount" : 0.00,
                      "taxYearAdviceAmount": 39592.3432,
-                      "taxYearAdviceProRataAmount": 14454.35,
                       "periods": [
                        {
                         "from": "2017-04-06",
