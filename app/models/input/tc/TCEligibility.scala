@@ -28,20 +28,17 @@ import play.api.libs.json._
 import utils._
 
 case class TCEligibility(
-                          taxYears: List[TaxYear],
-                          proRataEnd: Option[LocalDate] = None
-                          ) {
-
-  def isProrateringRequired: Boolean = {
-    proRataEnd.isDefined
-  }
-}
+                          taxYears: List[TaxYear]
+                          )
+//{
+//  def isProrateringRequired: Boolean = {
+//    proRataEnd.isDefined
+//  }
+//}
 
 object TCEligibility {
   implicit val tcEligibilityFormat: Reads[TCEligibility] =
-      (JsPath \ "taxYears").read[List[TaxYear]].map {taxYears => TCEligibility(taxYears)}
-//        ((JsPath \ "proRataEnd").readNullable[LocalDate](jodaLocalDateReads(datePattern)) or Reads.optionWithNull(jodaLocalDateReads(datePattern)))
-//    )(TCEligibility.apply _)
+    (JsPath \ "taxYears").read[List[TaxYear]].map {taxYears => TCEligibility(taxYears)}
 }
 
 case class TaxYear(

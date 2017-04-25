@@ -665,7 +665,6 @@ trait TCCalculator extends CCCalculator {
         // return an award period which contains all the elements and their amounts they can claim for that period
         val maximumAmounts = generateMaximumAmountsForPeriod(period)
         //here we get the model updated with net due and taper and advice amounts
-        //calculate the net due for period
         generateRequiredAmountsPerPeriod(
           maximumAmounts,
           period,
