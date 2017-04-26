@@ -72,9 +72,6 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with ESCConfig {
         ptUelMonthlyLowerLimitForCat = 673.00,
         ptUelMonthlyUpperLimitForCat = 3583.00,
         ptUelRateForCat = 12.00,
-//        uapUelMonthlyLowerLimitForCat = 3338.00,
-//        uapUelMonthlyUpperLimitForCat = 3583.00,
-//        uapUelRateForCat = 12.00,
         aboveUelMonthlyLowerLimitForCat = 3584.00,
         aboveUelRateForCat = 2.00
       )

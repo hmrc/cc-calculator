@@ -30,7 +30,6 @@ import play.api.mvc.Action
 import service.AuditEvents
 import play.api.i18n.{I18nSupport, MessagesApi}
 import javax.inject.{Inject, Singleton}
-
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 

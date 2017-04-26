@@ -7,7 +7,6 @@
                  "from": "2017-09-27",
                  "until": "2018-04-06",
                  "houseHoldIncome" : 17000.00,
-
                  "periods": [
                   {
                     "from": "2017-09-27",
@@ -157,7 +156,6 @@
              "from": "2018-04-06",
              "until": "2018-02-15",
              "houseHoldIncome" : 17000.00,
-
              "periods": [
               {
                 "from": "2018-04-06",

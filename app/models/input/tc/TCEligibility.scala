@@ -27,21 +27,18 @@ import play.api.libs.json.Reads._
 import play.api.libs.json._
 import utils._
 
-
 case class TCEligibility(
-                          taxYears: List[TaxYear],
-                          proRataEnd: Option[LocalDate] = None
-                          ) {
+                          taxYears: List[TaxYear]
+                          )
+//{
+//  def isProrateringRequired: Boolean = {
+//    proRataEnd.isDefined
+//  }
+//}
 
-  def isProrateringRequired: Boolean = {
-    proRataEnd.isDefined
-  }
-}
 object TCEligibility {
-  implicit val tcEligibilityFormat: Reads[TCEligibility] = (
-      (JsPath \ "taxYears").read[List[TaxYear]] and
-        ((JsPath \ "proRataEnd").readNullable[LocalDate](jodaLocalDateReads(datePattern)) or Reads.optionWithNull(jodaLocalDateReads(datePattern)))
-    )(TCEligibility.apply _)
+  implicit val tcEligibilityFormat: Reads[TCEligibility] =
+    (JsPath \ "taxYears").read[List[TaxYear]].map {taxYears => TCEligibility(taxYears)}
 }
 
 case class TaxYear(
@@ -52,16 +49,14 @@ case class TaxYear(
                     )
 
 object TaxYear {
-  def houseHoldIncomeValidation(income: BigDecimal) : Boolean = {
+  def hhIncomeValidation(income: BigDecimal) : Boolean = {
     income >= BigDecimal(0.00)
   }
 
   implicit val taxYearsFormat: Reads[TaxYear] = (
     (JsPath \ "from").read[LocalDate](jodaLocalDateReads(datePattern)) and
       (JsPath \ "until").read[LocalDate](jodaLocalDateReads(datePattern)) and
-        (JsPath \ "houseHoldIncome").read[BigDecimal].filter(
-        ValidationError(Messages("cc.calc.household.income.too.low"))
-        )(x => houseHoldIncomeValidation(x)) and
+        (JsPath \ "houseHoldIncome").read[BigDecimal].filter(ValidationError(Messages("cc.calc.household.income.too.low")))(x => hhIncomeValidation(x)) and
           (JsPath \ "periods").read[List[Period]]
     )(TaxYear.apply _)
 }
@@ -71,7 +66,7 @@ case class Period(from: LocalDate,
                   householdElements: HouseHoldElements,
                   claimants: List[Claimant],
                   children: List[Child]
-                   ) {
+                 ) {
 
   def getChildCareForPeriod: Boolean = {
     householdElements.childcare
@@ -148,9 +143,7 @@ object Child  {
     (JsPath \ "id").read[Short].filter(ValidationError(Messages("cc.calc.id.should.not.be.less.than.0")))(x => validID(x)) and
       (JsPath \ "name").read[String](maxLength[String](TCConfig.maxNameLength)) and
        (JsPath \ "qualifying").read[Boolean] and
-        (JsPath \ "childcareCost").read[BigDecimal].filter(
-        ValidationError(Messages("cc.calc.childcare.spend.too.low"))
-        )(x => childSpendValidation(x)) and
+        (JsPath \ "childcareCost").read[BigDecimal].filter(ValidationError(Messages("cc.calc.childcare.spend.too.low")))(x => childSpendValidation(x)) and
         //childcareCost max value should be 30,000 per year (This will be based on childcareCost Period, hence should be handled in frontend)
           (JsPath \ "childcareCostPeriod").read[Periods.Period] and
             (JsPath \ "childElements").read[ChildElements]
