@@ -296,8 +296,7 @@ trait TCCalculator extends CCCalculator {
     def getHigherAmount(amount1: BigDecimal, amount2: BigDecimal): BigDecimal = {
       if (amount1.>=(amount2)) {
         amount1
-      }
-      else {
+      } else {
         amount2
       }
     }
@@ -305,8 +304,7 @@ trait TCCalculator extends CCCalculator {
     //In order to maintain consistency across TC logic the amount is truncated to 3 digits after decimal point and rounded up to the nearest pence
     def earningsAmountToTaperForPeriod(income: BigDecimal, thresholdIncome: BigDecimal, period: Period) : BigDecimal = {
       val taperRate = period.config.thresholds.taperRatePercent
-      val rawResult = (income - thresholdIncome) * (taperRate / BigDecimal(100.00))
-      roundDownToTwoDigits(rawResult)
+      roundDownToTwoDigits((income - thresholdIncome) * (taperRate / BigDecimal(100.00)))
     }
 
     def getPercentOfAmount(amount : BigDecimal, percentage : Int) : BigDecimal = {
@@ -315,19 +313,16 @@ trait TCCalculator extends CCCalculator {
 
     def wtcIncomeThresholdForPeriod(period : Period) : BigDecimal = {
       val thresholdConfig = period.config.thresholds.wtcIncomeThreshold
-      val thresholdForPeriod = amountForDateRange(thresholdConfig, Periods.Yearly, period.from, period.until)
-      thresholdForPeriod
+      amountForDateRange(thresholdConfig, Periods.Yearly, period.from, period.until)
     }
 
     def ctcIncomeThresholdForPeriod(period : Period) : BigDecimal = {
       val thresholdConfig = period.config.thresholds.ctcIncomeThreshold
-      val thresholdForPeriod = amountForDateRange(thresholdConfig, Periods.Yearly, period.from, period.until)
-      thresholdForPeriod
+      amountForDateRange(thresholdConfig, Periods.Yearly, period.from, period.until)
     }
 
     def incomeForPeriod(previousHouseHoldIncome : BigDecimal, period : Period) : BigDecimal = {
-      val incomeForPeriod = amountForDateRange(previousHouseHoldIncome, Periods.Yearly, period.from, period.until)
-      incomeForPeriod
+      amountForDateRange(previousHouseHoldIncome, Periods.Yearly, period.from, period.until)
     }
 
     def getTaperingThreshold(
@@ -593,72 +588,6 @@ trait TCCalculator extends CCCalculator {
         period.elements.ctcFamilyElement.maximumAmount
     }
 
-    def determineTaxYearToProRata(taxYears : List[models.output.tc.TaxYear], proRataEndDate : LocalDate) : (Boolean, Option[models.output.tc.TaxYear]) = {
-      val result = for (ty <- taxYears) yield {
-        if ((proRataEndDate.toDate.equals(ty.from.toDate) || proRataEndDate.toDate.after(ty.from.toDate)) && proRataEndDate.toDate.before(ty.until.toDate)) {
-          (true, Some(ty))
-        } else {
-          (false, None)
-        }
-      }
-
-      val filtered = if (result.exists(c => c._2.isDefined)) result.filter(x => x._2.isDefined) else result
-      filtered.head
-    }
-
-    def proRataTaxYear(taxYear : models.output.tc.TaxYear, proRataStartDate : LocalDate, proRataEndDate : LocalDate) : models.output.tc.TaxYear = {
-
-      val numberOfDaysInTaxYear = daysBetween(taxYear.from, taxYear.until)
-      val numberofDaysProRata = daysBetween(proRataStartDate, proRataEndDate)
-      //daily amount currently is not rounded
-      val dailyAwardAmount = taxYear.taxYearAwardAmount/numberOfDaysInTaxYear
-      val proRataAwardAmount = roundDownToTwoDigits(dailyAwardAmount  * numberofDaysProRata)
-      val dailyAdviceAmount = taxYear.taxYearAdviceAmount/numberOfDaysInTaxYear
-      val proRataAdviceAmount =  roundDownToTwoDigits(dailyAdviceAmount * numberofDaysProRata)
-
-      models.output.tc.TaxYear(
-        from = taxYear.from,
-        until = taxYear.until,
-        proRataEnd = Some(proRataEndDate),
-        taxYearAwardAmount = taxYear.taxYearAwardAmount,
-        taxYearAwardProRataAmount = proRataAwardAmount,
-        taxYearAdviceAmount = taxYear.taxYearAdviceAmount,
-        taxYearAdviceProRataAmount = proRataAdviceAmount,
-        periods = taxYear.periods
-      )
-    }
-
-    def adjustAwardWithProRata(award : TCCalculation, proRataTaxYear: models.output.tc.TaxYear) : models.output.tc.TCCalculation = {
-      val taxYears = for(ty <- award.taxYears) yield {
-        if (proRataTaxYear.from == ty.from) {
-          proRataTaxYear
-        } else {
-          ty
-        }
-      }
-
-      val proRataTotalAward = taxYears.foldLeft(BigDecimal(0.00))((acc, ty) => if (ty.from == proRataTaxYear.from) {
-        acc + ty.taxYearAwardProRataAmount
-      }
-      else {
-        acc + ty.taxYearAwardAmount
-      })
-      val proRataTotalAdvice = taxYears.foldLeft(BigDecimal(0.00))((acc, ty) => if (ty.from == proRataTaxYear.from) {
-        acc + ty.taxYearAdviceProRataAmount
-      }
-      else {
-        acc + ty.taxYearAdviceAmount
-      })
-
-      // copy the original calculation swapping out the tax year that has been pro-ratard and adjusting the total calculation value
-      val result = award.copy(
-        proRataEnd = proRataTaxYear.proRataEnd,
-        totalAwardProRataAmount = proRataTotalAward,
-        totalHouseHoldAdviceProRataAmount = proRataTotalAdvice,
-        taxYears = taxYears
-      )
-      result
-    }
   }
 
   class TCCalculatorService extends CCCalculatorService with TCCalculatorElements with TCCalculatorTapering with TCCalculatorHelpers {
@@ -667,7 +596,6 @@ trait TCCalculator extends CCCalculator {
     //reverse taper rate is truncated to 3 decimal places
     //currently using just WTC threshold to calculate advice
     def getAdviceCalculationRounded(totalAmount : BigDecimal, wtcIncomeThreshold : BigDecimal, period: models.input.tc.Period) : BigDecimal = {
-
       val taperPercentage = period.config.thresholds.taperRatePercent
       val reverseTaperRate = BigDecimal(100.00) / BigDecimal(taperPercentage)
       val reverseTaperRateRounded = roundDownToTwoDigits(reverseTaperRate)
@@ -729,8 +657,7 @@ trait TCCalculator extends CCCalculator {
                               previousHouseholdIncome: BigDecimal,
                               fullCalculationRequired: Boolean = true
                               ): List[models.output.tc.Period] = {
-      val periods = taxYear.periods
-      val calculatedPeriods = for (period <- periods) yield {
+      for (period <- taxYear.periods) yield {
         // get all the elements for the period (pro-rota to the number of days) for each household composition
         val income = incomeForPeriod(previousHouseholdIncome, period)
         val wtcIncomeThreshold = wtcIncomeThresholdForPeriod(period)
@@ -738,7 +665,7 @@ trait TCCalculator extends CCCalculator {
         // return an award period which contains all the elements and their amounts they can claim for that period
         val maximumAmounts = generateMaximumAmountsForPeriod(period)
         //here we get the model updated with net due and taper and advice amounts
-        val amountForElements = generateRequiredAmountsPerPeriod(
+        generateRequiredAmountsPerPeriod(
           maximumAmounts,
           period,
           income,
@@ -746,16 +673,11 @@ trait TCCalculator extends CCCalculator {
           ctcIncomeThreshold,
           fullCalculationRequired
         )
-        //calculate the net due for period
-        amountForElements
       }
-      calculatedPeriods
     }
 
     def getCalculatedTaxYears(inputTCEligibility: TCEligibility, incomeAdviceCalculation: Boolean = false): List[TaxYear] = {
-      val taxYears = inputTCEligibility.taxYears
-
-      val calculatedTaxYears = for (taxYear <- taxYears) yield {
+      for (taxYear <- inputTCEligibility.taxYears) yield {
         if(incomeAdviceCalculation) {
           //calculating the income advice
           val calculatedPeriods = getCalculatedPeriods(taxYear, taxYear.houseHoldIncome, fullCalculationRequired = false)
@@ -780,104 +702,63 @@ trait TCCalculator extends CCCalculator {
           )
         }
       }
-      calculatedTaxYears
     }
 
-    override def award(request : Request) : Future[models.output.OutputAPIModel.AwardPeriod] = {
+    private def createTCCalculation(calculatedTaxYears: List[TaxYear], annualIncome: BigDecimal, incomeAdvice: Boolean = false) = {
+      TCCalculation(
+        from = calculatedTaxYears.head.from,
+        until = {
+          if (calculatedTaxYears.length > 1) {
+            calculatedTaxYears.tail.head.until
+          } else {
+            calculatedTaxYears.head.until
+          }
+        },
+        houseHoldAdviceAmount = if(incomeAdvice) {
+          annualIncome
+        } else {
+          BigDecimal(0.00)
+        },
+        totalAwardAmount = if(incomeAdvice) {
+          BigDecimal(0.00)
+        } else {
+          annualIncome
+        },
+        taxYears = calculatedTaxYears
+      )
+    }
 
-      def createTCCalculation(calculatedTaxYears : List[TaxYear], annualAward: BigDecimal) = {
-        TCCalculation(
-          from = calculatedTaxYears.head.from,
-          until = {
-            if (calculatedTaxYears.length > 1) {
-              calculatedTaxYears.tail.head.until
-            } else {
-              calculatedTaxYears.head.until
-            }
-          },
-          totalAwardAmount = annualAward,
-          taxYears = calculatedTaxYears
-        )
-      }
+    private def annualIncome(taxYears: List[TaxYear], incomeAdvice: Boolean = false): BigDecimal = {
+      taxYears.foldLeft(BigDecimal(0.00))((acc, taxYear) => {
+        if(incomeAdvice) {
+          acc + taxYear.taxYearAdviceAmount
+        } else {
+          acc + taxYear.taxYearAwardAmount
+        }
+      })
+    }
 
-      def annualAward(taxYears : List[TaxYear]) : BigDecimal = {
-        taxYears.foldLeft(BigDecimal(0.00))((acc, taxYear) => acc + taxYear.taxYearAwardAmount)
-      }
-
+    private def awardPeriod(request: Request, incomeAdvice: Boolean = false) = {
       Future {
         request.getTaxCreditsEligibility match {
           case Success(result) =>
-            val calculatedTaxYears = getCalculatedTaxYears(result)
-            result.proRataEnd match {
-              case Some(d) =>
-                val taxYearToProRata : (Boolean, Option[TaxYear]) = determineTaxYearToProRata(calculatedTaxYears, d)
-                if (taxYearToProRata._1) {
-                  val proRateredTaxYear = proRataTaxYear(taxYearToProRata._2.get, taxYearToProRata._2.get.from, d)
-                  AwardPeriod(
-                    tc = Some(adjustAwardWithProRata(createTCCalculation(calculatedTaxYears, annualAward(calculatedTaxYears)), proRateredTaxYear))
-                  )
-                } else {
-                  AwardPeriod()
-                }
-              case _ =>
-                AwardPeriod(
-                  tc = Some(createTCCalculation(calculatedTaxYears, annualAward(calculatedTaxYears)))
-                )
-            }
+            val calculatedTaxYears = getCalculatedTaxYears(result, incomeAdvice)
+            AwardPeriod(
+              tc = Some(createTCCalculation(calculatedTaxYears, annualIncome(calculatedTaxYears, incomeAdvice), incomeAdvice))
+            )
           case Failure(e) =>
-            Logger.warn(s"TCCalculator.TCCalculatorService.award.annualAward - Exception")
+            Logger.warn(s"TCCalculator.TCCalculatorService.awardPeriod - Exception")
             AwardPeriod()
         }
       }
+    }
+
+    def award(request: Request) : Future[models.output.OutputAPIModel.AwardPeriod] = {
+      awardPeriod(request, false)
     }
 
     def incomeAdvice(request : Request) : Future[models.output.OutputAPIModel.AwardPeriod] = {
-
-      def createTCCalculation(calculatedTaxYears: List[TaxYear], annualAdvice: BigDecimal) = {
-        TCCalculation(
-          from = calculatedTaxYears.head.from,
-          until = {
-            if (calculatedTaxYears.length > 1) {
-              calculatedTaxYears.tail.head.until
-            } else {
-              calculatedTaxYears.head.until
-            }
-          },
-          houseHoldAdviceAmount = annualAdvice,
-          taxYears = calculatedTaxYears
-        )
-      }
-
-      def annualAdvice(taxYears: List[TaxYear]): BigDecimal = {
-        taxYears.foldLeft(BigDecimal(0.00))((acc, taxYear) => acc + taxYear.taxYearAdviceAmount)
-      }
-
-
-      Future {
-        request.getTaxCreditsEligibility match {
-          case Success(result) =>
-            val calculatedTaxYears = getCalculatedTaxYears(result, incomeAdviceCalculation = true)
-            result.proRataEnd match {
-              case Some(d) =>
-                val taxYearToProRata: (Boolean, Option[TaxYear]) = determineTaxYearToProRata(calculatedTaxYears, d)
-                if (taxYearToProRata._1) {
-                  val proRateredTaxYear = proRataTaxYear(taxYearToProRata._2.get, taxYearToProRata._2.get.from, d)
-                  AwardPeriod(
-                    tc = Some(adjustAwardWithProRata(createTCCalculation(calculatedTaxYears, annualAdvice(calculatedTaxYears)), proRateredTaxYear))
-                  )
-                } else {
-                  AwardPeriod()
-                }
-              case _ =>
-                AwardPeriod(
-                  tc = Some(createTCCalculation(calculatedTaxYears, annualAdvice(calculatedTaxYears)))
-                )
-            }
-          case Failure(e) =>
-            Logger.warn(s"TCCalculator.TCCalculatorService.incomeAdvice.annualAdvice - Exception")
-            AwardPeriod()
-        }
-      }
+      awardPeriod(request, true)
     }
 
   }

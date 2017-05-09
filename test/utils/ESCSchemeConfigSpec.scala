@@ -22,10 +22,9 @@ import org.joda.time.format.DateTimeFormat
 import play.api.Configuration
 import utils.ESCConfig._
 
-/**
- * Created by user on 25/01/16.
- */
 class ESCSchemeConfigSpec extends FakeCCCalculatorApplication {
+  val location = "england"
+
   "ESC SchemeConfig" should {
 
     "(ESC) populate upper months limit from config file" in new ESCConfig {
@@ -57,7 +56,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication {
       val pattern = "dd-MM-yyyy"
       val formatter = DateTimeFormat.forPattern(pattern)
       val fromDate = LocalDate.parse("23-05-2016", formatter)
-      val config = ESCConfig.getConfig(fromDate,"")
+      val config = ESCConfig.getConfig(fromDate,"", location)
 
       val niCat = NiCategory(
         niCategoryCode = "A",
@@ -70,9 +69,6 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication {
         ptUelMonthlyLowerLimitForCat = 673.00,
         ptUelMonthlyUpperLimitForCat = 3583.00,
         ptUelRateForCat = 12.00,
-//        uapUelMonthlyLowerLimitForCat = 3338.00,
-//        uapUelMonthlyUpperLimitForCat = 3583.00,
-//        uapUelRateForCat = 12.00,
         aboveUelMonthlyLowerLimitForCat = 3584.00,
         aboveUelRateForCat = 2.00
       )
@@ -99,7 +95,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication {
       val formatter = DateTimeFormat.forPattern(pattern)
       val fromDate = LocalDate.parse("23-05-2016", formatter)
       try {
-        val result = ESCConfig.getConfig(fromDate,"Z")
+        val result = ESCConfig.getConfig(fromDate,"Z", location)
         result shouldBe a[NoSuchElementException]
       } catch {
         case e: Exception =>
@@ -131,7 +127,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication {
       val pattern = "dd-MM-yyyy"
       val formatter = DateTimeFormat.forPattern(pattern)
       val now = LocalDate.parse("23-05-2015", formatter)
-      val config = ESCConfig.getConfig(now,"A")
+      val config = ESCConfig.getConfig(now,"A", location)
       val niCat = NiCategory(
         niCategoryCode = "A",
         lelMonthlyLowerLimitForCat = 0.00,
@@ -167,7 +163,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication {
       val pattern = "dd-MM-yyyy"
       val formatter = DateTimeFormat.forPattern(pattern)
       val now = LocalDate.parse("23-05-2016", formatter)
-      val config = ESCConfig.getConfig(now,"A")
+      val config = ESCConfig.getConfig(now,"A", location)
       val niCat = NiCategory(
         niCategoryCode = "A",
         lelMonthlyLowerLimitForCat = 0.00,
@@ -204,7 +200,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication {
       val pattern = "dd-MM-yyyy"
       val formatter = DateTimeFormat.forPattern(pattern)
       val now = LocalDate.parse("23-05-2016", formatter)
-      val config = ESCConfig.getConfig(now,"B")
+      val config = ESCConfig.getConfig(now,"B", location)
       val niCat = NiCategory(
         niCategoryCode = "B",
         lelMonthlyLowerLimitForCat = 0.00,
@@ -241,7 +237,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication {
       val pattern = "dd-MM-yyyy"
       val formatter = DateTimeFormat.forPattern(pattern)
       val now = LocalDate.parse("23-07-2017", formatter)
-      val config = ESCConfig.getConfig(now,"C")
+      val config = ESCConfig.getConfig(now,"C", location)
       val niCat = NiCategory(
         niCategoryCode = "C",
         lelMonthlyLowerLimitForCat = 0.00,
@@ -278,7 +274,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication {
       val pattern = "dd-MM-yyyy"
       val formatter = DateTimeFormat.forPattern(pattern)
       val now = LocalDate.parse("23-07-2017", formatter)
-      val config = ESCConfig.getConfig(now,"A")
+      val config = ESCConfig.getConfig(now,"A", location)
       val niCat = NiCategory(
         niCategoryCode = "A",
         lelMonthlyLowerLimitForCat = 0.00,
@@ -315,7 +311,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication {
       val pattern = "dd-MM-yyyy"
       val formatter = DateTimeFormat.forPattern(pattern)
       val now = LocalDate.parse("05-04-2017", formatter)
-      val config = ESCConfig.getConfig(now, "")
+      val config = ESCConfig.getConfig(now, "", location)
       val niCat = NiCategory(
         niCategoryCode = "A",
         lelMonthlyLowerLimitForCat = 0.00,
@@ -352,7 +348,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication {
       val pattern = "dd-MM-yyyy"
       val formatter = DateTimeFormat.forPattern(pattern)
       val now = LocalDate.parse("06-04-2018", formatter)
-      val config = ESCConfig.getConfig(now,"B")
+      val config = ESCConfig.getConfig(now,"B", location)
       val niCat = NiCategory(
         niCategoryCode = "B",
         lelMonthlyLowerLimitForCat = 0.00,
@@ -389,7 +385,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication {
       val pattern = "dd-MM-yyyy"
       val formatter = DateTimeFormat.forPattern(pattern)
       val fromDate = LocalDate.parse("06-09-2017", formatter)
-      val escTaxYearConfig = ESCConfig.getConfig(fromDate,"A")
+      val escTaxYearConfig = ESCConfig.getConfig(fromDate,"A", location)
       escTaxYearConfig.niCategory.ptUelMonthlyUpperLimitForCat shouldBe 3753.00
     }
 
@@ -397,7 +393,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication {
       val pattern = "dd-MM-yyyy"
       val formatter = DateTimeFormat.forPattern(pattern)
       val fromDate = LocalDate.parse("06-12-2016", formatter)
-      val escTaxYearConfig = ESCConfig.getConfig(fromDate,"A")
+      val escTaxYearConfig = ESCConfig.getConfig(fromDate,"A", location)
       escTaxYearConfig.taxBasicBandCapacity shouldBe 32000.00
     }
 

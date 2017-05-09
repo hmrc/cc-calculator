@@ -3,7 +3,7 @@
     <check level="warning" class="org.scalastyle.file.FileTabChecker" enabled="true"></check>
     <check level="warning" class="org.scalastyle.file.FileLengthChecker" enabled="true">
         <parameters>
-            <parameter name="maxFileLength"><![CDATA[800]]></parameter>
+            <parameter name="maxFileLength"><![CDATA[900]]></parameter>
         </parameters>
     </check>
     <check level="warning" class="org.scalastyle.file.HeaderMatchesChecker" enabled="true">
@@ -55,9 +55,9 @@
             <parameter name="illegalImports"><![CDATA[sun._,java.awt._]]></parameter>
         </parameters>
     </check>
-    <check level="warning" class="org.scalastyle.scalariform.ParameterNumberChecker" enabled="true">
+    <check level="warning" class="org.scalastyle.scalariform.ParameterNumberChecker" enabled="false">
         <parameters>
-            <parameter name="maxParameters"><![CDATA[8]]></parameter>
+            <parameter name="maxParameters"><![CDATA[10]]></parameter>
         </parameters>
     </check>
     <check level="warning" class="org.scalastyle.scalariform.MagicNumberChecker" enabled="true">

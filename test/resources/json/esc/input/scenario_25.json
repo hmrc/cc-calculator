@@ -14,6 +14,7 @@
                   {
                     "qualifying": true,
                     "isPartner": false,
+                    "location": "england",
                     "eligibleMonthsInPeriod": 5,
                     "income": {
                       "taxablePay": 55000.00,
@@ -32,6 +33,7 @@
                   {
                     "qualifying": true,
                     "isPartner": true,
+                    "location": "england",
                     "eligibleMonthsInPeriod": 5,
                     "income": {
                       "taxablePay": 42000.00,
@@ -56,6 +58,7 @@
                   {
                     "qualifying": false,
                     "isPartner": false,
+                    "location": "england",
                     "eligibleMonthsInPeriod": 0,
                     "income": {
                       "taxablePay": 55000.00,
@@ -74,6 +77,7 @@
                   {
                     "qualifying": false,
                     "isPartner": true,
+                    "location": "england",
                     "eligibleMonthsInPeriod": 0,
                     "income": {
                       "taxablePay": 42000.00,
@@ -98,6 +102,7 @@
                   {
                     "qualifying": true,
                     "isPartner": false,
+                    "location": "england",
                     "eligibleMonthsInPeriod": 3,
                     "income": {
                       "taxablePay": 55000.00,
@@ -116,6 +121,7 @@
                   {
                     "qualifying": true,
                     "isPartner": true,
+                    "location": "england",
                     "eligibleMonthsInPeriod": 3,
                     "income": {
                       "taxablePay": 42000.00,

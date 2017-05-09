@@ -31,7 +31,6 @@ import scala.util.Try
 
 object APIModels extends utils.CCFormat {
 
-
   case class Request(
                       payload: Payload
                       ) {
@@ -81,7 +80,5 @@ object APIModels extends utils.CCFormat {
         (JsPath \ "esc").readNullable[ESCEligibility]
       )(Eligibility.apply _)
   }
-
-
 
 }

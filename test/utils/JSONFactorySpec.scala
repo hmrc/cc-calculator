@@ -111,9 +111,7 @@ class JSONFactorySpec extends FakeCCCalculatorApplication {
           |   "from": "${firstPeriodFrom.toString("yyyy-MM-dd")}",
           |   "until": "${firstPeriodTo.toString("yyyy-MM-dd")}",
           |   "totalAwardAmount": 5000.00,
-          |    "totalAwardProRataAmount": 0.00,
           |   "houseHoldAdviceAmount": 0.00,
-          |    "totalHouseHoldAdviceProRataAmount": 0.00,
           |   "taxYears": []
           | },
           | "tfc": null,
@@ -144,17 +142,13 @@ class JSONFactorySpec extends FakeCCCalculatorApplication {
           |   "from": "${firstPeriodFrom.toString("yyyy-MM-dd")}",
           |   "until": "${secondPeriodTo.toString("yyyy-MM-dd")}",
           |   "totalAwardAmount": 2982.17,
-          |   "totalAwardProRataAmount" :0.00,
           |   "houseHoldAdviceAmount": 0.00,
-          |  "totalHouseHoldAdviceProRataAmount" :0.00,
           |   "taxYears": [
           |   {
               |   "from": "${firstPeriodFrom.toString("yyyy-MM-dd")}",
               |   "until": "${secondPeriodTo.toString("yyyy-MM-dd")}",
               |   "taxYearAwardAmount": 2982.17,
-              |    "taxYearAwardProRataAmount" : 0.00,
               |   "taxYearAdviceAmount": 0.00,
-              |    "taxYearAdviceProRataAmount" : 0.00,
               |   "periods": [
               |     {
               |      "from": "${firstPeriodFrom.toString("yyyy-MM-dd")}",
@@ -249,17 +243,13 @@ class JSONFactorySpec extends FakeCCCalculatorApplication {
           |   "from": "${firstPeriodFrom.toString("yyyy-MM-dd")}",
           |   "until": "${secondPeriodTo.toString("yyyy-MM-dd")}",
           |   "totalAwardAmount": 0.00,
-          |   "totalAwardProRataAmount" : 0.00,
           |   "houseHoldAdviceAmount": 14970.064,
-          |   "totalHouseHoldAdviceProRataAmount" :0.00,
           |   "taxYears": [
           |   {
               |   "from": "${firstPeriodFrom.toString("yyyy-MM-dd")}",
               |   "until": "${secondPeriodTo.toString("yyyy-MM-dd")}",
               |   "taxYearAwardAmount": 0.00,
-              |   "taxYearAwardProRataAmount" : 0.00,
               |   "taxYearAdviceAmount": 14970.064,
-              |   "taxYearAdviceProRataAmount" : 0.00,
               |   "periods": [
               |     {
               |      "from": "${firstPeriodFrom.toString("yyyy-MM-dd")}",

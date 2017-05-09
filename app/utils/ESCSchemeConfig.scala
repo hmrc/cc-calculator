@@ -22,9 +22,6 @@ import play.api.Play.current
 import play.api.{Configuration, Play}
 import uk.gov.hmrc.play.config.ServicesConfig
 
-/**
- * Created by user on 22/01/16.
- */
 trait ESCConfig extends ServicesConfig with LoadConfig {
   lazy val upperMonthsLimitValidation = getInt(s"esc.months-upper-limit")
   lazy val lowerMonthsLimitValidation = getInt(s"esc.months-lower-limit")
@@ -32,14 +29,15 @@ trait ESCConfig extends ServicesConfig with LoadConfig {
   lazy val lowerTaxYearsLimitValidation = getInt(s"esc.tax-years-lower-limit")
   lazy val lowerClaimantsLimitValidation = getInt(s"esc.claimants-lower-limit")
   lazy val pre2011MaxExemptionMonthly = conf.getDouble(s"esc.pre-2011-maximum-exemption.basic-higher-additional.monthly").getOrElse(0.00)
+  lazy val localTaxEnabled: Boolean = getBoolean("esc.local-tax-enabled")
 }
 
 case class NiCategory(
-          niCategoryCode : String,
-          lelMonthlyLowerLimitForCat : Double,
+          niCategoryCode: String,
+          lelMonthlyLowerLimitForCat: Double,
           lelMonthlyUpperLimitForCat: Double,
-          lelRateForCat : Double,
-          lelPtMonthlyLowerLimitForCat : Double,
+          lelRateForCat: Double,
+          lelPtMonthlyLowerLimitForCat: Double,
           lelPtMonthlyUpperLimitForCat: Double,
           lelPtRateForCat: Double,
           ptUelMonthlyLowerLimitForCat: Double,
@@ -49,9 +47,9 @@ case class NiCategory(
           aboveUelRateForCat: Double
                        )
 case class ESCTaxYearConfig (
-                             post2011MaxExemptionMonthlyBasic : Double,
-                             post2011MaxExemptionMonthlyHigher : Double,
-                             post2011MaxExemptionMonthlyAdditional : Double,
+                             post2011MaxExemptionMonthlyBasic: Double,
+                             post2011MaxExemptionMonthlyHigher: Double,
+                             post2011MaxExemptionMonthlyAdditional: Double,
                              defaultTaxCode: String,
                              personalAllowanceRate: Double,
                              defaultPersonalAllowance: Double,
@@ -64,9 +62,9 @@ case class ESCTaxYearConfig (
                              niCategory: NiCategory
                              )
 
-object ESCConfig extends CCConfig with ServicesConfig with MessagesObject with LoadConfig {
+object ESCConfig extends CCConfig with ServicesConfig with ESCConfig with MessagesObject with LoadConfig {
 
-  def getConfig(currentDate: LocalDate, niCategoryCode : String): ESCTaxYearConfig = {
+  def getConfig(currentDate: LocalDate, niCategoryCode: String, location: String): ESCTaxYearConfig = {
     val configs: Seq[play.api.Configuration] = conf.getConfigSeq("esc.rule-change").get
 
     // get the default config and keep
@@ -74,52 +72,51 @@ object ESCConfig extends CCConfig with ServicesConfig with MessagesObject with L
           x.getString("rule-date").equals(Some("default"))
         }).head
     // fetch the config if it matches the particular year
-    val result = getConfigForTaxYear(currentDate, configs)
-
-    val config : ESCTaxYearConfig = result match {
-      case Some(x) => getTaxYear(niCategoryCode, x)
-      case _ => getTaxYear(niCategoryCode, defaultConfig)
-    }
-    config
+    val result = getConfigForTaxYear(currentDate, configs).getOrElse(defaultConfig)
+    getTaxYear(niCategoryCode, result, location)
   }
 
-  def getTaxYear(niCategoryCode : String, config : Configuration): ESCTaxYearConfig = {
+  def getTaxYear(niCategoryCode: String, config: Configuration, location: String): ESCTaxYearConfig = {
     // get the ni Category
     val niCat = getNiCategory(niCategoryCode, config)
+
+    val localConfig = if(localTaxEnabled) {
+      config.getConfig(s"tax.${location}").getOrElse(config.getConfig("tax.default").get)
+    }
+    else {
+      config.getConfig("tax.default").get
+    }
     ESCTaxYearConfig(
       post2011MaxExemptionMonthlyBasic = config.getDouble("post-2011-maximum-exemption.basic.monthly").get,
       post2011MaxExemptionMonthlyHigher = config.getDouble("post-2011-maximum-exemption.higher.monthly").get,
       post2011MaxExemptionMonthlyAdditional = config.getDouble("post-2011-maximum-exemption.additional.monthly").get,
-      defaultTaxCode = config.getString("tax.default-tax-code").get,
-      personalAllowanceRate = config.getDouble("tax.personal-allowance.rate").get,
-      defaultPersonalAllowance = config.getDouble("tax.personal-allowance.default-personal-allowance").get,
-      taxBasicRate = config.getDouble("tax.basic.rate").get,
-      taxBasicBandCapacity = config.getDouble("tax.basic.band-capacity-annual-amount").get,
-      taxHigherRate = config.getDouble("tax.higher.rate").get,
-      taxHigherBandUpperLimit = config.getDouble("tax.higher.band-annual-upper-limit").get,
-      taxAdditionalRate = config.getDouble("tax.additional.rate").get,
-      taxAdditionalBandLowerLimit= config.getDouble("tax.additional.band-annual-lower-limit").get,
+      defaultTaxCode = localConfig.getString("default-tax-code").get,
+      personalAllowanceRate = localConfig.getDouble("personal-allowance.rate").get,
+      defaultPersonalAllowance = localConfig.getDouble("personal-allowance.default-personal-allowance").get,
+      taxBasicRate = localConfig.getDouble("basic.rate").get,
+      taxBasicBandCapacity = localConfig.getDouble("basic.band-capacity-annual-amount").get,
+      taxHigherRate = localConfig.getDouble("higher.rate").get,
+      taxHigherBandUpperLimit = localConfig.getDouble("higher.band-annual-upper-limit").get,
+      taxAdditionalRate = localConfig.getDouble("additional.rate").get,
+      taxAdditionalBandLowerLimit= localConfig.getDouble("additional.band-annual-lower-limit").get,
       niCategory = niCat
     )
   }
 
-  def getNiCategory(niCategoryCode: String, config: play.api.Configuration) :NiCategory ={
+  def getNiCategory(niCategoryCode: String, config: Configuration): NiCategory ={
     // get the ni Category
     val niCode = niCategoryCode match {
       case cat if cat.isEmpty => config.getString("default-ni-code").get
       case cat if cat.equals("A") || cat.equals("B") || cat.equals("C") => cat
       case _ => throw new NoSuchElementException(messages("cc.scheme.config.invalid.ni.category"))
     }
-//    val output = getNiCategoryHelper(niCode,config.getConfigSeq("niCategories").get , None)
-    val niCat  = getNiCategoryHelper(niCode, config.getConfigSeq("niCategories").get , None)
-    match {
+   getNiCategoryHelper(niCode, config.getConfigSeq("niCategories").get, None) match {
       case Some(z) => z
       case _ =>   throw new NoSuchElementException(messages("cc.scheme.config.ni.category.not.found"))
     }
-    niCat
   }
 
-  def getNiCategoryHelper(code: String, niCategories: Seq[play.api.Configuration], acc: Option[NiCategory]): Option[NiCategory] = {
+  def getNiCategoryHelper(code: String, niCategories: Seq[Configuration], acc: Option[NiCategory]): Option[NiCategory] = {
     niCategories match {
       case Nil =>  acc
       case head :: tail =>

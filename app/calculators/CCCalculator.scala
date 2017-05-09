@@ -18,16 +18,12 @@ package calculators
 
 import java.text.NumberFormat
 import java.util.Locale
-
 import models.input.APIModels.Request
 import models.output.OutputAPIModel.AwardPeriod
 import org.joda.time.{Days, LocalDate}
-import play.api.Logger
 import utils.Periods
-
 import scala.concurrent.Future
 import scala.math.BigDecimal.RoundingMode
-
 
 /**
  * Created by adamconder on 08/06/15.

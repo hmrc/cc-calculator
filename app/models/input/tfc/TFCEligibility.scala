@@ -23,9 +23,6 @@ import play.api.libs.json.Reads._
 import play.api.libs.json._
 import utils._
 
-/**
- * Created by user on 18/06/15.
- */
 case class TFCEligibility(
                            from: LocalDate,
                            until: LocalDate,
@@ -111,5 +108,5 @@ object Disability {
   implicit val disabilityReads: Reads[Disability] = (
     (JsPath \ "disabled").read[Boolean].orElse(Reads.pure(false)) and
       (JsPath \ "severelyDisabled").read[Boolean].orElse(Reads.pure(false))
-    )(Disability.apply _)
+  )(Disability.apply _)
 }

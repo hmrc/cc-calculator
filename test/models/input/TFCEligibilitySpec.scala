@@ -17,7 +17,6 @@
 package models.input
 
 import java.lang.Short
-
 import com.fasterxml.jackson.databind.JsonNode
 import com.github.fge.jackson.JsonLoader
 import models.input.APIModels.Request

@@ -4,8 +4,8 @@
       "from": "2016-09-01",
       "until": "2018-09-01",
       "householdContribution": {
-        "parent": 44978.07,
-        "government": 6021.93,
+        "parent": 45978.07,
+        "government": 5021.93,
         "totalChildCareSpend": 51000.00
       },
       "numberOfPeriods" : 8,
@@ -249,8 +249,8 @@
           "from": "2017-12-01",
           "until": "2018-03-01",
           "periodContribution": {
-            "parent": 8000.00,
-            "government": 1000.00,
+            "parent": 9000.00,
+            "government": 0.00,
             "totalChildCareSpend": 9000.00
           },
           "children": [
@@ -271,8 +271,8 @@
               "name" : "Child 2",
               "childCareCost": 1000.00,
               "childContribution" : {
-                "parent": 2500.00,
-                "government": 500.00,
+                "parent": 3000.00,
+                "government": 0.00,
                 "totalChildCareSpend": 3000.00
               },
               "timeToMaximizeTopUp" : 0,
@@ -283,8 +283,8 @@
               "name": "Child 3",
               "childCareCost": 1000.00,
               "childContribution" : {
-                "parent": 2500.00,
-                "government": 500.00,
+                "parent": 3000.00,
+                "government": 0.00,
                 "totalChildCareSpend": 3000.00
               },
               "timeToMaximizeTopUp" : 0,
