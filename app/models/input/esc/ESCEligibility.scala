@@ -19,27 +19,20 @@ package models.input.esc
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import play.api.data.validation.ValidationError
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
-import play.api.i18n.Messages
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Reads._
 import play.api.libs.json.{JsPath, Reads}
 import utils._
 
-
-/**
- * Created by user on 18/06/15.
- */
 case class ESCEligibility(
                           taxYears: List[TaxYear]
                           )
 
-object ESCEligibility extends ESCConfig {
+object ESCEligibility extends ESCConfig with MessagesObject {
   implicit val escEligibilityReads : Reads[ESCEligibility] =
       (JsPath \ "taxYears").read[List[TaxYear]].map { taxYears =>
         ESCEligibility(taxYears)
-      }.filter(ValidationError(Messages("cc.calc.invalid.number.of.ty")))(ty => ty.taxYears.length >= lowerTaxYearsLimitValidation)
+      }.filter(ValidationError(messages("cc.calc.invalid.number.of.ty")))(ty => ty.taxYears.length >= lowerTaxYearsLimitValidation)
 }
 
 case class TaxYear(
@@ -48,12 +41,12 @@ case class TaxYear(
                     periods: List[ESCPeriod]
                     )
 
-object TaxYear extends CCFormat with ESCConfig {
+object TaxYear extends CCFormat with ESCConfig with MessagesObject {
   implicit val taxYearReads: Reads[TaxYear] = (
     (JsPath \ "startDate").read[LocalDate](jodaLocalDateReads(datePattern)) and
       (JsPath \ "endDate").read[LocalDate](jodaLocalDateReads(datePattern)) and
         (JsPath \ "periods").read[List[ESCPeriod]].filter(
-        ValidationError(Messages("cc.calc.invalid.number.of.periods"))
+        ValidationError(messages("cc.calc.invalid.number.of.periods"))
         )(periods => periods.length >= lowerPeriodsLimitValidation)
     )(TaxYear.apply _)
 }
@@ -64,12 +57,12 @@ case class ESCPeriod(
                       claimants: List[Claimant]
                       )
 
-object ESCPeriod extends CCFormat with ESCConfig {
+object ESCPeriod extends CCFormat with ESCConfig with MessagesObject {
   implicit val periodReads : Reads[ESCPeriod] = (
     (JsPath \ "from").read[LocalDate](jodaLocalDateReads(datePattern)) and
       (JsPath \ "until").read[LocalDate](jodaLocalDateReads(datePattern)) and
         (JsPath \ "claimants").read[List[Claimant]].filter(
-        ValidationError(Messages("cc.calc.invalid.number.of.claimants"))
+        ValidationError(messages("cc.calc.invalid.number.of.claimants"))
         )(claimants => claimants.length >= lowerClaimantsLimitValidation)
     )(ESCPeriod.apply _)
 }
@@ -96,10 +89,10 @@ case class Income(
   }
 }
 
-object Income {
+object Income extends MessagesObject {
   implicit val incomeReads : Reads[Income] = (
-    (JsPath \ "taxablePay").read[BigDecimal].filter(ValidationError(Messages("cc.calc.taxable.pay.less.than.0")))(income => income >= BigDecimal(0.00)) and
-      (JsPath \ "gross").read[BigDecimal].filter(ValidationError(Messages("cc.calc.gross.amount.less.than.0")))(income => income >= BigDecimal(0.00)) and
+    (JsPath \ "taxablePay").read[BigDecimal].filter(ValidationError(messages("cc.calc.taxable.pay.less.than.0")))(income => income >= BigDecimal(0.00)) and
+      (JsPath \ "gross").read[BigDecimal].filter(ValidationError(messages("cc.calc.gross.amount.less.than.0")))(income => income >= BigDecimal(0.00)) and
         (JsPath \ "taxCode").read[String].orElse(Reads.pure("")) and
           (JsPath \ "niCategory").read[String].orElse(Reads.pure(""))
     )(Income.apply _)
@@ -139,17 +132,17 @@ case class Claimant (
   }
 }
 
-object Claimant extends CCFormat with ESCConfig {
+object Claimant extends CCFormat with ESCConfig with MessagesObject {
   implicit val claimantReads : Reads[Claimant] = (
     (JsPath \ "qualifying").read[Boolean].orElse(Reads.pure(false)) and
       (JsPath \ "isPartner").read[Boolean].orElse(Reads.pure(false)) and
         (JsPath \ "location").read[String] and
-          (JsPath \ "eligibleMonthsInPeriod").read[Int].filter(ValidationError(Messages("cc.calc.invalid.number.of.months"))
+          (JsPath \ "eligibleMonthsInPeriod").read[Int].filter(ValidationError(messages("cc.calc.invalid.number.of.months"))
                                                         )(months => months >= lowerMonthsLimitValidation && months < upperMonthsLimitValidation) and
             (JsPath \ "income").read[Income] and
               (JsPath \ "elements").read[ClaimantElements] and
                 (JsPath \ "escStartDate").read[LocalDate](jodaLocalDateReads(datePattern)) and
-                  (JsPath \ "escAmount").read[BigDecimal].filter(ValidationError(Messages("cc.calc.voucher.amount.less.than.0"))
+                  (JsPath \ "escAmount").read[BigDecimal].filter(ValidationError(messages("cc.calc.voucher.amount.less.than.0"))
                                                           )(income => income >= BigDecimal(0.00)) and
                     (JsPath \ "escAmountPeriod").read[Periods.Period]
     )(Claimant.apply _)

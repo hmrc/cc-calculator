@@ -22,11 +22,7 @@ import models.output.OutputAPIModel.AwardPeriod
 import models.output.tfc._
 import org.joda.time.LocalDate
 import play.api.Logger
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
-import play.api.i18n.Messages
-import utils.{Periods, TFCTaxYearConfig}
-
+import utils.{MessagesObject, Periods, TFCTaxYearConfig}
 import scala.concurrent.Future
 import scala.util.Success
 
@@ -36,7 +32,7 @@ trait TFCCalculator extends CCCalculator {
 
   val calculator = new TFCCalculatorService
 
-  class TFCCalculatorService extends CCCalculatorService {
+  class TFCCalculatorService extends CCCalculatorService with MessagesObject {
 
     import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -60,13 +56,13 @@ trait TFCCalculator extends CCCalculator {
       (from, until) match {
         case (null, Some(u)) =>
           Logger.warn("TFCCalculator.TFCCalculatorService.getChildQualifyingDaysInTFCPeriod Exception - from date is null")
-          throw new IllegalArgumentException(Messages("cc.scheme.config.from.date"))
+          throw new IllegalArgumentException(messages("cc.scheme.config.from.date"))
         case (Some(f), null) =>
           Logger.warn("TFCCalculator.TFCCalculatorService.getChildQualifyingDaysInTFCPeriod Exception - until date is null")
-          throw new IllegalArgumentException(Messages("cc.scheme.config.until.date"))
+          throw new IllegalArgumentException(messages("cc.scheme.config.until.date"))
         case (null,null) =>
           Logger.warn("TFCCalculator.TFCCalculatorService.getChildQualifyingDaysInTFCPeriod Exception - from and until dates are null")
-          throw new IllegalArgumentException(Messages("cc.scheme.config.from.until.date"))
+          throw new IllegalArgumentException(messages("cc.scheme.config.from.until.date"))
         case (Some(f), Some(u)) => daysBetween(f,u)
         case (_, _) =>
           Logger.warn("TFCCalculator.TFCCalculatorService.getChildQualifyingDaysInTFCPeriod Exception - from and until dates are incorrect")
