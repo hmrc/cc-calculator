@@ -27,11 +27,6 @@ import utils._
 case class TCEligibility(
                           taxYears: List[TaxYear]
                           )
-//{
-//  def isProrateringRequired: Boolean = {
-//    proRataEnd.isDefined
-//  }
-//}
 
 object TCEligibility {
   implicit val tcEligibilityFormat: Reads[TCEligibility] =
