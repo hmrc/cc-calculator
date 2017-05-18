@@ -75,7 +75,7 @@ class TaxCreditCalculatorController @Inject()(val messagesApi: MessagesApi) exte
    implicit request =>
      request.body.validate[Request].fold(
        error => {
-         Logger.warn(s"TC Calculator Validation JsError in TaxCreditCalculatorController.calculate \n\n")
+         Logger.warn(s"TC Calculator Validation JsError in TaxCreditCalculatorController.calculate")
          Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(play.api.http.Status.BAD_REQUEST, Left(error))))
        },
        result => {
@@ -88,11 +88,11 @@ class TaxCreditCalculatorController @Inject()(val messagesApi: MessagesApi) exte
                  Ok(utils.JSONFactory.generateResultJson(response))
              } recover {
                case e: Exception =>
-                 Logger.warn(s"Tax Credits Calculator Exception in TaxCreditCalculatorController.calculate: ${e.getMessage}\n\n")
+                 Logger.warn(s"Tax Credits Calculator Exception in TaxCreditCalculatorController.calculate: ${e.getMessage}")
                  InternalServerError(utils.JSONFactory.generateErrorJSON(play.api.http.Status.INTERNAL_SERVER_ERROR, Right(e)))
              }
            case _ =>
-             Logger.warn(s"Tax Credits Calculator Exception in TaxCreditCalculatorController.calculate \n\n")
+             Logger.warn(s"Tax Credits Calculator Exception in TaxCreditCalculatorController.calculate ")
              Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(
                play.api.http.Status.BAD_REQUEST,
                Right(new IllegalArgumentException(Messages("cc.calc.invalid.request.exception")))
