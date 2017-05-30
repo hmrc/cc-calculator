@@ -27,14 +27,11 @@
                     "claimantElements": {
                       "disability": false,
                       "severeDisability": false
-                    },
-                    "failures": []
+                    }
                   }
                 ],
                 "children": [
                   {
-                    "id": 0,
-                    "name": "Child 1",
                     "childcareCost": 200.00,
                     "childcareCostPeriod": "Month",
                     "qualifying": true,
@@ -44,8 +41,7 @@
                       "disability": true,
                       "severeDisability": false,
                       "childcare": true
-                    },
-                    "failures": []
+                    }
                   }
                 ]
               }

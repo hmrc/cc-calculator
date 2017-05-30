@@ -42,8 +42,6 @@
                 ],
                 "children": [
                   {
-                    "id": 0,
-                    "name": "Child 1",
                     "childcareCost": 200.00,
                     "childcareCostPeriod": "Month",
                     "qualifying": true,
@@ -53,8 +51,7 @@
                       "disability": false,
                       "severeDisability": false,
                       "childcare": true
-                    },
-                    "failures": []
+                    }
                   }
                 ]
               }

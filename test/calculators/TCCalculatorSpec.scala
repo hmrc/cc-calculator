@@ -796,7 +796,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
       val fromDate = LocalDate.parse("2016-05-01", formatter)
       val untilDate = LocalDate.parse("2016-05-21", formatter)
 
-      val child = Child(id = 0, name = "Child 1", childcareCost = BigDecimal(2000.00), childcareCostPeriod = Periods.Monthly,
+      val child = Child(childcareCost = BigDecimal(2000.00), childcareCostPeriod = Periods.Monthly,
         childElements = ChildElements(childcare = true))
 
       val inputPeriod = models.input.tc.Period(from = fromDate, until = untilDate, householdElements = HouseHoldElements(), claimants = List(),
@@ -812,9 +812,9 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
       val fromDate = LocalDate.parse("2016-05-01", formatter)
       val untilDate = LocalDate.parse("2016-05-21", formatter)
 
-      val child1 = Child(id = 1, name = "Child 1", childcareCost = BigDecimal(2000.00), childcareCostPeriod = Periods.Monthly,
+      val child1 = Child(childcareCost = BigDecimal(2000.00), childcareCostPeriod = Periods.Monthly,
         childElements = ChildElements(childcare = true))
-      val child2 = Child(id = 2, name = "Child 2", childcareCost = BigDecimal(0.00), childcareCostPeriod = Periods.Monthly,
+      val child2 = Child(childcareCost = BigDecimal(0.00), childcareCostPeriod = Periods.Monthly,
         childElements = ChildElements(childcare = true))
 
       val inputPeriod = models.input.tc.Period(from = fromDate, until = untilDate, householdElements = HouseHoldElements(), claimants = List(),
@@ -830,13 +830,13 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
       val fromDate = LocalDate.parse("2016-05-01", formatter)
       val untilDate = LocalDate.parse("2016-05-21", formatter)
 
-      val child1 = Child(id = 0, name = "Child 1", childcareCost = BigDecimal(500.00), childcareCostPeriod = Periods.Monthly,
+      val child1 = Child(childcareCost = BigDecimal(500.00), childcareCostPeriod = Periods.Monthly,
         childElements = ChildElements(childcare = true))
-      val child2 = Child(id = 0, name = "Child 1", childcareCost = BigDecimal(2000.00), childcareCostPeriod = Periods.Monthly, childElements = ChildElements())
-      val child3 = Child(id = 0, name = "Child 1", childcareCost = BigDecimal(300.00), childcareCostPeriod = Periods.Monthly, childElements = ChildElements())
-      val child4 = Child(id = 0, name = "Child 1", childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly,
+      val child2 = Child(childcareCost = BigDecimal(2000.00), childcareCostPeriod = Periods.Monthly, childElements = ChildElements())
+      val child3 = Child(childcareCost = BigDecimal(300.00), childcareCostPeriod = Periods.Monthly, childElements = ChildElements())
+      val child4 = Child(childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly,
         childElements = ChildElements(childcare = true))
-      val child5 = Child(id = 0, name = "Child 1", childcareCost = BigDecimal(100.00), childcareCostPeriod = Periods.Monthly, childElements = ChildElements())
+      val child5 = Child(childcareCost = BigDecimal(100.00), childcareCostPeriod = Periods.Monthly, childElements = ChildElements())
 
       val inputPeriod = models.input.tc.Period(from = fromDate, until = untilDate, householdElements = HouseHoldElements(), claimants = List(),
         children = List(child1, child2, child3, child4, child5))
@@ -1312,7 +1312,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
         )
       }
 
-      val claimantClaimingSocialSecurityBenefit = models.input.tc.Claimant(qualifying = true, doesNotTaper = true, isPartner = false, claimantElements = ClaimantDisability(), failures = Some(List()))
+      val claimantClaimingSocialSecurityBenefit = models.input.tc.Claimant(qualifying = true, doesNotTaper = true, isPartner = false, claimantElements = ClaimantDisability())
 
       val inputPeriod = models.input.tc.Period(from = fromDate, until = untilDate, householdElements = HouseHoldElements(), claimants = List(claimantClaimingSocialSecurityBenefit), children = List())
 
@@ -1352,7 +1352,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
         )
       }
 
-      val claimantClaimingSocialSecurityBenefit = models.input.tc.Claimant(qualifying = true, doesNotTaper = false, isPartner = false, claimantElements = ClaimantDisability(), failures = Some(List()))
+      val claimantClaimingSocialSecurityBenefit = models.input.tc.Claimant(qualifying = true, doesNotTaper = false, isPartner = false, claimantElements = ClaimantDisability())
 
       val inputPeriod = models.input.tc.Period(from = fromDate, until = untilDate, householdElements = HouseHoldElements(), claimants = List(claimantClaimingSocialSecurityBenefit), children = List())
 
@@ -1392,8 +1392,8 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
         )
       }
 
-      val claimant = models.input.tc.Claimant(qualifying = true, isPartner = false, claimantElements = ClaimantDisability(), failures = Some(List()))
-      val claimantClaimingSocialSecurityBenefit = models.input.tc.Claimant(qualifying = true, doesNotTaper = true, isPartner = true, claimantElements = ClaimantDisability(), failures = Some(List()))
+      val claimant = models.input.tc.Claimant(qualifying = true, isPartner = false, claimantElements = ClaimantDisability())
+      val claimantClaimingSocialSecurityBenefit = models.input.tc.Claimant(qualifying = true, doesNotTaper = true, isPartner = true, claimantElements = ClaimantDisability())
 
       val inputPeriod = models.input.tc.Period(from = fromDate, until = untilDate, householdElements = HouseHoldElements(), claimants = List(claimant, claimantClaimingSocialSecurityBenefit), children = List())
 
@@ -1433,8 +1433,8 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
         )
       }
 
-      val claimantClaimingSocialSecurityBenefit1 = models.input.tc.Claimant(qualifying = true, doesNotTaper = true, isPartner = false, claimantElements = ClaimantDisability(), failures = Some(List()))
-      val claimantClaimingSocialSecurityBenefit2 = models.input.tc.Claimant(qualifying = true, doesNotTaper = true, isPartner = true, claimantElements = ClaimantDisability(), failures = Some(List()))
+      val claimantClaimingSocialSecurityBenefit1 = models.input.tc.Claimant(qualifying = true, doesNotTaper = true, isPartner = false, claimantElements = ClaimantDisability())
+      val claimantClaimingSocialSecurityBenefit2 = models.input.tc.Claimant(qualifying = true, doesNotTaper = true, isPartner = true, claimantElements = ClaimantDisability())
 
       val inputPeriod = models.input.tc.Period(from = fromDate, until = untilDate, householdElements = HouseHoldElements(), claimants = List(claimantClaimingSocialSecurityBenefit1, claimantClaimingSocialSecurityBenefit2), children = List())
 
@@ -1474,8 +1474,8 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
         )
       }
 
-      val claimant1 = models.input.tc.Claimant(qualifying = true, isPartner = false, claimantElements = ClaimantDisability(), failures = Some(List()))
-      val claimant2 = models.input.tc.Claimant(qualifying = true, isPartner = true, claimantElements = ClaimantDisability(), failures = Some(List()))
+      val claimant1 = models.input.tc.Claimant(qualifying = true, isPartner = false, claimantElements = ClaimantDisability())
+      val claimant2 = models.input.tc.Claimant(qualifying = true, isPartner = true, claimantElements = ClaimantDisability())
 
       val inputPeriod = models.input.tc.Period(from = fromDate, until = untilDate, householdElements = HouseHoldElements(), claimants = List(claimant1, claimant2), children = List())
 

@@ -27,10 +27,7 @@
                     "claimantElements": {
                       "disability": false,
                       "severeDisability": false
-                    },
-                    "failures": [
-                      "hours30"
-                    ]
+                    }
                   },
                   {
                     "qualifying": true,
@@ -38,10 +35,7 @@
                     "claimantElements": {
                       "disability": false,
                       "severeDisability": false
-                    },
-                    "failures": [
-                      "hours30"
-                    ]
+                    }
                   }
                 ],
                 "children": [
@@ -57,8 +51,7 @@
                       "disability": true,
                       "severeDisability": true,
                       "childcare": true
-                    },
-                    "failures": []
+                    }
                   }
                 ]
               }
