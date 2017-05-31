@@ -26,14 +26,14 @@ import utils.{CCFormat, Periods}
  * Created by user on 18/06/15.
  */
 case class ESCCalculation(
-                           from : LocalDate,
-                           until : LocalDate,
-                           totalSavings : Savings,
-                           taxYears : List[TaxYear]
+                           from: LocalDate,
+                           until: LocalDate,
+                           totalSavings: Savings,
+                           taxYears: List[TaxYear]
                            )
 
 object ESCCalculation extends CCFormat {
-  implicit val escCalculationWrites : Writes[ESCCalculation] = (
+  implicit val escCalculationWrites: Writes[ESCCalculation] = (
     (JsPath \ "from").write[LocalDate](jodaLocalDateWrites(datePattern)) and
       (JsPath \ "until").write[LocalDate](jodaLocalDateWrites(datePattern)) and
         (JsPath \ "totalSavings").write[Savings] and
@@ -42,10 +42,10 @@ object ESCCalculation extends CCFormat {
   }
 
 case class TaxYear(
-                    from : LocalDate,
-                    until : LocalDate,
-                    totalSavings : Savings,
-                    claimants : List[Claimant]
+                    from: LocalDate,
+                    until: LocalDate,
+                    totalSavings: Savings,
+                    claimants: List[Claimant]
                     )
 
 object TaxYear extends CCFormat {
@@ -58,9 +58,9 @@ object TaxYear extends CCFormat {
   }
 
 case class Savings(
-                    totalSaving : BigDecimal = BigDecimal(0.00),
+                    totalSaving: BigDecimal = BigDecimal(0.00),
                     taxSaving: BigDecimal = BigDecimal(0.00),
-                    niSaving : BigDecimal = BigDecimal(0.00)
+                    niSaving: BigDecimal = BigDecimal(0.00)
                     )
 
 object Savings extends CCFormat {
@@ -72,19 +72,19 @@ object Savings extends CCFormat {
   }
 
 case class Claimant(
-                     qualifying : Boolean = false,
-                     eligibleMonthsInTaxYear : Int,
-                     isPartner : Boolean = false,
-                     income : Income,
-                     elements : ClaimantElements,
-                     escAmount : BigDecimal = BigDecimal(0.00),
-                     escAmountPeriod : Periods.Period,
-                     escStartDate : LocalDate,
-                     savings : Savings,
-                     maximumRelief : BigDecimal = BigDecimal(0.00),
-                     maximumReliefPeriod : Periods.Period,
-                     taxAndNIBeforeSacrifice : TaxAndNI,
-                     taxAndNIAfterSacrifice : TaxAndNI
+                     qualifying: Boolean = false,
+                     eligibleMonthsInTaxYear: Int,
+                     isPartner: Boolean = false,
+                     income: Income,
+                     elements: ClaimantElements,
+                     escAmount: BigDecimal = BigDecimal(0.00),
+                     escAmountPeriod: Periods.Period,
+                     escStartDate: LocalDate,
+                     savings: Savings,
+                     maximumRelief: BigDecimal = BigDecimal(0.00),
+                     maximumReliefPeriod: Periods.Period,
+                     taxAndNIBeforeSacrifice: TaxAndNI,
+                     taxAndNIAfterSacrifice: TaxAndNI
                      )
 
 object Claimant extends CCFormat {
@@ -122,16 +122,16 @@ object Income extends CCFormat {
 }
 
 case class ClaimantElements(
-    vouchers : Boolean = false
+    vouchers: Boolean = false
   )
 
 object ClaimantElements extends CCFormat {
-  implicit val ClaimantElementsWrites : Format[ClaimantElements] = Json.format[ClaimantElements]
+  implicit val ClaimantElementsWrites: Format[ClaimantElements] = Json.format[ClaimantElements]
 }
 
 case class TaxAndNI(
-  taxPaid : BigDecimal = BigDecimal(0.00),
-  niPaid : BigDecimal = BigDecimal(0.00)
+  taxPaid: BigDecimal = BigDecimal(0.00),
+  niPaid: BigDecimal = BigDecimal(0.00)
  )
 
 object TaxAndNI extends CCFormat {

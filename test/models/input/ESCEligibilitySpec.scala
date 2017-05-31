@@ -34,34 +34,38 @@ class ESCEligibilitySpec extends UnitSpec with FakeCCCalculatorApplication {
     "read a valid JSON input and convert to a specific type" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/esc/input/calculator_input_test.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
+      val result = json.validate[ESCEligibility]
       result match {
         case JsSuccess(x, _) => {
-          x shouldBe a[Request]
-          x.payload should not be null
-          x.payload.eligibility.esc.get.taxYears.head.startDate shouldBe a[LocalDate]
-          x.payload.eligibility.esc.get.taxYears.head.endDate shouldBe a[LocalDate]
+          x shouldBe a[ESCEligibility]
 
-          x.payload.eligibility.esc.get.taxYears.head.periods.head shouldBe a[ESCPeriod]
-          x.payload.eligibility.esc.get.taxYears.head.periods.head.from shouldBe a[LocalDate]
-          x.payload.eligibility.esc.get.taxYears.head.periods.head.until shouldBe a[LocalDate]
-          x.payload.eligibility.esc.get.taxYears.head.periods.head.claimants.head shouldBe a[Claimant]
+          val taxYear = x.taxYears.head
+          taxYear.startDate shouldBe a[LocalDate]
+          taxYear.endDate shouldBe a[LocalDate]
 
-          x.payload.eligibility.esc.get.taxYears.head.periods.head.claimants.head.qualifying.isInstanceOf[Boolean] shouldBe true
-          x.payload.eligibility.esc.get.taxYears.head.periods.head.claimants.head.eligibleMonthsInPeriod.isInstanceOf[Int] shouldBe true
-          x.payload.eligibility.esc.get.taxYears.head.periods.head.claimants.head.isPartner.isInstanceOf[Boolean] shouldBe true
-          x.payload.eligibility.esc.get.taxYears.head.periods.head.claimants.head.income shouldBe a[Income]
-          x.payload.eligibility.esc.get.taxYears.head.periods.head.claimants.head.elements shouldBe a[ClaimantElements]
-          x.payload.eligibility.esc.get.taxYears.head.periods.head.claimants.head.escAmount shouldBe a[BigDecimal]
-          x.payload.eligibility.esc.get.taxYears.head.periods.head.claimants.head.escAmountPeriod.isInstanceOf[Periods.Period] shouldBe true
-          x.payload.eligibility.esc.get.taxYears.head.periods.head.claimants.head.escStartDate.isInstanceOf[LocalDate] shouldBe true
+          val period = taxYear.periods.head
+          period shouldBe a[ESCPeriod]
+          period.from shouldBe a[LocalDate]
+          period.until shouldBe a[LocalDate]
 
-          x.payload.eligibility.esc.get.taxYears.head.periods.head.claimants.head.income.gross shouldBe a[BigDecimal]
-          x.payload.eligibility.esc.get.taxYears.head.periods.head.claimants.head.income.taxablePay shouldBe a[BigDecimal]
-          x.payload.eligibility.esc.get.taxYears.head.periods.head.claimants.head.income.taxCode.isInstanceOf[String] shouldBe true
-          x.payload.eligibility.esc.get.taxYears.head.periods.head.claimants.head.income.niCategory.isInstanceOf[String] shouldBe true
+          val claimant = period.claimants.head
+          claimant shouldBe a[Claimant]
+          claimant.qualifying.isInstanceOf[Boolean] shouldBe true
+          claimant.eligibleMonthsInPeriod.isInstanceOf[Int] shouldBe true
+          claimant.isPartner.isInstanceOf[Boolean] shouldBe true
+          claimant.elements shouldBe a[ClaimantElements]
+          claimant.escAmount shouldBe a[BigDecimal]
+          claimant.escAmountPeriod.isInstanceOf[Periods.Period] shouldBe true
+          claimant.escStartDate.isInstanceOf[LocalDate] shouldBe true
 
-          x.payload.eligibility.esc.get.taxYears.head.periods.head.claimants.head.elements.vouchers.isInstanceOf[Boolean] shouldBe true
+          val income = period.claimants.head.income
+          income shouldBe a[Income]
+          income.gross shouldBe a[BigDecimal]
+          income.taxablePay shouldBe a[BigDecimal]
+          income.taxCode.isInstanceOf[String] shouldBe true
+          income.niCategory.isInstanceOf[String] shouldBe true
+
+          claimant.elements.vouchers.isInstanceOf[Boolean] shouldBe true
         }
         case _ => throw new Exception
       }

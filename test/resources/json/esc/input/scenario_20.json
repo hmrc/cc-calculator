@@ -1,62 +1,54 @@
 {
-  "payload": {
-    "eligibility": {
-      "esc": {
-        "taxYears": [
-          {
-            "startDate": "2016-04-06",
-            "endDate": "2017-04-06",
-            "periods": [
-              {
-                "from": "2016-04-06",
-                "until": "2017-04-06",
-                "claimants": [
-                  {
-                    "qualifying": false,
-                    "isPartner": false,
-                    "location": "england",
-                    "eligibleMonthsInPeriod": 0,
-                    "income": {
-                      "taxablePay": 32000.00,
-                      "gross": 35000.00,
-                      "taxCode": "1060L",
-                      "niCategory": "A"
-                    },
-                    "elements": {
-                      "vouchers": false
-                    },
-                    "escAmount": 100.00,
-                    "escAmountPeriod": "Month",
-                    "escStartDate": "2009-08-27",
-                    "failures": []
-                  },
-                  {
-                    "qualifying": true,
-                    "isPartner": true,
-                    "location": "england",
-                    "eligibleMonthsInPeriod": 10,
-                    "income": {
-                      "taxablePay": 10500.00,
-                      "gross": 10500.00,
-                      "taxCode": "NT",
-                      "niCategory": "C"
-                    },
-                    "elements": {
-                      "vouchers": true
-                    },
-                    "escAmount": 100.00,
-                    "escAmountPeriod": "Month",
-                    "escStartDate": "2010-08-27",
-                    "failures": []
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      },
-      "tc": null,
-      "tfc": null
+  "taxYears": [
+    {
+      "startDate": "2016-04-06",
+      "endDate": "2017-04-06",
+      "periods": [
+        {
+          "from": "2016-04-06",
+          "until": "2017-04-06",
+          "claimants": [
+            {
+              "qualifying": false,
+              "isPartner": false,
+              "location": "england",
+              "eligibleMonthsInPeriod": 0,
+              "income": {
+                "taxablePay": 32000.00,
+                "gross": 35000.00,
+                "taxCode": "1060L",
+                "niCategory": "A"
+              },
+              "elements": {
+                "vouchers": false
+              },
+              "escAmount": 100.00,
+              "escAmountPeriod": "Month",
+              "escStartDate": "2009-08-27",
+              "failures": []
+            },
+            {
+              "qualifying": true,
+              "isPartner": true,
+              "location": "england",
+              "eligibleMonthsInPeriod": 10,
+              "income": {
+                "taxablePay": 10500.00,
+                "gross": 10500.00,
+                "taxCode": "NT",
+                "niCategory": "C"
+              },
+              "elements": {
+                "vouchers": true
+              },
+              "escAmount": 100.00,
+              "escAmountPeriod": "Month",
+              "escStartDate": "2010-08-27",
+              "failures": []
+            }
+          ]
+        }
+      ]
     }
-  }
+  ]
 }

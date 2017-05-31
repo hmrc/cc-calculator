@@ -379,42 +379,6 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
       result shouldBe "3781.20"
     }
 
-    "convert the daily amount to a period (weekly) (Leap year - 366 days)" in {
-      val cost : BigDecimal = 1000.00 // per quarter
-      val result : BigDecimal = TCCalculator.calculator.amountFromPeriodToDaily(cost, Periods.Weekly, 366)
-      TestCalculator.calculator.convertToCurrency(result) shouldBe "£142.08"
-    }
-
-    "convert the daily amount to a period (fortnightly) (Leap year - 366 days)" in {
-      val cost : BigDecimal = 1000.00 // per quarter
-      val result : BigDecimal = TCCalculator.calculator.amountFromPeriodToDaily(cost, Periods.Fortnightly, 366)
-      TestCalculator.calculator.convertToCurrency(result) shouldBe "£71.04"
-    }
-
-    "convert the daily amount to a period (monthly) (Leap year - 366 days)" in {
-      val cost : BigDecimal = 1000.00 // per quarter
-      val result : BigDecimal = TCCalculator.calculator.amountFromPeriodToDaily(cost, Periods.Monthly, 366)
-      TestCalculator.calculator.convertToCurrency(result) shouldBe "£32.79"
-    }
-
-    "convert the daily amount to a period (quarterly) (Leap year - 366 days)" in {
-      val cost : BigDecimal = 1000.00 // per quarter
-      val result : BigDecimal = TCCalculator.calculator.amountFromPeriodToDaily(cost, Periods.Quarterly, 366)
-      TestCalculator.calculator.convertToCurrency(result) shouldBe "£10.93"
-    }
-
-    "convert the daily amount to a period (yearly) (Leap year - 366 days)" in {
-      val cost : BigDecimal = 1000.00 // per quarter
-      val result : BigDecimal = TCCalculator.calculator.amountFromPeriodToDaily(cost, Periods.Yearly, 366)
-      TestCalculator.calculator.convertToCurrency(result) shouldBe "£2.73"
-    }
-
-    "convert the daily amount to a period (Invalid) (Leap year - 366 days)" in {
-      val cost : BigDecimal = 1000.00 // per quarter
-      val result : BigDecimal = TCCalculator.calculator.amountFromPeriodToDaily(cost, Periods.INVALID, 366)
-      TestCalculator.calculator.convertToCurrency(result) shouldBe "£0.00"
-    }
-
     "Determine earnings amount per period" in {
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val fromDate = LocalDate.parse("2016-09-27", formatter)

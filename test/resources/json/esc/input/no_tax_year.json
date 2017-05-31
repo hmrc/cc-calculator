@@ -1,12 +1,4 @@
 {
-  "payload": {
-    "eligibility": {
-      "esc": {
-        "taxYears": [
-        ]
-      },
-      "tc": null,
-      "tfc": null
-    }
-  }
+  "taxYears": [
+  ]
 }
