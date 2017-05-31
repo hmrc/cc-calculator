@@ -19,7 +19,7 @@ package models.output.tc
 import org.joda.time.LocalDate
 import play.api.libs.json._
 
-object TCCalculation extends utils.CCFormat {
+object TCCalculation {
   implicit val TCCalculationWrites: Writes[TCCalculation] = Json.writes[TCCalculation]
 }
 
@@ -30,7 +30,7 @@ case class TCCalculation(from: LocalDate,
                          taxYears: List[TaxYear]
                         )
 
-object TaxYear extends utils.CCFormat {
+object TaxYear {
   implicit val TaxYearWrites: Writes[TaxYear] = Json.writes[TaxYear]
 }
 
@@ -42,7 +42,7 @@ case class TaxYear(
                     periods: List[Period]
                   )
 
-object Period extends utils.CCFormat {
+object Period {
   implicit val ElementWrites: Writes[Period] = Json.writes[Period]
 }
 
