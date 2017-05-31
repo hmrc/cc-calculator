@@ -100,7 +100,6 @@ object ChildElements {
 }
 
 case class Child(id: Short,
-                 name : String,
                  qualifying: Boolean = false,
                  childcareCost : BigDecimal,
                  childcareCostPeriod: Periods.Period,
@@ -135,7 +134,6 @@ object Child extends MessagesObject {
 
   implicit val childFormat: Reads[Child] = (
     (JsPath \ "id").read[Short].filter(ValidationError(messages("cc.calc.id.should.not.be.less.than.0")))(x => validID(x)) and
-      (JsPath \ "name").read[String](maxLength[String](TCConfig.maxNameLength)) and
        (JsPath \ "qualifying").read[Boolean] and
         (JsPath \ "childcareCost").read[BigDecimal].filter(
           ValidationError(messages("cc.calc.childcare.spend.too.low"))

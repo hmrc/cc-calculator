@@ -74,7 +74,6 @@ class TCEligibilitySpec extends UnitSpec with FakeCCCalculatorApplication with C
           x.payload.eligibility.tc.get.taxYears.head.periods.head.claimants.head.claimantElements.severeDisability.isInstanceOf[Boolean] shouldBe true
 
           x.payload.eligibility.tc.get.taxYears.head.periods.head.children.head.id.isInstanceOf[Short] shouldBe true
-          x.payload.eligibility.tc.get.taxYears.head.periods.head.children.head.name shouldBe a[String]
           x.payload.eligibility.tc.get.taxYears.head.periods.head.children.head.qualifying.isInstanceOf[Boolean] shouldBe true
           x.payload.eligibility.tc.get.taxYears.head.periods.head.children.head.childcareCost shouldBe a[BigDecimal]
           x.payload.eligibility.tc.get.taxYears.head.periods.head.children.head.childcareCostPeriod shouldBe a[Periods.Period]
@@ -98,7 +97,7 @@ class TCEligibilitySpec extends UnitSpec with FakeCCCalculatorApplication with C
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val periodStart = LocalDate.parse ("2016-06-01",formatter)
       val periodEnd = LocalDate.parse ("2016-08-31",formatter)
-      val child = Child(id = 0, name = "Child 1", childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, childElements = ChildElements())
+      val child = Child(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, childElements = ChildElements())
       val period = Period(from = periodStart, until = periodEnd, householdElements = HouseHoldElements(childcare = true), claimants = List(),
         children = List(child))
       period.getChildCareForPeriod shouldBe true
