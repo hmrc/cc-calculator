@@ -36,52 +36,50 @@ class TCEligibilitySpec extends UnitSpec with FakeCCCalculatorApplication with C
     "read a valid JSON input and convert to a specific type" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2017/scenario_1.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
+      val result = json.validate[TCEligibility]
       result match {
         case JsSuccess(x, _) => {
-          x shouldBe a[Request]
-          x.payload should not be null
-          x.payload shouldBe a[Payload]
-          x.payload.eligibility.tc.isInstanceOf[Option[TCEligibility]] shouldBe true
+          x shouldBe a[TCEligibility]
+          x.isInstanceOf[TCEligibility] shouldBe true
 
-          x.payload.eligibility.tc.get.taxYears.isInstanceOf[List[TaxYear]] shouldBe true
+          x.taxYears.isInstanceOf[List[TaxYear]] shouldBe true
 
-          x.payload.eligibility.tc.get.taxYears.head.from shouldBe a[LocalDate]
-          x.payload.eligibility.tc.get.taxYears.head.until shouldBe a[LocalDate]
-          x.payload.eligibility.tc.get.taxYears.head.houseHoldIncome shouldBe a[BigDecimal]
-          x.payload.eligibility.tc.get.taxYears.head.periods.isInstanceOf[List[Period]] shouldBe true
+          x.taxYears.head.from shouldBe a[LocalDate]
+          x.taxYears.head.until shouldBe a[LocalDate]
+          x.taxYears.head.houseHoldIncome shouldBe a[BigDecimal]
+          x.taxYears.head.periods.isInstanceOf[List[Period]] shouldBe true
 
-          x.payload.eligibility.tc.get.taxYears.head.periods.head.from shouldBe a[LocalDate]
-          x.payload.eligibility.tc.get.taxYears.head.periods.head.until shouldBe a[LocalDate]
-          x.payload.eligibility.tc.get.taxYears.head.periods.head.householdElements shouldBe a[HouseHoldElements]
-          x.payload.eligibility.tc.get.taxYears.head.periods.head.claimants.isInstanceOf[List[Claimant]] shouldBe true
-          x.payload.eligibility.tc.get.taxYears.head.periods.head.children.isInstanceOf[List[Child]] shouldBe true
+          x.taxYears.head.periods.head.from shouldBe a[LocalDate]
+          x.taxYears.head.periods.head.until shouldBe a[LocalDate]
+          x.taxYears.head.periods.head.householdElements shouldBe a[HouseHoldElements]
+          x.taxYears.head.periods.head.claimants.isInstanceOf[List[Claimant]] shouldBe true
+          x.taxYears.head.periods.head.children.isInstanceOf[List[Child]] shouldBe true
 
-          x.payload.eligibility.tc.get.taxYears.head.periods.head.householdElements.basic.isInstanceOf[Boolean] shouldBe true
-          x.payload.eligibility.tc.get.taxYears.head.periods.head.householdElements.childcare.isInstanceOf[Boolean] shouldBe true
-          x.payload.eligibility.tc.get.taxYears.head.periods.head.householdElements.family.isInstanceOf[Boolean] shouldBe true
-          x.payload.eligibility.tc.get.taxYears.head.periods.head.householdElements.hours30.isInstanceOf[Boolean] shouldBe true
-          x.payload.eligibility.tc.get.taxYears.head.periods.head.householdElements.loneParent.isInstanceOf[Boolean] shouldBe true
-          x.payload.eligibility.tc.get.taxYears.head.periods.head.householdElements.secondParent.isInstanceOf[Boolean] shouldBe true
+          x.taxYears.head.periods.head.householdElements.basic.isInstanceOf[Boolean] shouldBe true
+          x.taxYears.head.periods.head.householdElements.childcare.isInstanceOf[Boolean] shouldBe true
+          x.taxYears.head.periods.head.householdElements.family.isInstanceOf[Boolean] shouldBe true
+          x.taxYears.head.periods.head.householdElements.hours30.isInstanceOf[Boolean] shouldBe true
+          x.taxYears.head.periods.head.householdElements.loneParent.isInstanceOf[Boolean] shouldBe true
+          x.taxYears.head.periods.head.householdElements.secondParent.isInstanceOf[Boolean] shouldBe true
 
-          x.payload.eligibility.tc.get.taxYears.head.periods.head.claimants.head.qualifying.isInstanceOf[Boolean] shouldBe true
-          x.payload.eligibility.tc.get.taxYears.head.periods.head.claimants.head.isPartner.isInstanceOf[Boolean] shouldBe true
-          x.payload.eligibility.tc.get.taxYears.head.periods.head.claimants.head.claimantElements shouldBe a[ClaimantDisability]
-          x.payload.eligibility.tc.get.taxYears.head.periods.head.claimants.head.doesNotTaper.isInstanceOf[Boolean] shouldBe true
+          x.taxYears.head.periods.head.claimants.head.qualifying.isInstanceOf[Boolean] shouldBe true
+          x.taxYears.head.periods.head.claimants.head.isPartner.isInstanceOf[Boolean] shouldBe true
+          x.taxYears.head.periods.head.claimants.head.claimantElements shouldBe a[ClaimantDisability]
+          x.taxYears.head.periods.head.claimants.head.doesNotTaper.isInstanceOf[Boolean] shouldBe true
 
-          x.payload.eligibility.tc.get.taxYears.head.periods.head.claimants.head.claimantElements.disability.isInstanceOf[Boolean] shouldBe true
-          x.payload.eligibility.tc.get.taxYears.head.periods.head.claimants.head.claimantElements.severeDisability.isInstanceOf[Boolean] shouldBe true
+          x.taxYears.head.periods.head.claimants.head.claimantElements.disability.isInstanceOf[Boolean] shouldBe true
+          x.taxYears.head.periods.head.claimants.head.claimantElements.severeDisability.isInstanceOf[Boolean] shouldBe true
 
-          x.payload.eligibility.tc.get.taxYears.head.periods.head.children.head.qualifying.isInstanceOf[Boolean] shouldBe true
-          x.payload.eligibility.tc.get.taxYears.head.periods.head.children.head.childcareCost shouldBe a[BigDecimal]
-          x.payload.eligibility.tc.get.taxYears.head.periods.head.children.head.childcareCostPeriod shouldBe a[Periods.Period]
-          x.payload.eligibility.tc.get.taxYears.head.periods.head.children.head.childElements shouldBe a[ChildElements]
+          x.taxYears.head.periods.head.children.head.qualifying.isInstanceOf[Boolean] shouldBe true
+          x.taxYears.head.periods.head.children.head.childcareCost shouldBe a[BigDecimal]
+          x.taxYears.head.periods.head.children.head.childcareCostPeriod shouldBe a[Periods.Period]
+          x.taxYears.head.periods.head.children.head.childElements shouldBe a[ChildElements]
 
-          x.payload.eligibility.tc.get.taxYears.head.periods.head.children.head.childElements.child.isInstanceOf[Boolean] shouldBe true
-          x.payload.eligibility.tc.get.taxYears.head.periods.head.children.head.childElements.youngAdult.isInstanceOf[Boolean] shouldBe true
-          x.payload.eligibility.tc.get.taxYears.head.periods.head.children.head.childElements.childcare.isInstanceOf[Boolean] shouldBe true
-          x.payload.eligibility.tc.get.taxYears.head.periods.head.children.head.childElements.disability.isInstanceOf[Boolean] shouldBe true
-          x.payload.eligibility.tc.get.taxYears.head.periods.head.children.head.childElements.severeDisability.isInstanceOf[Boolean] shouldBe true
+          x.taxYears.head.periods.head.children.head.childElements.child.isInstanceOf[Boolean] shouldBe true
+          x.taxYears.head.periods.head.children.head.childElements.youngAdult.isInstanceOf[Boolean] shouldBe true
+          x.taxYears.head.periods.head.children.head.childElements.childcare.isInstanceOf[Boolean] shouldBe true
+          x.taxYears.head.periods.head.children.head.childElements.disability.isInstanceOf[Boolean] shouldBe true
+          x.taxYears.head.periods.head.children.head.childElements.severeDisability.isInstanceOf[Boolean] shouldBe true
         }
         case _ => throw new Exception
       }

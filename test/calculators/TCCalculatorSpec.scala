@@ -100,36 +100,6 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
       result shouldBe 12
     }
 
-    "truncate the number to three decimal places(.1192)" in {
-      val cost: BigDecimal = 12.1192
-      val result: BigDecimal = TCCalculator.calculator.roundDownToThreeDigits(cost)
-      result shouldBe 12.119
-    }
-
-    "truncate the number to three decimal places(.1145)" in {
-      val cost: BigDecimal = 12.1145
-      val result: BigDecimal = TCCalculator.calculator.roundDownToThreeDigits(cost)
-      result shouldBe 12.114
-    }
-
-    "truncate the number to three decimal places(.111001)" in {
-      val cost: BigDecimal = 12.111001
-      val result: BigDecimal = TCCalculator.calculator.roundDownToThreeDigits(cost)
-      result shouldBe 12.111
-    }
-
-    "truncate the number to three decimal places(.0009)" in {
-      val cost: BigDecimal = 12.0009
-      val result: BigDecimal = TCCalculator.calculator.roundDownToThreeDigits(cost)
-      result shouldBe 12.000
-    }
-
-    "truncate the number to three decimal places(.465753)" in {
-      val cost: BigDecimal = 142.465753
-      val result: BigDecimal = TCCalculator.calculator.roundDownToThreeDigits(cost)
-      result shouldBe 142.465
-    }
-
     "pro-tata an amount of money between two dates (after is before until date)" in {
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
@@ -425,10 +395,10 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
     "(qualifying) determine if get basic element and the amount for the period" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_1.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
+      val result = json.validate[TCEligibility]
       result match {
         case JsSuccess(x, _) =>
-          val period = x.payload.eligibility.tc.get.taxYears.head.periods
+          val period = x.taxYears.head.periods
           val basicElement = TCCalculator.calculator.basicElementForPeriod(period.head)
           basicElement shouldBe BigDecimal(1025.67)
         case JsError(e) => throw new RuntimeException(e.toList.toString())
@@ -460,10 +430,10 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
     "determine if get 30 hours element and the amount for the period" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_7.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
+      val result = json.validate[TCEligibility]
       result match {
         case JsSuccess(x, _) =>
-          val period = x.payload.eligibility.tc.get.taxYears.head.periods
+          val period = x.taxYears.head.periods
           val hours30Element = TCCalculator.calculator.hours30ElementForPeriod(period.head)
           hours30Element shouldBe BigDecimal(424.02)
         case JsError(e) => throw new RuntimeException(e.toList.toString)
@@ -473,11 +443,10 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
     "determine if get disabled worker element and the amount for the period" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_13.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
+      val result = json.validate[TCEligibility]
       result match {
         case JsSuccess(x, _) =>
-          val period = x.payload.eligibility.tc.get.taxYears.head.periods
+          val period = x.taxYears.head.periods
           val claimant = period.head.claimants.head
           val workerDisabiltyElement = TCCalculator.calculator.disabledWorkerElementForPeriod(period.head, claimant)
           workerDisabiltyElement shouldBe BigDecimal(1554.74)
@@ -488,10 +457,10 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
     "determine if get severely disabled worker element and the amount for the period" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_19.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
+      val result = json.validate[TCEligibility]
       result match {
         case JsSuccess(x, _) =>
-          val period = x.payload.eligibility.tc.get.taxYears.head.periods
+          val period = x.taxYears.head.periods
           val claimant = period.head.claimants.head
           val severelyDisabledWorkerElement = TCCalculator.calculator.severelyDisabledWorkerElementForPeriod(period.head, claimant)
           severelyDisabledWorkerElement shouldBe BigDecimal(666.59)
@@ -502,10 +471,10 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
     "determine if get lone parent element and amount for the period" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_1.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
+      val result = json.validate[TCEligibility]
       result match {
         case JsSuccess(x, _) =>
-          val period = x.payload.eligibility.tc.get.taxYears.head.periods
+          val period = x.taxYears.head.periods
           val loneParentElement = TCCalculator.calculator.loneParentElementForPeriod(period.head)
           loneParentElement shouldBe BigDecimal(1052.41)
         case JsError(e) => throw new RuntimeException(e.toList.toString)
@@ -515,10 +484,10 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
     "determine if get second adult element and amount for the period" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_18.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
+      val result = json.validate[TCEligibility]
       result match {
         case JsSuccess(x, _) =>
-          val period = x.payload.eligibility.tc.get.taxYears.head.periods
+          val period = x.taxYears.head.periods
           val coupleElement = TCCalculator.calculator.secondAdultElementForPeriod(period.head)
           coupleElement shouldBe BigDecimal(1052.41)
         case JsError(e) => throw new RuntimeException(e.toList.toString)
@@ -528,10 +497,10 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
     "(qualifying) determine if get family element for period and amount for the period" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_1.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
+      val result = json.validate[TCEligibility]
       result match {
         case JsSuccess(x, _) =>
-          val period = x.payload.eligibility.tc.get.taxYears.head.periods
+          val period = x.taxYears.head.periods
           val familyElement = TCCalculator.calculator.maxFamilyElementForPeriod(period.head)
           familyElement shouldBe BigDecimal(284.59)
         case JsError(e) => throw new RuntimeException(e.toList.toString)
@@ -541,12 +510,12 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
     "(non - qualifying) determine if get family element for period and amount for the period" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_51.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
+      val result = json.validate[TCEligibility]
+
       result match {
         case JsSuccess(x, _) =>
           // first period
-          val period = x.payload.eligibility.tc.get.taxYears.head.periods.tail.head
+          val period = x.taxYears.head.periods.tail.head
           val familyElement = TCCalculator.calculator.maxFamilyElementForPeriod(period)
           familyElement shouldBe BigDecimal(0.00)
 
@@ -558,10 +527,10 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
     "(qualifying) Determine if child gets the child basic element for the period" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_1.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
+      val result = json.validate[TCEligibility]
       result match {
         case JsSuccess(x, _) =>
-          val period = x.payload.eligibility.tc.get.taxYears.head.periods
+          val period = x.taxYears.head.periods
           val childElement = TCCalculator.calculator.childOrYoungAdultBasicElementForPeriod(period.head, period.head.children.head)
           childElement shouldBe BigDecimal(1455.42)
         case JsError(e) => throw new RuntimeException(e.toList.toString)
@@ -571,10 +540,10 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
     "(non-qualifying) Determine if child gets the child basic element for the period" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_51.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
+      val result = json.validate[TCEligibility]
       result match {
         case JsSuccess(x, _) =>
-          val period = x.payload.eligibility.tc.get.taxYears.head.periods.tail.head
+          val period = x.taxYears.head.periods.tail.head
           val childElement = TCCalculator.calculator.childOrYoungAdultBasicElementForPeriod(period, period.children.head)
           childElement shouldBe BigDecimal(0.00)
         case JsError(e) => throw new RuntimeException(e.toList.toString)
@@ -584,11 +553,11 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
     "(qualifying) Determine if child gets disability element for the period" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_11.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
+      val result = json.validate[TCEligibility]
+
       result match {
         case JsSuccess(x, _) =>
-          val period = x.payload.eligibility.tc.get.taxYears.head.periods
+          val period = x.taxYears.head.periods
           val childDisabiltyElement = TCCalculator.calculator.childOrYoungAdultDisabilityElementForPeriod(period.head, period.head.children.head)
           childDisabiltyElement shouldBe BigDecimal(1642.60)
         case JsError(e) => throw new RuntimeException(e.toList.toString)
@@ -598,11 +567,11 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
     "(non - qualifying) Determine if child gets disability element for the period" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_1.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
+      val result = json.validate[TCEligibility]
+
       result match {
         case JsSuccess(x, _) =>
-          val period = x.payload.eligibility.tc.get.taxYears.head.periods
+          val period = x.taxYears.head.periods
           val childDisabiltyElement = TCCalculator.calculator.childOrYoungAdultDisabilityElementForPeriod(period.head, period.head.children.head)
           childDisabiltyElement shouldBe BigDecimal(0.00)
         case JsError(e) => throw new RuntimeException(e.toList.toString)
@@ -612,11 +581,11 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
     "(qualifying) Determine if child gets severe disability element for the period" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_11.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
+      val result = json.validate[TCEligibility]
+
       result match {
         case JsSuccess(x, _) =>
-          val period = x.payload.eligibility.tc.get.taxYears.head.periods
+          val period = x.taxYears.head.periods
           val childSevereDisabiltyElement = TCCalculator.calculator.childOrYoungAdultSevereDisabilityElementForPeriod(period.head, period.head.children.head)
           childSevereDisabiltyElement shouldBe BigDecimal(666.59)
         case JsError(e) => throw new RuntimeException(e.toList.toString)
@@ -626,11 +595,11 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
     "(non-qualifying) Determine if child gets severe disability element for the period" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_21.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
+      val result = json.validate[TCEligibility]
+
       result match {
         case JsSuccess(x, _) =>
-          val period = x.payload.eligibility.tc.get.taxYears.head.periods
+          val period = x.taxYears.head.periods
           val childSevereDisabiltyElement = TCCalculator.calculator.childOrYoungAdultSevereDisabilityElementForPeriod(period.head, period.head.children.head)
           childSevereDisabiltyElement shouldBe BigDecimal(0.00)
         case JsError(e) => throw new RuntimeException(e.toList.toString)
@@ -640,11 +609,11 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
     "(qualifying) determine child element(s) (as a total) for multiple children" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_44.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
+      val result = json.validate[TCEligibility]
+
       result match {
         case JsSuccess(x, _) =>
-          val period = x.payload.eligibility.tc.get.taxYears.head.periods
+          val period = x.taxYears.head.periods
           val childElement = TCCalculator.calculator.maxChildElementForPeriod(period.head)
           childElement shouldBe BigDecimal(8318.05)
         case JsError(e) => throw new RuntimeException(e.toList.toString)
@@ -654,12 +623,12 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
     "(one child qualifying, one not qualifying)(child + child) determine child element(s) (as a total) for multiple children" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_52.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
+      val result = json.validate[TCEligibility]
+
       result match {
         case JsSuccess(x, _) =>
           // first period
-          val period = x.payload.eligibility.tc.get.taxYears.head.periods
+          val period = x.taxYears.head.periods
           val period1ChildElement = TCCalculator.calculator.maxChildElementForPeriod(period.head)
           period1ChildElement shouldBe BigDecimal(1232.72)
 
@@ -673,12 +642,12 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
     "(qualifying)(young adult + child) determine child element(s) (as a total) for multiple children" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_50.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
+      val result = json.validate[TCEligibility]
+
       result match {
         case JsSuccess(x, _) =>
           // first period
-          val period = x.payload.eligibility.tc.get.taxYears.head.periods
+          val period = x.taxYears.head.periods
           val period1ChildElement = TCCalculator.calculator.maxChildElementForPeriod(period.head)
           period1ChildElement shouldBe BigDecimal(1158.24)
 
@@ -760,12 +729,12 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
     "(all not qualifying) determine child element(s) (as a total) for multiple children" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_52.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
+      val result = json.validate[TCEligibility]
+
       result match {
         case JsSuccess(x, _) =>
           // first period
-          val period = x.payload.eligibility.tc.get.taxYears.head.periods
+          val period = x.taxYears.head.periods
           val period1ChildElement = TCCalculator.calculator.maxChildElementForPeriod(period.head)
           period1ChildElement shouldBe BigDecimal(1232.72)
           // second period
@@ -778,12 +747,12 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
     "(no children) determine the child element(s) (as a total) for no children" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_57.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
+      val result = json.validate[TCEligibility]
+
       result match {
         case JsSuccess(x, _) =>
           // first period
-          val period = x.payload.eligibility.tc.get.taxYears.head.periods
+          val period = x.taxYears.head.periods
           val period1ChildElement = TCCalculator.calculator.maxChildElementForPeriod(period.head)
           period1ChildElement shouldBe BigDecimal(0.00)
         case JsError(e) => throw new RuntimeException(e.toList.toString)
@@ -793,11 +762,11 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
     "(claimant with partner both qualifying) determine wtc work element(s) (as a total) for multiple claimants" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_18.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
+      val result = json.validate[TCEligibility]
+
       result match {
         case JsSuccess(x, _) =>
-          val period = x.payload.eligibility.tc.get.taxYears.head.periods
+          val period = x.taxYears.head.periods
           val workElement = TCCalculator.calculator.maxWorkElementForPeriod(period.head)
           workElement shouldBe BigDecimal(5187.56)
         case JsError(e) => throw new RuntimeException(e.toList.toString)
@@ -807,11 +776,11 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
     "(claimant qualifying without partner) determine wtc work element (as a total) for single claimant" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_27.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
+      val result = json.validate[TCEligibility]
+
       result match {
         case JsSuccess(x, _) =>
-          val period = x.payload.eligibility.tc.get.taxYears.head.periods
+          val period = x.taxYears.head.periods
           val workElement = TCCalculator.calculator.maxWorkElementForPeriod(period.head)
           workElement shouldBe BigDecimal(4056.84)
         case JsError(e) => throw new RuntimeException(e.toList.toString)
@@ -821,11 +790,11 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
     "(claimant with partner both qualifying) determine wtc work element(s) (as a total) for multiple claimants with severe disability" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_32.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
+      val result = json.validate[TCEligibility]
+
       result match {
         case JsSuccess(x, _) =>
-          val period = x.payload.eligibility.tc.get.taxYears.head.periods
+          val period = x.taxYears.head.periods
           val workElement = TCCalculator.calculator.maxWorkElementForPeriod(period.head)
           workElement shouldBe BigDecimal(6944.76)
         case JsError(e) => throw new RuntimeException(e.toList.toString)
@@ -835,11 +804,11 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
     "(claimant without partner without children) determine wtc work element(s) (as a total) for single claimant (Not applicable for our journey)" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_54.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
+      val result = json.validate[TCEligibility]
+
       result match {
         case JsSuccess(x, _) =>
-          val period = x.payload.eligibility.tc.get.taxYears.head.periods
+          val period = x.taxYears.head.periods
           val workElement = TCCalculator.calculator.maxWorkElementForPeriod(period.head)
           workElement shouldBe BigDecimal(1025.67)
         case JsError(e) => throw new RuntimeException(e.toList.toString)
@@ -849,11 +818,11 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
     "(claimant with partner without children) determine wtc work element(s) (as a total) for multiple claimants (Not applicable for our journey)" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_55.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
+      val result = json.validate[TCEligibility]
+
       result match {
         case JsSuccess(x, _) =>
-          val period = x.payload.eligibility.tc.get.taxYears.head.periods
+          val period = x.taxYears.head.periods
           val workElement = TCCalculator.calculator.maxWorkElementForPeriod(period.head)
           workElement shouldBe BigDecimal(2580.41)
         case JsError(e) => throw new RuntimeException(e.toList.toString)
@@ -863,11 +832,11 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
     "Determine WTC childcare element when there is only one child (not exceeding the element limit)" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_1.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
+      val result = json.validate[TCEligibility]
+
       result match {
         case JsSuccess(x, _) =>
-          val period = x.payload.eligibility.tc.get.taxYears.head.periods
+          val period = x.taxYears.head.periods
           val wtcChildcareElement = TCCalculator.calculator.maxChildcareElementForPeriod(period.head)
           wtcChildcareElement shouldBe BigDecimal(878.41)
         case JsError(e) => throw new RuntimeException(e.toList.toString)
@@ -877,11 +846,11 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
     "Determine WTC childcare element when there is only one child (exceeding the element limit)" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_2.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
+      val result = json.validate[TCEligibility]
+
       result match {
         case JsSuccess(x, _) =>
-          val period = x.payload.eligibility.tc.get.taxYears.head.periods
+          val period = x.taxYears.head.periods
           val wtcChildcareElement = TCCalculator.calculator.maxChildcareElementForPeriod(period.head)
           wtcChildcareElement shouldBe BigDecimal(3333.14)
         case JsError(e) => throw new RuntimeException(e.toList.toString)
@@ -891,11 +860,11 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
     "Determine WTC childcare element when there are 2 children (not exceeding childcare element limit)" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_39.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
+      val result = json.validate[TCEligibility]
+
       result match {
         case JsSuccess(x, _) =>
-          val period = x.payload.eligibility.tc.get.taxYears.head.periods
+          val period = x.taxYears.head.periods
           val wtcChildcareElement = TCCalculator.calculator.maxChildcareElementForPeriod(period.head)
           wtcChildcareElement shouldBe BigDecimal(5687.60)
         case JsError(e) => throw new RuntimeException(e.toList.toString)
@@ -905,11 +874,11 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
     "Determine WTC childcare element when there are 2 children (edge case -> 300p/w)" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_38.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
+      val result = json.validate[TCEligibility]
+
       result match {
         case JsSuccess(x, _) =>
-          val period = x.payload.eligibility.tc.get.taxYears.head.periods
+          val period = x.taxYears.head.periods
           val wtcChildcareElement = TCCalculator.calculator.maxChildcareElementForPeriod(period.head)
           wtcChildcareElement shouldBe BigDecimal(5700.97)
         case JsError(e) => throw new RuntimeException(e.toList.toString)
@@ -919,11 +888,11 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
     "Determine WTC childcare element when there are 2 children (exceeding childcare element limit)" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_37.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
+      val result = json.validate[TCEligibility]
+
       result match {
         case JsSuccess(x, _) =>
-          val period = x.payload.eligibility.tc.get.taxYears.head.periods
+          val period = x.taxYears.head.periods
           val wtcChildcareElement = TCCalculator.calculator.maxChildcareElementForPeriod(period.head)
           wtcChildcareElement shouldBe BigDecimal(5714.34)
         case JsError(e) => throw new RuntimeException(e.toList.toString)
@@ -933,11 +902,11 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
     "Determine WTC childcare element when there are 3 children (not exceeding the element limit)" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_43.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
+      val result = json.validate[TCEligibility]
+
       result match {
         case JsSuccess(x, _) =>
-          val period = x.payload.eligibility.tc.get.taxYears.head.periods
+          val period = x.taxYears.head.periods
           val wtcChildcareElement = TCCalculator.calculator.maxChildcareElementForPeriod(period.head)
           wtcChildcareElement shouldBe BigDecimal(2637.90)
         case JsError(e) => throw new RuntimeException(e.toList.toString)
@@ -947,11 +916,11 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
     "Determine WTC childcare element when there are 3 children (exceeding the element limit)" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_44.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
+      val result = json.validate[TCEligibility]
+
       result match {
         case JsSuccess(x, _) =>
-          val period = x.payload.eligibility.tc.get.taxYears.head.periods
+          val period = x.taxYears.head.periods
           val wtcChildcareElement = TCCalculator.calculator.maxChildcareElementForPeriod(period.head)
           wtcChildcareElement shouldBe BigDecimal(5714.34)
         case JsError(e) => throw new RuntimeException(e.toList.toString)
@@ -961,16 +930,16 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
     "Determine award period start and end dates when there is only one period" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_1.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
+      val result = json.validate[TCEligibility]
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val fromDate = LocalDate.parse("2016-09-27", formatter)
       val toDate = LocalDate.parse("2017-04-06", formatter)
-      logResult(result)
+
       result match {
         case JsSuccess(x, _) =>
           val award = TCCalculator.calculator.award(x)
-          award.tc.get.from shouldBe fromDate
-          award.tc.get.until shouldBe toDate
+          award.from shouldBe fromDate
+          award.until shouldBe toDate
         case JsError(e) => throw new RuntimeException(e.toList.toString)
       }
     }
@@ -978,16 +947,16 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
     "Determine award period start and end dates when there is more than one period" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_52.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
+      val result = json.validate[TCEligibility]
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val fromDate = LocalDate.parse("2016-09-27", formatter)
       val toDate = LocalDate.parse("2017-04-06", formatter)
-      logResult(result)
+
       result match {
         case JsSuccess(x, _) =>
           val award = TCCalculator.calculator.award(x)
-          award.tc.get.from shouldBe fromDate
-          award.tc.get.until shouldBe toDate
+          award.from shouldBe fromDate
+          award.until shouldBe toDate
         case JsError(e) => throw new RuntimeException(e.toList.toString)
       }
     }
@@ -995,11 +964,11 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
     "(2016/2017) Determine wtc income threshold for a period" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_1.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
+      val result = json.validate[TCEligibility]
+
       result match {
         case JsSuccess(x, _) =>
-          val period = x.payload.eligibility.tc.get.taxYears.head.periods
+          val period = x.taxYears.head.periods
           val threshold = TCCalculator.calculator.wtcIncomeThresholdForPeriod(period.head)
           threshold shouldBe BigDecimal(3359.69)
         case JsError(e) => throw new RuntimeException(e.toList.toString)
@@ -1009,11 +978,11 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
     "(2016/2017) Determine ctc income threshold for a period" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_1.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
+      val result = json.validate[TCEligibility]
+
       result match {
         case JsSuccess(x, _) =>
-          val period = x.payload.eligibility.tc.get.taxYears.head.periods
+          val period = x.taxYears.head.periods
           val threshold = TCCalculator.calculator.ctcIncomeThresholdForPeriod(period.head)
           threshold shouldBe BigDecimal(8426.92)
         case JsError(e) => throw new RuntimeException(e.toList.toString)
@@ -1023,11 +992,11 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
     "(2017/2018) Determine wtc income threshold for a period" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2017/scenario_1.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
+      val result = json.validate[TCEligibility]
+
       result match {
         case JsSuccess(x, _) =>
-          val period = x.payload.eligibility.tc.get.taxYears.head.periods
+          val period = x.taxYears.head.periods
           val threshold = TCCalculator.calculator.wtcIncomeThresholdForPeriod(period.head)
           threshold shouldBe BigDecimal(3359.69)
         case JsError(e) => throw new RuntimeException(e.toList.toString)
@@ -1037,11 +1006,11 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
     "(2017/2018) Determine ctc income threshold for a period" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2017/scenario_1.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
+      val result = json.validate[TCEligibility]
+
       result match {
         case JsSuccess(x, _) =>
-          val period = x.payload.eligibility.tc.get.taxYears.head.periods
+          val period = x.taxYears.head.periods
           val threshold = TCCalculator.calculator.ctcIncomeThresholdForPeriod(period.head)
           threshold shouldBe BigDecimal(8426.92)
         case JsError(e) => throw new RuntimeException(e.toList.toString)
@@ -1051,12 +1020,12 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
     "Determine single claimant income for a period" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_1.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
+      val result = json.validate[TCEligibility]
+
       result match {
         case JsSuccess(x, _) =>
-          val period = x.payload.eligibility.tc.get.taxYears.head.periods
-          val threshold = TCCalculator.calculator.incomeForPeriod(x.payload.eligibility.tc.get.taxYears.head.houseHoldIncome, period.head)
+          val period = x.taxYears.head.periods
+          val threshold = TCCalculator.calculator.incomeForPeriod(x.taxYears.head.houseHoldIncome, period.head)
           threshold shouldBe BigDecimal(8896.78)
         case JsError(e) => throw new RuntimeException(e.toList.toString)
       }
@@ -1065,12 +1034,12 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
     "Determine multiple claimant income for a period" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_32.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
+      val result = json.validate[TCEligibility]
+
       result match {
         case JsSuccess(x, _) =>
-          val period = x.payload.eligibility.tc.get.taxYears.head.periods
-          val threshold = TCCalculator.calculator.incomeForPeriod(x.payload.eligibility.tc.get.taxYears.head.houseHoldIncome, period.head)
+          val period = x.taxYears.head.periods
+          val threshold = TCCalculator.calculator.incomeForPeriod(x.taxYears.head.houseHoldIncome, period.head)
           threshold shouldBe BigDecimal(17791.65)
         case JsError(e) => throw new RuntimeException(e.toList.toString)
       }
@@ -1400,13 +1369,12 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
     "generate the maximum amounts for a period model" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_1.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
+      val result = json.validate[TCEligibility]
+
       result match {
         case JsSuccess(x, _) =>
           // period 1
-          val tc = x.payload.eligibility.tc.getOrElse(throw new Exception())
-          val p = tc.taxYears.head.periods.head
+          val p = x.taxYears.head.periods.head
           val setup = TCCalculator.calculator.generateMaximumAmountsForPeriod(p)
           setup.elements.wtcWorkElement.maximumAmount shouldBe BigDecimal(2078.08)
           setup.elements.wtcChildcareElement.maximumAmount shouldBe BigDecimal(878.41)
@@ -1419,13 +1387,12 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
     "Generate the maximum amounts for a period model (no children, get just basic element)" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_54.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
+      val result = json.validate[TCEligibility]
+
       result match {
         case JsSuccess(x, _) =>
           // period 1
-          val tc = x.payload.eligibility.tc.getOrElse(throw new Exception())
-          val p = tc.taxYears.head.periods.head
+          val p = x.taxYears.head.periods.head
           val setup = TCCalculator.calculator.generateMaximumAmountsForPeriod(p)
           setup.elements.wtcWorkElement.maximumAmount shouldBe BigDecimal(1025.67)
           setup.elements.wtcChildcareElement.maximumAmount shouldBe BigDecimal(0.00)
@@ -1438,14 +1405,13 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
     "(no tapering required) Taper the first element (WTC element)" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_54.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
+      val result = json.validate[TCEligibility]
+
       result match {
         case JsSuccess(x, _) =>
           // period 1
-          val tc = x.payload.eligibility.tc.getOrElse(throw new Exception())
-          val p = tc.taxYears.head.periods.head
-          val income = tc.taxYears.head.houseHoldIncome
+          val p = x.taxYears.head.periods.head
+          val income = x.taxYears.head.houseHoldIncome
           val setup = TCCalculator.calculator.generateMaximumAmountsForPeriod(p)
           val i = TCCalculator.calculator.incomeForPeriod(income, p)
           val incomeThreshold = TCCalculator.calculator.wtcIncomeThresholdForPeriod(period = p)
@@ -2222,17 +2188,16 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
     "Determine that the list of periods is populated when there is one period" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_1.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
+      val result = json.validate[TCEligibility]
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val fromDate = LocalDate.parse("2016-09-27", formatter)
       val toDate = LocalDate.parse("2017-04-06", formatter)
-      logResult(result)
+
       result match {
         case JsSuccess(x, _) =>
           // period 1
-          val tc = x.payload.eligibility.tc.getOrElse(throw new Exception())
-          val taxYear = x.getTaxCreditsEligibility.get.taxYears.head
-          val income = x.payload.eligibility.tc.get.taxYears.head.houseHoldIncome
+          val taxYear = x.taxYears.head
+          val income = x.taxYears.head.houseHoldIncome
           val setup = TCCalculator.calculator.getCalculatedPeriods(taxYear, income)
 
           setup.head should not be Nil
@@ -2252,19 +2217,18 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
     "Determine that the list of periods is populated when there are multiple periods" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_52.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
+      val result = json.validate[TCEligibility]
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val firstPeriodFrom = LocalDate.parse("2016-09-27", formatter)
       val firstPeriodTo = LocalDate.parse("2016-12-12", formatter)
       val secondPeriodFrom = LocalDate.parse("2016-12-12", formatter)
       val secondPeriodTo = LocalDate.parse("2017-04-06", formatter)
-      logResult(result)
+
       result match {
         case JsSuccess(x, _) =>
           // period 1
-          val tc = x.payload.eligibility.tc.getOrElse(throw new Exception())
-          val taxYear = x.getTaxCreditsEligibility.get.taxYears.head
-          val income = x.payload.eligibility.tc.get.taxYears.head.houseHoldIncome
+          val taxYear = x.taxYears.head
+          val income = x.taxYears.head.houseHoldIncome
           val setup = TCCalculator.calculator.getCalculatedPeriods(taxYear, income)
 
           setup.head should not be Nil
@@ -2291,19 +2255,19 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
     "Determine total award for calculation (one period)" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_1.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
+      val result = json.validate[TCEligibility]
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val firstPeriodFrom = LocalDate.parse("2016-09-27", formatter)
       val firstPeriodTo = LocalDate.parse("2017-04-06", formatter)
-      logResult(result)
+
       result match {
         case JsSuccess(x, _) =>
           val setup = TCCalculator.calculator.award(x)
 
           setup should not be Nil
-          setup.tc.get.from shouldBe firstPeriodFrom
-          setup.tc.get.until shouldBe firstPeriodTo
-          setup.tc.get.totalAwardAmount shouldBe 2426.29
+          setup.from shouldBe firstPeriodFrom
+          setup.until shouldBe firstPeriodTo
+          setup.totalAwardAmount shouldBe 2426.29
         case JsError(e) => throw new RuntimeException(e.toList.toString)
       }
     }
@@ -2311,60 +2275,38 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
     "Determine total award for calculation (two periods)" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_52.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
+      val result = json.validate[TCEligibility]
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val firstPeriodFrom = LocalDate.parse("2016-09-27", formatter)
       val secondPeriodTo = LocalDate.parse("2017-04-06", formatter)
-      logResult(result)
+
       result match {
         case JsSuccess(x, _) =>
           val setup = TCCalculator.calculator.award(x)
 
           setup should not be Nil
-          setup.tc.get.from shouldBe firstPeriodFrom
-          setup.tc.get.until shouldBe secondPeriodTo
-          setup.tc.get.totalAwardAmount shouldBe 1787.75
+          setup.from shouldBe firstPeriodFrom
+          setup.until shouldBe secondPeriodTo
+          setup.totalAwardAmount shouldBe 1787.75
         case JsError(e) => throw new RuntimeException(e.toList.toString)
-      }
-    }
-
-    "Determine advice amount for calculation (malformed input model, no tc eligibility present)" in {
-      val request = Request(payload = Payload(
-        eligibility = Eligibility(tc = None, tfc = None, esc = None)
-      )
-      )
-      val setup = TCCalculator.calculator.incomeAdvice(request)
-      setup.flatMap {
-        result => result shouldBe AwardPeriod()
-      }
-    }
-
-    "Determine total award for calculation (malformed input model, no tc eligibility present)" in {
-      val request = Request(payload = Payload(
-        eligibility = Eligibility(tc = None, tfc = None, esc = None)
-      )
-      )
-      val setup = TCCalculator.calculator.award(request)
-      setup.flatMap {
-        result => result shouldBe AwardPeriod()
       }
     }
 
     "Determine calculation amount for the award amount" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_1.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
+      val result = json.validate[TCEligibility]
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val firstPeriodFrom = LocalDate.parse("2016-09-27", formatter)
       val secondPeriodTo = LocalDate.parse("2017-04-06", formatter)
-      logResult(result)
+
       result match {
         case JsSuccess(x, _) =>
           val setup = TCCalculator.calculator.award(x)
           setup should not be Nil
-          setup.tc.get.from shouldBe firstPeriodFrom
-          setup.tc.get.until shouldBe secondPeriodTo
-          setup.tc.get.totalAwardAmount shouldBe 2426.29
+          setup.from shouldBe firstPeriodFrom
+          setup.until shouldBe secondPeriodTo
+          setup.totalAwardAmount shouldBe 2426.29
         case JsError(e) => throw new RuntimeException(e.toList.toString)
       }
     }
@@ -2372,18 +2314,18 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
     "Determine calculation amount for the award amount (Multiple Tax years)" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2017/scenario_3.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
+      val result = json.validate[TCEligibility]
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val firstPeriodFrom = LocalDate.parse("2017-09-27", formatter)
       val lastPeriodTo = LocalDate.parse("2018-02-15", formatter)
-      logResult(result)
+
       result match {
         case JsSuccess(x, _) =>
           val setup = TCCalculator.calculator.award(x)
           setup should not be Nil
-          setup.tc.get.from shouldBe firstPeriodFrom
-          setup.tc.get.until shouldBe lastPeriodTo
-          setup.tc.get.totalAwardAmount shouldBe 10307.22
+          setup.from shouldBe firstPeriodFrom
+          setup.until shouldBe lastPeriodTo
+          setup.totalAwardAmount shouldBe 10307.22
         case JsError(e) => throw new RuntimeException(e.toList.toString)
       }
     }
@@ -2447,19 +2389,19 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
     "Return advice amount set in the total award model of TCCalculation (Successful)" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_1.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
+      val result = json.validate[TCEligibility]
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val firstPeriodFrom = LocalDate.parse("2016-09-27", formatter)
       val secondPeriodTo = LocalDate.parse("2017-04-06", formatter)
-      logResult(result)
+
       result match {
         case JsSuccess(x, _) =>
           val setup = TCCalculator.calculator.incomeAdvice(x)
           setup should not be Nil
-          setup.tc.get.from shouldBe firstPeriodFrom
-          setup.tc.get.until shouldBe secondPeriodTo
-          setup.tc.get.totalAwardAmount shouldBe 0.00
-          setup.tc.get.houseHoldAdviceAmount shouldBe 14819.1500
+          setup.from shouldBe firstPeriodFrom
+          setup.until shouldBe secondPeriodTo
+          setup.totalAwardAmount shouldBe 0.00
+          setup.houseHoldAdviceAmount shouldBe 14819.1500
         case JsError(e) => throw new RuntimeException(e.toList.toString)
       }
     }
@@ -2467,31 +2409,21 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
     "Return advice amount set in the total award model of TCCalculation (Successful) (Multiple Tax years)" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2017/scenario_3.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
+      val result = json.validate[TCEligibility]
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val firstPeriodFrom = LocalDate.parse("2017-09-27", formatter)
       val lastPeriodTo = LocalDate.parse("2018-02-15", formatter)
-      logResult(result)
+
       result match {
         case JsSuccess(x, _) =>
           val setup = TCCalculator.calculator.incomeAdvice(x)
           setup should not be Nil
-          setup.tc.get.from shouldBe firstPeriodFrom
-          setup.tc.get.until shouldBe lastPeriodTo
-          setup.tc.get.totalAwardAmount shouldBe 0.00
-          setup.tc.get.houseHoldAdviceAmount shouldBe 40944.1676
+          setup.from shouldBe firstPeriodFrom
+          setup.until shouldBe lastPeriodTo
+          setup.totalAwardAmount shouldBe 0.00
+          setup.houseHoldAdviceAmount shouldBe 40944.1676
         case JsError(e) => throw new RuntimeException(e.toList.toString)
       }
-    }
-
-    "Return advice amount set in the total award model of TCCalculation (No Eligibility present)" in {
-      val request = Request(payload = Payload(
-        eligibility = Eligibility(tc = None, tfc = None, esc = None)
-      )
-      )
-      val setup = TCCalculator.calculator.incomeAdvice(request)
-      setup should not be Nil
-      setup.tc shouldBe None
     }
 
     "Determine total Maximum amount for a period (populated model) " in {
@@ -2589,14 +2521,14 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
     "populate tax years model when there is only one tax year" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_1.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
+      val result = json.validate[TCEligibility]
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val firstPeriodFrom = LocalDate.parse("2016-09-27", formatter)
       val secondPeriodTo = LocalDate.parse("2017-04-06", formatter)
-      logResult(result)
+
       result match {
         case JsSuccess(x, _) =>
-          val listOfTaxYears = TCCalculator.calculator.getCalculatedTaxYears(x.getTaxCreditsEligibility.get)
+          val listOfTaxYears = TCCalculator.calculator.getCalculatedTaxYears(x)
           listOfTaxYears should not be Nil
           listOfTaxYears.head.from shouldBe firstPeriodFrom
           listOfTaxYears.head.until shouldBe secondPeriodTo
@@ -2610,14 +2542,14 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
     "populate tax years model when there are two tax years (Total Award Calculation)" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2017/scenario_3.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
+      val result = json.validate[TCEligibility]
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val firstPeriodFrom = LocalDate.parse("2017-09-27", formatter)
       val lastPeriodTo = LocalDate.parse("2018-02-15", formatter)
-      logResult(result)
+
       result match {
         case JsSuccess(x, _) =>
-          val listOfTaxYears = TCCalculator.calculator.getCalculatedTaxYears(x.getTaxCreditsEligibility.get)
+          val listOfTaxYears = TCCalculator.calculator.getCalculatedTaxYears(x)
           listOfTaxYears should not be Nil
           listOfTaxYears.head.from shouldBe firstPeriodFrom
           listOfTaxYears.tail.head.until shouldBe lastPeriodTo
@@ -2631,14 +2563,14 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
     "populate tax years model when there is only one tax year (Income Advice Calculation)" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_1.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
+      val result = json.validate[TCEligibility]
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val firstPeriodFrom = LocalDate.parse("2016-09-27", formatter)
       val secondPeriodTo = LocalDate.parse("2017-04-06", formatter)
-      logResult(result)
+
       result match {
         case JsSuccess(x, _) =>
-          val listOfTaxYears = TCCalculator.calculator.getCalculatedTaxYears(x.getTaxCreditsEligibility.get, true)
+          val listOfTaxYears = TCCalculator.calculator.getCalculatedTaxYears(x, true)
           listOfTaxYears should not be Nil
           listOfTaxYears.head.from shouldBe firstPeriodFrom
           listOfTaxYears.head.until shouldBe secondPeriodTo
@@ -2654,14 +2586,14 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
     "populate tax years model when there are two tax years (Income Advice Calculation)" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2017/scenario_3.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
+      val result = json.validate[TCEligibility]
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val firstPeriodFrom = LocalDate.parse("2017-09-27", formatter)
       val lastPeriodTo = LocalDate.parse("2018-02-15", formatter)
-      logResult(result)
+
       result match {
         case JsSuccess(x, _) =>
-          val listOfTaxYears = TCCalculator.calculator.getCalculatedTaxYears(x.getTaxCreditsEligibility.get, true)
+          val listOfTaxYears = TCCalculator.calculator.getCalculatedTaxYears(x, true)
           listOfTaxYears should not be Nil
           listOfTaxYears.head.from shouldBe firstPeriodFrom
           listOfTaxYears.tail.head.until shouldBe lastPeriodTo
