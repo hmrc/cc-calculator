@@ -1,106 +1,98 @@
 {
-  "payload": {
-    "eligibility": {
-      "esc": {
-        "taxYears": [
-          {
-            "startDate": "2016-04-06",
-            "endDate": "2017-04-06",
-            "periods": [
-              {
-                "from": "2016-04-06",
-                "until": "2017-12-06",
-                "claimants": [
-                  {
-                    "qualifying": true,
-                    "isPartner": false,
-                    "location": "england",
-                    "eligibleMonthsInPeriod": 9,
-                    "income": {
-                      "taxablePay": 35000.00,
-                      "gross": 35000.00,
-                      "taxCode": "1060N",
-                      "niCategory": "A"
-                    },
-                    "elements": {
-                      "vouchers": false
-                    },
-                    "escAmount": 200.00,
-                    "escAmountPeriod": "Month",
-                    "escStartDate": "2012-08-27",
-                    "failures": []
-                  },
-                  {
-                    "qualifying": true,
-                    "isPartner": true,
-                    "location": "england",
-                    "eligibleMonthsInPeriod": 9,
-                    "income": {
-                      "taxablePay": 20000.00,
-                      "gross": 20000.00,
-                      "taxCode": "1060L",
-                      "niCategory": "B"
-                    },
-                    "elements": {
-                      "vouchers": true
-                    },
-                    "escAmount": 250.00,
-                    "escAmountPeriod": "Month",
-                    "escStartDate": "2011-08-27",
-                    "failures": []
-                  }
-                ]
+  "taxYears": [
+    {
+      "startDate": "2016-04-06",
+      "endDate": "2017-04-06",
+      "periods": [
+        {
+          "from": "2016-04-06",
+          "until": "2017-12-06",
+          "claimants": [
+            {
+              "qualifying": true,
+              "isPartner": false,
+              "location": "england",
+              "eligibleMonthsInPeriod": 9,
+              "income": {
+                "taxablePay": 35000.00,
+                "gross": 35000.00,
+                "taxCode": "1060N",
+                "niCategory": "A"
               },
-              {
-                "from": "2016-12-06",
-                "until": "2017-04-06",
-                "claimants": [
-                  {
-                    "qualifying": false,
-                    "isPartner": false,
-                    "location": "england",
-                    "eligibleMonthsInPeriod": 0,
-                    "income": {
-                      "taxablePay": 35000.00,
-                      "gross": 35000.00,
-                      "taxCode": "1060N",
-                      "niCategory": "A"
-                    },
-                    "elements": {
-                      "vouchers": false
-                    },
-                    "escAmount": 200.00,
-                    "escAmountPeriod": "Month",
-                    "escStartDate": "2012-08-27",
-                    "failures": []
-                  },
-                  {
-                    "qualifying": false,
-                    "isPartner": true,
-                    "location": "england",
-                    "eligibleMonthsInPeriod": 0,
-                    "income": {
-                      "taxablePay": 20000.00,
-                      "gross": 20000.00,
-                      "taxCode": "1060L",
-                      "niCategory": "B"
-                    },
-                    "elements": {
-                      "vouchers": false
-                    },
-                    "escAmount": 250.00,
-                    "escAmountPeriod": "Month",
-                    "escStartDate": "2011-08-27",
-                    "failures": []
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      },
-      "tc": null,
-      "tfc": null
+              "elements": {
+                "vouchers": false
+              },
+              "escAmount": 200.00,
+              "escAmountPeriod": "Month",
+              "escStartDate": "2012-08-27",
+              "failures": []
+            },
+            {
+              "qualifying": true,
+              "isPartner": true,
+              "location": "england",
+              "eligibleMonthsInPeriod": 9,
+              "income": {
+                "taxablePay": 20000.00,
+                "gross": 20000.00,
+                "taxCode": "1060L",
+                "niCategory": "B"
+              },
+              "elements": {
+                "vouchers": true
+              },
+              "escAmount": 250.00,
+              "escAmountPeriod": "Month",
+              "escStartDate": "2011-08-27",
+              "failures": []
+            }
+          ]
+        },
+        {
+          "from": "2016-12-06",
+          "until": "2017-04-06",
+          "claimants": [
+            {
+              "qualifying": false,
+              "isPartner": false,
+              "location": "england",
+              "eligibleMonthsInPeriod": 0,
+              "income": {
+                "taxablePay": 35000.00,
+                "gross": 35000.00,
+                "taxCode": "1060N",
+                "niCategory": "A"
+              },
+              "elements": {
+                "vouchers": false
+              },
+              "escAmount": 200.00,
+              "escAmountPeriod": "Month",
+              "escStartDate": "2012-08-27",
+              "failures": []
+            },
+            {
+              "qualifying": false,
+              "isPartner": true,
+              "location": "england",
+              "eligibleMonthsInPeriod": 0,
+              "income": {
+                "taxablePay": 20000.00,
+                "gross": 20000.00,
+                "taxCode": "1060L",
+                "niCategory": "B"
+              },
+              "elements": {
+                "vouchers": false
+              },
+              "escAmount": 250.00,
+              "escAmountPeriod": "Month",
+              "escStartDate": "2011-08-27",
+              "failures": []
+            }
+          ]
+        }
+      ]
     }
-  }
+  ]
 }

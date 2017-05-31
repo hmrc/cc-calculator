@@ -1,8 +1,13 @@
 {
-  "calculation": {
-    "tc": null,
-    "tfc": null,
-    "esc": {
+  "from": "2017-04-06",
+  "until": "2018-04-06",
+  "totalSavings": {
+    "totalSaving": 260.40,
+    "taxSaving": 248.00,
+    "niSaving": 12.40
+  },
+  "taxYears": [
+    {
       "from": "2017-04-06",
       "until": "2018-04-06",
       "totalSavings": {
@@ -10,15 +15,8 @@
         "taxSaving": 248.00,
         "niSaving": 12.40
       },
-      "taxYears": [{
-        "from": "2017-04-06",
-        "until": "2018-04-06",
-        "totalSavings": {
-          "totalSaving": 260.40,
-          "taxSaving": 248.00,
-          "niSaving": 12.40
-        },
-        "claimants": [{
+      "claimants": [
+        {
           "qualifying": true,
           "eligibleMonthsInTaxYear": 5,
           "isPartner": false,
@@ -49,7 +47,8 @@
             "taxPaid": 1342,
             "niPaid": 407.88
           }
-        }, {
+        },
+        {
           "qualifying": true,
           "eligibleMonthsInTaxYear": 5,
           "isPartner": true,
@@ -80,8 +79,8 @@
             "taxPaid": 0.00,
             "niPaid": 18.36
           }
-        }]
-      }]
+        }
+      ]
     }
-  }
+  ]
 }

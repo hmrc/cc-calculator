@@ -23,7 +23,7 @@ import com.github.fge.jackson.JsonLoader
 import models.input.APIModels.{Eligibility, Payload, Request}
 import models.input.esc._
 import models.output.OutputAPIModel.AwardPeriod
-import models.output.esc.Savings
+import models.output.esc.{ESCCalculation, Savings}
 import models.utility.{CalculationNIBands, CalculationTaxBands}
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
@@ -48,8 +48,8 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
 
     "return a Future[AwardPeriod] result" in {
       val service = ESCCalculator
-      val result = service.calculator.award(Request(payload = Payload(eligibility = Eligibility(esc = Some(ESCEligibility(taxYears = List())), tc = None, tfc = None))))
-      result.isInstanceOf[Future[AwardPeriod]] shouldBe true
+      val result = service.calculator.award(ESCEligibility(taxYears = List()))
+      result.isInstanceOf[Future[ESCCalculation]] shouldBe true
     }
 
     "(TY2016) get personal allowance when tax code is not provided" in {
@@ -1896,22 +1896,15 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
     "Generate total award with claimants (Total Award test)" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/esc/input/calculator_input_test.json")
       val json: JsValue = Json.parse(resource.toString)
-      val inputJson = json.validate[Request]
-      inputJson.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val inputJson = json.validate[ESCEligibility]
+      inputJson.isInstanceOf[JsSuccess[ESCEligibility]] shouldBe true
 
-      val result : AwardPeriod = ESCCalculator.calculator.award(inputJson.get)
+      val result: ESCCalculation = ESCCalculator.calculator.award(inputJson.get)
 
       val resourceJson = JsonLoader.fromResource("/json/esc/output/output_test_1.json")
       val outputJson: JsValue = Json.parse(resourceJson.toString)
 
-      JSONFactory.generateResultJson(result) shouldBe outputJson
-    }
-
-    "Generate total award with claimants (Total Award test - empty award period)" in {
-      val emptyRequest = Request(payload = Payload(eligibility = Eligibility(null, null, null)))
-      val result : AwardPeriod = ESCCalculator.calculator.award(emptyRequest)
-
-      result shouldBe AwardPeriod()
+      Json.toJson(result) shouldBe outputJson
     }
 
     "Validate tax code and return personal allowance (11000)" in {

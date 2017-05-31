@@ -1,17 +1,9 @@
 {
-  "payload": {
-    "eligibility": {
-      "esc": {
-        "taxYears": [
-          {
-            "startDate": "2015-08-27",
-            "endDate": "2016-08-27",
-            "periods": []
-          }
-        ]
-      },
-      "tc": null,
-      "tfc": null
+  "taxYears": [
+    {
+      "startDate": "2015-08-27",
+      "endDate": "2016-08-27",
+      "periods": []
     }
-  }
+  ]
 }
