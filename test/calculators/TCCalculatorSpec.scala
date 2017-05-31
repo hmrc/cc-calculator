@@ -458,59 +458,6 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
       calc.calculator.isInstanceOf[TCCalculatorService] shouldBe true
     }
 
-    "Determine if wtc Work element net due amount is nil (amount is 0)" in {
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
-      val fromDate = LocalDate.parse("12-12-2016", formatter)
-      val toDate = LocalDate.parse("06-04-2017", formatter)
-      val period = models.output.tc.Period(
-        from = fromDate,
-        until = toDate,
-        elements = Elements(
-          wtcWorkElement = Element(
-            maximumAmount = BigDecimal(100.00)
-          ),
-          wtcChildcareElement = Element(
-            maximumAmount = BigDecimal(100.00)
-          ),
-          ctcIndividualElement = Element(
-            maximumAmount = BigDecimal(100.00)
-          ),
-          ctcFamilyElement = Element(
-            maximumAmount = BigDecimal(100.00)
-          )
-        )
-      )
-      val result = period.elements.wtcWorkElementNetDueIsNil
-      result shouldBe true
-    }
-
-    "Determine if wtc Work element net due amount is nil (amount is not 0)" in {
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
-      val fromDate = LocalDate.parse("12-12-2016", formatter)
-      val toDate = LocalDate.parse("06-04-2017", formatter)
-      val period = models.output.tc.Period(
-        from = fromDate,
-        until = toDate,
-        elements = Elements(
-          wtcWorkElement = Element(
-            maximumAmount = BigDecimal(100.00),
-            netAmount = BigDecimal(100.00)
-          ),
-          wtcChildcareElement = Element(
-            maximumAmount = BigDecimal(100.00)
-          ),
-          ctcIndividualElement = Element(
-            maximumAmount = BigDecimal(100.00)
-          ),
-          ctcFamilyElement = Element(
-            maximumAmount = BigDecimal(100.00)
-          )
-        )
-      )
-      val result = period.elements.wtcWorkElementNetDueIsNil
-      result shouldBe false
-    }
-
     "(qualifying) determine if get basic element and the amount for the period" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_1.json")
       val json: JsValue = Json.parse(resource.toString)
