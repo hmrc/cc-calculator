@@ -41,7 +41,7 @@ case class TaxYear(
                     )
 
 object TaxYear extends MessagesObject{
-  def houseHoldIncomeValidation(income: BigDecimal) : Boolean = {
+  private def houseHoldIncomeValidation(income: BigDecimal) : Boolean = {
     income >= BigDecimal(0.00)
   }
 
@@ -68,19 +68,13 @@ case class Period(from: LocalDate,
   def config: TCTaxYearConfig = TCConfig.getConfig(from)
 
   def atLeastOneClaimantIsClaimingSocialSecurityBenefit: Boolean = {
-    val count = claimants.foldLeft(0)((acc, claimant) => if (claimant.isClaimingSocialSecurity) acc + 1 else acc)
+    val count = claimants.foldLeft(0)((acc, claimant) => if (claimant.doesNotTaper) acc + 1 else acc)
     count > 0
   }
 }
 
 object Period {
-  implicit val periodFormat: Reads[Period] = (
-    (JsPath \ "from").read[LocalDate](jodaLocalDateReads(datePattern)) and
-      (JsPath \ "until").read[LocalDate](jodaLocalDateReads(datePattern)) and
-        (JsPath \ "householdElements").read[HouseHoldElements] and
-          (JsPath \ "claimants").read[List[Claimant]] and
-            (JsPath \ "children").read[List[Child]]
-    )(Period.apply _)
+  implicit val periodFormat: Reads[Period] = Json.reads[Period]
 }
 
 case class ChildElements(child: Boolean = false,
@@ -90,17 +84,10 @@ case class ChildElements(child: Boolean = false,
                          childcare: Boolean = false)
 
 object ChildElements {
-  implicit val childElementsReads: Reads[ChildElements] = (
-    (JsPath \ "child").read[Boolean] and
-      (JsPath \ "youngAdult").read[Boolean] and
-        (JsPath \ "disability").read[Boolean] and
-          (JsPath \ "severeDisability").read[Boolean] and
-            (JsPath \ "childcare").read[Boolean]
-    )(ChildElements.apply _)
+  implicit val childElementsReads: Reads[ChildElements] = Json.reads[ChildElements]
 }
 
-case class Child(id: Short,
-                 qualifying: Boolean = false,
+case class Child(qualifying: Boolean = false,
                  childcareCost : BigDecimal,
                  childcareCostPeriod: Periods.Period,
                  childElements: ChildElements) {
@@ -124,16 +111,12 @@ case class Child(id: Short,
 }
 
 object Child extends MessagesObject {
-  def validID(id: Short): Boolean = {
-    id >= 0
-  }
 
   def childSpendValidation(cost: BigDecimal) : Boolean = {
     cost >= BigDecimal(0.00)
   }
 
   implicit val childFormat: Reads[Child] = (
-    (JsPath \ "id").read[Short].filter(ValidationError(messages("cc.calc.id.should.not.be.less.than.0")))(x => validID(x)) and
        (JsPath \ "qualifying").read[Boolean] and
         (JsPath \ "childcareCost").read[BigDecimal].filter(
           ValidationError(messages("cc.calc.childcare.spend.too.low"))
@@ -150,32 +133,22 @@ case class ClaimantDisability(
                              )
 
 object ClaimantDisability {
-  implicit val claimantDisabilityFormat: Reads[ClaimantDisability] = (
-    (JsPath \ "disability").read[Boolean] and
-      (JsPath \ "severeDisability").read[Boolean]
-    )(ClaimantDisability.apply _)
+  implicit val claimantDisabilityFormat: Reads[ClaimantDisability] = Json.reads[ClaimantDisability]
 }
 
 case class Claimant(qualifying: Boolean,
                     isPartner: Boolean,
                     claimantElements: ClaimantDisability,
-                    doesNotTaper : Boolean = false,
-                    failures: Option[List[String]]) {
-  def isQualified: Boolean = {
-    qualifying
-  }
+                    doesNotTaper : Boolean = false) {
 
   def getsDisabilityElement: Boolean = {
-    isQualified && claimantElements.disability
+    qualifying && claimantElements.disability
   }
 
   def getsSevereDisabilityElement: Boolean = {
-    isQualified && claimantElements.severeDisability
+    qualifying && claimantElements.severeDisability
   }
 
-  def isClaimingSocialSecurity: Boolean = {
-    doesNotTaper
-  }
 }
 
 object Claimant {
@@ -184,8 +157,7 @@ object Claimant {
     (JsPath \ "qualifying").read[Boolean] and
       (JsPath \ "isPartner").read[Boolean] and
         (JsPath \ "claimantElements").read[ClaimantDisability] and
-          ((JsPath \ "doesNotTaper").read[Boolean] or Reads.pure(false)) and
-            (JsPath \ "failures").readNullable[List[String]]
+          ((JsPath \ "doesNotTaper").read[Boolean] or Reads.pure(false))
     )(Claimant.apply _)
 }
 
@@ -198,12 +170,5 @@ case class HouseHoldElements(basic: Boolean = false,
                               )
 
 object HouseHoldElements {
-  implicit val householdElementsFormat: Reads[HouseHoldElements] = (
-    (JsPath \ "basic").read[Boolean] and
-      (JsPath \ "hours30").read[Boolean] and
-        (JsPath \ "childcare").read[Boolean] and
-          (JsPath \ "loneParent").read[Boolean] and
-            (JsPath \ "secondParent").read[Boolean] and
-              (JsPath \ "family").read[Boolean]
-    )(HouseHoldElements.apply _)
+  implicit val householdElementsFormat: Reads[HouseHoldElements] = Json.reads[HouseHoldElements]
 }

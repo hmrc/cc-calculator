@@ -38,23 +38,10 @@ class APIModelSpec extends UnitSpec with FakeCCCalculatorApplication with CCJson
     "return Tax Credits eligibility result" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_1.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
+      val result = json.validate[TCEligibility]
       result match {
         case JsSuccess(x, _) =>
-          x.getTaxCreditsEligibility.isInstanceOf[Success[TCEligibility]] shouldBe true
-        case _ => throw new Exception
-      }
-    }
-
-    "return Failure if Tax Credits eligibility result does not exist" in {
-      val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/no_eligiblity.json")
-      val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result match {
-        case JsSuccess(x, _) =>
-          x.getTaxCreditsEligibility.isInstanceOf[Failure[TCEligibility]] shouldBe true
+          x.isInstanceOf[TCEligibility] shouldBe true
         case _ => throw new Exception
       }
     }

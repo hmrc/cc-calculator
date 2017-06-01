@@ -1,132 +1,123 @@
 {
-  "payload": {
-    "eligibility": {
-      "tc": {
-      "taxYears": [
+  "taxYears": [
+    {
+      "from": "2017-09-27",
+      "until": "2018-04-06",
+      "houseHoldIncome": 17000.00,
+      "periods": [
         {
-         "from": "2017-09-27",
-         "until": "2018-04-06",
-         "houseHoldIncome" : 17000.00,
-
-         "periods": [
-          {
-            "from": "2017-09-27",
-            "until": "2017-12-12",
-            "householdElements": {
-              "basic": true,
-              "hours30": true,
-              "childcare": true,
-              "loneParent": true,
-              "secondParent": false,
-              "family": true
-            },
-            "claimants": [
-              {
-                "qualifying": true,
-                "isPartner": false,
-                "claimantElements": {
-                  "disability": false,
-                  "severeDisability": false
-                },
-                "failures": []
-              }
-            ],
-            "children": [
-              {
-                "id": 0,
-                "name": "Child 1",
-                "childcareCost": 200.00,
-                "childcareCostPeriod": "Month",
-                "qualifying": true,
-                "childElements": {
-                  "child": false,
-                  "youngAdult": true,
-                  "disability": false,
-                  "severeDisability": false,
-                  "childcare": true
-                },
-                "failures": []
+          "from": "2017-09-27",
+          "until": "2017-12-12",
+          "householdElements": {
+            "basic": true,
+            "hours30": true,
+            "childcare": true,
+            "loneParent": true,
+            "secondParent": false,
+            "family": true
+          },
+          "claimants": [
+            {
+              "qualifying": true,
+              "isPartner": false,
+              "claimantElements": {
+                "disability": false,
+                "severeDisability": false
               },
-              {
-                "id": 1,
-                "name": "Child 2",
-                "childcareCost": 200.00,
-                "childcareCostPeriod": "Month",
-                "qualifying": true,
-                "childElements": {
-                  "child": true,
-                  "youngAdult": false,
-                  "disability": false,
-                  "severeDisability": false,
-                  "childcare": true
-                },
-                "failures": []
-              }
-            ]
+              "failures": []
+            }
+          ],
+          "children": [
+            {
+              "id": 0,
+              "name": "Child 1",
+              "childcareCost": 200.00,
+              "childcareCostPeriod": "Month",
+              "qualifying": true,
+              "childElements": {
+                "child": false,
+                "youngAdult": true,
+                "disability": false,
+                "severeDisability": false,
+                "childcare": true
+              },
+              "failures": []
             },
-           {
-             "from": "2017-12-12",
-             "until": "2018-04-06",
-             "householdElements": {
-               "basic": true,
-               "hours30": true,
-               "childcare": true,
-               "loneParent": true,
-               "secondParent": false,
-               "family": true
-             },
-             "claimants": [
-               {
-                 "qualifying": true,
-                 "isPartner": false,
-                 "claimantElements": {
-                   "disability": false,
-                   "severeDisability": false
-                 },
-                 "failures": []
-               }
-             ],
-             "children": [
-               {
-                 "id": 0,
-                 "name": "Child 1",
-                 "childcareCost": 200.00,
-                 "childcareCostPeriod": "Month",
-                 "qualifying": true,
-                 "childElements": {
-                   "child": false,
-                   "youngAdult": true,
-                   "disability": false,
-                   "severeDisability": false,
-                   "childcare": true
-                 },
-                 "failures": []
-               },
-               {
-                 "id": 1,
-                 "name": "Child 2",
-                 "childcareCost": 200.00,
-                 "childcareCostPeriod": "Month",
-                 "qualifying": false,
-                 "childElements": {
-                   "child": false,
-                   "youngAdult": false,
-                   "disability": false,
-                   "severeDisability": false,
-                   "childcare": false
-                 },
-                 "failures": [
-                   "OVER_16"
-                 ]
-               }
-             ]
-           }
-         ]
-      }
-        ]
-      },
-      "tfc": null,
-      "esc": null
+            {
+              "id": 1,
+              "name": "Child 2",
+              "childcareCost": 200.00,
+              "childcareCostPeriod": "Month",
+              "qualifying": true,
+              "childElements": {
+                "child": true,
+                "youngAdult": false,
+                "disability": false,
+                "severeDisability": false,
+                "childcare": true
+              },
+              "failures": []
+            }
+          ]
+        },
+        {
+          "from": "2017-12-12",
+          "until": "2018-04-06",
+          "householdElements": {
+            "basic": true,
+            "hours30": true,
+            "childcare": true,
+            "loneParent": true,
+            "secondParent": false,
+            "family": true
+          },
+          "claimants": [
+            {
+              "qualifying": true,
+              "isPartner": false,
+              "claimantElements": {
+                "disability": false,
+                "severeDisability": false
+              },
+              "failures": []
+            }
+          ],
+          "children": [
+            {
+              "id": 0,
+              "name": "Child 1",
+              "childcareCost": 200.00,
+              "childcareCostPeriod": "Month",
+              "qualifying": true,
+              "childElements": {
+                "child": false,
+                "youngAdult": true,
+                "disability": false,
+                "severeDisability": false,
+                "childcare": true
+              },
+              "failures": []
+            },
+            {
+              "id": 1,
+              "name": "Child 2",
+              "childcareCost": 200.00,
+              "childcareCostPeriod": "Month",
+              "qualifying": false,
+              "childElements": {
+                "child": false,
+                "youngAdult": false,
+                "disability": false,
+                "severeDisability": false,
+                "childcare": false
+              },
+              "failures": [
+                "OVER_16"
+              ]
+            }
+          ]
+        }
+      ]
     }
-  }
+  ]
 }

@@ -1,7 +1,5 @@
 {
-  "payload": {
-    "eligibility": {
-      "tc": {
+
         "taxYears": [
           {
             "from": "2017-09-27",
@@ -54,9 +52,4 @@
             ]
           }
         ]
-      },
-      "esc": null,
-      "tfc": null
-    }
-  }
-}
+      }

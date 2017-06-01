@@ -70,28 +70,6 @@ trait CCCalculatorHelper {
     }
   }
 
-  def amountToWeeklyAmount(cost: BigDecimal, fromPeriod: Periods.Period): BigDecimal = {
-    fromPeriod match {
-      case Periods.Weekly => cost
-      case Periods.Fortnightly => cost / 2
-      case Periods.Monthly => (cost * 12) / 52
-      case Periods.Quarterly => (cost * 4) / 52
-      case Periods.Yearly => cost / 52
-      case _ => 0.00 //error
-    }
-  }
-
-  def amountToAnnualAmount(cost: BigDecimal, fromPeriod: Periods.Period): BigDecimal = {
-    fromPeriod match {
-      case Periods.Weekly => cost * 52
-      case Periods.Fortnightly => cost * 26
-      case Periods.Monthly => cost * 12
-      case Periods.Quarterly => cost * 4
-      case Periods.Yearly => cost
-      case _ => 0.00 //error
-    }
-  }
-
   def annualAmountToPeriod(cost: BigDecimal, fromPeriod: Periods.Period): BigDecimal = {
     fromPeriod match {
       case Periods.Weekly => cost / 52
