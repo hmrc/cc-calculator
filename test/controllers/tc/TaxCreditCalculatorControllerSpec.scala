@@ -100,26 +100,6 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
       status(result) shouldBe Status.BAD_REQUEST
     }
 
-    "Accept invalid json if child name for more than 25 characters for total award and return 400" in {
-      val controller = mockTaxCreditCalculatorController
-      val inputJson: JsValue  = Json.parse(JsonLoader.fromResource("/json/tc/input/2016/invalid_child_name.json").toString)
-      val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
-
-      when(controller.calculator.award(any[Request]())).thenReturn(Future.successful(AwardPeriod()))
-      val result = await(controller.calculate()(request))
-      status(result) shouldBe Status.BAD_REQUEST
-    }
-
-    "Accept invalid json if child name for more than 25 characters for income advice and return 400" in {
-      val controller = mockTaxCreditCalculatorController
-      val inputJson: JsValue  = Json.parse(JsonLoader.fromResource("/json/tc/input/2016/invalid_child_name.json").toString)
-      val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
-
-      when(controller.calculator.incomeAdvice(any[Request]())).thenReturn(Future.successful(AwardPeriod()))
-      val result = await(controller.incomeAdvice() (request))
-      status(result) shouldBe Status.BAD_REQUEST
-    }
-
     "Accept invalid json if houseHold Income is less than 0.00 and return Bad request" in {
       val controller = mockTaxCreditCalculatorController
       val inputJson: JsValue  = Json.parse(JsonLoader.fromResource("/json/tc/input/2016/negative_household_income.json").toString)
@@ -727,46 +707,6 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
           |            {
           |                "message": "Childcare Spend cost should not be less than 0.00",
           |                "args": []
-          |            }
-          |         ]
-          |       }
-          |    ]
-          |}
-        """.stripMargin)
-
-      status(result) shouldBe Status.BAD_REQUEST
-      jsonBodyOf(result) shouldBe outputJSON
-    }
-
-    "Accept invalid json if child ID index is less than 0 and return a valid response" in {
-      val controller = mockTaxCreditCalculatorController
-      val inputJson = Json.parse(JsonLoader.fromResource("/json/tc/input/2016/invalid_child_name.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
-      val result = await(controller.incomeAdvice()(request))
-
-      val outputJSON = Json.parse(
-        """
-          |{
-          |    "status": 400,
-          |    "errors":
-          |    [
-          |       {
-          |        "path" : "/payload/eligibility/tc/taxYears(0)/periods(0)/children(0)/id",
-          |         "validationErrors" :
-          |         [
-          |            {
-          |                "message": "ID should not be less than 0",
-          |                "args": []
-          |            }
-          |         ]
-          |       },
-          |       {
-          |        "path" : "/payload/eligibility/tc/taxYears(0)/periods(0)/children(0)/name",
-          |         "validationErrors" :
-          |         [
-          |            {
-          |                "message": "error.maxLength",
-          |                "args": [25]
           |            }
           |         ]
           |       }
