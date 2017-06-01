@@ -132,10 +132,6 @@ class TCSchemeConfigSpec extends FakeCCCalculatorApplication with TCConfig {
 
   "TC SchemeConfig" should {
 
-    "max no of characters of childrens name from config file" in {
-      TCConfig.maxNameLength shouldBe 25
-    }
-
     "Tax year end month from config file" in {
       TCConfig.taxYearEndMonth shouldBe 4
     }

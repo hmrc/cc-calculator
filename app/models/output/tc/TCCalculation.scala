@@ -17,18 +17,10 @@
 package models.output.tc
 
 import org.joda.time.LocalDate
-import play.api.libs.functional.syntax._
-import play.api.libs.json.Writes._
 import play.api.libs.json._
 
-object TCCalculation extends utils.CCFormat {
-  implicit val TCCalculationWrites: Writes[TCCalculation] = (
-    (JsPath \ "from").write[LocalDate](jodaLocalDateWrites(datePattern)) and
-      (JsPath \ "until").write[LocalDate](jodaLocalDateWrites(datePattern)) and
-        (JsPath \ "totalAwardAmount").write[BigDecimal] and
-          (JsPath \ "houseHoldAdviceAmount").write[BigDecimal] and
-            (JsPath \ "taxYears").write[List[TaxYear]]
-    )(unlift(TCCalculation.unapply))
+object TCCalculation {
+  implicit val TCCalculationWrites: Writes[TCCalculation] = Json.writes[TCCalculation]
 }
 
 case class TCCalculation(from: LocalDate,
@@ -36,16 +28,10 @@ case class TCCalculation(from: LocalDate,
                          totalAwardAmount: BigDecimal = 0.00,
                          houseHoldAdviceAmount: BigDecimal = 0.00,
                          taxYears: List[TaxYear]
-                          )
+                        )
 
-object TaxYear extends utils.CCFormat {
-  implicit val TaxYearWrites: Writes[TaxYear] = (
-    (JsPath \ "from").write[LocalDate](jodaLocalDateWrites(datePattern)) and
-      (JsPath \ "until").write[LocalDate](jodaLocalDateWrites(datePattern)) and
-        (JsPath \ "taxYearAwardAmount").write[BigDecimal] and
-          (JsPath \ "taxYearAdviceAmount").write[BigDecimal] and
-            (JsPath \ "periods").write[List[Period]]
-    )(unlift(TaxYear.unapply))
+object TaxYear {
+  implicit val TaxYearWrites: Writes[TaxYear] = Json.writes[TaxYear]
 }
 
 case class TaxYear(
@@ -54,16 +40,10 @@ case class TaxYear(
                     taxYearAwardAmount: BigDecimal = BigDecimal(0.00),
                     taxYearAdviceAmount: BigDecimal = BigDecimal(0.00),
                     periods: List[Period]
-                    )
+                  )
 
-object Period extends utils.CCFormat {
-  implicit val ElementWrites: Writes[Period] = (
-    (JsPath \ "from").write[LocalDate](jodaLocalDateWrites(datePattern)) and
-      (JsPath \ "until").write[LocalDate](jodaLocalDateWrites(datePattern)) and
-        (JsPath \ "periodNetAmount").write[BigDecimal] and
-          (JsPath \ "periodAdviceAmount").write[BigDecimal] and
-            (JsPath \ "elements").write[Elements]
-    )(unlift(Period.unapply))
+object Period {
+  implicit val ElementWrites: Writes[Period] = Json.writes[Period]
 }
 
 case class Period(from: LocalDate,
@@ -73,31 +53,16 @@ case class Period(from: LocalDate,
                   elements: Elements)
 
 object Elements {
-  implicit val ElementsWrites: Writes[Elements] = (
-      (JsPath \ "wtcWorkElement").write[Element] and
-        (JsPath \ "wtcChildcareElement").write[Element] and
-         (JsPath \ "ctcIndividualElement").write[Element] and
-           (JsPath \ "ctcFamilyElement").write[Element]
-    )(unlift(Elements.unapply))
+  implicit val ElementsWrites: Writes[Elements] = Json.writes[Elements]
 }
 
 case class Elements(wtcWorkElement: Element,
-                     wtcChildcareElement: Element,
-                     ctcIndividualElement: Element,
-                     ctcFamilyElement: Element) {
-
-  def wtcWorkElementNetDueIsNil: Boolean = {
-    wtcWorkElement.netAmount.equals(BigDecimal(0.00))
-  }
-
-}
+                    wtcChildcareElement: Element,
+                    ctcIndividualElement: Element,
+                    ctcFamilyElement: Element)
 
 object Element {
-  implicit val ElementWrites: Writes[Element] = (
-    (JsPath \ "netAmount").write[BigDecimal] and
-      (JsPath \ "maximumAmount").write[BigDecimal] and
-        (JsPath \ "taperAmount").write[BigDecimal]
-    )(unlift(Element.unapply))
+  implicit val ElementWrites: Writes[Element] = Json.writes[Element]
 }
 
 case class Element(netAmount: BigDecimal = 0.00,

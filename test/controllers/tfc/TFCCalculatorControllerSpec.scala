@@ -54,32 +54,6 @@ class TFCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
       status(result.get) should not be NOT_FOUND
     }
 
-    "Return Bad Request with error message if a request for a different scheme is passed(e.g. TC) " in {
-
-      val mockTFCCalculatorController = new TFCCalculatorController(applicationMessagesApi) with TFCCalculator {
-        override val calculator = mock[TFCCalculatorService]
-        override val auditEvent = mock[AuditEvents]
-      }
-
-      val controller = mockTFCCalculatorController
-
-      val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_12.json")
-      val inputJson: JsValue = Json.parse(resource.toString)
-      val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
-      val result = await(controller.calculate()(request))
-      status(result) shouldBe Status.BAD_REQUEST
-
-      val outputJSON = Json.parse(
-        """
-          |{
-          |    "status": 400,
-          |    "error": "You have provided a wrong type of request"
-          |}
-        """.stripMargin)
-
-      jsonBodyOf(result) shouldBe outputJSON
-    }
-
     "Return Internal Server Error with error message if an exception is thrown during calculation " in {
 
       val mockTFCCalculatorController = new TFCCalculatorController(applicationMessagesApi) with TFCCalculator {

@@ -28,7 +28,6 @@ import uk.gov.hmrc.play.config.ServicesConfig
 
 trait TCConfig extends ServicesConfig {
   val defaultMaxNameLength: Int = 25
-  lazy val maxNameLength = getInt(s"tc.max-name-length")
   lazy val taxYearEndMonth = getInt(s"tc.end-of-tax-year-date.month")
   lazy val taxYearEndDay = getInt(s"tc.end-of-tax-year-date.day")
 }

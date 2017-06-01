@@ -20,11 +20,12 @@ import calculators.TCCalculator
 import com.fasterxml.jackson.databind.JsonNode
 import com.github.fge.jackson.JsonLoader
 import models.input.APIModels.Request
+import models.input.tc.TCEligibility
 import models.output.tc.{Element, Period}
 import org.joda.time.LocalDate
 import play.api.libs.json.{JsSuccess, JsValue, Json}
 import uk.gov.hmrc.play.test.UnitSpec
-import utils.{FakeCCCalculatorApplication, CCJsonLogger}
+import utils.{CCJsonLogger, FakeCCCalculatorApplication}
 
 
 trait ValidateCalculations {
@@ -60,16 +61,15 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
   "(TY 2016/2017 Scenario 1) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_1.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
+      result.isInstanceOf[JsSuccess[TCEligibility]] shouldBe true
 
-      val award = TCCalculator.calculator.award(result.get)
-      val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
+      val award = await(TCCalculator.calculator.award(result.get))
+      val incomeAdvice = await(TCCalculator.calculator.incomeAdvice(result.get))
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -89,26 +89,23 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
           throw e
       }
 
-      award.tc.get.totalAwardAmount shouldBe 2426.29
-      award.tc.get.houseHoldAdviceAmount shouldBe 0.00
-      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 14819.1500
-      incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
+      award.totalAwardAmount shouldBe 2426.29
+      award.houseHoldAdviceAmount shouldBe 0.00
+      incomeAdvice.houseHoldAdviceAmount shouldBe 14819.1500
+      incomeAdvice.totalAwardAmount shouldBe 0.00
     }
 
     "(TY 2016/2017 Scenario 2) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_2.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
+      val result = json.validate[TCEligibility]
 
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
-
-      val award = TCCalculator.calculator.award(result.get)
-      val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
+      val award = await(TCCalculator.calculator.award(result.get))
+      val incomeAdvice = await(TCCalculator.calculator.incomeAdvice(result.get))
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -128,24 +125,24 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
           throw e
       }
 
-      award.tc.get.totalAwardAmount shouldBe 1234.13
-      award.tc.get.houseHoldAdviceAmount shouldBe 0.00
-      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 20808.6912
-      incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
+      award.totalAwardAmount shouldBe 1234.13
+      award.houseHoldAdviceAmount shouldBe 0.00
+      incomeAdvice.houseHoldAdviceAmount shouldBe 20808.6912
+      incomeAdvice.totalAwardAmount shouldBe 0.00
     }
 
     "(TY 2016/2017 Scenario 3) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_3.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val award = TCCalculator.calculator.award(result.get)
+
+
+      val award = await(TCCalculator.calculator.award(result.get))
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -164,15 +161,15 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
     "(TY 2016/2017 Scenario 4) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_4.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val award = TCCalculator.calculator.award(result.get)
+
+
+      val award = await(TCCalculator.calculator.award(result.get))
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -191,15 +188,13 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
     "(TY 2016/2017 Scenario 5) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_5.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val award = TCCalculator.calculator.award(result.get)
+      val award = await(TCCalculator.calculator.award(result.get))
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -218,15 +213,13 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
     "(TY 2016/2017 Scenario 6) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_6.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val award = TCCalculator.calculator.award(result.get)
+      val award = await(TCCalculator.calculator.award(result.get))
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -245,16 +238,14 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
     "(TY 2016/2017 Scenario 7) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_7.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val award = TCCalculator.calculator.award(result.get)
+      val award = await(TCCalculator.calculator.award(result.get))
       val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -273,26 +264,24 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
         case e: Exception =>
           throw e
       }
-      award.tc.get.totalAwardAmount shouldBe 2850.31
-      award.tc.get.houseHoldAdviceAmount shouldBe 0.00
-      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 15853.7588
-      incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
+      award.totalAwardAmount shouldBe 2850.31
+      award.houseHoldAdviceAmount shouldBe 0.00
+      incomeAdvice.houseHoldAdviceAmount shouldBe 15853.7588
+      incomeAdvice.totalAwardAmount shouldBe 0.00
 
     }
 
     "(TY 2016/2017 Scenario 8) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_8.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val award = TCCalculator.calculator.award(result.get)
+      val award = await(TCCalculator.calculator.award(result.get))
       val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -311,24 +300,22 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
         case e: Exception =>
           throw e
       }
-      award.tc.get.totalAwardAmount shouldBe 0.00
-      award.tc.get.houseHoldAdviceAmount shouldBe 0.00
-      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 15853.7588
-      incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
+      award.totalAwardAmount shouldBe 0.00
+      award.houseHoldAdviceAmount shouldBe 0.00
+      incomeAdvice.houseHoldAdviceAmount shouldBe 15853.7588
+      incomeAdvice.totalAwardAmount shouldBe 0.00
     }
 
     "(TY 2016/2017 Scenario 9) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_9.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val award = TCCalculator.calculator.award(result.get)
+      val award = await(TCCalculator.calculator.award(result.get))
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -347,14 +334,12 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
     "(TY 2016/2017 Scenario 10) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_10.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
-      val award = TCCalculator.calculator.award(result.get)
+      val result = json.validate[TCEligibility]
+      val award = await(TCCalculator.calculator.award(result.get))
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -373,15 +358,13 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
     "(TY 2016/2017 Scenario 11) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_11.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val award = TCCalculator.calculator.award(result.get)
+      val award = await(TCCalculator.calculator.award(result.get))
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -400,14 +383,13 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
     "(TY 2016/2017 Scenario 12) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_12.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
-      val award = TCCalculator.calculator.award(result.get)
+      val result = json.validate[TCEligibility]
+
+      val award = await(TCCalculator.calculator.award(result.get))
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -426,16 +408,14 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
     "(TY 2016/2017 Scenario 13) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_13.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val award = TCCalculator.calculator.award(result.get)
+      val award = await(TCCalculator.calculator.award(result.get))
       val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -454,25 +434,23 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
         case e: Exception =>
           throw e
       }
-      award.tc.get.totalAwardAmount shouldBe 3981.03
-      award.tc.get.houseHoldAdviceAmount shouldBe 0.00
-      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 18612.7156
-      incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
+      award.totalAwardAmount shouldBe 3981.03
+      award.houseHoldAdviceAmount shouldBe 0.00
+      incomeAdvice.houseHoldAdviceAmount shouldBe 18612.7156
+      incomeAdvice.totalAwardAmount shouldBe 0.00
     }
 
     "(TY 2016/2017 Scenario 14) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_14.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val award = TCCalculator.calculator.award(result.get)
+      val award = await(TCCalculator.calculator.award(result.get))
       val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -491,23 +469,22 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
         case e: Exception =>
           throw e
       }
-      award.tc.get.totalAwardAmount shouldBe 1888.88
-      award.tc.get.houseHoldAdviceAmount shouldBe 0.00
-      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 22406.2812
-      incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
+      award.totalAwardAmount shouldBe 1888.88
+      award.houseHoldAdviceAmount shouldBe 0.00
+      incomeAdvice.houseHoldAdviceAmount shouldBe 22406.2812
+      incomeAdvice.totalAwardAmount shouldBe 0.00
     }
 
     "(TY 2016/2017 Scenario 15) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_15.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
-      val award = TCCalculator.calculator.award(result.get)
+      val result = json.validate[TCEligibility]
+
+      val award = await(TCCalculator.calculator.award(result.get))
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -526,15 +503,13 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
     "(TY 2016/2017 Scenario 16) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_16.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val award = TCCalculator.calculator.award(result.get)
+      val award = await(TCCalculator.calculator.award(result.get))
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -553,15 +528,13 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
     "(TY 2016/2017 Scenario 17) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_17.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val award = TCCalculator.calculator.award(result.get)
+      val award = await(TCCalculator.calculator.award(result.get))
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -580,15 +553,13 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
     "(TY 2016/2017 Scenario 18) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_18.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val award = TCCalculator.calculator.award(result.get)
+      val award = await(TCCalculator.calculator.award(result.get))
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -607,16 +578,14 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
     "(TY 2016/2017 Scenario 19) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_19.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val award = TCCalculator.calculator.award(result.get)
+      val award = await(TCCalculator.calculator.award(result.get))
       val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -635,25 +604,23 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
         case e: Exception =>
           throw e
       }
-      award.tc.get.totalAwardAmount shouldBe 4647.62
-      award.tc.get.houseHoldAdviceAmount shouldBe 0.00
-      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 20239.1952
-      incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
+      award.totalAwardAmount shouldBe 4647.62
+      award.houseHoldAdviceAmount shouldBe 0.00
+      incomeAdvice.houseHoldAdviceAmount shouldBe 20239.1952
+      incomeAdvice.totalAwardAmount shouldBe 0.00
     }
 
     "(TY 2016/2017 Scenario 20) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_20.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val award = TCCalculator.calculator.award(result.get)
+      val award = await(TCCalculator.calculator.award(result.get))
       val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -672,24 +639,22 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
         case e: Exception =>
           throw e
       }
-      award.tc.get.totalAwardAmount shouldBe 3222.06
-      award.tc.get.houseHoldAdviceAmount shouldBe 0.00
-      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 25659.2404
-      incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
+      award.totalAwardAmount shouldBe 3222.06
+      award.houseHoldAdviceAmount shouldBe 0.00
+      incomeAdvice.houseHoldAdviceAmount shouldBe 25659.2404
+      incomeAdvice.totalAwardAmount shouldBe 0.00
     }
 
     "(TY 2016/2017 Scenario 21) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_21.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val award = TCCalculator.calculator.award(result.get)
+      val award = await(TCCalculator.calculator.award(result.get))
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -708,15 +673,13 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
     "(TY 2016/2017 Scenario 22) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_22.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val award = TCCalculator.calculator.award(result.get)
+      val award = await(TCCalculator.calculator.award(result.get))
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -735,15 +698,13 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
     "(TY 2016/2017 Scenario 23) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_23.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val award = TCCalculator.calculator.award(result.get)
+      val award = await(TCCalculator.calculator.award(result.get))
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -763,15 +724,13 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
     "(TY 2016/2017 Scenario 24) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_24.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val award = TCCalculator.calculator.award(result.get)
+      val award = await(TCCalculator.calculator.award(result.get))
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -790,15 +749,13 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
     "(TY 2016/2017 Scenario 25) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_25.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val award = TCCalculator.calculator.award(result.get)
+      val award = await(TCCalculator.calculator.award(result.get))
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -817,15 +774,13 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
     "(TY 2016/2017 Scenario 26) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_26.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val award = TCCalculator.calculator.award(result.get)
+      val award = await(TCCalculator.calculator.award(result.get))
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -844,15 +799,13 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
     "(TY 2016/2017 Scenario 27) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_27.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val award = TCCalculator.calculator.award(result.get)
+      val award = await(TCCalculator.calculator.award(result.get))
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -871,15 +824,13 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
     "(TY 2016/2017 Scenario 28) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_28.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val award = TCCalculator.calculator.award(result.get)
+      val award = await(TCCalculator.calculator.award(result.get))
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -898,15 +849,13 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
     "(TY 2016/2017 Scenario 29) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_29.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val award = TCCalculator.calculator.award(result.get)
+      val award = await(TCCalculator.calculator.award(result.get))
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -925,15 +874,13 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
     "(TY 2016/2017 Scenario 30) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_30.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val award = TCCalculator.calculator.award(result.get)
+      val award = await(TCCalculator.calculator.award(result.get))
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -952,15 +899,13 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
     "(TY 2016/2017 Scenario 31) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_31.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val award = TCCalculator.calculator.award(result.get)
+      val award = await(TCCalculator.calculator.award(result.get))
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -979,15 +924,13 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
     "(TY 2016/2017 Scenario 32) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_32.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val award = TCCalculator.calculator.award(result.get)
+      val award = await(TCCalculator.calculator.award(result.get))
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -1006,15 +949,13 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
     "(TY 2016/2017 Scenario 33) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_33.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val award = TCCalculator.calculator.award(result.get)
+      val award = await(TCCalculator.calculator.award(result.get))
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -1033,15 +974,13 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
     "(TY 2016/2017 Scenario 34) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_34.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val award = TCCalculator.calculator.award(result.get)
+      val award = await(TCCalculator.calculator.award(result.get))
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -1060,16 +999,14 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
     "(TY 2016/2017 Scenario 35) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_35.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val award = TCCalculator.calculator.award(result.get)
+      val award = await(TCCalculator.calculator.award(result.get))
       val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -1088,25 +1025,23 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
         case e: Exception =>
           throw e
       }
-      award.tc.get.totalAwardAmount shouldBe 7380.83
-      award.tc.get.houseHoldAdviceAmount shouldBe 0.00
-      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 26908.2276
-      incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
+      award.totalAwardAmount shouldBe 7380.83
+      award.houseHoldAdviceAmount shouldBe 0.00
+      incomeAdvice.houseHoldAdviceAmount shouldBe 26908.2276
+      incomeAdvice.totalAwardAmount shouldBe 0.00
     }
 
     "(TY 2016/2017 Scenario 36) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_36.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val award = TCCalculator.calculator.award(result.get)
+      val award = await(TCCalculator.calculator.award(result.get))
       val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -1125,24 +1060,22 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
         case e: Exception =>
           throw e
       }
-      award.tc.get.totalAwardAmount shouldBe 5955.27
-      award.tc.get.houseHoldAdviceAmount shouldBe 0.00
-      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 32328.2728
-      incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
+      award.totalAwardAmount shouldBe 5955.27
+      award.houseHoldAdviceAmount shouldBe 0.00
+      incomeAdvice.houseHoldAdviceAmount shouldBe 32328.2728
+      incomeAdvice.totalAwardAmount shouldBe 0.00
     }
 
     "(TY 2016/2017 Scenario 37) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_37.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val award = TCCalculator.calculator.award(result.get)
+      val award = await(TCCalculator.calculator.award(result.get))
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -1162,15 +1095,13 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
     "(TY 2016/2017 Scenario 38) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_38.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val award = TCCalculator.calculator.award(result.get)
+      val award = await(TCCalculator.calculator.award(result.get))
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -1189,15 +1120,13 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
     "(TY 2016/2017 Scenario 39) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_39.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val award = TCCalculator.calculator.award(result.get)
+      val award = await(TCCalculator.calculator.award(result.get))
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -1216,15 +1145,13 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
     "(TY 2016/2017 Scenario 40) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_40.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val award = TCCalculator.calculator.award(result.get)
+      val award = await(TCCalculator.calculator.award(result.get))
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -1243,15 +1170,13 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
     "(TY 2016/2017 Scenario 41) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_41.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val award = TCCalculator.calculator.award(result.get)
+      val award = await(TCCalculator.calculator.award(result.get))
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -1270,15 +1195,13 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
     "(TY 2016/2017 Scenario 42) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_42.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val award = TCCalculator.calculator.award(result.get)
+      val award = await(TCCalculator.calculator.award(result.get))
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -1297,15 +1220,13 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
     "(TY 2016/2017 Scenario 43) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_43.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val award = TCCalculator.calculator.award(result.get)
+      val award = await(TCCalculator.calculator.award(result.get))
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -1324,16 +1245,14 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
     "(TY 2016/2017 Scenario 44) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_44.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val award = TCCalculator.calculator.award(result.get)
+      val award = await(TCCalculator.calculator.award(result.get))
       val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -1352,24 +1271,22 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
         case e: Exception =>
           throw e
       }
-      award.tc.get.totalAwardAmount shouldBe 16346.18
-      award.tc.get.houseHoldAdviceAmount shouldBe 0.00
-      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 48783.6816
-      incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
+      award.totalAwardAmount shouldBe 16346.18
+      award.houseHoldAdviceAmount shouldBe 0.00
+      incomeAdvice.houseHoldAdviceAmount shouldBe 48783.6816
+      incomeAdvice.totalAwardAmount shouldBe 0.00
     }
 
     "(TY 2016/2017 Scenario 45) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_45.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val award = TCCalculator.calculator.award(result.get)
+      val award = await(TCCalculator.calculator.award(result.get))
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -1388,15 +1305,13 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
     "(TY 2016/2017 Scenario 46) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_46.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val award = TCCalculator.calculator.award(result.get)
+      val award = await(TCCalculator.calculator.award(result.get))
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -1415,14 +1330,12 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
     "(TY 2016/2017 Scenario 47) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_47.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
-
-      val award = TCCalculator.calculator.award(result.get)
+      val result = json.validate[TCEligibility]
+      val award = await(TCCalculator.calculator.award(result.get))
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -1442,14 +1355,12 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
     "(TY 2016/2017 Scenario 48) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_48.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
-
-      val award = TCCalculator.calculator.award(result.get)
+      val result = json.validate[TCEligibility]
+      val award = await(TCCalculator.calculator.award(result.get))
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -1468,14 +1379,12 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
     "(TY 2016/2017 Scenario 49) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_49.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
-
-      val award = TCCalculator.calculator.award(result.get)
+      val result = json.validate[TCEligibility]
+      val award = await(TCCalculator.calculator.award(result.get))
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -1494,15 +1403,13 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
     "(TY 2016/2017 Scenario 50) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_50.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val award = TCCalculator.calculator.award(result.get)
+      val award = await(TCCalculator.calculator.award(result.get))
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -1525,16 +1432,13 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
     "(TY 2016/2017 Scenario 51) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_51.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-//      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
-
-      val award = TCCalculator.calculator.award(result.get)
+      val result = json.validate[TCEligibility]
+      val award = await(TCCalculator.calculator.award(result.get))
       val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -1562,25 +1466,23 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
         case e: Exception =>
           throw e
       }
-      award.tc.get.totalAwardAmount shouldBe 2982.17
-      award.tc.get.houseHoldAdviceAmount shouldBe 0.00
-      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 14970.0640
-      incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
+      award.totalAwardAmount shouldBe 2982.17
+      award.houseHoldAdviceAmount shouldBe 0.00
+      incomeAdvice.houseHoldAdviceAmount shouldBe 14970.0640
+      incomeAdvice.totalAwardAmount shouldBe 0.00
     }
 
     "(TY 2016/2017 Scenario 52) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_52.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val award = TCCalculator.calculator.award(result.get)
+      val award = await(TCCalculator.calculator.award(result.get))
       val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -1608,25 +1510,23 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
         case e: Exception =>
           throw e
       }
-      award.tc.get.totalAwardAmount shouldBe 1787.75
-      award.tc.get.houseHoldAdviceAmount shouldBe 0.00
-      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 12055.6792
-      incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
+      award.totalAwardAmount shouldBe 1787.75
+      award.houseHoldAdviceAmount shouldBe 0.00
+      incomeAdvice.houseHoldAdviceAmount shouldBe 12055.6792
+      incomeAdvice.totalAwardAmount shouldBe 0.00
     }
 
     "(TY 2016/2017 Scenario 53) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_53.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val award = TCCalculator.calculator.award(result.get)
+      val award = await(TCCalculator.calculator.award(result.get))
       val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -1654,25 +1554,23 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
         case e: Exception =>
           throw e
       }
-      award.tc.get.totalAwardAmount shouldBe 955.27
-      award.tc.get.houseHoldAdviceAmount shouldBe 0.00
-      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 17395.3508
-      incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
+      award.totalAwardAmount shouldBe 955.27
+      award.houseHoldAdviceAmount shouldBe 0.00
+      incomeAdvice.houseHoldAdviceAmount shouldBe 17395.3508
+      incomeAdvice.totalAwardAmount shouldBe 0.00
     }
 
     "(TY 2016/2017 Scenario 54) Generate total award with periods with elements (not applicable for our journey)" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_54.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val award = TCCalculator.calculator.award(result.get)
+      val award = await(TCCalculator.calculator.award(result.get))
       val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -1691,25 +1589,23 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
         case e: Exception =>
           throw e
       }
-      award.tc.get.totalAwardAmount shouldBe 0.00
-      award.tc.get.houseHoldAdviceAmount shouldBe 0.00
-      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 5862.3248
-      incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
+      award.totalAwardAmount shouldBe 0.00
+      award.houseHoldAdviceAmount shouldBe 0.00
+      incomeAdvice.houseHoldAdviceAmount shouldBe 5862.3248
+      incomeAdvice.totalAwardAmount shouldBe 0.00
     }
 
     "(TY 2016/2017 Scenario 55) Generate total award with periods with elements (not applicable for our journey)" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_55.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val award = TCCalculator.calculator.award(result.get)
+      val award = await(TCCalculator.calculator.award(result.get))
       val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -1729,25 +1625,23 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
         case e: Exception =>
           throw e
       }
-      award.tc.get.totalAwardAmount shouldBe 0.00
-      award.tc.get.houseHoldAdviceAmount shouldBe 0.00
-      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 9655.8904
-      incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
+      award.totalAwardAmount shouldBe 0.00
+      award.houseHoldAdviceAmount shouldBe 0.00
+      incomeAdvice.houseHoldAdviceAmount shouldBe 9655.8904
+      incomeAdvice.totalAwardAmount shouldBe 0.00
     }
 
     "(TY 2016/2017 Scenario 56) Generate total award with periods with elements (not applicable for our journey)" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_56.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val award = TCCalculator.calculator.award(result.get)
+      val award = await(TCCalculator.calculator.award(result.get))
       val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -1767,25 +1661,23 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
         case e: Exception =>
           throw e
       }
-      award.tc.get.totalAwardAmount shouldBe 1025.67
-      award.tc.get.houseHoldAdviceAmount shouldBe 0.00
-      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 5862.3248
-      incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
+      award.totalAwardAmount shouldBe 1025.67
+      award.houseHoldAdviceAmount shouldBe 0.00
+      incomeAdvice.houseHoldAdviceAmount shouldBe 5862.3248
+      incomeAdvice.totalAwardAmount shouldBe 0.00
     }
 
     "(TY 2016/2017 Scenario 57) Generate total award with periods with elements (not applicable for our journey)" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_57.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val award = TCCalculator.calculator.award(result.get)
+      val award = await(TCCalculator.calculator.award(result.get))
       val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -1805,25 +1697,23 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
         case e: Exception =>
           throw e
       }
-      award.tc.get.totalAwardAmount shouldBe 1025.67
-      award.tc.get.houseHoldAdviceAmount shouldBe 0.00
-      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 5862.3248
-      incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
+      award.totalAwardAmount shouldBe 1025.67
+      award.houseHoldAdviceAmount shouldBe 0.00
+      incomeAdvice.houseHoldAdviceAmount shouldBe 5862.3248
+      incomeAdvice.totalAwardAmount shouldBe 0.00
     }
 
     "(TY 2016/2017 Scenario 58, Child being born mid tax year) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_58.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val award = TCCalculator.calculator.award(result.get)
+      val award = await(TCCalculator.calculator.award(result.get))
       val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -1851,26 +1741,24 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
         case e: Exception =>
           throw e
       }
-      award.tc.get.totalAwardAmount shouldBe 0.00
-      award.tc.get.houseHoldAdviceAmount shouldBe 0.00
+      award.totalAwardAmount shouldBe 0.00
+      award.houseHoldAdviceAmount shouldBe 0.00
 
-      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 23189.0808
-      incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
+      incomeAdvice.houseHoldAdviceAmount shouldBe 23189.0808
+      incomeAdvice.totalAwardAmount shouldBe 0.00
     }
 
     "(TY 2016/2017 Scenario 59, doesNotTaper is true) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_59.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val award = TCCalculator.calculator.award(result.get)
+      val award = await(TCCalculator.calculator.award(result.get))
       val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -1898,26 +1786,24 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
         case e: Exception =>
           throw e
       }
-      award.tc.get.totalAwardAmount shouldBe 7463.57
-      award.tc.get.houseHoldAdviceAmount shouldBe 0.00
+      award.totalAwardAmount shouldBe 7463.57
+      award.houseHoldAdviceAmount shouldBe 0.00
 
-      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 23189.0808
-      incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
+      incomeAdvice.houseHoldAdviceAmount shouldBe 23189.0808
+      incomeAdvice.totalAwardAmount shouldBe 0.00
     }
 
     "(TY 2016/2017 Scenario 60, doesNotTaper is false) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_60.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val award = TCCalculator.calculator.award(result.get)
+      val award = await(TCCalculator.calculator.award(result.get))
       val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -1945,26 +1831,24 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
         case e: Exception =>
           throw e
       }
-      award.tc.get.totalAwardAmount shouldBe 0.00
-      award.tc.get.houseHoldAdviceAmount shouldBe 0.00
+      award.totalAwardAmount shouldBe 0.00
+      award.houseHoldAdviceAmount shouldBe 0.00
 
-      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 23189.0808
-      incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
+      incomeAdvice.houseHoldAdviceAmount shouldBe 23189.0808
+      incomeAdvice.totalAwardAmount shouldBe 0.00
     }
 
     "(TY 2016/2017 Scenario 61) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_61.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val taxYearProRataAward = TCCalculator.calculator.award(result.get)
+      val taxYearProRataAward = await(TCCalculator.calculator.award(result.get))
       val taxYearProRataIncomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = taxYearProRataAward.tc.get.taxYears.head.periods
+        val periods: List[Period] = taxYearProRataAward.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -1992,24 +1876,22 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
         case e: Exception =>
           throw e
       }
-      taxYearProRataAward.tc.get.totalAwardAmount shouldBe 2982.17
-      taxYearProRataAward.tc.get.houseHoldAdviceAmount shouldBe 0.00
-      taxYearProRataIncomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 14970.0640
-      taxYearProRataIncomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
+      taxYearProRataAward.totalAwardAmount shouldBe 2982.17
+      taxYearProRataAward.houseHoldAdviceAmount shouldBe 0.00
+      taxYearProRataIncomeAdvice.houseHoldAdviceAmount shouldBe 14970.0640
+      taxYearProRataIncomeAdvice.totalAwardAmount shouldBe 0.00
     }
 
     "(TY 2017/2018 Scenario 62) Generate total award with periods with elements" in {
         val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2017/scenario_1.json")
         val json: JsValue = Json.parse(resource.toString)
-        val result = json.validate[Request]
-        logResult(result)
-        result.isInstanceOf[JsSuccess[Request]] shouldBe true
+        val result = json.validate[TCEligibility]
 
-        val award = TCCalculator.calculator.award(result.get)
+        val award = await(TCCalculator.calculator.award(result.get))
         val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
 
          try {
-          val tys = award.tc.get.taxYears.zipWithIndex
+          val tys = award.taxYears.zipWithIndex
 
             for ((ty, i) <- tys) {
               i match {
@@ -2041,26 +1923,24 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
               throw e
         }
 
-       award.tc.get.totalAwardAmount shouldBe 2426.29
-       award.tc.get.houseHoldAdviceAmount shouldBe 0.00
+       award.totalAwardAmount shouldBe 2426.29
+       award.houseHoldAdviceAmount shouldBe 0.00
 
-       incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 14819.1500
-       incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
+       incomeAdvice.houseHoldAdviceAmount shouldBe 14819.1500
+       incomeAdvice.totalAwardAmount shouldBe 0.00
     }
 
     "(TY 2017/2018 Scenario 63) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2017/scenario_2.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val award = TCCalculator.calculator.award(result.get)
+      val award = await(TCCalculator.calculator.award(result.get))
       val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -2091,25 +1971,23 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
           throw e
       }
 
-      award.tc.get.totalAwardAmount shouldBe 3779.48
-      award.tc.get.houseHoldAdviceAmount shouldBe 0.00
+      award.totalAwardAmount shouldBe 3779.48
+      award.houseHoldAdviceAmount shouldBe 0.00
 
-      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 18120.9336
-      incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
+      incomeAdvice.houseHoldAdviceAmount shouldBe 18120.9336
+      incomeAdvice.totalAwardAmount shouldBe 0.00
     }
 
     "(TY 2016/2017 - 2017/2018 Scenario 64) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2017/scenario_3.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val award = TCCalculator.calculator.award(result.get)
+      val award = await(TCCalculator.calculator.award(result.get))
       val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
 
       try {
-        val taxYears = award.tc.get.taxYears
+        val taxYears = award.taxYears
 
         for ((ty, ti) <- taxYears.zipWithIndex) {
           ti match {
@@ -2174,25 +2052,23 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
           throw e
       }
 
-      award.tc.get.totalAwardAmount shouldBe 10307.22
-      award.tc.get.houseHoldAdviceAmount shouldBe 0.00
+      award.totalAwardAmount shouldBe 10307.22
+      award.houseHoldAdviceAmount shouldBe 0.00
 
-      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 40944.1676
-      incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
+      incomeAdvice.houseHoldAdviceAmount shouldBe 40944.1676
+      incomeAdvice.totalAwardAmount shouldBe 0.00
     }
 
     "(TY 2016/2017 - 2017/2018 Scenario 65) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2017/scenario_4.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val award = TCCalculator.calculator.award(result.get)
+      val award = await(TCCalculator.calculator.award(result.get))
       val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
 
       try {
-        val taxYears = award.tc.get.taxYears
+        val taxYears = award.taxYears
 
         for ((ty, ti) <- taxYears.zipWithIndex) {
           ti match {
@@ -2257,25 +2133,23 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
           throw e
       }
 
-      award.tc.get.totalAwardAmount shouldBe 5273.57
-      award.tc.get.houseHoldAdviceAmount shouldBe 0.00
+      award.totalAwardAmount shouldBe 5273.57
+      award.houseHoldAdviceAmount shouldBe 0.00
 
-      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 69256.9168
-      incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
+      incomeAdvice.houseHoldAdviceAmount shouldBe 69256.9168
+      incomeAdvice.totalAwardAmount shouldBe 0.00
     }
 
     "(Proratering) (TY 2016/2017 - 2017/2018 Scenario 66) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2017/scenario_5.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val award = TCCalculator.calculator.award(result.get)
+      val award = await(TCCalculator.calculator.award(result.get))
       val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
 
       try {
-        val taxYears = award.tc.get.taxYears
+        val taxYears = award.taxYears
 
         for ((ty, ti) <- taxYears.zipWithIndex) {
           ti match {
@@ -2340,27 +2214,25 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
           throw e
       }
 
-      award.tc.get.totalAwardAmount shouldBe 5273.57
-      award.tc.get.houseHoldAdviceAmount shouldBe 0.00
+      award.totalAwardAmount shouldBe 5273.57
+      award.houseHoldAdviceAmount shouldBe 0.00
 
-      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 69256.9168
-      incomeAdvice.tc.get.taxYears.head.taxYearAdviceAmount shouldBe 29664.5736
-      incomeAdvice.tc.get.taxYears.tail.head.taxYearAdviceAmount shouldBe 39592.3432
-      incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
+      incomeAdvice.houseHoldAdviceAmount shouldBe 69256.9168
+      incomeAdvice.taxYears.head.taxYearAdviceAmount shouldBe 29664.5736
+      incomeAdvice.taxYears.tail.head.taxYearAdviceAmount shouldBe 39592.3432
+      incomeAdvice.totalAwardAmount shouldBe 0.00
     }
 
     "(TY 2018/2019 Scenario 67) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2018/scenario_1.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val award = TCCalculator.calculator.award(result.get)
+      val award = await(TCCalculator.calculator.award(result.get))
       val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
 
       try {
-        val tys = award.tc.get.taxYears.zipWithIndex
+        val tys = award.taxYears.zipWithIndex
 
         for ((ty, i) <- tys) {
           i match {
@@ -2392,26 +2264,24 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
           throw e
       }
 
-      award.tc.get.totalAwardAmount shouldBe 2426.29
-      award.tc.get.houseHoldAdviceAmount shouldBe 0.00
+      award.totalAwardAmount shouldBe 2426.29
+      award.houseHoldAdviceAmount shouldBe 0.00
 
-      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 14819.1500
-      incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
+      incomeAdvice.houseHoldAdviceAmount shouldBe 14819.1500
+      incomeAdvice.totalAwardAmount shouldBe 0.00
     }
 
     "(TY 2018/2019 Scenario 68) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2018/scenario_2.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val award = TCCalculator.calculator.award(result.get)
+      val award = await(TCCalculator.calculator.award(result.get))
       val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
 
       try {
         // loop over each period checking it's values
-        val periods: List[Period] = award.tc.get.taxYears.head.periods
+        val periods: List[Period] = award.taxYears.head.periods
         for ((period, i) <- periods.zipWithIndex) {
           i match {
             case 0 =>
@@ -2442,25 +2312,23 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
           throw e
       }
 
-      award.tc.get.totalAwardAmount shouldBe 3779.48
-      award.tc.get.houseHoldAdviceAmount shouldBe 0.00
+      award.totalAwardAmount shouldBe 3779.48
+      award.houseHoldAdviceAmount shouldBe 0.00
 
-      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 18120.9336
-      incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
+      incomeAdvice.houseHoldAdviceAmount shouldBe 18120.9336
+      incomeAdvice.totalAwardAmount shouldBe 0.00
     }
 
     "(TY 2017/2018 - 2018/2019 Scenario 69) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2018/scenario_3.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val award = TCCalculator.calculator.award(result.get)
+      val award = await(TCCalculator.calculator.award(result.get))
       val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
 
       try {
-        val taxYears = award.tc.get.taxYears
+        val taxYears = award.taxYears
 
         for ((ty, ti) <- taxYears.zipWithIndex) {
           ti match {
@@ -2525,25 +2393,23 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
           throw e
       }
 
-      award.tc.get.totalAwardAmount shouldBe 10297.12
-      award.tc.get.houseHoldAdviceAmount shouldBe 0.00
+      award.totalAwardAmount shouldBe 10297.12
+      award.houseHoldAdviceAmount shouldBe 0.00
 
-      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 40900.2896
-      incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
+      incomeAdvice.houseHoldAdviceAmount shouldBe 40900.2896
+      incomeAdvice.totalAwardAmount shouldBe 0.00
     }
 
     "(TY 2017/2018 - 2018/2019 Scenario 70) Generate total award with periods and elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2018/scenario_4.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result.isInstanceOf[JsSuccess[Request]] shouldBe true
+      val result = json.validate[TCEligibility]
 
-      val award = TCCalculator.calculator.award(result.get)
+      val award = await(TCCalculator.calculator.award(result.get))
       val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
 
       try {
-        val taxYears = award.tc.get.taxYears
+        val taxYears = award.taxYears
 
         for ((ty, ti) <- taxYears.zipWithIndex) {
           ti match {
@@ -2608,11 +2474,11 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
           throw e
       }
 
-      award.tc.get.totalAwardAmount shouldBe 5296.48
-      award.tc.get.houseHoldAdviceAmount shouldBe 0.00
+      award.totalAwardAmount shouldBe 5296.48
+      award.houseHoldAdviceAmount shouldBe 0.00
 
-      incomeAdvice.tc.get.houseHoldAdviceAmount shouldBe 69312.8416
-      incomeAdvice.tc.get.totalAwardAmount shouldBe 0.00
+      incomeAdvice.houseHoldAdviceAmount shouldBe 69312.8416
+      incomeAdvice.totalAwardAmount shouldBe 0.00
     }
 
   }
