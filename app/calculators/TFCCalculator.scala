@@ -28,11 +28,11 @@ import scala.util.Success
 
 object TFCCalculator extends TFCCalculator
 
-trait TFCCalculator extends CCCalculator {
+trait TFCCalculator {
 
   val calculator = new TFCCalculatorService
 
-  class TFCCalculatorService extends CCCalculatorService with MessagesObject {
+  class TFCCalculatorService extends CCCalculatorHelper with MessagesObject {
 
     import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -152,22 +152,15 @@ trait TFCCalculator extends CCCalculator {
      def getTopUpPercentForChildCareCost(child: Child, tfcTaxYearConfig: TFCTaxYearConfig): BigDecimal =
        ((tfcTaxYearConfig.topUpPercent * getChildCareCostForPeriod(child)) / 100)
 
-    override def award(request : Request) : Future[AwardPeriod] = {
-      def getTFCCalculation(eligibility: TFCEligibility): TFCCalculation = {
-        TFCCalculation(
-          from = eligibility.from,
-          until = eligibility.until,
-          householdContribution = getHouseholdContribution(getCalculatedTFCPeriods(eligibility.periods)),
-          numberOfPeriods = eligibility.periods.length.toShort,
-          periods = getCalculatedTFCPeriods(eligibility.periods)
-        )
-      }
-
+    def award(request: TFCEligibility): Future[TFCCalculation] = {
       Future {
-        request.getTFCEligibility match {
-          case Success(result) if(result.householdEligibility) => AwardPeriod(tfc = Some(getTFCCalculation(result)))
-          case _ => AwardPeriod()
-        }
+        TFCCalculation(
+          from = request.from,
+          until = request.until,
+          householdContribution = getHouseholdContribution(getCalculatedTFCPeriods(request.periods)),
+          numberOfPeriods = request.periods.length.toShort,
+          periods = getCalculatedTFCPeriods(request.periods)
+        )
       }
     }
   }

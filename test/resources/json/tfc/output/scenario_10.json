@@ -1,110 +1,104 @@
 {
-  "calculation" : {
-    "tfc": {
+  "from": "2016-03-03",
+  "until": "2017-03-03",
+  "householdContribution": {
+    "parent": 8969.14,
+    "government": 1014.86,
+    "totalChildCareSpend": 9984.00
+  },
+  "numberOfPeriods" : 4,
+  "periods" : [
+    {
       "from": "2016-03-03",
-      "until": "2017-03-03",
-      "householdContribution": {
-        "parent": 8969.14,
-        "government": 1014.86,
-        "totalChildCareSpend": 9984.00
+      "until": "2016-06-03",
+      "periodContribution": {
+        "parent": 1996.80,
+        "government": 499.20,
+        "totalChildCareSpend": 2496.00
       },
-      "numberOfPeriods" : 4,
-      "periods" : [
+      "children": [
         {
-          "from": "2016-03-03",
-          "until": "2016-06-03",
-          "periodContribution": {
+          "id": 0,
+          "name": "Child 1",
+          "childCareCost": 832.00,
+          "childContribution" : {
             "parent": 1996.80,
             "government": 499.20,
             "totalChildCareSpend": 2496.00
           },
-          "children": [
-            {
-              "id": 0,
-              "name": "Child 1",
-              "childCareCost": 832.00,
-              "childContribution" : {
-                "parent": 1996.80,
-                "government": 499.20,
-                "totalChildCareSpend": 2496.00
-              },
-              "timeToMaximizeTopUp" : 0,
-              "failures" : []
-            }
-          ]
-        },
+          "timeToMaximizeTopUp" : 0,
+          "failures" : []
+        }
+      ]
+    },
+    {
+      "from": "2016-06-03",
+      "until": "2016-09-03",
+      "periodContribution": {
+        "parent": 1996.80,
+        "government": 499.20,
+        "totalChildCareSpend": 2496.00
+      },
+      "children": [
         {
-          "from": "2016-06-03",
-          "until": "2016-09-03",
-          "periodContribution": {
+          "id": 0,
+          "name": "Child 1",
+          "childCareCost": 832.00,
+          "childContribution" : {
             "parent": 1996.80,
             "government": 499.20,
             "totalChildCareSpend": 2496.00
           },
-          "children": [
-            {
-              "id": 0,
-              "name": "Child 1",
-              "childCareCost": 832.00,
-              "childContribution" : {
-                "parent": 1996.80,
-                "government": 499.20,
-                "totalChildCareSpend": 2496.00
-              },
-              "timeToMaximizeTopUp" : 0,
-              "failures" : []
-            }
-          ]
-        },
+          "timeToMaximizeTopUp" : 0,
+          "failures" : []
+        }
+      ]
+    },
+    {
+      "from": "2016-09-03",
+      "until": "2016-12-03",
+      "periodContribution": {
+        "parent": 2479.54,
+        "government": 16.46,
+        "totalChildCareSpend": 2496
+      },
+      "children": [
         {
-          "from": "2016-09-03",
-          "until": "2016-12-03",
-          "periodContribution": {
+          "id": 0,
+          "name": "Child 1",
+          "childCareCost": 832.00,
+          "childContribution" : {
             "parent": 2479.54,
             "government": 16.46,
             "totalChildCareSpend": 2496
           },
-          "children": [
-            {
-              "id": 0,
-              "name": "Child 1",
-              "childCareCost": 832.00,
-              "childContribution" : {
-                "parent": 2479.54,
-                "government": 16.46,
-                "totalChildCareSpend": 2496
-              },
-              "timeToMaximizeTopUp" : 0,
-              "failures" : []
-            }
-          ]
-        },
+          "timeToMaximizeTopUp" : 0,
+          "failures" : []
+        }
+      ]
+    },
+    {
+      "from": "2016-12-03",
+      "until": "2017-03-03",
+      "periodContribution": {
+        "parent": 2496.00,
+        "government": 0.00,
+        "totalChildCareSpend": 2496.00
+      },
+      "children": [
         {
-          "from": "2016-12-03",
-          "until": "2017-03-03",
-          "periodContribution": {
+          "id": 0,
+          "name": "Child 1",
+          "childCareCost": 832.00,
+          "childContribution" : {
             "parent": 2496.00,
             "government": 0.00,
             "totalChildCareSpend": 2496.00
           },
-          "children": [
-            {
-              "id": 0,
-              "name": "Child 1",
-              "childCareCost": 832.00,
-              "childContribution" : {
-                "parent": 2496.00,
-                "government": 0.00,
-                "totalChildCareSpend": 2496.00
-              },
-              "timeToMaximizeTopUp" : 0,
-              "failures" : []
-            }
-          ]
+          "timeToMaximizeTopUp" : 0,
+          "failures" : []
         }
       ]
-    },
-    "esc": null,
-    "tc": null
-  }
+    }
+  ]
 }

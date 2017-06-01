@@ -36,34 +36,37 @@ class TFCEligibilitySpec extends UnitSpec with FakeCCCalculatorApplication with 
     "read a valid JSON input and convert to a specific type" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tfc/input/calculator_input_test.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
+      val result = json.validate[TFCEligibility]
       result match {
         case JsSuccess(x, _) => {
-          x shouldBe a[Request]
-          x.payload should not be null
+          x shouldBe a[TFCEligibility]
 
-          x.payload.eligibility.tfc.get.from shouldBe a[LocalDate]
-          x.payload.eligibility.tfc.get.until shouldBe a[LocalDate]
-          x.payload.eligibility.tfc.get.householdEligibility.isInstanceOf[Boolean] shouldBe true
-          x.payload.eligibility.tfc.get.periods.head shouldBe a[TFCPeriod]
+          x.from shouldBe a[LocalDate]
+          x.until shouldBe a[LocalDate]
+          x.householdEligibility.isInstanceOf[Boolean] shouldBe true
+
 
           //TFC model
-          x.payload.eligibility.tfc.get.periods.head.from shouldBe a[LocalDate]
-          x.payload.eligibility.tfc.get.periods.head.until shouldBe a[LocalDate]
-          x.payload.eligibility.tfc.get.periods.head.children.head shouldBe a[Child]
+          val period = x.periods.head
+          period shouldBe a[TFCPeriod]
+          period.from shouldBe a[LocalDate]
+          period.until shouldBe a[LocalDate]
 
           //Child model
-          x.payload.eligibility.tfc.get.periods.head.children.head.id shouldBe a[Short]
-          x.payload.eligibility.tfc.get.periods.head.children.head.name.isInstanceOf[Option[String]] shouldBe true
-          x.payload.eligibility.tfc.get.periods.head.children.head.qualifying.isInstanceOf[Boolean] shouldBe true
-          x.payload.eligibility.tfc.get.periods.head.children.head.from.isInstanceOf[Option[LocalDate]] shouldBe true
-          x.payload.eligibility.tfc.get.periods.head.children.head.until.isInstanceOf[Option[LocalDate]] shouldBe true
-          x.payload.eligibility.tfc.get.periods.head.children.head.childcareCost shouldBe a[BigDecimal]
-          x.payload.eligibility.tfc.get.periods.head.children.head.disability shouldBe a[Disability]
+          val child = period.children.head
+          child shouldBe a[Child]
+          child.id shouldBe a[Short]
+          child.name.isInstanceOf[Option[String]] shouldBe true
+          child.qualifying.isInstanceOf[Boolean] shouldBe true
+          child.from.isInstanceOf[Option[LocalDate]] shouldBe true
+          child.until.isInstanceOf[Option[LocalDate]] shouldBe true
+          child.childcareCost shouldBe a[BigDecimal]
 
           //Child Disability model
-          x.payload.eligibility.tfc.get.periods.head.children.head.disability.disabled.isInstanceOf[Boolean] shouldBe true
-          x.payload.eligibility.tfc.get.periods.head.children.head.disability.severelyDisabled.isInstanceOf[Boolean] shouldBe true
+          val disability = child.disability
+          disability shouldBe a[Disability]
+          disability.disabled.isInstanceOf[Boolean] shouldBe true
+          disability.severelyDisabled.isInstanceOf[Boolean] shouldBe true
         }
         case _ => throw new Exception
       }

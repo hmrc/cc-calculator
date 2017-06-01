@@ -1,34 +1,26 @@
 {
-  "payload": {
-    "eligibility": {
-      "esc":null,
-      "tc": null,
-      "tfc": {
-        "from": "2015-08-27",
-        "until": "2015-11-27",
-        "householdEligibility": false,
-        "periods": [
-          {
-            "from" : "2015-08-27",
-            "until" : "2015-11-27",
-            "periodEligibility" : false,
-            "children" : [
-              {
-                "id" : 0,
-                "name" : "Child 1",
-                "qualifying" : false,
-                "from" : null,
-                "until" : null,
-                "childcareCost" : 100.00,
-                "disability": {
-                  "disabled": false,
-                  "severelyDisabled": false
-                }
-              }
-            ]
+  "from": "2015-08-27",
+  "until": "2015-11-27",
+  "householdEligibility": false,
+  "periods": [
+    {
+      "from" : "2015-08-27",
+      "until" : "2015-11-27",
+      "periodEligibility" : false,
+      "children" : [
+        {
+          "id" : 0,
+          "name" : "Child 1",
+          "qualifying" : false,
+          "from" : null,
+          "until" : null,
+          "childcareCost" : 100.00,
+          "disability": {
+            "disabled": false,
+            "severelyDisabled": false
           }
-        ]
-      }
+        }
+      ]
     }
-  }
+  ]
 }

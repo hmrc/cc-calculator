@@ -1,53 +1,47 @@
 {
-  "calculation" : {
-    "tfc": {
+  "from": "2016-08-27",
+  "until": "2016-11-27",
+  "householdContribution": {
+    "parent": 1996.80,
+    "government": 499.20,
+    "totalChildCareSpend": 2496.00
+  },
+  "numberOfPeriods" : 1,
+  "periods" : [
+    {
       "from": "2016-08-27",
       "until": "2016-11-27",
-      "householdContribution": {
+      "periodContribution": {
         "parent": 1996.80,
         "government": 499.20,
         "totalChildCareSpend": 2496.00
       },
-      "numberOfPeriods" : 1,
-      "periods" : [
+      "children": [
         {
-          "from": "2016-08-27",
-          "until": "2016-11-27",
-          "periodContribution": {
+          "id": 0,
+          "name": "Child 1",
+          "childCareCost": 832.00,
+          "childContribution" : {
             "parent": 1996.80,
             "government": 499.20,
             "totalChildCareSpend": 2496.00
           },
-          "children": [
-            {
-              "id": 0,
-              "name": "Child 1",
-              "childCareCost": 832.00,
-              "childContribution" : {
-                "parent": 1996.80,
-                "government": 499.20,
-                "totalChildCareSpend": 2496.00
-              },
-              "timeToMaximizeTopUp" : 0,
-              "failures" : []
-            },
-            {
-              "id": 1,
-              "name": "Child 2",
-              "childCareCost": 0.00,
-              "childContribution" : {
-                "parent": 0.00,
-                "government": 0.00,
-                "totalChildCareSpend": 0.00
-              },
-              "timeToMaximizeTopUp" : 0,
-              "failures" : []
-            }
-          ]
+          "timeToMaximizeTopUp" : 0,
+          "failures" : []
+        },
+        {
+          "id": 1,
+          "name": "Child 2",
+          "childCareCost": 0.00,
+          "childContribution" : {
+            "parent": 0.00,
+            "government": 0.00,
+            "totalChildCareSpend": 0.00
+          },
+          "timeToMaximizeTopUp" : 0,
+          "failures" : []
         }
       ]
-    },
-    "esc": null,
-    "tc": null
-  }
+    }
+  ]
 }

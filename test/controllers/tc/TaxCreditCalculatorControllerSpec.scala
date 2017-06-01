@@ -820,44 +820,44 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
       jsonBodyOf(result) shouldBe outputJSON
     }
 
-    "Return Bad Request with error message if a request for a different scheme is passed (Income Advice)(e.g. TFC) " in {
-      val controller = mockTaxCreditCalculatorController
-      val resource: JsonNode = JsonLoader.fromResource("/json/tfc/input/scenario_01.json")
-      val inputJson: JsValue = Json.parse(resource.toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
-      val result = await(controller.incomeAdvice()(request))
-
-
-      val outputJSON = Json.parse(
-        """
-          |{
-          |    "status": 400,
-          |    "error": "You have provided a wrong type of request"
-          |}
-        """.stripMargin)
-
-      status(result) shouldBe Status.BAD_REQUEST
-      jsonBodyOf(result) shouldBe outputJSON
-    }
-
-    "Return Bad Request with error message if a request for a different scheme is passed (Calculate)(e.g. TFC) " in {
-      val controller = mockTaxCreditCalculatorController
-      val resource: JsonNode = JsonLoader.fromResource("/json/tfc/input/scenario_12.json")
-      val inputJson: JsValue = Json.parse(resource.toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
-      val result = await(controller.calculate()(request))
-
-      val outputJSON = Json.parse(
-        """
-          |{
-          |    "status": 400,
-          |    "error": "You have provided a wrong type of request"
-          |}
-        """.stripMargin)
-
-      status(result) shouldBe Status.BAD_REQUEST
-      jsonBodyOf(result) shouldBe outputJSON
-    }
+//    "Return Bad Request with error message if a request for a different scheme is passed (Income Advice)(e.g. TFC) " in {
+//      val controller = mockTaxCreditCalculatorController
+//      val resource: JsonNode = JsonLoader.fromResource("/json/tfc/input/scenario_01.json")
+//      val inputJson: JsValue = Json.parse(resource.toString)
+//      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
+//      val result = await(controller.incomeAdvice()(request))
+//
+//
+//      val outputJSON = Json.parse(
+//        """
+//          |{
+//          |    "status": 400,
+//          |    "error": "You have provided a wrong type of request"
+//          |}
+//        """.stripMargin)
+//
+//      status(result) shouldBe Status.BAD_REQUEST
+//      jsonBodyOf(result) shouldBe outputJSON
+//    }
+//
+//    "Return Bad Request with error message if a request for a different scheme is passed (Calculate)(e.g. TFC) " in {
+//      val controller = mockTaxCreditCalculatorController
+//      val resource: JsonNode = JsonLoader.fromResource("/json/tfc/input/scenario_12.json")
+//      val inputJson: JsValue = Json.parse(resource.toString)
+//      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
+//      val result = await(controller.calculate()(request))
+//
+//      val outputJSON = Json.parse(
+//        """
+//          |{
+//          |    "status": 400,
+//          |    "error": "You have provided a wrong type of request"
+//          |}
+//        """.stripMargin)
+//
+//      status(result) shouldBe Status.BAD_REQUEST
+//      jsonBodyOf(result) shouldBe outputJSON
+//    }
 
   }
 

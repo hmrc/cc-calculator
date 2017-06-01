@@ -58,30 +58,5 @@ class APIModelSpec extends UnitSpec with FakeCCCalculatorApplication with CCJson
         case _ => throw new Exception
       }
     }
-
-    "return TFC eligibility result" in {
-      val resource: JsonNode = JsonLoader.fromResource("/json/tfc/input/tfc_eligible.json")
-      val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result match {
-        case JsSuccess(x, _) =>
-          x.getTFCEligibility.isInstanceOf[Success[TFCEligibility]] shouldBe true
-        case _ => throw new Exception
-      }
-    }
-
-    "return Failure if TFC eligibility result does not exist" in {
-      val resource: JsonNode = JsonLoader.fromResource("/json/tfc/input/no_eligiblity.json")
-      val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      logResult(result)
-      result match {
-        case JsSuccess(x, _) =>
-          x.getTFCEligibility.isInstanceOf[Failure[TFCEligibility]] shouldBe true
-        case _ => throw new Exception
-      }
-    }
-
   }
 }

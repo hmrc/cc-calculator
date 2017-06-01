@@ -20,7 +20,7 @@ import calculators.TFCCalculator.TFCCalculatorService
 import models.input.APIModels.{Eligibility, Payload, Request}
 import models.input.tfc.{Child, Disability, TFCEligibility}
 import models.output.OutputAPIModel.AwardPeriod
-import models.output.tfc.{Contribution, OutputChild, TFCPeriod}
+import models.output.tfc.{TFCCalculation, Contribution, OutputChild, TFCPeriod}
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import uk.gov.hmrc.play.test.UnitSpec
@@ -40,22 +40,15 @@ class TFCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
       val fromDate = LocalDate.parse("2016-05-01T18:46:17", formatter)
       val untilDate = LocalDate.parse("2016-05-21T18:46:17", formatter)
 
-      val result = TFCCalculator.calculator.award(Request(payload = Payload(eligibility = Eligibility(tfc = Some(TFCEligibility(from = fromDate,
-        until = untilDate, householdEligibility = true, periods = List())), tc = None, esc = None))))
-      result.isInstanceOf[Future[AwardPeriod]] shouldBe true
+      val result = TFCCalculator.calculator.award(TFCEligibility(from = fromDate,
+        until = untilDate, householdEligibility = true, periods = List()))
+      result.isInstanceOf[Future[TFCCalculation]] shouldBe true
     }
 
     "return an empty Future[AwardPeriod] result when household eligibility is false" in {
-      val result = await(TFCCalculator.calculator.award(Request(payload = Payload(eligibility = Eligibility(tfc = Some(TFCEligibility(from = null,
-        until = null, householdEligibility = false, periods = List())), tc = None, esc = None)))))
-      result shouldBe AwardPeriod()
-    }
-
-    "Generate total award with claimants (Total Award test - empty award period)" in {
-      val emptyRequest = Request(payload = Payload(eligibility = Eligibility(null, null, null)))
-      val result: AwardPeriod = TFCCalculator.calculator.award(emptyRequest)
-
-      result shouldBe AwardPeriod()
+      val result = await(TFCCalculator.calculator.award(TFCEligibility(from = null,
+        until = null, householdEligibility = false, periods = List())))
+      result shouldBe TFCCalculation(null,null,Contribution(0.00,0.00,0.00),0,List())
     }
 
     "return a calculated TFC for 1 TFC period with 1 child" in {

@@ -1,53 +1,47 @@
 {
-  "calculation" : {
-    "tfc": {
+  "from": "2016-08-27",
+  "until": "2016-11-27",
+  "householdContribution": {
+    "parent": 8996.00,
+    "government": 1999.00,
+    "totalChildCareSpend": 10995.00
+  },
+  "numberOfPeriods" : 1,
+  "periods" : [
+    {
       "from": "2016-08-27",
       "until": "2016-11-27",
-      "householdContribution": {
+      "periodContribution": {
         "parent": 8996.00,
         "government": 1999.00,
         "totalChildCareSpend": 10995.00
       },
-      "numberOfPeriods" : 1,
-      "periods" : [
+      "children": [
         {
-          "from": "2016-08-27",
-          "until": "2016-11-27",
-          "periodContribution": {
-            "parent": 8996.00,
-            "government": 1999.00,
-            "totalChildCareSpend": 10995.00
+          "id": 0,
+          "name": "Child 1",
+          "childCareCost": 1665.00,
+          "childContribution" : {
+            "parent": 3996.00,
+            "government": 999.00,
+            "totalChildCareSpend": 4995.00
           },
-          "children": [
-            {
-              "id": 0,
-              "name": "Child 1",
-              "childCareCost": 1665.00,
-              "childContribution" : {
-                "parent": 3996.00,
-                "government": 999.00,
-                "totalChildCareSpend": 4995.00
-              },
-              "timeToMaximizeTopUp" : 0,
-              "failures" : []
-            },
-            {
-              "id": 1,
-              "name": "Child 2",
-              "childCareCost": 2000.00,
-              "childContribution" : {
-                "parent": 5000.00,
-                "government": 1000.00,
-                "totalChildCareSpend": 6000.00
-              },
-              "timeToMaximizeTopUp" : 0,
-              "failures" : []
-            }
-          ]
+          "timeToMaximizeTopUp" : 0,
+          "failures" : []
+        },
+        {
+          "id": 1,
+          "name": "Child 2",
+          "childCareCost": 2000.00,
+          "childContribution" : {
+            "parent": 5000.00,
+            "government": 1000.00,
+            "totalChildCareSpend": 6000.00
+          },
+          "timeToMaximizeTopUp" : 0,
+          "failures" : []
         }
       ]
-    },
-    "esc": null,
-    "tc": null
-  }
+    }
+  ]
 }

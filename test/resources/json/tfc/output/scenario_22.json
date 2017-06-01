@@ -1,228 +1,222 @@
 {
-  "calculation" : {
-    "tfc": {
+  "from": "2016-09-01",
+  "until": "2018-03-01",
+  "householdContribution": {
+    "parent": 42500.00,
+    "government": 2500.00,
+    "totalChildCareSpend": 45000.00
+  },
+  "numberOfPeriods" : 6,
+  "periods" : [
+    {
       "from": "2016-09-01",
-      "until": "2018-03-01",
-      "householdContribution": {
-        "parent": 42500.00,
-        "government": 2500.00,
-        "totalChildCareSpend": 45000.00
+      "until": "2016-12-01",
+      "periodContribution": {
+        "parent": 5000.00,
+        "government": 1000.00,
+        "totalChildCareSpend": 6000.00
       },
-      "numberOfPeriods" : 6,
-      "periods" : [
+      "children": [
         {
-          "from": "2016-09-01",
-          "until": "2016-12-01",
-          "periodContribution": {
+          "id": 0,
+          "name": "Child 1",
+          "childCareCost": 2000.00,
+          "childContribution" : {
             "parent": 5000.00,
             "government": 1000.00,
             "totalChildCareSpend": 6000.00
           },
-          "children": [
-            {
-              "id": 0,
-              "name": "Child 1",
-              "childCareCost": 2000.00,
-              "childContribution" : {
-                "parent": 5000.00,
-                "government": 1000.00,
-                "totalChildCareSpend": 6000.00
-              },
-              "timeToMaximizeTopUp" : 0,
-              "failures" : []
-            },
-            {
-              "id": 1,
-              "name": "Child 2",
-              "childCareCost": 0.00,
-              "childContribution" : {
-                "parent": 0.00,
-                "government": 0.00,
-                "totalChildCareSpend": 0.00
-              },
-              "timeToMaximizeTopUp" : 0,
-              "failures" : []
-            }
-          ]
+          "timeToMaximizeTopUp" : 0,
+          "failures" : []
         },
         {
-          "from": "2016-12-01",
-          "until": "2017-03-01",
-          "periodContribution": {
-            "parent": 6000.00,
+          "id": 1,
+          "name": "Child 2",
+          "childCareCost": 0.00,
+          "childContribution" : {
+            "parent": 0.00,
             "government": 0.00,
-            "totalChildCareSpend": 6000.00
+            "totalChildCareSpend": 0.00
           },
-          "children": [
-            {
-              "id": 0,
-              "name": "Child 1",
-              "childCareCost": 2000.00,
-              "childContribution" : {
-                "parent": 6000.00,
-                "government": 0.00,
-                "totalChildCareSpend": 6000.00
-              },
-              "timeToMaximizeTopUp" : 0,
-              "failures" : []
-            },
-            {
-              "id": 1,
-              "name": "Child 2",
-              "childCareCost": 0.00,
-              "childContribution" : {
-                "parent": 0.00,
-                "government": 0.00,
-                "totalChildCareSpend": 0.00
-              },
-              "timeToMaximizeTopUp" : 0,
-              "failures" : []
-            }
-          ]
-        },
-        {
-          "from": "2017-03-01",
-          "until": "2017-06-01",
-          "periodContribution": {
-            "parent": 6000.00,
-            "government": 0.00,
-            "totalChildCareSpend": 6000.00
-          },
-          "children": [
-            {
-              "id": 0,
-              "name": "Child 1",
-              "childCareCost": 2000.00,
-              "childContribution" : {
-                "parent": 6000.00,
-                "government": 0.00,
-                "totalChildCareSpend": 6000.00
-              },
-              "timeToMaximizeTopUp" : 0,
-              "failures" : []
-            },
-            {
-              "id": 1,
-              "name": "Child 2",
-              "childCareCost": 0.00,
-              "childContribution" : {
-                "parent": 0.00,
-                "government": 0.00,
-                "totalChildCareSpend": 0.00
-              },
-              "timeToMaximizeTopUp" : 0,
-              "failures" : []
-            }
-          ]
-        },
-        {
-          "from": "2017-06-01",
-          "until": "2017-09-01",
-          "periodContribution": {
-            "parent": 8500.00,
-            "government": 500.00,
-            "totalChildCareSpend": 9000.00
-          },
-          "children": [
-            {
-              "id": 0,
-              "name": "Child 1",
-              "childCareCost": 2000.00,
-              "childContribution" : {
-                "parent": 6000.00,
-                "government": 0.00,
-                "totalChildCareSpend": 6000.00
-              },
-              "timeToMaximizeTopUp" : 0,
-              "failures" : []
-            },
-            {
-              "id": 1,
-              "name": "Child 2",
-              "childCareCost": 1000.00,
-              "childContribution" : {
-                "parent": 2500.00,
-                "government": 500.00,
-                "totalChildCareSpend": 3000.00
-              },
-              "timeToMaximizeTopUp" : 0,
-              "failures" : []
-            }
-          ]
-        },
-        {
-          "from": "2017-09-01",
-          "until": "2017-12-01",
-          "periodContribution": {
-            "parent": 8500.00,
-            "government": 500.00,
-            "totalChildCareSpend": 9000.00
-          },
-          "children": [
-            {
-              "id": 0,
-              "name": "Child 1",
-              "childCareCost": 2000.00,
-              "childContribution" : {
-                "parent": 6000.00,
-                "government": 0.00,
-                "totalChildCareSpend": 6000.00
-              },
-              "timeToMaximizeTopUp" : 0,
-              "failures" : []
-            },
-            {
-              "id": 1,
-              "name": "Child 2",
-              "childCareCost": 1000.00,
-              "childContribution" : {
-                "parent": 2500.00,
-                "government": 500.00,
-                "totalChildCareSpend": 3000.00
-              },
-              "timeToMaximizeTopUp" : 0,
-              "failures" : []
-            }
-          ]
-        },
-        {
-          "from": "2017-12-01",
-          "until": "2018-03-01",
-          "periodContribution": {
-            "parent": 8500.00,
-            "government": 500.00,
-            "totalChildCareSpend": 9000.00
-          },
-          "children": [
-            {
-              "id": 0,
-              "name": "Child 1",
-              "childCareCost": 2000.00,
-              "childContribution" : {
-                "parent": 6000.00,
-                "government": 0.00,
-                "totalChildCareSpend": 6000.00
-              },
-              "timeToMaximizeTopUp" : 0,
-              "failures" : []
-            },
-            {
-              "id": 1,
-              "name": "Child 2",
-              "childCareCost": 1000.00,
-              "childContribution" : {
-                "parent": 2500.00,
-                "government": 500.00,
-                "totalChildCareSpend": 3000.00
-              },
-              "timeToMaximizeTopUp" : 0,
-              "failures" : []
-            }
-          ]
+          "timeToMaximizeTopUp" : 0,
+          "failures" : []
         }
       ]
     },
-    "esc": null,
-    "tc": null
-  }
+    {
+      "from": "2016-12-01",
+      "until": "2017-03-01",
+      "periodContribution": {
+        "parent": 6000.00,
+        "government": 0.00,
+        "totalChildCareSpend": 6000.00
+      },
+      "children": [
+        {
+          "id": 0,
+          "name": "Child 1",
+          "childCareCost": 2000.00,
+          "childContribution" : {
+            "parent": 6000.00,
+            "government": 0.00,
+            "totalChildCareSpend": 6000.00
+          },
+          "timeToMaximizeTopUp" : 0,
+          "failures" : []
+        },
+        {
+          "id": 1,
+          "name": "Child 2",
+          "childCareCost": 0.00,
+          "childContribution" : {
+            "parent": 0.00,
+            "government": 0.00,
+            "totalChildCareSpend": 0.00
+          },
+          "timeToMaximizeTopUp" : 0,
+          "failures" : []
+        }
+      ]
+    },
+    {
+      "from": "2017-03-01",
+      "until": "2017-06-01",
+      "periodContribution": {
+        "parent": 6000.00,
+        "government": 0.00,
+        "totalChildCareSpend": 6000.00
+      },
+      "children": [
+        {
+          "id": 0,
+          "name": "Child 1",
+          "childCareCost": 2000.00,
+          "childContribution" : {
+            "parent": 6000.00,
+            "government": 0.00,
+            "totalChildCareSpend": 6000.00
+          },
+          "timeToMaximizeTopUp" : 0,
+          "failures" : []
+        },
+        {
+          "id": 1,
+          "name": "Child 2",
+          "childCareCost": 0.00,
+          "childContribution" : {
+            "parent": 0.00,
+            "government": 0.00,
+            "totalChildCareSpend": 0.00
+          },
+          "timeToMaximizeTopUp" : 0,
+          "failures" : []
+        }
+      ]
+    },
+    {
+      "from": "2017-06-01",
+      "until": "2017-09-01",
+      "periodContribution": {
+        "parent": 8500.00,
+        "government": 500.00,
+        "totalChildCareSpend": 9000.00
+      },
+      "children": [
+        {
+          "id": 0,
+          "name": "Child 1",
+          "childCareCost": 2000.00,
+          "childContribution" : {
+            "parent": 6000.00,
+            "government": 0.00,
+            "totalChildCareSpend": 6000.00
+          },
+          "timeToMaximizeTopUp" : 0,
+          "failures" : []
+        },
+        {
+          "id": 1,
+          "name": "Child 2",
+          "childCareCost": 1000.00,
+          "childContribution" : {
+            "parent": 2500.00,
+            "government": 500.00,
+            "totalChildCareSpend": 3000.00
+          },
+          "timeToMaximizeTopUp" : 0,
+          "failures" : []
+        }
+      ]
+    },
+    {
+      "from": "2017-09-01",
+      "until": "2017-12-01",
+      "periodContribution": {
+        "parent": 8500.00,
+        "government": 500.00,
+        "totalChildCareSpend": 9000.00
+      },
+      "children": [
+        {
+          "id": 0,
+          "name": "Child 1",
+          "childCareCost": 2000.00,
+          "childContribution" : {
+            "parent": 6000.00,
+            "government": 0.00,
+            "totalChildCareSpend": 6000.00
+          },
+          "timeToMaximizeTopUp" : 0,
+          "failures" : []
+        },
+        {
+          "id": 1,
+          "name": "Child 2",
+          "childCareCost": 1000.00,
+          "childContribution" : {
+            "parent": 2500.00,
+            "government": 500.00,
+            "totalChildCareSpend": 3000.00
+          },
+          "timeToMaximizeTopUp" : 0,
+          "failures" : []
+        }
+      ]
+    },
+    {
+      "from": "2017-12-01",
+      "until": "2018-03-01",
+      "periodContribution": {
+        "parent": 8500.00,
+        "government": 500.00,
+        "totalChildCareSpend": 9000.00
+      },
+      "children": [
+        {
+          "id": 0,
+          "name": "Child 1",
+          "childCareCost": 2000.00,
+          "childContribution" : {
+            "parent": 6000.00,
+            "government": 0.00,
+            "totalChildCareSpend": 6000.00
+          },
+          "timeToMaximizeTopUp" : 0,
+          "failures" : []
+        },
+        {
+          "id": 1,
+          "name": "Child 2",
+          "childCareCost": 1000.00,
+          "childContribution" : {
+            "parent": 2500.00,
+            "government": 500.00,
+            "totalChildCareSpend": 3000.00
+          },
+          "timeToMaximizeTopUp" : 0,
+          "failures" : []
+        }
+      ]
+    }
+  ]
 }
