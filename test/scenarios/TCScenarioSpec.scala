@@ -1878,8 +1878,8 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJs
       }
       taxYearProRataAward.totalAwardAmount shouldBe 2982.17
       taxYearProRataAward.houseHoldAdviceAmount shouldBe 0.00
-      taxYearProRataAward.houseHoldAdviceAmount shouldBe 14970.0640
-      taxYearProRataAward.totalAwardAmount shouldBe 0.00
+      taxYearProRataIncomeAdvice.houseHoldAdviceAmount shouldBe 14970.0640
+      taxYearProRataIncomeAdvice.totalAwardAmount shouldBe 0.00
     }
 
     "(TY 2017/2018 Scenario 62) Generate total award with periods with elements" in {

@@ -213,8 +213,8 @@ class JSONFactorySpec extends FakeCCCalculatorApplication {
 
       result match {
         case JsSuccess(x, _) =>
-          val setup = TCCalculator.calculator.award(x)
-          result shouldBe outputJson
+          val setup = await(TCCalculator.calculator.award(x))
+          Json.toJson(setup) shouldBe outputJson
         case _ => throw new Exception
       }
     }
@@ -232,8 +232,6 @@ class JSONFactorySpec extends FakeCCCalculatorApplication {
       val outputJson = Json.parse(
         s"""
           |{
-          |"calculation": {
-          | "tc": {
           |   "from": "${firstPeriodFrom.toString("yyyy-MM-dd")}",
           |   "until": "${secondPeriodTo.toString("yyyy-MM-dd")}",
           |   "totalAwardAmount": 0.00,
@@ -304,18 +302,14 @@ class JSONFactorySpec extends FakeCCCalculatorApplication {
               |   ]
            |   }
           |   ]
-          | },
-          | "tfc": null,
-          | "esc": null
-          |}
-          |}
+          | }
         """.stripMargin)
 
 
       result match {
         case JsSuccess(x, _) =>
-          val setup = TCCalculator.calculator.incomeAdvice(x)
-          result shouldBe outputJson
+          val setup = await(TCCalculator.calculator.incomeAdvice(x))
+          Json.toJson(setup) shouldBe outputJson
         case _ => throw new Exception
       }
     }

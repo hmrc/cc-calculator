@@ -171,8 +171,6 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
       val outputJson = Json.parse(
         s"""
          |{
-          |"calculation": {
-          | "tc": {
           |   "from": "${firstPeriodFrom.toString("yyyy-MM-dd")}",
           |   "until": "${firstPeriodTo.toString("yyyy-MM-dd")}",
           |   "totalAwardAmount": 2426.29,
@@ -215,11 +213,7 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
                |     ]
              |     }
            |     ]
-              | },
-              | "tfc": null,
-              | "esc": null
-            |}
-          |}
+         | }
         """.stripMargin)
 
       jsonBodyOf(result) shouldBe outputJson
@@ -244,8 +238,6 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
       val outputJson = Json.parse(
         s"""
           |{
-          |"calculation": {
-          | "tc": {
           | "from": "${firstPeriodFrom.toString("yyyy-MM-dd")}",
           | "until": "${secondPeriodTo.toString("yyyy-MM-dd")}",
           | "totalAwardAmount": 0.00,
@@ -316,11 +308,7 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
           |     ]
           |     }
           |   ]
-          | },
-          | "tfc": null,
-          | "esc": null
-          |}
-          |}
+          | }
         """.stripMargin)
 
       jsonBodyOf(result) shouldBe outputJson
@@ -341,8 +329,6 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
       val outputResult = Json.parse(
         s"""
         {
-          "calculation": {
-           "tc": {
              "from": "2016-09-27",
              "until": "2017-04-06",
              "totalAwardAmount": 2982.17,
@@ -413,11 +399,7 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
                  ]
              }
              ]
-           },
-           "tfc": null,
-           "esc": null
-          }
-        }
+           }
         """.stripMargin)
 
       jsonBodyOf(result) shouldBe outputResult
@@ -437,8 +419,6 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
       val outputResult = Json.parse(
         s"""
         {
-          "calculation": {
-           "tc": {
              "from": "2016-09-27",
              "until": "2017-04-06",
              "totalAwardAmount": 0.00,
@@ -509,11 +489,7 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
                  ]
              }
              ]
-           },
-           "tfc": null,
-           "esc": null
-          }
-        }
+           }
         """.stripMargin)
 
       status(result) shouldBe Status.OK
@@ -534,8 +510,6 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
       val outputResult = Json.parse(
         s"""
        {
-          "calculation": {
-           "tc": {
              "from": "2016-09-27",
              "until": "2018-02-15",
              "totalAwardAmount": 0.00,
@@ -670,11 +644,7 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
                  ]
              }
              ]
-           },
-           "tfc": null,
-           "esc": null
-          }
-        }
+           }
         """.stripMargin)
 
       status(result) shouldBe Status.OK
@@ -695,7 +665,7 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
           |    "errors":
           |     [
           |       {
-          |         "path": "/payload/eligibility/tc/taxYears(0)/houseHoldIncome",
+          |         "path": "/taxYears(0)/houseHoldIncome",
           |         "validationErrors":
           |         [
           |             {
@@ -705,7 +675,7 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
           |         ]
           |        },
           |        {
-          |        "path": "/payload/eligibility/tc/taxYears(0)/periods(0)/children(0)/childcareCost",
+          |        "path": "/taxYears(0)/periods(0)/children(0)/childcareCost",
           |         "validationErrors":
           |         [
           |            {
@@ -761,45 +731,6 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
         """.stripMargin)
 
       status(result) shouldBe Status.INTERNAL_SERVER_ERROR
-      jsonBodyOf(result) shouldBe outputJSON
-    }
-
-    "Return Bad Request with error message if a request for a different scheme is passed (Income Advice)(e.g. TFC) " in {
-      val controller = mockTaxCreditCalculatorController
-      val resource: JsonNode = JsonLoader.fromResource("/json/tfc/input/scenario_01.json")
-      val inputJson: JsValue = Json.parse(resource.toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
-      val result = await(controller.incomeAdvice()(request))
-
-
-      val outputJSON = Json.parse(
-        """
-          |{
-          |    "status": 400,
-          |    "error": "You have provided a wrong type of request"
-          |}
-        """.stripMargin)
-
-      status(result) shouldBe Status.BAD_REQUEST
-      jsonBodyOf(result) shouldBe outputJSON
-    }
-
-    "Return Bad Request with error message if a request for a different scheme is passed (Calculate)(e.g. TFC) " in {
-      val controller = mockTaxCreditCalculatorController
-      val resource: JsonNode = JsonLoader.fromResource("/json/tfc/input/scenario_12.json")
-      val inputJson: JsValue = Json.parse(resource.toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
-      val result = await(controller.calculate()(request))
-
-      val outputJSON = Json.parse(
-        """
-          |{
-          |    "status": 400,
-          |    "error": "You have provided a wrong type of request"
-          |}
-        """.stripMargin)
-
-      status(result) shouldBe Status.BAD_REQUEST
       jsonBodyOf(result) shouldBe outputJSON
     }
 
