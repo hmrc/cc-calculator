@@ -149,12 +149,8 @@ class OutputAPIModelSpec extends UnitSpec with FakeCCCalculatorApplication with 
       )
 
       val outputChild = models.output.tfc.OutputChild(
-        id = 0,
-        name = Some("Child 1"),
         childCareCost =  BigDecimal(0.00),
-        childContribution = contribution,
-        timeToMaximizeTopUp = 0,
-        failures = List()
+        childContribution = contribution
       )
 
       val tfcPeriod = models.output.tfc.TFCPeriod(
@@ -196,16 +192,12 @@ class OutputAPIModelSpec extends UnitSpec with FakeCCCalculatorApplication with 
           |		},
           |		"children": [
           |   {
-          |			  "id": 0,
-          |			  "name": "Child 1",
           |			  "childCareCost": 0.0,
           |			  "childContribution": {
           |				"parent": 0.0,
           |				"government": 0.0,
           |				"totalChildCareSpend": 0.0
-          |			},
-          |			"timeToMaximizeTopUp": 0,
-          |			"failures": []
+          |			}
           |		}
           |  ]
           |	}

@@ -9,8 +9,6 @@
       "periodEligibility": true,
       "children": [
         {
-          "id": 0,
-          "name": "Child 1",
           "qualifying": true,
           "from": "2016-03-03",
           "until": "2016-06-03",
@@ -28,8 +26,6 @@
       "periodEligibility": true,
       "children": [
         {
-          "id": 0,
-          "name": "Child 1",
           "qualifying": true,
           "from": "2016-06-03",
           "until": "2016-09-03",
@@ -47,8 +43,6 @@
       "periodEligibility": true,
       "children": [
         {
-          "id": 0,
-          "name": "Child 1",
           "qualifying": true,
           "from": "2016-09-03",
           "until": "2016-09-06",
@@ -66,8 +60,6 @@
       "periodEligibility": false,
       "children": [
         {
-          "id": 0,
-          "name": "Child 1",
           "qualifying": false,
           "from": null,
           "until": null,

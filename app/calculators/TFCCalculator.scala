@@ -109,12 +109,8 @@ trait TFCCalculator {
     def getOutputChildren(period: models.input.tfc.TFCPeriod): List[OutputChild] = {
       for(child <- period.children) yield {
         OutputChild(
-          id = child.id,
-          name = child.name,
           childCareCost = child.childcareCost,
-          childContribution = getChildContribution(child, period.configRule, daysBetween(period.from, period.until), period.periodEligibility),
-          timeToMaximizeTopUp = 0,
-          failures = List()
+          childContribution = getChildContribution(child, period.configRule, daysBetween(period.from, period.until), period.periodEligibility)
         )
       }
 

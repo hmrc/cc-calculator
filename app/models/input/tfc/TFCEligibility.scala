@@ -62,8 +62,6 @@ object TFCPeriod extends CCFormat with MessagesObject {
 }
 
 case class Child(
-                  id: Short,
-                  name: Option[String],
                   qualifying: Boolean,
                   from: Option[LocalDate],
                   until: Option[LocalDate],
@@ -81,16 +79,11 @@ case class Child(
 }
 
 object Child extends CCFormat with MessagesObject {
-  def validID(id: Short): Boolean = {
-    id >= 0
-  }
 
   def childSpendValidation(cost: BigDecimal) : Boolean = {
     cost >= BigDecimal(0.00)
   }
   implicit val childFormat : Reads[Child] = (
-    (JsPath \ "id").read[Short].filter(ValidationError(messages("cc.calc.id.should.not.be.less.than.0")))(x => validID(x)) and
-      (JsPath \ "name").readNullable[String](maxLength[String](TFCConfig.maxNameLength)) and
         (JsPath \ "qualifying").read[Boolean] and
           ((JsPath \ "from").readNullable[LocalDate](jodaLocalDateReads(datePattern)) or Reads.optionWithNull(jodaLocalDateReads(datePattern))) and
             ((JsPath \ "until").readNullable[LocalDate](jodaLocalDateReads(datePattern)) or Reads.optionWithNull(jodaLocalDateReads(datePattern))) and

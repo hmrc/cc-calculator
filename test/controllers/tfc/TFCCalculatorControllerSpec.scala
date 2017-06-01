@@ -249,44 +249,6 @@ class TFCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
       jsonBodyOf(result) shouldBe outputJSON
     }
 
-    "Accept invalid JSON at /tax-free-childcare/calculate and return a BadRequest with an error (child id negative)" in {
-
-      val mockTFCCalculatorController = new TFCCalculatorController(applicationMessagesApi) with TFCCalculator {
-        override val calculator = mock[TFCCalculatorService]
-        override val auditEvent = mock[AuditEvents]
-      }
-
-      val controller = mockTFCCalculatorController
-      val inputJson: JsValue = Json.parse(JsonLoader.fromResource("/json/tfc/input/child_negative_id.json").toString)
-      val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
-
-      when(controller.calculator.award(any[TFCEligibility]())).thenReturn(Future.successful(mockTFCCalculation))
-      val result = await(controller.calculate()(request))
-      status(result) shouldBe Status.BAD_REQUEST
-
-      val outputJSON = Json.parse(
-        """
-          |{
-          |   "status":400,
-          |   "errors":[
-          |      {
-          |         "path":"/periods(0)/children(0)/id",
-          |         "validationErrors":[
-          |            {
-          |               "message":"ID should not be less than 0",
-          |               "args":[
-          |
-          |               ]
-          |            }
-          |         ]
-          |      }
-          |   ]
-          |}
-        """.stripMargin)
-
-      jsonBodyOf(result) shouldBe outputJSON
-    }
-
     "Accept invalid JSON at /tax-free-childcare/calculate and return a BadRequest with an error (Invalid data type)" in {
 
       val mockTFCCalculatorController = new TFCCalculatorController(applicationMessagesApi) with TFCCalculator {
@@ -339,22 +301,6 @@ class TFCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
       status(result) shouldBe Status.OK
     }
 
-    "Valid JSON at /tax-free-childcare/calculate(childname is null)" in {
-
-      val mockTFCCalculatorController = new TFCCalculatorController(applicationMessagesApi) with TFCCalculator {
-        override val calculator = mock[TFCCalculatorService]
-        override val auditEvent = mock[AuditEvents]
-      }
-
-      val controller = mockTFCCalculatorController
-      val inputJson: JsValue = Json.parse(JsonLoader.fromResource("/json/tfc/input/childName_none.json").toString)
-      val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
-
-      when(controller.calculator.award(any[TFCEligibility]())).thenReturn(Future.successful(mockTFCCalculation))
-      val result = await(controller.calculate()(request))
-      status(result) shouldBe Status.OK
-    }
-
     "Valid JSON at /tax-free-childcare/calculate(no disability field)" in {
 
       val mockTFCCalculatorController = new TFCCalculatorController(applicationMessagesApi) with TFCCalculator {
@@ -369,42 +315,6 @@ class TFCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
       when(controller.calculator.award(any[TFCEligibility]())).thenReturn(Future.successful(mockTFCCalculation))
       val result = await(controller.calculate()(request))
       status(result) shouldBe Status.OK
-    }
-
-    "Accept invalid JSON at /tax-free-childcare/calculate and return a BadRequest with an error (max child name length > 25)" in {
-
-      val mockTFCCalculatorController = new TFCCalculatorController(applicationMessagesApi) with TFCCalculator {
-        override val calculator = mock[TFCCalculatorService]
-        override val auditEvent = mock[AuditEvents]
-      }
-
-      val controller = mockTFCCalculatorController
-      val inputJson: JsValue = Json.parse(JsonLoader.fromResource("/json/tfc/input/childName_length_invalid.json").toString)
-      val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
-
-      when(controller.calculator.award(any[TFCEligibility]())).thenReturn(Future.successful(mockTFCCalculation))
-      val result = await(controller.calculate()(request))
-      status(result) shouldBe Status.BAD_REQUEST
-
-      val outputJSON = Json.parse(
-        """
-          |{
-          |   "status":400,
-          |   "errors":[
-          |      {
-          |         "path":"/periods(0)/children(0)/name",
-          |         "validationErrors":[
-          |            {
-          |               "message":"error.maxLength",
-          |               "args":[25]
-          |            }
-          |         ]
-          |      }
-          |   ]
-          |}
-        """.stripMargin)
-
-      jsonBodyOf(result) shouldBe outputJSON
     }
 
     "Valid JSON at /tax-free-childcare/calculate(TFC Award Calculation Wire up)" in {

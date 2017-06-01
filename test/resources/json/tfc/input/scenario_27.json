@@ -9,8 +9,6 @@
       "periodEligibility": true,
       "children": [
         {
-          "id": 0,
-          "name": "Child 1",
           "qualifying": true,
           "from": "2016-09-01",
           "until": "2016-12-01",
@@ -21,8 +19,6 @@
           }
         },
         {
-          "id": 1,
-          "name": "Child 2",
           "qualifying": false,
           "from": null,
           "until": null,
@@ -33,8 +29,6 @@
           }
         },
         {
-          "id": 2,
-          "name": "Child 3",
           "qualifying": false,
           "from": null,
           "until": null,
@@ -52,8 +46,6 @@
       "periodEligibility": true,
       "children": [
         {
-          "id": 0,
-          "name": "Child 1",
           "qualifying": true,
           "from": "2016-12-01",
           "until": "2017-03-01",
@@ -64,8 +56,6 @@
           }
         },
         {
-          "id": 1,
-          "name": "Child 2",
           "qualifying": false,
           "from": null,
           "until": null,
@@ -76,8 +66,6 @@
           }
         },
         {
-          "id": 2,
-          "name": "Child 3",
           "qualifying": false,
           "from": null,
           "until": null,
@@ -95,8 +83,6 @@
       "periodEligibility": true,
       "children": [
         {
-          "id": 0,
-          "name": "Child 1",
           "qualifying": true,
           "from": "2017-03-01",
           "until": "2017-06-01",
@@ -107,8 +93,6 @@
           }
         },
         {
-          "id": 1,
-          "name": "Child 2",
           "qualifying": false,
           "from": null,
           "until": null,
@@ -119,8 +103,6 @@
           }
         },
         {
-          "id": 2,
-          "name": "Child 3",
           "qualifying": false,
           "from": null,
           "until": null,
@@ -138,8 +120,6 @@
       "periodEligibility": true,
       "children": [
         {
-          "id": 0,
-          "name": "Child 1",
           "qualifying": true,
           "from": "2017-06-01",
           "until": "2017-09-01",
@@ -150,8 +130,6 @@
           }
         },
         {
-          "id": 1,
-          "name": "Child 2",
           "qualifying": true,
           "from": "2017-08-31",
           "until": "2017-09-01",
@@ -162,8 +140,6 @@
           }
         },
         {
-          "id": 2,
-          "name": "Child 3",
           "qualifying": false,
           "from": null,
           "until": null,
@@ -181,8 +157,6 @@
       "periodEligibility": true,
       "children": [
         {
-          "id": 0,
-          "name": "Child 1",
           "qualifying": true,
           "from": "2017-09-01",
           "until": "2017-09-04",
@@ -193,8 +167,6 @@
           }
         },
         {
-          "id": 1,
-          "name": "Child 2",
           "qualifying": true,
           "from": "2017-09-01",
           "until": "2017-12-01",
@@ -205,8 +177,6 @@
           }
         },
         {
-          "id": 2,
-          "name": "Child 3",
           "qualifying": true,
           "from": "2017-09-01",
           "until": "2017-12-01",
@@ -224,8 +194,6 @@
       "periodEligibility": false,
       "children": [
         {
-          "id": 0,
-          "name": "Child 1",
           "qualifying": false,
           "from": null,
           "until": null,
@@ -236,8 +204,6 @@
           }
         },
         {
-          "id": 1,
-          "name": "Child 2",
           "qualifying": true,
           "from": "2017-12-01",
           "until": "2018-03-01",
@@ -248,8 +214,6 @@
           }
         },
         {
-          "id": 2,
-          "name": "Child 3",
           "qualifying": true,
           "from": "2017-12-01",
           "until": "2018-03-01",
@@ -267,8 +231,6 @@
       "periodEligibility": true,
       "children": [
         {
-          "id": 0,
-          "name": "Child 1",
           "qualifying": false,
           "from": null,
           "until": null,
@@ -279,8 +241,6 @@
           }
         },
         {
-          "id": 1,
-          "name": "Child 2",
           "qualifying": true,
           "from": "2018-03-01",
           "until": "2018-06-01",
@@ -291,8 +251,6 @@
           }
         },
         {
-          "id": 2,
-          "name": "Child 3",
           "qualifying": true,
           "from": "2018-03-01",
           "until": "2018-06-01",
@@ -310,8 +268,6 @@
       "periodEligibility": true,
       "children": [
         {
-          "id": 0,
-          "name": "Child 1",
           "qualifying": false,
           "from": null,
           "until": null,
@@ -322,8 +278,6 @@
           }
         },
         {
-          "id": 1,
-          "name": "Child 2",
           "qualifying": true,
           "from": "2018-06-01",
           "until": "2018-09-01",
@@ -334,8 +288,6 @@
           }
         },
         {
-          "id": 2,
-          "name": "Child 3",
           "qualifying": true,
           "from": "2018-06-01",
           "until": "2018-09-01",

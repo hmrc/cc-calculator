@@ -9,8 +9,6 @@
       "periodEligibility": true,
       "children": [
         {
-          "id": 1,
-          "name": "Child 1",
           "qualifying": true,
           "from": "2016-08-27",
           "until": "2016-11-27",

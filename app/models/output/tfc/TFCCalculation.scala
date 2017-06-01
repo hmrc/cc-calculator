@@ -60,22 +60,14 @@ object TFCPeriod extends CCFormat{
 }
 
 case class OutputChild(
-                        id: Short,
-                        name: Option[String],
                         childCareCost : BigDecimal = BigDecimal(0.00),
-                        childContribution : Contribution,
-                        timeToMaximizeTopUp : Short = 0,
-                        failures: List[String]
+                        childContribution : Contribution
                         )
 
 object OutputChild extends CCFormat {
   implicit val childWrites : Writes[OutputChild] = (
-    (JsPath \ "id").write[Short] and
-      (JsPath \ "name").writeNullable[String] and
           (JsPath \ "childCareCost").write[BigDecimal] and
-              (JsPath \ "childContribution").write[Contribution] and
-                (JsPath \ "timeToMaximizeTopUp").write[Short] and
-                  (JsPath \ "failures").write[List[String]]
+              (JsPath \ "childContribution").write[Contribution]
     )(unlift(OutputChild.unapply))
 }
 

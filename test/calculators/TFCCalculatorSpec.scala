@@ -55,7 +55,7 @@ class TFCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
       val fromDate = LocalDate.parse("2016-05-01T18:46:17", formatter)
       val untilDate = LocalDate.parse("2016-05-21T18:46:17", formatter)
-      val child = Child(id = 2, name = Some("Child 1"), childcareCost = BigDecimal(200.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = Disability(disabled = false, severelyDisabled = false))
+      val child = Child(childcareCost = BigDecimal(200.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = Disability(disabled = false, severelyDisabled = false))
       val tfcPeriod = models.input.tfc.TFCPeriod(from = fromDate, until = untilDate, periodEligibility = false, children = List(child))
       val result = TFCCalculator.calculator.getCalculatedTFCPeriods(List(tfcPeriod))
 
@@ -66,12 +66,8 @@ class TFCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
           periodContribution = Contribution(600.0,0.0,600.0),
           children = List(
             OutputChild(
-              id = 2,
-              name = Some("Child 1"),
               childCareCost =  BigDecimal(200.00),
-              childContribution = Contribution(600.0,0.0,600.0),
-              timeToMaximizeTopUp = 0,
-              failures = List()
+              childContribution = Contribution(600.0,0.0,600.0)
             )
           )
         )
@@ -84,8 +80,6 @@ class TFCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
       val untilDate = LocalDate.parse("2016-05-21T18:46:17", formatter)
       val children = List(
         Child(
-          id = 2,
-          name = Some("Child 1"),
           childcareCost = BigDecimal(200.00),
           qualifying = true,
           from = Some(fromDate),
@@ -93,8 +87,6 @@ class TFCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
           disability = Disability(disabled = false, severelyDisabled = false)
         ),
         Child(
-          id = 2,
-          name = Some("Child 2"),
           childcareCost = BigDecimal(800.00),
           qualifying = true,
           from = Some(fromDate),
@@ -112,20 +104,12 @@ class TFCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
           periodContribution = Contribution(3000.00,0.00,3000.00),
           children = List(
             OutputChild(
-              id = 2,
-              name = Some("Child 1"),
               childCareCost =  BigDecimal(200.00),
-              childContribution = Contribution(600.00,0.00,600.00),
-              timeToMaximizeTopUp = 0,
-              failures = List()
+              childContribution = Contribution(600.00,0.00,600.00)
             ),
             OutputChild(
-              id = 2,
-              name = Some("Child 2"),
               childCareCost =  BigDecimal(800.00),
-              childContribution = Contribution(2400.00,0.00,2400.00),
-              timeToMaximizeTopUp = 0,
-              failures = List()
+              childContribution = Contribution(2400.00,0.00,2400.00)
             )
           )
         )
@@ -188,37 +172,23 @@ class TFCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
       val fromDate = LocalDate.parse("2016-08-27T00:00:00", formatter)
       val untilDate = LocalDate.parse("2016-11-27T00:00:00", formatter)
-      val child = Child(id = 2, name = Some("Child 1"), childcareCost = BigDecimal(200.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = Disability(disabled = false, severelyDisabled = false))
+      val child = Child(childcareCost = BigDecimal(200.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = Disability(disabled = false, severelyDisabled = false))
       val tfcPeriod = models.input.tfc.TFCPeriod(from = fromDate, until = untilDate, periodEligibility = false, children = List(child))
       val result = TFCCalculator.calculator.getOutputChildren(tfcPeriod)
 
       result shouldBe List(
         OutputChild(
-          id = 2,
-          name = Some("Child 1"),
           childCareCost =  BigDecimal(200.00),
-          childContribution = Contribution(600.00,0.00,600.00),
-          timeToMaximizeTopUp = 0,
-          failures = List()
+          childContribution = Contribution(600.00,0.00,600.00)
         )
       )
-    }
-
-    "return a child name for non-empty name" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
-      val fromDate = LocalDate.parse("2016-08-27T00:00:00", formatter)
-      val untilDate = LocalDate.parse("2016-11-27T00:00:00", formatter)
-      val child = Child(id = 2, name = Some("Child 1"), childcareCost = BigDecimal(200.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = Disability(disabled = false, severelyDisabled = false))
-      val tfcPeriod = models.input.tfc.TFCPeriod(from = fromDate, until = untilDate, periodEligibility = true, children = List(child))
-      val outputChild = TFCCalculator.calculator.getOutputChildren(tfcPeriod)
-      outputChild.head.name shouldBe Some("Child 1")
     }
 
     "return a childcareCost for cost > 0.00" in {
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
       val fromDate = LocalDate.parse("2016-08-27T00:00:00", formatter)
       val untilDate = LocalDate.parse("2016-11-27T00:00:00", formatter)
-      val child = Child(id = 2, name = Some("Child 1"), childcareCost = BigDecimal(500.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = Disability(disabled = false, severelyDisabled = false))
+      val child = Child(childcareCost = BigDecimal(500.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = Disability(disabled = false, severelyDisabled = false))
       val tfcPeriod = models.input.tfc.TFCPeriod(from = fromDate, until = untilDate, periodEligibility = true, children = List(child))
       val outputChild = TFCCalculator.calculator.getOutputChildren(tfcPeriod)
       outputChild.head.childCareCost shouldBe BigDecimal(500.00)
@@ -300,7 +270,7 @@ class TFCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
         val fromDate = LocalDate.parse("2016-07-01T18:46:17", formatter)
         val untilDate = LocalDate.parse("2016-10-01T18:46:17", formatter)
-        val child = Child(id = 2, name = Some("Child 1"), childcareCost = BigDecimal(500.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = Disability(disabled = false, severelyDisabled = false))
+        val child = Child(childcareCost = BigDecimal(500.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = Disability(disabled = false, severelyDisabled = false))
         val result = TFCCalculator.calculator.getChildCareCostForPeriod(child)
         result shouldBe BigDecimal(1500.00)
       }
@@ -310,7 +280,7 @@ class TFCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
         val fromDate = LocalDate.parse("2016-07-01T18:46:17", formatter)
         val untilDate = LocalDate.parse("2016-10-01T18:46:17", formatter)
-        val child = Child(id = 2, name = Some("Child 1"), childcareCost = BigDecimal(0.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = Disability(disabled = false, severelyDisabled = false))
+        val child = Child(childcareCost = BigDecimal(0.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = Disability(disabled = false, severelyDisabled = false))
         val result = TFCCalculator.calculator.getChildCareCostForPeriod(child)
         result shouldBe BigDecimal(0.00)
       }
@@ -320,7 +290,7 @@ class TFCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
         val fromDate = LocalDate.parse("2016-07-01T18:46:17", formatter)
         val untilDate = LocalDate.parse("2016-10-01T18:46:17", formatter)
-        val child = Child(id = 2, name = Some("Child 1"), childcareCost = BigDecimal(500.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = Disability(disabled = false, severelyDisabled = false))
+        val child = Child(childcareCost = BigDecimal(500.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = Disability(disabled = false, severelyDisabled = false))
         val tfcPeriod = models.input.tfc.TFCPeriod(from = fromDate, until = untilDate, periodEligibility = true, children = List(child))
         val result = TFCCalculator.calculator.getTopUpPercentForChildCareCost(child, tfcPeriod.configRule)
         result shouldBe BigDecimal(300.00)
@@ -331,7 +301,7 @@ class TFCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
         val fromDate = LocalDate.parse("2017-07-01T18:46:17", formatter)
         val untilDate = LocalDate.parse("2017-10-01T18:46:17", formatter)
-        val child = Child(id = 2, name = Some("Child 1"), childcareCost = BigDecimal(500.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = Disability(disabled = true, severelyDisabled = false))
+        val child = Child(childcareCost = BigDecimal(500.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = Disability(disabled = true, severelyDisabled = false))
         val tfcPeriod = models.input.tfc.TFCPeriod(from = fromDate, until = untilDate, periodEligibility = true, children = List(child))
         val result = TFCCalculator.calculator.getTopUpPercentForChildCareCost(child, tfcPeriod.configRule)
         result shouldBe BigDecimal(300.00)
@@ -342,7 +312,7 @@ class TFCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
         val fromDate = LocalDate.parse("2017-07-01T18:46:17", formatter)
         val untilDate = LocalDate.parse("2017-10-01T18:46:17", formatter)
-        val child = Child(id = 2, name = Some("Child 1"), childcareCost = BigDecimal(0.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = Disability(disabled = false, severelyDisabled = false))
+        val child = Child(childcareCost = BigDecimal(0.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = Disability(disabled = false, severelyDisabled = false))
         val tfcPeriod = models.input.tfc.TFCPeriod(from = fromDate, until = untilDate, periodEligibility = true, children = List(child))
         val result = TFCCalculator.calculator.getTopUpPercentForChildCareCost(child, tfcPeriod.configRule)
         result shouldBe BigDecimal(0.00)
@@ -353,7 +323,7 @@ class TFCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
         val fromDate = LocalDate.parse("2017-07-01T18:46:17", formatter)
         val untilDate = LocalDate.parse("2017-10-01T18:46:17", formatter)
-        val child = Child(id = 2, name = Some("Child 1"), childcareCost = BigDecimal(0.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = Disability(disabled = false, severelyDisabled = false))
+        val child = Child(childcareCost = BigDecimal(0.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = Disability(disabled = false, severelyDisabled = false))
         val tfcPeriod = models.input.tfc.TFCPeriod(from = fromDate, until = untilDate, periodEligibility = true, children = List(child))
         val tfcConfig = tfcPeriod.configRule
         val result = TFCCalculator.calculator.getMaximumTopup(child, tfcConfig)
@@ -365,7 +335,7 @@ class TFCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
         val fromDate = LocalDate.parse("2017-07-01T18:46:17", formatter)
         val untilDate = LocalDate.parse("2017-10-01T18:46:17", formatter)
-        val child = Child(id = 2, name = Some("Child 1"), childcareCost = BigDecimal(700.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = Disability(disabled = false, severelyDisabled = false))
+        val child = Child(childcareCost = BigDecimal(700.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = Disability(disabled = false, severelyDisabled = false))
         val tfcPeriod = models.input.tfc.TFCPeriod(from = fromDate, until = untilDate, periodEligibility = true, children = List(child))
         val tfcConfig = tfcPeriod.configRule
         val result = TFCCalculator.calculator.getMaximumTopup(child, tfcConfig)
@@ -378,7 +348,7 @@ class TFCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
         val fromDate = LocalDate.parse("2017-07-01T18:46:17", formatter)
         val untilDate = LocalDate.parse("2017-10-01T18:46:17", formatter)
-        val child = Child(id = 2, name = Some("Child 1"), childcareCost = BigDecimal(833.34), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = Disability(disabled = false, severelyDisabled = false))
+        val child = Child(childcareCost = BigDecimal(833.34), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = Disability(disabled = false, severelyDisabled = false))
         val tfcPeriod = models.input.tfc.TFCPeriod(from = fromDate, until = untilDate, periodEligibility = true, children = List(child))
         val tfcConfig = tfcPeriod.configRule
         val result = TFCCalculator.calculator.getMaximumTopup(child, tfcConfig)
@@ -391,7 +361,7 @@ class TFCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
         val fromDate = LocalDate.parse("2017-07-01T18:46:17", formatter)
         val untilDate = LocalDate.parse("2017-10-01T18:46:17", formatter)
-        val child = Child(id = 2, name = Some("Child 1"), childcareCost = BigDecimal(1000.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = Disability(disabled = false, severelyDisabled = false))
+        val child = Child(childcareCost = BigDecimal(1000.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = Disability(disabled = false, severelyDisabled = false))
         val tfcPeriod = models.input.tfc.TFCPeriod(from = fromDate, until = untilDate, periodEligibility = true, children = List(child))
         val tfcConfig = tfcPeriod.configRule
         val result = TFCCalculator.calculator.getMaximumTopup(child, tfcConfig)
@@ -403,7 +373,7 @@ class TFCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
         val fromDate = LocalDate.parse("2017-07-01T18:46:17", formatter)
         val untilDate = LocalDate.parse("2016-10-01T18:46:17", formatter)
-        val child = Child(id = 2, name = Some("Child 1"), childcareCost = BigDecimal(0.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = Disability(disabled = true, severelyDisabled = false))
+        val child = Child(childcareCost = BigDecimal(0.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = Disability(disabled = true, severelyDisabled = false))
         val tfcPeriod = models.input.tfc.TFCPeriod(from = fromDate, until = untilDate, periodEligibility = true, children = List(child))
         val tfcConfig = tfcPeriod.configRule
         val result = TFCCalculator.calculator.getMaximumTopup(child, tfcConfig)
@@ -415,7 +385,7 @@ class TFCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
         val fromDate = LocalDate.parse("2016-07-01T18:46:17", formatter)
         val untilDate = LocalDate.parse("2016-10-01T18:46:17", formatter)
-        val child = Child(id = 2, name = Some("Child 1"), childcareCost = BigDecimal(1000.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = Disability(disabled = true, severelyDisabled = false))
+        val child = Child(childcareCost = BigDecimal(1000.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = Disability(disabled = true, severelyDisabled = false))
         val tfcPeriod = models.input.tfc.TFCPeriod(from = fromDate, until = untilDate, periodEligibility = true, children = List(child))
         val tfcConfig = tfcPeriod.configRule
         val result = TFCCalculator.calculator.getMaximumTopup(child, tfcConfig)
@@ -427,7 +397,7 @@ class TFCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
         val fromDate = LocalDate.parse("2016-07-01T18:46:17", formatter)
         val untilDate = LocalDate.parse("2016-10-01T18:46:17", formatter)
-        val child = Child(id = 2, name = Some("Child 1"), childcareCost = BigDecimal(1666.67), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = Disability(disabled = true, severelyDisabled = false))
+        val child = Child(childcareCost = BigDecimal(1666.67), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = Disability(disabled = true, severelyDisabled = false))
         val tfcPeriod = models.input.tfc.TFCPeriod(from = fromDate, until = untilDate, periodEligibility = true, children = List(child))
         val tfcConfig = tfcPeriod.configRule
         val result = TFCCalculator.calculator.getMaximumTopup(child, tfcConfig)
@@ -439,7 +409,7 @@ class TFCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
         val fromDate = LocalDate.parse("2016-07-01T18:46:17", formatter)
         val untilDate = LocalDate.parse("2017-10-01T18:46:17", formatter)
-        val child = Child(id = 2, name = Some("Child 1"), childcareCost = BigDecimal(1800.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = Disability(disabled = true, severelyDisabled = false))
+        val child = Child(childcareCost = BigDecimal(1800.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = Disability(disabled = true, severelyDisabled = false))
         val tfcPeriod = models.input.tfc.TFCPeriod(from = fromDate, until = untilDate, periodEligibility = true, children = List(child))
         val tfcConfig = tfcPeriod.configRule
         val result = TFCCalculator.calculator.getMaximumTopup(child, tfcConfig)
@@ -451,7 +421,7 @@ class TFCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
         val fromDate = LocalDate.parse("2016-07-01T18:46:17", formatter)
         val untilDate = LocalDate.parse("2016-07-06T18:46:17", formatter)
-        val child = Child(id = 2, name = Some("Child 1"), childcareCost = BigDecimal(500.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = Disability(disabled = false, severelyDisabled = false))
+        val child = Child(childcareCost = BigDecimal(500.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = Disability(disabled = false, severelyDisabled = false))
         val tfcPeriod = models.input.tfc.TFCPeriod(from = fromDate, until = untilDate, periodEligibility = true, children = List(child))
         val result = TFCCalculator.calculator.getChildContribution(child, tfcPeriod.configRule, 92, true)
         result shouldBe
@@ -467,7 +437,7 @@ class TFCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
         val fromDate = LocalDate.parse("2016-07-01T18:46:17", formatter)
         val untilDate = LocalDate.parse("2016-10-01T18:46:17", formatter)
-        val child = Child(id = 2, name = Some("Child 1"), childcareCost = BigDecimal(1000.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = Disability(disabled = false, severelyDisabled = false))
+        val child = Child(childcareCost = BigDecimal(1000.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = Disability(disabled = false, severelyDisabled = false))
         val tfcPeriod = models.input.tfc.TFCPeriod(from = fromDate, until = untilDate, periodEligibility = true, children = List(child))
         val result = TFCCalculator.calculator.getChildContribution(child, tfcPeriod.configRule, 92, true)
         result shouldBe
@@ -483,7 +453,7 @@ class TFCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
         val fromDate = LocalDate.parse("2016-07-01T18:46:17", formatter)
         val untilDate = LocalDate.parse("2016-10-01T18:46:17", formatter)
-        val child = Child(id = 2, name = Some("Child 1"), childcareCost = BigDecimal(833.33), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = Disability(disabled = false, severelyDisabled = false))
+        val child = Child(childcareCost = BigDecimal(833.33), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = Disability(disabled = false, severelyDisabled = false))
         val tfcPeriod = models.input.tfc.TFCPeriod(from = fromDate, until = untilDate, periodEligibility = true, children = List(child))
         val result = TFCCalculator.calculator.getChildContribution(child, tfcPeriod.configRule, 92, true)
         result shouldBe
@@ -499,7 +469,7 @@ class TFCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
         val fromDate = LocalDate.parse("2017-11-30T18:46:17", formatter)
         val untilDate = LocalDate.parse("2018-02-28T18:46:17", formatter)
-        val child = Child(id = 2, name = Some("Child 1"), childcareCost = BigDecimal(600.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = Disability(disabled = false, severelyDisabled = false))
+        val child = Child(childcareCost = BigDecimal(600.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = Disability(disabled = false, severelyDisabled = false))
         val tfcPeriod = models.input.tfc.TFCPeriod(from = fromDate, until = untilDate, periodEligibility = true, children = List(child))
         val result = TFCCalculator.calculator.getChildContribution(child, tfcPeriod.configRule, 90, true)
         result shouldBe
@@ -514,7 +484,7 @@ class TFCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
         val fromDate = LocalDate.parse("2017-11-30T18:46:17", formatter)
         val untilDate = LocalDate.parse("2018-02-28T18:46:17", formatter)
-        val child = Child(id = 2, name = Some("Child 1"), childcareCost = BigDecimal(1000.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = Disability(disabled = true, severelyDisabled = false))
+        val child = Child(childcareCost = BigDecimal(1000.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = Disability(disabled = true, severelyDisabled = false))
         val tfcPeriod = models.input.tfc.TFCPeriod(from = fromDate, until = untilDate, periodEligibility = true, children = List(child))
         val result = TFCCalculator.calculator.getChildContribution(child, tfcPeriod.configRule, 90, true)
         result shouldBe
@@ -530,7 +500,7 @@ class TFCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
         val fromDate = LocalDate.parse("2017-05-31T18:46:17", formatter)
         val untilDate = LocalDate.parse("2017-08-31T18:46:17", formatter)
-        val child = Child(id = 2, name = Some("Child 1"), childcareCost = BigDecimal(2000.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = Disability(disabled = true, severelyDisabled = false))
+        val child = Child(childcareCost = BigDecimal(2000.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = Disability(disabled = true, severelyDisabled = false))
         val tfcPeriod = models.input.tfc.TFCPeriod(from = fromDate, until = untilDate, periodEligibility = true, children = List(child))
         val result = TFCCalculator.calculator.getChildContribution(child, tfcPeriod.configRule, 92, true)
         result shouldBe
@@ -546,7 +516,7 @@ class TFCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
         val fromDate = LocalDate.parse("2017-05-31T18:46:17", formatter)
         val untilDate = LocalDate.parse("2017-08-31T18:46:17", formatter)
-        val child = Child(id = 2, name = Some("Child 1"), childcareCost = BigDecimal(1666.66), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = Disability(disabled = true, severelyDisabled = false))
+        val child = Child(childcareCost = BigDecimal(1666.66), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = Disability(disabled = true, severelyDisabled = false))
         val tfcPeriod = models.input.tfc.TFCPeriod(from = fromDate, until = untilDate, periodEligibility = true, children = List(child))
         val result = TFCCalculator.calculator.getChildContribution(child, tfcPeriod.configRule, 92, true)
         result shouldBe
@@ -562,7 +532,7 @@ class TFCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
         val fromDate = LocalDate.parse("2017-11-30T18:46:17", formatter)
         val untilDate = LocalDate.parse("2018-02-28T18:46:17", formatter)
-        val child = Child(id = 2, name = Some("Child 1"), childcareCost = BigDecimal(600.00), qualifying = false, from = Some(fromDate), until  = Some(untilDate),disability = Disability(disabled = false, severelyDisabled = false))
+        val child = Child(childcareCost = BigDecimal(600.00), qualifying = false, from = Some(fromDate), until  = Some(untilDate),disability = Disability(disabled = false, severelyDisabled = false))
         val tfcPeriod = models.input.tfc.TFCPeriod(from = fromDate, until = untilDate, periodEligibility = true, children = List(child))
         val result = TFCCalculator.calculator.getChildContribution(child, tfcPeriod.configRule, 90, true)
         result shouldBe
@@ -578,7 +548,7 @@ class TFCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
         val fromDate = LocalDate.parse("2017-05-31T18:46:17", formatter)
         val untilDate = LocalDate.parse("2018-08-31T18:46:17", formatter)
-        val child = Child(id = 2, name = Some("Child 1"), childcareCost = BigDecimal(1000.00), qualifying = false, from = Some(fromDate), until  = Some(untilDate),disability = Disability(disabled = true, severelyDisabled = false))
+        val child = Child(childcareCost = BigDecimal(1000.00), qualifying = false, from = Some(fromDate), until  = Some(untilDate),disability = Disability(disabled = true, severelyDisabled = false))
         val tfcPeriod = models.input.tfc.TFCPeriod(from = fromDate, until = untilDate, periodEligibility = true, children = List(child))
         val result = TFCCalculator.calculator.getChildContribution(child, tfcPeriod.configRule, 92, true)
         result shouldBe
@@ -596,8 +566,6 @@ class TFCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
         val untilDate = LocalDate.parse("2016-05-21T18:46:17", formatter)
         val children = List(
           Child(
-            id = 2,
-            name = Some("Child 1"),
             childcareCost = BigDecimal(200.00),
             qualifying = true,
             from = Some(fromDate),
@@ -605,8 +573,6 @@ class TFCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
             disability = Disability(disabled = false, severelyDisabled = false)
           ),
           Child(
-            id = 2,
-            name = Some("Child 2"),
             childcareCost = BigDecimal(800.00),
             qualifying = false,
             from = Some(fromDate),
@@ -619,26 +585,18 @@ class TFCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
 
         result shouldBe List(
           OutputChild(
-            id = 2,
-            name = Some("Child 1"),
             childCareCost =  BigDecimal(200.00),
             childContribution = Contribution(
               parent = 600.00,
               government = 0.00,
-              totalChildCareSpend = 600.00),
-            timeToMaximizeTopUp = 0,
-            failures = List()
+              totalChildCareSpend = 600.00)
           ),
           OutputChild(
-            id = 2,
-            name = Some("Child 2"),
             childCareCost =  BigDecimal(800.00),
             childContribution = Contribution(
               parent = 2400.00,
               government = 00.00,
-              totalChildCareSpend = 2400.00),
-            timeToMaximizeTopUp = 0,
-            failures = List()
+              totalChildCareSpend = 2400.00)
           )
         )
       }
@@ -650,8 +608,6 @@ class TFCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
         val untilDate = LocalDate.parse("2016-05-21T18:46:17", formatter)
         val children = List(
           Child(
-            id = 2,
-            name = Some("Child 1"),
             childcareCost = BigDecimal(200.00),
             qualifying = true,
             from = Some(fromDate),
@@ -659,8 +615,6 @@ class TFCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
             disability = Disability(disabled = true, severelyDisabled = false)
           ),
           Child(
-            id = 3,
-            name = Some("Child 2"),
             childcareCost = BigDecimal(800.00),
             qualifying = true,
             from = Some(fromDate),
@@ -673,26 +627,18 @@ class TFCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
 
         result shouldBe List(
           OutputChild(
-            id = 2,
-            name = Some("Child 1"),
             childCareCost =  BigDecimal(200.00),
             childContribution = Contribution(
               parent = 600.00,
               government = 0.00,
-              totalChildCareSpend = 600.00),
-            timeToMaximizeTopUp = 0,
-            failures = List()
+              totalChildCareSpend = 600.00)
           ),
           OutputChild(
-            id = 3,
-            name = Some("Child 2"),
             childCareCost =  BigDecimal(800.00),
             childContribution = Contribution(
               parent = 2400.00,
               government = 0.00,
-              totalChildCareSpend = 2400.00),
-            timeToMaximizeTopUp = 0,
-            failures = List()
+              totalChildCareSpend = 2400.00)
           )
         )
       }
@@ -704,8 +650,6 @@ class TFCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
         val untilDate = LocalDate.parse("2016-05-21T18:46:17", formatter)
         val children = List(
           Child(
-            id = 2,
-            name = Some("Child 1"),
             childcareCost = BigDecimal(200.00),
             qualifying = false,
             from = Some(fromDate),
@@ -713,8 +657,6 @@ class TFCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
             disability = Disability(disabled = true, severelyDisabled = false)
           ),
           Child(
-            id = 3,
-            name = Some("Child 2"),
             childcareCost = BigDecimal(800.00),
             qualifying = false,
             from = Some(fromDate),
@@ -727,32 +669,24 @@ class TFCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
 
         result shouldBe List(
           OutputChild(
-            id = 2,
-            name = Some("Child 1"),
             childCareCost =  BigDecimal(200.00),
             childContribution = Contribution(
               parent = 600.00,
               government = 0.00,
-              totalChildCareSpend = 600.00),
-            timeToMaximizeTopUp = 0,
-            failures = List()
+              totalChildCareSpend = 600.00)
           ),
           OutputChild(
-            id = 3,
-            name = Some("Child 2"),
             childCareCost =  BigDecimal(800.00),
             childContribution = Contribution(
               parent = 2400.00,
               government = 0.00,
-              totalChildCareSpend = 2400.00),
-            timeToMaximizeTopUp = 0,
-            failures = List()
+              totalChildCareSpend = 2400.00)
           )
         )
       }
 
     "Calculate the Total Period contributions for 1 child" in {
-      val child = OutputChild(id = 2, name = Some("Child 1"), childCareCost = BigDecimal(200.00), childContribution = Contribution(BigDecimal(480.00), BigDecimal(120.00), BigDecimal(600.00)), timeToMaximizeTopUp = 0, failures = List())
+      val child = OutputChild(childCareCost = BigDecimal(200.00), childContribution = Contribution(BigDecimal(480.00), BigDecimal(120.00), BigDecimal(600.00)))
       val result = TFCCalculator.calculator.getPeriodContribution(List(child))
 
       result shouldBe Contribution(
@@ -763,8 +697,8 @@ class TFCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
     }
 
     "Calculate the Total Period contributions for 2 children" in {
-      val child1 = OutputChild(id = 2, name = Some("Child 1"), childCareCost = BigDecimal(200.00), childContribution = Contribution(BigDecimal(480.00), BigDecimal(120.00), BigDecimal(600.00)), timeToMaximizeTopUp = 0, failures = List())
-      val child2 = OutputChild(id = 2, name = Some("Child 2"), childCareCost = BigDecimal(200.00), childContribution = Contribution(BigDecimal(480.00), BigDecimal(120.00), BigDecimal(600.00)), timeToMaximizeTopUp = 0, failures = List())
+      val child1 = OutputChild(childCareCost = BigDecimal(200.00), childContribution = Contribution(BigDecimal(480.00), BigDecimal(120.00), BigDecimal(600.00)))
+      val child2 = OutputChild(childCareCost = BigDecimal(200.00), childContribution = Contribution(BigDecimal(480.00), BigDecimal(120.00), BigDecimal(600.00)))
 
       val result = TFCCalculator.calculator.getPeriodContribution(List(child1, child2))
 
@@ -776,9 +710,9 @@ class TFCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
     }
 
     "Calculate the Total Period contributions for 3 children" in {
-      val child1 = OutputChild(id = 2, name = Some("Child 1"), childCareCost = BigDecimal(200.00), childContribution = Contribution(BigDecimal(480.00), BigDecimal(120.00), BigDecimal(600.00)), timeToMaximizeTopUp = 0, failures = List())
-      val child2 = OutputChild(id = 2, name = Some("Child 2"), childCareCost = BigDecimal(200.00), childContribution = Contribution(BigDecimal(480.00), BigDecimal(120.00), BigDecimal(600.00)), timeToMaximizeTopUp = 0, failures = List())
-      val child3 = OutputChild(id = 2, name = Some("Child 3"), childCareCost = BigDecimal(200.00), childContribution = Contribution(BigDecimal(20.00), BigDecimal(100.00), BigDecimal(100.00)), timeToMaximizeTopUp = 0, failures = List())
+      val child1 = OutputChild(childCareCost = BigDecimal(200.00), childContribution = Contribution(BigDecimal(480.00), BigDecimal(120.00), BigDecimal(600.00)))
+      val child2 = OutputChild(childCareCost = BigDecimal(200.00), childContribution = Contribution(BigDecimal(480.00), BigDecimal(120.00), BigDecimal(600.00)))
+      val child3 = OutputChild(childCareCost = BigDecimal(200.00), childContribution = Contribution(BigDecimal(20.00), BigDecimal(100.00), BigDecimal(100.00)))
 
       val result = TFCCalculator.calculator.getPeriodContribution(List(child1, child2, child3))
 
@@ -793,7 +727,7 @@ class TFCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
       val periodOneFromDate = LocalDate.parse("2016-05-01T18:46:17", formatter)
       val periodOneUntilDate = LocalDate.parse("2016-08-01T18:46:17", formatter)
-      val child = OutputChild(id = 2, name = Some("Child 1"), childCareCost = BigDecimal(200.00), childContribution = Contribution(BigDecimal(480.00), BigDecimal(120.00), BigDecimal(600.00)), timeToMaximizeTopUp = 0, failures = List())
+      val child = OutputChild(childCareCost = BigDecimal(200.00), childContribution = Contribution(BigDecimal(480.00), BigDecimal(120.00), BigDecimal(600.00)))
       val tfcPeriod1 = models.output.tfc.TFCPeriod(from = periodOneFromDate, until = periodOneUntilDate, periodContribution = Contribution(BigDecimal(480.00), BigDecimal(120.00), BigDecimal(600.00)), children = List(child))
 
       val result = TFCCalculator.calculator.getHouseholdContribution(List(tfcPeriod1))
@@ -811,7 +745,7 @@ class TFCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
       val periodOneUntilDate = LocalDate.parse("2016-08-01T18:46:17", formatter)
       val periodTwoFromDate = LocalDate.parse("2016-08-01T18:46:17", formatter)
       val periodTwoUntilDate = LocalDate.parse("2016-11-01T18:46:17", formatter)
-      val child = OutputChild(id = 2, name = Some("Child 1"), childCareCost = BigDecimal(200.00), childContribution = Contribution(BigDecimal(480.00), BigDecimal(120.00), BigDecimal(600.00)), timeToMaximizeTopUp = 0, failures = List())
+      val child = OutputChild(childCareCost = BigDecimal(200.00), childContribution = Contribution(BigDecimal(480.00), BigDecimal(120.00), BigDecimal(600.00)))
       val tfcPeriod1 = models.output.tfc.TFCPeriod(from = periodOneFromDate, until = periodOneUntilDate, periodContribution = Contribution(BigDecimal(480.00), BigDecimal(120.00), BigDecimal(600.00)), children = List(child))
       val tfcPeriod2 = models.output.tfc.TFCPeriod(from = periodTwoFromDate, until = periodTwoUntilDate, periodContribution = Contribution(BigDecimal(480.00), BigDecimal(120.00), BigDecimal(600.00)), children = List(child))
 
@@ -832,7 +766,7 @@ class TFCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
       val periodTwoUntilDate = LocalDate.parse("2016-11-01T18:46:17", formatter)
       val periodThreeFromDate = LocalDate.parse("2016-11-01T18:46:17", formatter)
       val periodThreeUntilDate = LocalDate.parse("2017-02-01T18:46:17", formatter)
-      val child = OutputChild(id = 2, name = Some("Child 1"), childCareCost = BigDecimal(200.00), childContribution = Contribution(BigDecimal(480.00), BigDecimal(120.00), BigDecimal(600.00)), timeToMaximizeTopUp = 0, failures = List())
+      val child = OutputChild(childCareCost = BigDecimal(200.00), childContribution = Contribution(BigDecimal(480.00), BigDecimal(120.00), BigDecimal(600.00)))
       val tfcPeriod1 = models.output.tfc.TFCPeriod(from = periodOneFromDate, until = periodOneUntilDate, periodContribution = Contribution(BigDecimal(480.00), BigDecimal(120.00), BigDecimal(600.00)), children = List(child))
       val tfcPeriod2 = models.output.tfc.TFCPeriod(from = periodTwoFromDate, until = periodTwoUntilDate, periodContribution = Contribution(BigDecimal(480.00), BigDecimal(120.00), BigDecimal(600.00)), children = List(child))
       val tfcPeriod3 = models.output.tfc.TFCPeriod(from = periodTwoFromDate, until = periodTwoUntilDate, periodContribution = Contribution(BigDecimal(480.00), BigDecimal(120.00), BigDecimal(600.00)), children = List(child))

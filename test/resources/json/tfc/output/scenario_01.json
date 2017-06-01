@@ -18,16 +18,12 @@
       },
       "children": [
         {
-          "id": 0,
-          "name": "Child 1",
           "childCareCost": 3000.00,
           "childContribution" : {
             "parent": 8500.00,
             "government": 500.00,
             "totalChildCareSpend": 9000.00
-          },
-          "timeToMaximizeTopUp" : 0,
-          "failures" : []
+          }
         }
       ]
     }

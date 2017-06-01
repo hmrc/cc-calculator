@@ -55,8 +55,6 @@ class TFCEligibilitySpec extends UnitSpec with FakeCCCalculatorApplication with 
           //Child model
           val child = period.children.head
           child shouldBe a[Child]
-          child.id shouldBe a[Short]
-          child.name.isInstanceOf[Option[String]] shouldBe true
           child.qualifying.isInstanceOf[Boolean] shouldBe true
           child.from.isInstanceOf[Option[LocalDate]] shouldBe true
           child.until.isInstanceOf[Option[LocalDate]] shouldBe true
@@ -79,7 +77,7 @@ class TFCEligibilitySpec extends UnitSpec with FakeCCCalculatorApplication with 
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
       val periodStart = LocalDate.parse ("2016-06-01T18:46:17",formatter)
       val periodEnd = LocalDate.parse ("2016-08-31T18:46:17",formatter)
-      val child = Child(id =1,name = None ,qualifying = true, from = Some(periodStart), until = Some(periodEnd),childcareCost= BigDecimal(18000), disability = Disability(disabled = false, severelyDisabled = false))
+      val child = Child(qualifying = true, from = Some(periodStart), until = Some(periodEnd),childcareCost= BigDecimal(18000), disability = Disability(disabled = false, severelyDisabled = false))
       val tfcPeriod = TFCPeriod(from = periodStart, until = periodEnd, periodEligibility = true, List(child))
 
       val tfcEligibility = TFCEligibility(
@@ -95,7 +93,7 @@ class TFCEligibilitySpec extends UnitSpec with FakeCCCalculatorApplication with 
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
       val periodStart = LocalDate.parse ("2016-06-01T18:46:17",formatter)
       val periodEnd = LocalDate.parse ("2016-08-31T18:46:17",formatter)
-      val child = Child(id =1,name = None ,qualifying = true, from = Some(periodStart), until = Some(periodEnd),childcareCost= BigDecimal(18000), disability = Disability(disabled = false, severelyDisabled = false))
+      val child = Child(qualifying = true, from = Some(periodStart), until = Some(periodEnd),childcareCost= BigDecimal(18000), disability = Disability(disabled = false, severelyDisabled = false))
       val tfcPeriod = TFCPeriod(from = periodStart, until = periodEnd, periodEligibility = true, List(child))
 
       val tfcEligibility = TFCEligibility(
@@ -140,34 +138,26 @@ class TFCEligibilitySpec extends UnitSpec with FakeCCCalculatorApplication with 
 
   "TFC Input Child" should {
 
-    "return None for child's name not defined" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
-      val periodStart = LocalDate.parse ("2016-06-01T18:46:17",formatter)
-      val periodEnd = LocalDate.parse ("2016-08-31T18:46:17",formatter)
-      val child = Child(id =1,name = None ,qualifying = true, from = Some(periodStart), until = Some(periodEnd),childcareCost= BigDecimal(18000), disability = Disability(disabled = false, severelyDisabled = false))
-      child.name shouldBe None
-    }
-
     "return child disabled status for not disabled & not severely disabled child" in {
-      val child = Child(id =1,name = None ,qualifying = true, from = null, until = null, childcareCost= BigDecimal(18000), disability = Disability(disabled = false, severelyDisabled = false))
+      val child = Child(qualifying = true, from = null, until = null, childcareCost= BigDecimal(18000), disability = Disability(disabled = false, severelyDisabled = false))
       child.getChildDisability shouldBe false
       child.getChildSevereDisability shouldBe false
     }
 
     "return child disabled status for disabled & severely disabled child" in {
-      val child = Child(id =1,name = None ,qualifying = true, from = null, until = null, childcareCost= BigDecimal(18000), disability = Disability(disabled = true, severelyDisabled = true))
+      val child = Child(qualifying = true, from = null, until = null, childcareCost= BigDecimal(18000), disability = Disability(disabled = true, severelyDisabled = true))
       child.getChildDisability shouldBe true
       child.getChildSevereDisability shouldBe true
     }
 
     "return child disabled status for not disabled & severely disabled child" in {
-      val child = Child(id =1,name = None ,qualifying = true, from = null, until = null, childcareCost= BigDecimal(18000), disability = Disability(disabled = false, severelyDisabled = true))
+      val child = Child(qualifying = true, from = null, until = null, childcareCost= BigDecimal(18000), disability = Disability(disabled = false, severelyDisabled = true))
       child.getChildDisability shouldBe true
       child.getChildSevereDisability shouldBe true
     }
 
     "return child disabled status for disabled child" in {
-      val child = Child(id =1,name = None ,qualifying = true, from = null, until = null, childcareCost= BigDecimal(18000), disability = Disability(disabled = true, severelyDisabled = false))
+      val child = Child(qualifying = true, from = null, until = null, childcareCost= BigDecimal(18000), disability = Disability(disabled = true, severelyDisabled = false))
       child.getChildDisability shouldBe true
       child.getChildSevereDisability shouldBe false
     }

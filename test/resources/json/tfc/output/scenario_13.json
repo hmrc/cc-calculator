@@ -18,16 +18,12 @@
       },
       "children": [
         {
-          "id": 0,
-          "name": "Child 1",
           "childCareCost": 1000.00,
           "childContribution" : {
             "government": 500.00,
             "parent": 2500.00,
             "totalChildCareSpend": 3000.00
-          },
-          "timeToMaximizeTopUp" : 0,
-          "failures" : []
+          }
         }
       ]
     },
@@ -41,16 +37,12 @@
       },
       "children": [
         {
-          "id": 0,
-          "name": "Child 1",
           "childCareCost": 1000.00,
           "childContribution" : {
             "parent": 2500.00,
             "government": 500.00,
             "totalChildCareSpend": 3000.00
-          },
-          "timeToMaximizeTopUp" : 0,
-          "failures" : []
+          }
         }
       ]
     },
@@ -64,16 +56,12 @@
       },
       "children": [
         {
-          "id": 0,
-          "name": "Child 1",
           "childCareCost": 1000.00,
           "childContribution" : {
             "parent": 2516.30,
             "government": 483.70,
             "totalChildCareSpend": 3000.00
-          },
-          "timeToMaximizeTopUp" : 0,
-          "failures" : []
+          }
         }
       ]
     },
@@ -87,16 +75,12 @@
       },
       "children": [
         {
-          "id": 0,
-          "name": "Child 1",
           "childCareCost": 1000.00,
           "childContribution" : {
             "parent": 3000.00,
             "government": 0.00,
             "totalChildCareSpend": 3000.00
-          },
-          "timeToMaximizeTopUp" : 0,
-          "failures" : []
+          }
         }
       ]
     }
