@@ -1,7 +1,5 @@
 {
-  "payload": {
-    "eligibility": {
-      "tc": {
+
         "taxYears": [
           {
             "from": "2016-09-27",
@@ -27,10 +25,7 @@
                     "claimantElements": {
                       "disability": false,
                       "severeDisability": false
-                    },
-                    "failures": [
-                      "hours30"
-                    ]
+                    }
                   },
                   {
                     "qualifying": true,
@@ -38,16 +33,11 @@
                     "claimantElements": {
                       "disability": false,
                       "severeDisability": false
-                    },
-                    "failures": [
-                      "hours30"
-                    ]
+                    }
                   }
                 ],
                 "children": [
                   {
-                    "id": 0,
-                    "name": "Child 1",
                     "qualifying": true,
                     "childcareCost": 200.00,
                     "childcareCostPeriod": "Week",
@@ -57,17 +47,12 @@
                       "disability": false,
                       "severeDisability": false,
                       "childcare": true
-                    },
-                    "failures": []
+                    }
                   }
                 ]
               }
             ]
           }
         ]
-      },
-        "esc": null,
-        "tfc": null
-      }
-    }
+
 }

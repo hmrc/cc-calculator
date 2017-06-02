@@ -16,90 +16,69 @@
 
 package controllers.tc
 
-/**
- * Created by user on 03/06/15.
- */
+import javax.inject.{Inject, Singleton}
 
 import calculators.TCCalculator
-import controllers.CalculatorController
-import models.input.APIModels.Request
+import models.input.tc.TCEligibility
 import play.api.Logger
-import play.api.i18n.Messages
+import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json._
 import play.api.mvc.Action
 import service.AuditEvents
-import play.api.i18n.{I18nSupport, MessagesApi}
-import javax.inject.{Inject, Singleton}
+import uk.gov.hmrc.play.microservice.controller.BaseController
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 @Singleton
-class TaxCreditCalculatorController @Inject()(val messagesApi: MessagesApi) extends
-  CalculatorController with TCCalculator with I18nSupport {
+class TaxCreditCalculatorController @Inject()(val messagesApi: MessagesApi) extends BaseController with
+  TCCalculator with I18nSupport {
 
 
   this: TCCalculator =>
 
-  val auditEvent : AuditEvents = AuditEvents
+  val auditEvent: AuditEvents = AuditEvents
 
   def incomeAdvice: Action[JsValue] = Action.async(parse.json) {
     implicit request =>
-      request.body.validate[Request].fold(
+      request.body.validate[TCEligibility].fold(
         error => {
           Logger.warn("TC Calculator Validation JsError in TaxCreditCalculatorController.incomeAdvice")
           Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(play.api.http.Status.BAD_REQUEST, Left(error))))
         },
         result => {
-          result.getTaxCreditsEligibility.isSuccess match {
-            case true =>
-              calculator.incomeAdvice(result).map {
-                response =>
-                  Ok(utils.JSONFactory.generateResultJson(response))
-              } recover {
-                case e: Exception =>
-                  Logger.warn(s"Tax Credits Calculator Exception in TaxCreditCalculatorController.incomeAdvice: ${e.getMessage}")
-                  InternalServerError(utils.JSONFactory.generateErrorJSON(play.api.http.Status.INTERNAL_SERVER_ERROR, Right(e)))
-              }
-            case _ =>
-              Logger.warn("Tax Credits Calculator Exception in TaxCreditCalculatorController.incomeAdvice")
-              Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(
-                play.api.http.Status.BAD_REQUEST,
-                Right(new IllegalArgumentException(Messages("cc.calc.invalid.request.exception")))
-              )))
+          calculator.incomeAdvice(result).map {
+            response =>
+              Ok(Json.toJson(response))
+          } recover {
+            case e: Exception =>
+              Logger.warn(s"Tax Credits Calculator Exception in TaxCreditCalculatorController.incomeAdvice: ${e.getMessage}")
+              InternalServerError(utils.JSONFactory.generateErrorJSON(play.api.http.Status.INTERNAL_SERVER_ERROR, Right(e)))
           }
+
         }
       )
   }
 
- override def calculate: Action[JsValue] = Action.async(parse.json) {
-   implicit request =>
-     request.body.validate[Request].fold(
-       error => {
-         Logger.warn(s"TC Calculator Validation JsError in TaxCreditCalculatorController.calculate")
-         Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(play.api.http.Status.BAD_REQUEST, Left(error))))
-       },
-       result => {
-         result.getTaxCreditsEligibility.isSuccess match {
-           case true =>
-             auditEvent.auditTCRequest(result.toString)
-             calculator.award(result).map {
-               response =>
-                 auditEvent.auditTCResponse(utils.JSONFactory.generateResultJson(response).toString())
-                 Ok(utils.JSONFactory.generateResultJson(response))
-             } recover {
-               case e: Exception =>
-                 Logger.warn(s"Tax Credits Calculator Exception in TaxCreditCalculatorController.calculate: ${e.getMessage}")
-                 InternalServerError(utils.JSONFactory.generateErrorJSON(play.api.http.Status.INTERNAL_SERVER_ERROR, Right(e)))
-             }
-           case _ =>
-             Logger.warn(s"Tax Credits Calculator Exception in TaxCreditCalculatorController.calculate ")
-             Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(
-               play.api.http.Status.BAD_REQUEST,
-               Right(new IllegalArgumentException(Messages("cc.calc.invalid.request.exception")))
-             )))
-         }
-       }
-     )
- }
+  def calculate: Action[JsValue] = Action.async(parse.json) {
+    implicit request =>
+      request.body.validate[TCEligibility].fold(
+        error => {
+          Logger.warn(s"TC Calculator Validation JsError in TaxCreditCalculatorController.calculate")
+          Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(play.api.http.Status.BAD_REQUEST, Left(error))))
+        },
+        result => {
+          auditEvent.auditTCRequest(result.toString)
+          calculator.award(result).map {
+            response =>
+              auditEvent.auditTCResponse(Json.toJson(response).toString())
+              Ok(Json.toJson(response))
+          } recover {
+            case e: Exception =>
+              Logger.warn(s"Tax Credits Calculator Exception in TaxCreditCalculatorController.calculate: ${e.getMessage}")
+              InternalServerError(utils.JSONFactory.generateErrorJSON(play.api.http.Status.INTERNAL_SERVER_ERROR, Right(e)))
+          }
+        }
+      )
+  }
 
 }

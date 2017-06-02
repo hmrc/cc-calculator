@@ -1,41 +1,31 @@
 {
-  "calculation" : {
-    "tfc": {
+  "from": "2016-08-27",
+  "until": "2016-11-27",
+  "householdContribution": {
+    "parent": 8500.00,
+    "government": 500.00,
+    "totalChildCareSpend": 9000.00
+  },
+  "numberOfPeriods" : 1,
+  "periods" : [
+    {
       "from": "2016-08-27",
       "until": "2016-11-27",
-      "householdContribution": {
+      "periodContribution": {
         "parent": 8500.00,
         "government": 500.00,
         "totalChildCareSpend": 9000.00
       },
-      "numberOfPeriods" : 1,
-      "periods" : [
+      "children": [
         {
-          "from": "2016-08-27",
-          "until": "2016-11-27",
-          "periodContribution": {
+          "childCareCost": 3000.00,
+          "childContribution" : {
             "parent": 8500.00,
             "government": 500.00,
             "totalChildCareSpend": 9000.00
-          },
-          "children": [
-            {
-              "id": 0,
-              "name": "Child 1",
-              "childCareCost": 3000.00,
-              "childContribution" : {
-                "parent": 8500.00,
-                "government": 500.00,
-                "totalChildCareSpend": 9000.00
-              },
-              "timeToMaximizeTopUp" : 0,
-              "failures" : []
-            }
-          ]
+          }
         }
       ]
-    },
-    "esc": null,
-    "tc": null
-  }
+    }
+  ]
 }

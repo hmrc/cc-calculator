@@ -16,12 +16,10 @@
 
 package utils
 
-import calculators.{TCCalculator, TFCCalculator}
+import calculators.TCCalculator
 import com.fasterxml.jackson.databind.JsonNode
 import com.github.fge.jackson.JsonLoader
-import models.input.APIModels.Request
-import models.output.OutputAPIModel.AwardPeriod
-import models.output.tc.TCCalculation
+import models.input.tc.TCEligibility
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import play.api.data.validation.ValidationError
@@ -91,43 +89,10 @@ class JSONFactorySpec extends FakeCCCalculatorApplication {
       result shouldBe outputJSON
     }
 
-    "Return a valid response with calculation result" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
-      val firstPeriodFrom = LocalDate.parse("2016-09-27", formatter)
-      val firstPeriodTo = LocalDate.parse("2016-12-12", formatter)
-      val calculation = TCCalculation(
-                      from = firstPeriodFrom,
-                      until = firstPeriodTo,
-                      totalAwardAmount = 5000.00,
-                      houseHoldAdviceAmount = 0.00,
-                      taxYears = List())
-
-      val response = AwardPeriod(tc = Some(calculation))
-      val outputJson = Json.parse(
-        s"""
-          |{
-          |"calculation": {
-          | "tc": {
-          |   "from": "${firstPeriodFrom.toString("yyyy-MM-dd")}",
-          |   "until": "${firstPeriodTo.toString("yyyy-MM-dd")}",
-          |   "totalAwardAmount": 5000.00,
-          |   "houseHoldAdviceAmount": 0.00,
-          |   "taxYears": []
-          | },
-          | "tfc": null,
-          | "esc": null
-          |}
-          |}
-        """.stripMargin)
-
-      val result = utils.JSONFactory.generateResultJson(response)
-      result shouldBe outputJson
-    }
-
     "Return a valid JSON response with calculation result (Scenario 51 input)" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_51.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
+      val result = json.validate[TCEligibility]
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val firstPeriodFrom = LocalDate.parse("2016-09-27", formatter)
       val firstPeriodTo = LocalDate.parse("2016-12-12", formatter)
@@ -137,8 +102,6 @@ class JSONFactorySpec extends FakeCCCalculatorApplication {
       val outputJson = Json.parse(
         s"""
           |{
-          |"calculation": {
-          | "tc": {
           |   "from": "${firstPeriodFrom.toString("yyyy-MM-dd")}",
           |   "until": "${secondPeriodTo.toString("yyyy-MM-dd")}",
           |   "totalAwardAmount": 2982.17,
@@ -209,18 +172,13 @@ class JSONFactorySpec extends FakeCCCalculatorApplication {
               |   ]
            |   }
           |   ]
-          | },
-          | "tfc": null,
-          | "esc": null
-          |}
           |}
         """.stripMargin)
 
       result match {
         case JsSuccess(x, _) =>
-          val setup = TCCalculator.calculator.award(x)
-          val result = utils.JSONFactory.generateResultJson(setup)
-          result shouldBe outputJson
+          val setup = await(TCCalculator.calculator.award(x))
+          Json.toJson(setup) shouldBe outputJson
         case _ => throw new Exception
       }
     }
@@ -228,7 +186,7 @@ class JSONFactorySpec extends FakeCCCalculatorApplication {
     "Return a valid JSON response with advice earnings calculation result (Scenario 51 input)" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_51.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
+      val result = json.validate[TCEligibility]
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val firstPeriodFrom = LocalDate.parse("2016-09-27", formatter)
       val firstPeriodTo = LocalDate.parse("2016-12-12", formatter)
@@ -238,8 +196,6 @@ class JSONFactorySpec extends FakeCCCalculatorApplication {
       val outputJson = Json.parse(
         s"""
           |{
-          |"calculation": {
-          | "tc": {
           |   "from": "${firstPeriodFrom.toString("yyyy-MM-dd")}",
           |   "until": "${secondPeriodTo.toString("yyyy-MM-dd")}",
           |   "totalAwardAmount": 0.00,
@@ -310,88 +266,16 @@ class JSONFactorySpec extends FakeCCCalculatorApplication {
               |   ]
            |   }
           |   ]
-          | },
-          | "tfc": null,
-          | "esc": null
-          |}
-          |}
+          | }
         """.stripMargin)
 
 
       result match {
         case JsSuccess(x, _) =>
-          val setup = TCCalculator.calculator.incomeAdvice(x)
-          val result = utils.JSONFactory.generateResultJson(setup)
-          result shouldBe outputJson
+          val setup = await(TCCalculator.calculator.incomeAdvice(x))
+          Json.toJson(setup) shouldBe outputJson
         case _ => throw new Exception
       }
     }
-
-    "Return a valid JSON response with award earnings TFC calculation result (calculator_input_test1)" in {
-      val resource: JsonNode = JsonLoader.fromResource("/json/tfc/input/calculator_input_test1.json")
-      val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[Request]
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
-      val firstPeriodFrom = LocalDate.parse("2016-08-27", formatter)
-      val firstPeriodTo = LocalDate.parse("2016-11-27", formatter)
-
-      val outputJson = Json.parse(
-        s"""
-           |{
-           |  "calculation" : {
-           |    "tc": null,
-           |    "tfc": {
-           |      "from": "${firstPeriodFrom.toString("yyyy-MM-dd")}",
-           |      "until": "${firstPeriodTo.toString("yyyy-MM-dd")}",
-           |      "householdContribution": {
-           |        "parent": 8500.00,
-           |        "government": 500.00,
-           |        "totalChildCareSpend": 9000.00
-           |      },
-           |      "numberOfPeriods" : 1,
-           |      "periods" : [
-           |        {
-           |      "from": "${firstPeriodFrom.toString("yyyy-MM-dd")}",
-           |      "until": "${firstPeriodTo.toString("yyyy-MM-dd")}",
-           |          "periodContribution": {
-           |            "parent": 8500.00,
-           |            "government": 500.00,
-           |            "totalChildCareSpend": 9000.00
-           |          },
-           |          "children": [
-           |            {
-           |              "id": 1,
-           |              "name" : "Child 1",
-           |              "childCareCost": 3000.00,
-           |              "childContribution" : {
-           |                "parent": 8500.00,
-           |                "government": 500.00,
-           |                "totalChildCareSpend": 9000.00
-           |              },
-           |              "timeToMaximizeTopUp" : 0,
-           |              "failures" : []
-           |            }
-           |          ]
-           |        }
-           |      ]
-           |    },
-           |    "esc": null
-           |  }
-           |}
-           |
-        """.stripMargin)
-
-
-      result match {
-        case JsSuccess(x, _) =>
-          val setup = TFCCalculator.calculator.award(x)
-          val result = utils.JSONFactory.generateResultJson(setup)
-          result shouldBe outputJson
-        case _ => throw new Exception
-      }
-    }
-
-
-
   }
 }

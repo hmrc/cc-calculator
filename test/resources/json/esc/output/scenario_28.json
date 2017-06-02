@@ -1,167 +1,153 @@
 {
-  "calculation" : {
-    "esc": {
+  "from": "2016-08-27",
+  "until": "2017-08-27",
+  "totalSavings": {
+    "totalSaving": 697.65,
+    "taxSaving": 583.20,
+    "niSaving": 114.45
+  },
+  "taxYears": [
+    {
       "from": "2016-08-27",
-      "until": "2017-08-27",
+      "until": "2017-04-06",
       "totalSavings": {
-        "totalSaving": 697.65,
-        "taxSaving": 583.20,
-        "niSaving": 114.45
+        "totalSaving": 348.81,
+        "taxSaving": 291.60,
+        "niSaving": 57.21
       },
-      "taxYears": [
+      "claimants": [
         {
-          "from": "2016-08-27",
-          "until": "2017-04-06",
-          "totalSavings": {
-            "totalSaving": 348.81,
-            "taxSaving": 291.60,
-            "niSaving": 57.21
+          "qualifying": true,
+          "eligibleMonthsInTaxYear": 3,
+          "isPartner": false,
+          "escAmount": 500,
+          "escAmountPeriod": "Month",
+          "escStartDate":"2012-08-27",
+          "maximumRelief": 243,
+          "maximumReliefPeriod": "Month",
+          "income": {
+            "taxablePay": 50000,
+            "gross": 50000,
+            "taxCode": "BR",
+            "niCategory": "A"
           },
-          "claimants": [
-            {
-              "qualifying": true,
-              "eligibleMonthsInTaxYear": 3,
-              "isPartner": false,
-              "escAmount": 500,
-              "escAmountPeriod": "Month",
-              "escStartDate":"2012-08-27",
-              "maximumRelief": 243,
-              "maximumReliefPeriod": "Month",
-              "income": {
-                "taxablePay": 50000,
-                "gross": 50000,
-                "taxCode": "BR",
-                "niCategory": "A"
-              },
-              "elements": {
-                "vouchers": true
-              },
-              "savings": {
-                "totalSaving": 160.38,
-                "taxSaving": 145.80,
-                "niSaving": 14.58
-              },
-              "taxAndNIBeforeSacrifice": {
-                "taxPaid": 833.4,
-                "niPaid": 361.0
-              },
-              "taxAndNIAfterSacrifice": {
-                "taxPaid": 784.8,
-                "niPaid": 356.14
-              }
-            },
-            {
-              "qualifying": true,
-              "eligibleMonthsInTaxYear": 3,
-              "isPartner": true,
-              "escAmount": 300,
-              "escAmountPeriod": "Month",
-              "escStartDate":"2005-08-27",
-              "maximumRelief": 243,
-              "maximumReliefPeriod": "Month",
-              "income": {
-                "taxablePay": 35000,
-                "gross": 35000,
-                "taxCode": "1100L",
-                "niCategory": "B"
-              },
-              "elements": {
-                "vouchers": true
-              },
-              "savings": {
-                "totalSaving": 188.43,
-                "taxSaving": 145.8,
-                "niSaving": 42.63
-              },
-              "taxAndNIBeforeSacrifice": {
-                "taxPaid": 400.0,
-                "niPaid": 131.33
-              },
-              "taxAndNIAfterSacrifice": {
-                "taxPaid": 351.4,
-                "niPaid": 117.12
-              }
-            }
-          ]
+          "vouchers": true,
+          "savings": {
+            "totalSaving": 160.38,
+            "taxSaving": 145.80,
+            "niSaving": 14.58
+          },
+          "taxAndNIBeforeSacrifice": {
+            "taxPaid": 833.4,
+            "niPaid": 361.0
+          },
+          "taxAndNIAfterSacrifice": {
+            "taxPaid": 784.8,
+            "niPaid": 356.14
+          }
         },
         {
-          "from": "2017-04-06",
-          "until": "2017-08-27",
-          "totalSavings": {
-            "totalSaving": 348.84,
-            "taxSaving": 291.60,
-            "niSaving": 57.24
+          "qualifying": true,
+          "eligibleMonthsInTaxYear": 3,
+          "isPartner": true,
+          "escAmount": 300,
+          "escAmountPeriod": "Month",
+          "escStartDate":"2005-08-27",
+          "maximumRelief": 243,
+          "maximumReliefPeriod": "Month",
+          "income": {
+            "taxablePay": 35000,
+            "gross": 35000,
+            "taxCode": "1100L",
+            "niCategory": "B"
           },
-          "claimants": [
-            {
-              "qualifying": true,
-              "eligibleMonthsInTaxYear": 3,
-              "isPartner": false,
-              "escAmount": 500,
-              "escAmountPeriod": "Month",
-              "escStartDate":"2012-08-27",
-              "maximumRelief": 243,
-              "maximumReliefPeriod": "Month",
-              "income": {
-                "taxablePay": 50000,
-                "gross": 50000,
-                "taxCode": "BR",
-                "niCategory": "A"
-              },
-              "elements": {
-                "vouchers": true
-              },
-              "savings": {
-                "totalSaving": 160.38,
-                "taxSaving": 145.8,
-                "niSaving": 14.58
-              },
-              "taxAndNIBeforeSacrifice": {
-                "taxPaid": 833.4,
-                "niPaid": 377.04
-              },
-              "taxAndNIAfterSacrifice": {
-                "taxPaid": 784.8,
-                "niPaid": 372.18
-              }
-            },
-            {
-              "qualifying": true,
-              "eligibleMonthsInTaxYear": 3,
-              "isPartner": true,
-              "escAmount": 300,
-              "escAmountPeriod": "Month",
-              "escStartDate":"2005-08-27",
-              "maximumRelief": 243,
-              "maximumReliefPeriod": "Month",
-              "income": {
-                "taxablePay": 36000,
-                "gross": 36000,
-                "taxCode": "1100L",
-                "niCategory": "B"
-              },
-              "elements": {
-                "vouchers": true
-              },
-              "savings": {
-                "totalSaving": 188.46,
-                "taxSaving": 145.8,
-                "niSaving": 42.66
-              },
-              "taxAndNIBeforeSacrifice": {
-                "taxPaid": 416.6,
-                "niPaid": 135.72
-              },
-              "taxAndNIAfterSacrifice": {
-                "taxPaid": 368.0,
-                "niPaid": 121.5
-              }
-            }
-          ]
+          "vouchers": true,
+          "savings": {
+            "totalSaving": 188.43,
+            "taxSaving": 145.8,
+            "niSaving": 42.63
+          },
+          "taxAndNIBeforeSacrifice": {
+            "taxPaid": 400.0,
+            "niPaid": 131.33
+          },
+          "taxAndNIAfterSacrifice": {
+            "taxPaid": 351.4,
+            "niPaid": 117.12
+          }
         }
       ]
     },
-    "tc": null,
-    "tfc": null
-  }
+    {
+      "from": "2017-04-06",
+      "until": "2017-08-27",
+      "totalSavings": {
+        "totalSaving": 348.84,
+        "taxSaving": 291.60,
+        "niSaving": 57.24
+      },
+      "claimants": [
+        {
+          "qualifying": true,
+          "eligibleMonthsInTaxYear": 3,
+          "isPartner": false,
+          "escAmount": 500,
+          "escAmountPeriod": "Month",
+          "escStartDate":"2012-08-27",
+          "maximumRelief": 243,
+          "maximumReliefPeriod": "Month",
+          "income": {
+            "taxablePay": 50000,
+            "gross": 50000,
+            "taxCode": "BR",
+            "niCategory": "A"
+          },
+          "vouchers": true,
+          "savings": {
+            "totalSaving": 160.38,
+            "taxSaving": 145.8,
+            "niSaving": 14.58
+          },
+          "taxAndNIBeforeSacrifice": {
+            "taxPaid": 833.4,
+            "niPaid": 377.04
+          },
+          "taxAndNIAfterSacrifice": {
+            "taxPaid": 784.8,
+            "niPaid": 372.18
+          }
+        },
+        {
+          "qualifying": true,
+          "eligibleMonthsInTaxYear": 3,
+          "isPartner": true,
+          "escAmount": 300,
+          "escAmountPeriod": "Month",
+          "escStartDate":"2005-08-27",
+          "maximumRelief": 243,
+          "maximumReliefPeriod": "Month",
+          "income": {
+            "taxablePay": 36000,
+            "gross": 36000,
+            "taxCode": "1100L",
+            "niCategory": "B"
+          },
+          "vouchers": true,
+          "savings": {
+            "totalSaving": 188.46,
+            "taxSaving": 145.8,
+            "niSaving": 42.66
+          },
+          "taxAndNIBeforeSacrifice": {
+            "taxPaid": 416.6,
+            "niPaid": 135.72
+          },
+          "taxAndNIAfterSacrifice": {
+            "taxPaid": 368.0,
+            "niPaid": 121.5
+          }
+        }
+      ]
+    }
+  ]
 }

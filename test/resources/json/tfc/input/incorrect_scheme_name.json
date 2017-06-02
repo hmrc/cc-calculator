@@ -1,42 +1,34 @@
 {
-  "payload": {
-    "eligibility": {
-      "esc": {
-        "taxYears": [
-          {
-            "startDate": "2015-08-27",
-            "endDate": "2016-04-06",
-            "periods": [
-              {
-                "from": "2015-08-27",
-                "until": "2016-04-06",
-                "claimants": [
-                  {
-                    "qualifying": false,
-                    "isPartner": false,
-                    "eligibleMonthsInPeriod": 2,
-                    "income": {
-                      "taxablePay": 50000.00,
-                      "gross": 50000.00,
-                      "taxCode": "1060L",
-                      "niCategory": "A"
-                    },
-                    "elements": {
-                      "vouchers": false
-                    },
-                    "escAmount": 200.00,
-                    "escAmountPeriod": "Month",
-                    "escStartDate": "2012-08-27",
-                    "failures": []
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      },
-      "tc": null,
-      "tfc": null
+  "taxYears": [
+    {
+      "startDate": "2015-08-27",
+      "endDate": "2016-04-06",
+      "periods": [
+        {
+          "from": "2015-08-27",
+          "until": "2016-04-06",
+          "claimants": [
+            {
+              "qualifying": false,
+              "isPartner": false,
+              "eligibleMonthsInPeriod": 2,
+              "income": {
+                "taxablePay": 50000.00,
+                "gross": 50000.00,
+                "taxCode": "1060L",
+                "niCategory": "A"
+              },
+              "elements": {
+                "vouchers": false
+              },
+              "escAmount": 200.00,
+              "escAmountPeriod": "Month",
+              "escStartDate": "2012-08-27",
+              "failures": []
+            }
+          ]
+        }
+      ]
     }
-  }
+  ]
 }

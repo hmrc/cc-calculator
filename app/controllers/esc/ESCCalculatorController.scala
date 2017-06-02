@@ -17,54 +17,43 @@
 package controllers.esc
 
 import calculators.ESCCalculator
-import controllers.CalculatorController
-import models.input.APIModels.Request
+import models.input.esc.ESCEligibility
+import models.output.esc.ESCCalculation
 import play.api.Logger
-import play.api.i18n.Messages
-import play.api.libs.json.{JsValue, JsError}
+import play.api.libs.json.{Json, JsValue}
 import play.api.mvc.Action
 import service.AuditEvents
 import play.api.i18n.{I18nSupport, MessagesApi}
 import javax.inject.{Inject, Singleton}
-
+import uk.gov.hmrc.play.microservice.controller.BaseController
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 @Singleton
-class ESCCalculatorController @Inject()(val messagesApi: MessagesApi) extends
-  CalculatorController with ESCCalculator with I18nSupport {
+class ESCCalculatorController @Inject()(val messagesApi: MessagesApi) extends BaseController with ESCCalculator with I18nSupport {
 
   this: ESCCalculator =>
 
   val auditEvent : AuditEvents = AuditEvents
 
-  override def calculate: Action[JsValue] = Action.async(parse.json) {
+  def calculate: Action[JsValue] = Action.async(parse.json) {
     implicit request =>
-      request.body.validate[Request].fold(
+      request.body.validate[ESCEligibility].fold(
         error => {
           Logger.warn("ESC Calculator Validation JsError in ESCCalculatorController.calculate")
           Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(play.api.http.Status.BAD_REQUEST, Left(error))))
         },
         result => {
-          result.getESCEligibility.isSuccess match {
-            case true =>
-              auditEvent.auditESCRequest(result.toString)
-              calculator.award(result).map {
-                response =>
-                  auditEvent.auditESCResponse(utils.JSONFactory.generateResultJson(response).toString())
-                  Ok(utils.JSONFactory.generateResultJson(response))
-              } recover {
-                case e: Exception =>
-                  Logger.warn(s"ESC Calculator Exception in ESCCalculatorController.calculate: ${e.getMessage}")
-                  InternalServerError(utils.JSONFactory.generateErrorJSON(play.api.http.Status.INTERNAL_SERVER_ERROR, Right(e)))
-              }
-            case _ =>
-              Logger.warn("ESC Calculator Exception in ESCCalculatorController.calculate")
-              Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(
-                play.api.http.Status.BAD_REQUEST,
-                Right(new IllegalArgumentException(Messages("cc.calc.invalid.request.exception")))
-              )))
-
+          auditEvent.auditESCRequest(result.toString)
+          calculator.award(result).map {
+            response =>
+              val jsonResponse = Json.toJson[ESCCalculation](response)
+              auditEvent.auditESCResponse(jsonResponse.toString())
+              Ok(jsonResponse)
+          } recover {
+            case e: Exception =>
+              Logger.warn(s"ESC Calculator Exception in ESCCalculatorController.calculate: ${e.getMessage}")
+              InternalServerError(utils.JSONFactory.generateErrorJSON(play.api.http.Status.INTERNAL_SERVER_ERROR, Right(e)))
           }
         }
       )

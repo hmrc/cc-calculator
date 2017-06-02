@@ -1,156 +1,130 @@
 {
-  "payload": {
-    "eligibility": {
-      "esc": {
-        "taxYears": [
-          {
-            "startDate": "2016-08-27",
-            "endDate": "2017-04-06",
-            "periods": [
-              {
-                "from": "2016-08-27",
-                "until": "2017-02-06",
-                "claimants": [
-                  {
-                    "qualifying": true,
-                    "isPartner": false,
-                    "location": "england",
-                    "eligibleMonthsInPeriod": 3,
-                    "income": {
-                      "taxablePay": 50000.00,
-                      "gross": 50000.00,
-                      "taxCode": "BR",
-                      "niCategory": "A"
-                    },
-                    "elements": {
-                      "vouchers": true
-                    },
-                    "escAmount": 500.00,
-                    "escAmountPeriod": "Month",
-                    "escStartDate": "2012-08-27",
-                    "failures": []
-                  },
-                  {
-                    "qualifying": true,
-                    "isPartner": true,
-                    "location": "england",
-                    "eligibleMonthsInPeriod": 3,
-                    "income": {
-                      "taxablePay": 35000.00,
-                      "gross": 35000.00,
-                      "taxCode": "1100L",
-                      "niCategory": "B"
-                    },
-                    "elements": {
-                      "vouchers": true
-                    },
-                    "escAmount": 300.00,
-                    "escAmountPeriod": "Month",
-                    "escStartDate": "2005-08-27",
-                    "failures": []
-                  }
-                ]
+  "taxYears": [
+    {
+      "startDate": "2016-08-27",
+      "endDate": "2017-04-06",
+      "periods": [
+        {
+          "from": "2016-08-27",
+          "until": "2017-02-06",
+          "claimants": [
+            {
+              "qualifying": true,
+              "isPartner": false,
+              "location": "england",
+              "eligibleMonthsInPeriod": 3,
+              "income": {
+                "taxablePay": 50000.00,
+                "gross": 50000.00,
+                "taxCode": "BR",
+                "niCategory": "A"
               },
-              {
-                "from": "2017-02-06",
-                "until": "2017-04-06",
-                "claimants": [
-                  {
-                    "qualifying": false,
-                    "isPartner": false,
-                    "location": "england",
-                    "eligibleMonthsInPeriod": 0,
-                    "income": {
-                      "taxablePay": 50000.00,
-                      "gross": 50000.00,
-                      "taxCode": "BR",
-                      "niCategory": "A"
-                    },
-                    "elements": {
-                      "vouchers": false
-                    },
-                    "escAmount": 500.00,
-                    "escAmountPeriod": "Month",
-                    "escStartDate": "2012-08-27",
-                    "failures": []
-                  },
-                  {
-                    "qualifying": false,
-                    "isPartner": true,
-                    "location": "england",
-                    "eligibleMonthsInPeriod": 0,
-                    "income": {
-                      "taxablePay": 35000.00,
-                      "gross": 35000.00,
-                      "taxCode": "1100L",
-                      "niCategory": "B"
-                    },
-                    "elements": {
-                      "vouchers": false
-                    },
-                    "escAmount": 300.00,
-                    "escAmountPeriod": "Month",
-                    "escStartDate": "2005-08-27",
-                    "failures": []
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "startDate": "2017-04-06",
-            "endDate": "2017-08-27",
-            "periods": [
-              {
-                "from": "2017-04-06",
-                "until": "2017-08-27",
-                "claimants": [
-                  {
-                    "qualifying": true,
-                    "isPartner": false,
-                    "location": "england",
-                    "eligibleMonthsInPeriod": 3,
-                    "income": {
-                      "taxablePay": 50000.00,
-                      "gross": 50000.00,
-                      "taxCode": "BR",
-                      "niCategory": "A"
-                    },
-                    "elements": {
-                      "vouchers": true
-                    },
-                    "escAmount": 500.00,
-                    "escAmountPeriod": "Month",
-                    "escStartDate": "2012-08-27",
-                    "failures": []
-                  },
-                  {
-                    "qualifying": true,
-                    "isPartner": true,
-                    "location": "england",
-                    "eligibleMonthsInPeriod": 3,
-                    "income": {
-                      "taxablePay": 36000.00,
-                      "gross": 36000.00,
-                      "taxCode": "1100L",
-                      "niCategory": "B"
-                    },
-                    "elements": {
-                      "vouchers": true
-                    },
-                    "escAmount": 300.00,
-                    "escAmountPeriod": "Month",
-                    "escStartDate": "2005-08-27",
-                    "failures": []
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      },
-      "tc": null,
-      "tfc": null
+                "vouchers": true,
+              "escAmount": 500.00,
+              "escAmountPeriod": "Month",
+              "escStartDate": "2012-08-27"
+            },
+            {
+              "qualifying": true,
+              "isPartner": true,
+              "location": "england",
+              "eligibleMonthsInPeriod": 3,
+              "income": {
+                "taxablePay": 35000.00,
+                "gross": 35000.00,
+                "taxCode": "1100L",
+                "niCategory": "B"
+              },
+                "vouchers": true,
+              "escAmount": 300.00,
+              "escAmountPeriod": "Month",
+              "escStartDate": "2005-08-27"
+            }
+          ]
+        },
+        {
+          "from": "2017-02-06",
+          "until": "2017-04-06",
+          "claimants": [
+            {
+              "qualifying": false,
+              "isPartner": false,
+              "location": "england",
+              "eligibleMonthsInPeriod": 0,
+              "income": {
+                "taxablePay": 50000.00,
+                "gross": 50000.00,
+                "taxCode": "BR",
+                "niCategory": "A"
+              },
+                "vouchers": false,
+              "escAmount": 500.00,
+              "escAmountPeriod": "Month",
+              "escStartDate": "2012-08-27"
+            },
+            {
+              "qualifying": false,
+              "isPartner": true,
+              "location": "england",
+              "eligibleMonthsInPeriod": 0,
+              "income": {
+                "taxablePay": 35000.00,
+                "gross": 35000.00,
+                "taxCode": "1100L",
+                "niCategory": "B"
+              },
+                "vouchers": false,
+              "escAmount": 300.00,
+              "escAmountPeriod": "Month",
+              "escStartDate": "2005-08-27"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "startDate": "2017-04-06",
+      "endDate": "2017-08-27",
+      "periods": [
+        {
+          "from": "2017-04-06",
+          "until": "2017-08-27",
+          "claimants": [
+            {
+              "qualifying": true,
+              "isPartner": false,
+              "location": "england",
+              "eligibleMonthsInPeriod": 3,
+              "income": {
+                "taxablePay": 50000.00,
+                "gross": 50000.00,
+                "taxCode": "BR",
+                "niCategory": "A"
+              },
+                "vouchers": true,
+              "escAmount": 500.00,
+              "escAmountPeriod": "Month",
+              "escStartDate": "2012-08-27"
+            },
+            {
+              "qualifying": true,
+              "isPartner": true,
+              "location": "england",
+              "eligibleMonthsInPeriod": 3,
+              "income": {
+                "taxablePay": 36000.00,
+                "gross": 36000.00,
+                "taxCode": "1100L",
+                "niCategory": "B"
+              },
+                "vouchers": true,
+              "escAmount": 300.00,
+              "escAmountPeriod": "Month",
+              "escStartDate": "2005-08-27"
+            }
+          ]
+        }
+      ]
     }
-  }
+  ]
 }

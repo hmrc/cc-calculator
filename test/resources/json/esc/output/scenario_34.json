@@ -1,8 +1,13 @@
 {
-  "calculation": {
-    "tc": null,
-    "tfc": null,
-    "esc": {
+  "from": "2017-04-06",
+  "until": "2018-04-06",
+  "totalSavings": {
+    "totalSaving": 777.60,
+    "taxSaving": 486.00,
+    "niSaving": 291.60
+  },
+  "taxYears": [
+    {
       "from": "2017-04-06",
       "until": "2018-04-06",
       "totalSavings": {
@@ -10,15 +15,8 @@
         "taxSaving": 486.00,
         "niSaving": 291.60
       },
-      "taxYears": [{
-        "from": "2017-04-06",
-        "until": "2018-04-06",
-        "totalSavings": {
-          "totalSaving": 777.60,
-          "taxSaving": 486.00,
-          "niSaving": 291.60
-        },
-        "claimants": [{
+      "claimants": [
+        {
           "qualifying": true,
           "eligibleMonthsInTaxYear": 5,
           "isPartner": false,
@@ -28,9 +26,7 @@
             "taxCode": "",
             "niCategory": "A"
           },
-          "elements": {
-            "vouchers": true
-          },
+          "vouchers": true,
           "escAmount": 1000,
           "escAmountPeriod": "Month",
           "escStartDate": "2012-08-27",
@@ -49,7 +45,8 @@
             "taxPaid": 176.40,
             "niPaid": 139.2
           }
-        }, {
+        },
+        {
           "qualifying": true,
           "eligibleMonthsInTaxYear": 5,
           "isPartner": true,
@@ -59,9 +56,7 @@
             "taxCode": "",
             "niCategory": "A"
           },
-          "elements": {
-            "vouchers": true
-          },
+          "vouchers": true,
           "escAmount": 1000,
           "escAmountPeriod": "Month",
           "escStartDate": "2012-08-27",
@@ -80,8 +75,8 @@
             "taxPaid": 93.20,
             "niPaid": 89.28
           }
-        }]
-      }]
+        }
+      ]
     }
-  }
+  ]
 }

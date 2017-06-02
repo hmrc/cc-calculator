@@ -19,8 +19,8 @@ package controllers.tc
 import calculators.TCCalculator
 import com.fasterxml.jackson.databind.JsonNode
 import com.github.fge.jackson.JsonLoader
-import models.input.APIModels.Request
-import models.output.OutputAPIModel.AwardPeriod
+import models.input.tc.TCEligibility
+import models.output.tc.TCCalculation
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import org.mockito.Matchers.{eq => mockEq, _}
@@ -31,13 +31,11 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import service.AuditEvents
-import utils.{FakeCCCalculatorApplication, CCJsonLogger}
+import utils.FakeCCCalculatorApplication
 import scala.concurrent.Future
 import play.api.i18n.Messages.Implicits._
-/**
- * Created by Ravi on 03/06/15.
- */
-class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with MockitoSugar with CCJsonLogger {
+
+class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with MockitoSugar {
 
   val mockTaxCreditCalculatorController = new TaxCreditCalculatorController(applicationMessagesApi) with TCCalculator {
     override val calculator =  mock[TCCalculatorService]
@@ -65,7 +63,8 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
       val inputJson: JsValue = Json.parse(JsonLoader.fromResource("/json/tc/input/2016/scenario_1.json").toString)
       val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.calculator.award(any[Request]())).thenReturn(Future.successful(AwardPeriod()))
+      when(controller.calculator.award(any[TCEligibility]())).thenReturn(Future.successful(TCCalculation(LocalDate.now(),
+        LocalDate.now(), 0, 0, Nil)))
       val result = await(controller.calculate()(request))
       status(result) shouldBe Status.OK
     }
@@ -75,7 +74,7 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
       val inputJson: JsValue  = Json.parse(JsonLoader.fromResource("/json/tc/input/2016/scenario_1.json").toString)
       val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.calculator.incomeAdvice(any[Request]())).thenReturn(Future.successful(AwardPeriod()))
+      when(controller.calculator.incomeAdvice(any[TCEligibility]())).thenReturn(Future.successful(TCCalculation(LocalDate.now(), LocalDate.now(), 0, 0, Nil)))
       val result = await(controller.incomeAdvice() (request))
       status(result) shouldBe Status.OK
     }
@@ -85,7 +84,7 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
       val inputJson: JsValue  = Json.parse(JsonLoader.fromResource("/json/no_payload.json").toString)
       val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.calculator.incomeAdvice(any[Request]())).thenReturn(Future.successful(AwardPeriod()))
+      when(controller.calculator.incomeAdvice(any[TCEligibility]())).thenReturn(Future.successful(TCCalculation(LocalDate.now(), LocalDate.now(), 0, 0, Nil)))
       val result = await(controller.incomeAdvice() (request))
       status(result) shouldBe Status.BAD_REQUEST
     }
@@ -95,7 +94,7 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
       val inputJson: JsValue  = Json.parse(JsonLoader.fromResource("/json/tc/input/2016/incorrect_data_type.json").toString)
       val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.calculator.award(any[Request]())).thenReturn(Future.successful(AwardPeriod()))
+      when(controller.calculator.award(any[TCEligibility]())).thenReturn(Future.successful(TCCalculation(LocalDate.now(), LocalDate.now(), 0, 0, Nil)))
       val result = await(controller.calculate()(request))
       status(result) shouldBe Status.BAD_REQUEST
     }
@@ -105,7 +104,7 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
       val inputJson: JsValue  = Json.parse(JsonLoader.fromResource("/json/tc/input/2016/negative_household_income.json").toString)
       val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.calculator.incomeAdvice(any[Request]())).thenReturn(Future.successful(AwardPeriod()))
+      when(controller.calculator.incomeAdvice(any[TCEligibility]())).thenReturn(Future.successful(TCCalculation(LocalDate.now(), LocalDate.now(), 0, 0, Nil)))
       val result = await(controller.incomeAdvice() (request))
       status(result) shouldBe Status.BAD_REQUEST
     }
@@ -115,7 +114,7 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
       val inputJson: JsValue  = Json.parse(JsonLoader.fromResource("/json/tc/input/2016/no_household_income.json").toString)
       val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.calculator.incomeAdvice(any[Request]())).thenReturn(Future.successful(AwardPeriod()))
+      when(controller.calculator.incomeAdvice(any[TCEligibility]())).thenReturn(Future.successful(TCCalculation(LocalDate.now(), LocalDate.now(), 0, 0, Nil)))
       val result = await(controller.incomeAdvice()(request))
       status(result) shouldBe Status.OK
     }
@@ -125,7 +124,7 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
       val inputJson: JsValue  = Json.parse(JsonLoader.fromResource("/json/no_childcare_cost.json").toString)
       val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.calculator.award(any[Request]())).thenReturn(Future.successful(AwardPeriod()))
+      when(controller.calculator.award(any[TCEligibility]())).thenReturn(Future.successful(TCCalculation(LocalDate.now(), LocalDate.now(), 0, 0, Nil)))
       val result = await(controller.calculate()(request))
       status(result) shouldBe Status.OK
     }
@@ -135,7 +134,7 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
       val inputJson: JsValue  = Json.parse(JsonLoader.fromResource("/json/childcare_cost_two_children.json").toString)
       val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.calculator.award(any[Request]())).thenReturn(Future.successful(AwardPeriod()))
+      when(controller.calculator.award(any[TCEligibility]())).thenReturn(Future.successful(TCCalculation(LocalDate.now(), LocalDate.now(), 0, 0, Nil)))
       val result = await(controller.calculate()(request))
       status(result) shouldBe Status.BAD_REQUEST
     }
@@ -145,7 +144,7 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
       val inputJson: JsValue  = Json.parse(JsonLoader.fromResource("/json/negative_childcare_cost_two_children.json").toString)
       val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.calculator.award(any[Request]())).thenReturn(Future.successful(AwardPeriod()))
+      when(controller.calculator.award(any[TCEligibility]())).thenReturn(Future.successful(TCCalculation(LocalDate.now(), LocalDate.now(), 0, 0, Nil)))
       val result = await(controller.calculate()(request))
       status(result) shouldBe Status.BAD_REQUEST
     }
@@ -154,7 +153,7 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
       val controller = mockTaxCreditCalculatorController
       val inputJson = Json.parse(JsonLoader.fromResource("/json/tc/input/2016/scenario_1.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
-      val JsonResult = inputJson.validate[Request]
+      val JsonResult = inputJson.validate[TCEligibility]
       val award = TCCalculator.calculator.award(JsonResult.get)
 
       when(controller.calculator.award(mockEq(JsonResult.get))).thenReturn(Future.successful(award))
@@ -167,8 +166,6 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
       val outputJson = Json.parse(
         s"""
          |{
-          |"calculation": {
-          | "tc": {
           |   "from": "${firstPeriodFrom.toString("yyyy-MM-dd")}",
           |   "until": "${firstPeriodTo.toString("yyyy-MM-dd")}",
           |   "totalAwardAmount": 2426.29,
@@ -211,11 +208,7 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
                |     ]
              |     }
            |     ]
-              | },
-              | "tfc": null,
-              | "esc": null
-            |}
-          |}
+         | }
         """.stripMargin)
 
       jsonBodyOf(result) shouldBe outputJson
@@ -225,7 +218,7 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
       val controller = mockTaxCreditCalculatorController
       val inputJson = Json.parse(JsonLoader.fromResource("/json/tc/input/2016/scenario_52.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
-      val JsonResult = inputJson.validate[Request]
+      val JsonResult = inputJson.validate[TCEligibility]
       val award = TCCalculator.calculator.incomeAdvice(JsonResult.get)
 
       when(controller.calculator.incomeAdvice(mockEq(JsonResult.get))).thenReturn(Future.successful(award))
@@ -240,8 +233,6 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
       val outputJson = Json.parse(
         s"""
           |{
-          |"calculation": {
-          | "tc": {
           | "from": "${firstPeriodFrom.toString("yyyy-MM-dd")}",
           | "until": "${secondPeriodTo.toString("yyyy-MM-dd")}",
           | "totalAwardAmount": 0.00,
@@ -312,11 +303,7 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
           |     ]
           |     }
           |   ]
-          | },
-          | "tfc": null,
-          | "esc": null
-          |}
-          |}
+          | }
         """.stripMargin)
 
       jsonBodyOf(result) shouldBe outputJson
@@ -327,7 +314,7 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
       val inputJson = Json.parse(JsonLoader.fromResource("/json/tc/input/2016/scenario_61.json").toString)
 
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
-      val JsonResult = inputJson.validate[Request]
+      val JsonResult = inputJson.validate[TCEligibility]
       val award = TCCalculator.calculator.award(JsonResult.get)
 
       when(controller.calculator.award(mockEq(JsonResult.get))).thenReturn(Future.successful(award))
@@ -337,8 +324,6 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
       val outputResult = Json.parse(
         s"""
         {
-          "calculation": {
-           "tc": {
              "from": "2016-09-27",
              "until": "2017-04-06",
              "totalAwardAmount": 2982.17,
@@ -409,11 +394,7 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
                  ]
              }
              ]
-           },
-           "tfc": null,
-           "esc": null
-          }
-        }
+           }
         """.stripMargin)
 
       jsonBodyOf(result) shouldBe outputResult
@@ -424,7 +405,7 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
       val inputJson = Json.parse(JsonLoader.fromResource("/json/tc/input/2016/scenario_61.json").toString)
 
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
-      val JsonResult = inputJson.validate[Request]
+      val JsonResult = inputJson.validate[TCEligibility]
       val incomeAdvice = TCCalculator.calculator.incomeAdvice(JsonResult.get)
 
       when(controller.calculator.incomeAdvice(mockEq(JsonResult.get))).thenReturn(Future.successful(incomeAdvice))
@@ -433,8 +414,6 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
       val outputResult = Json.parse(
         s"""
         {
-          "calculation": {
-           "tc": {
              "from": "2016-09-27",
              "until": "2017-04-06",
              "totalAwardAmount": 0.00,
@@ -505,11 +484,7 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
                  ]
              }
              ]
-           },
-           "tfc": null,
-           "esc": null
-          }
-        }
+           }
         """.stripMargin)
 
       status(result) shouldBe Status.OK
@@ -521,7 +496,7 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
       val inputJson = Json.parse(JsonLoader.fromResource("/json/tc/input/2017/scenario_5.json").toString)
 
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
-      val JsonResult = inputJson.validate[Request]
+      val JsonResult = inputJson.validate[TCEligibility]
       val incomeAdvice = TCCalculator.calculator.incomeAdvice(JsonResult.get)
 
       when(controller.calculator.incomeAdvice(mockEq(JsonResult.get))).thenReturn(Future.successful(incomeAdvice))
@@ -530,8 +505,6 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
       val outputResult = Json.parse(
         s"""
        {
-          "calculation": {
-           "tc": {
              "from": "2016-09-27",
              "until": "2018-02-15",
              "totalAwardAmount": 0.00,
@@ -666,11 +639,7 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
                  ]
              }
              ]
-           },
-           "tfc": null,
-           "esc": null
-          }
-        }
+           }
         """.stripMargin)
 
       status(result) shouldBe Status.OK
@@ -691,7 +660,7 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
           |    "errors":
           |     [
           |       {
-          |         "path": "/payload/eligibility/tc/taxYears(0)/houseHoldIncome",
+          |         "path": "/taxYears(0)/houseHoldIncome",
           |         "validationErrors":
           |         [
           |             {
@@ -701,7 +670,7 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
           |         ]
           |        },
           |        {
-          |        "path": "/payload/eligibility/tc/taxYears(0)/periods(0)/children(0)/childcareCost",
+          |        "path": "/taxYears(0)/periods(0)/children(0)/childcareCost",
           |         "validationErrors":
           |         [
           |            {
@@ -722,7 +691,7 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
       val controller = mockTaxCreditCalculatorController
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_23.json")
       val inputJson: JsValue = Json.parse(resource.toString)
-      val JsonResult = inputJson.validate[Request]
+      val JsonResult = inputJson.validate[TCEligibility]
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
       when(controller.calculator.incomeAdvice(mockEq(JsonResult.get))).thenReturn(Future.failed(new Exception("Something bad happened")))
@@ -743,7 +712,7 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
       val controller = mockTaxCreditCalculatorController
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_52.json")
       val inputJson: JsValue = Json.parse(resource.toString)
-      val JsonResult = inputJson.validate[Request]
+      val JsonResult = inputJson.validate[TCEligibility]
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
       when(controller.calculator.award(mockEq(JsonResult.get))).thenReturn(Future.failed(new Exception("Something bad happened")))
@@ -757,45 +726,6 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
         """.stripMargin)
 
       status(result) shouldBe Status.INTERNAL_SERVER_ERROR
-      jsonBodyOf(result) shouldBe outputJSON
-    }
-
-    "Return Bad Request with error message if a request for a different scheme is passed (Income Advice)(e.g. ESC) " in {
-      val controller = mockTaxCreditCalculatorController
-      val resource: JsonNode = JsonLoader.fromResource("/json/esc/input/scenario_1.json")
-      val inputJson: JsValue = Json.parse(resource.toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
-      val result = await(controller.incomeAdvice()(request))
-
-
-      val outputJSON = Json.parse(
-        """
-          |{
-          |    "status": 400,
-          |    "error": "You have provided a wrong type of request"
-          |}
-        """.stripMargin)
-
-      status(result) shouldBe Status.BAD_REQUEST
-      jsonBodyOf(result) shouldBe outputJSON
-    }
-
-    "Return Bad Request with error message if a request for a different scheme is passed (Calculate)(e.g. ESC) " in {
-      val controller = mockTaxCreditCalculatorController
-      val resource: JsonNode = JsonLoader.fromResource("/json/esc/input/scenario_12.json")
-      val inputJson: JsValue = Json.parse(resource.toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
-      val result = await(controller.calculate()(request))
-
-      val outputJSON = Json.parse(
-        """
-          |{
-          |    "status": 400,
-          |    "error": "You have provided a wrong type of request"
-          |}
-        """.stripMargin)
-
-      status(result) shouldBe Status.BAD_REQUEST
       jsonBodyOf(result) shouldBe outputJSON
     }
 

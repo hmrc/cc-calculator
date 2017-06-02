@@ -1,6 +1,13 @@
 {
-  "calculation" : {
-    "esc": {
+  "from": "2017-08-27",
+  "until": "2018-04-06",
+  "totalSavings": {
+    "totalSaving": 104.16,
+    "taxSaving": 99.2,
+    "niSaving": 4.96
+  },
+  "taxYears": [
+    {
       "from": "2017-08-27",
       "until": "2018-04-06",
       "totalSavings": {
@@ -8,53 +15,38 @@
         "taxSaving": 99.2,
         "niSaving": 4.96
       },
-      "taxYears": [
+      "claimants": [
         {
-          "from": "2017-08-27",
-          "until": "2018-04-06",
-          "totalSavings": {
+          "qualifying": false,
+          "eligibleMonthsInTaxYear": 2,
+          "isPartner": false,
+          "escAmount": 200,
+          "escAmountPeriod": "Month",
+          "escStartDate": "2012-08-27",
+          "maximumRelief": 124,
+          "maximumReliefPeriod": "Month",
+          "income": {
+            "taxablePay": 50000,
+            "gross": 50000,
+            "taxCode": "1150L",
+            "niCategory": "A"
+          },
+          "vouchers": false,
+          "savings": {
             "totalSaving": 104.16,
             "taxSaving": 99.2,
             "niSaving": 4.96
           },
-          "claimants": [
-            {
-              "qualifying": false,
-              "eligibleMonthsInTaxYear": 2,
-              "isPartner": false,
-              "escAmount": 200,
-              "escAmountPeriod": "Month",
-              "escStartDate": "2012-08-27",
-              "maximumRelief": 124,
-              "maximumReliefPeriod": "Month",
-              "income": {
-                "taxablePay": 50000,
-                "gross": 50000,
-                "taxCode": "1150L",
-                "niCategory": "A"
-              },
-              "elements": {
-                "vouchers": false
-              },
-              "savings": {
-                "totalSaving": 104.16,
-                "taxSaving": 99.2,
-                "niSaving": 4.96
-              },
-              "taxAndNIBeforeSacrifice": {
-                "taxPaid": 725.20,
-                "niPaid": 377.04
-              },
-              "taxAndNIAfterSacrifice": {
-                "taxPaid": 675.6,
-                "niPaid": 374.56
-              }
-            }
-          ]
+          "taxAndNIBeforeSacrifice": {
+            "taxPaid": 725.20,
+            "niPaid": 377.04
+          },
+          "taxAndNIAfterSacrifice": {
+            "taxPaid": 675.6,
+            "niPaid": 374.56
+          }
         }
       ]
-    },
-    "tc": null,
-    "tfc": null
-  }
+    }
+  ]
 }

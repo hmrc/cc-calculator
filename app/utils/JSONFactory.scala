@@ -16,7 +16,6 @@
 
 package utils
 
-import models.output.OutputAPIModel.AwardPeriod
 import play.api.Logger
 import play.api.data.validation.ValidationError
 import play.api.libs.json._
@@ -33,10 +32,6 @@ trait JSONFactory {
       case Right(e) =>
         Json.obj("status" -> status, "error" -> s"${e.getMessage}")
     }
-  }
-
-  def generateResultJson(response : AwardPeriod): JsObject = {
-    Json.obj("calculation" -> Json.toJson[AwardPeriod](response))
   }
 
   def errorBuilder(errors: Seq[(JsPath, Seq[ValidationError])]): JsArray = {
