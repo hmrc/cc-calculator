@@ -19,9 +19,7 @@
                 "taxCode": "1100L",
                 "niCategory": "B"
               },
-              "elements": {
-                "vouchers": false
-              },
+                "vouchers": false,
               "escAmount": 250.00,
               "escAmountPeriod": "Month",
               "escStartDate": "2013-08-27",

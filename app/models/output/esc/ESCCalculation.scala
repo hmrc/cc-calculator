@@ -17,7 +17,7 @@
 package models.output.esc
 
 import org.joda.time.LocalDate
-import play.api.libs.json.{Format, Json, Writes}
+import play.api.libs.json.{Json, Writes}
 import utils.{CCFormat, Periods}
 
 /**
@@ -32,7 +32,7 @@ case class ESCCalculation(
 
 object ESCCalculation extends CCFormat {
   implicit val escCalculationWrites: Writes[ESCCalculation] = Json.writes[ESCCalculation]
-  }
+}
 
 case class TaxYear(
                     from: LocalDate,
@@ -43,7 +43,7 @@ case class TaxYear(
 
 object TaxYear extends CCFormat {
   implicit val TaxYearWrites: Writes[TaxYear] = Json.writes[TaxYear]
-  }
+}
 
 case class Savings(
                     totalSaving: BigDecimal = BigDecimal(0.00),
@@ -53,14 +53,14 @@ case class Savings(
 
 object Savings extends CCFormat {
   implicit val SavingsWrites : Writes[Savings] = Json.writes[Savings]
-  }
+}
 
 case class Claimant(
                      qualifying: Boolean = false,
                      eligibleMonthsInTaxYear: Int,
                      isPartner: Boolean = false,
                      income: Income,
-                     elements: ClaimantElements,
+                     vouchers: Boolean = false,
                      escAmount: BigDecimal = BigDecimal(0.00),
                      escAmountPeriod: Periods.Period,
                      escStartDate: LocalDate,
@@ -84,14 +84,6 @@ case class Income(
 
 object Income extends CCFormat {
   implicit val IncomeWrites : Writes[Income] = Json.writes[Income]
-}
-
-case class ClaimantElements(
-    vouchers: Boolean = false
-  )
-
-object ClaimantElements extends CCFormat {
-  implicit val ClaimantElementsWrites: Format[ClaimantElements] = Json.format[ClaimantElements]
 }
 
 case class TaxAndNI(

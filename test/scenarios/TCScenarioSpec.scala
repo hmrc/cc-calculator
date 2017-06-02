@@ -134,9 +134,6 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_3.json")
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCEligibility]
-
-
-
       val award = await(TCCalculator.calculator.award(result.get))
 
       try {

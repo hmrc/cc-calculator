@@ -220,7 +220,7 @@ trait ESCCalculator {
         eligibleMonthsInTaxYear = eligibleMonths,
         isPartner = isPartner,
         income = models.output.esc.Income(taxablePay = taxablePay, gross = grossPay, taxCode = taxCode, niCategory = niCategory),
-        elements = models.output.esc.ClaimantElements(vouchers = vouchers),
+        vouchers = vouchers,
         escAmount = escAmount,
         escAmountPeriod = escAmountPeriod,
         escStartDate = escStartDate,
@@ -443,7 +443,7 @@ trait ESCCalculator {
           grossPay = claimant.income.gross,
           taxCode = claimant.income.taxCode,
           niCategory = config.niCategory.niCategoryCode,
-          vouchers = claimant.elements.vouchers,
+          vouchers = claimant.vouchers,
           escAmount = claimant.escAmount,
           escAmountPeriod = claimant.escAmountPeriod,
           escStartDate = claimant.escStartDate,
@@ -522,7 +522,7 @@ trait ESCCalculator {
       def populateClaimant(isPartner: Boolean, claimant: models.output.esc.Claimant): models.output.esc.Claimant = {
         val eligibleMonths: Int = sumClaimantEligibleMonths(listOfClaimantPairs, (c: models.output.esc.Claimant) => c.isPartner == isPartner)
         val qualification: Boolean = listOfClaimantPairs.exists(claimant => if(claimant.isPartner == isPartner) claimant.qualifying else false)
-        val voucherFlag: Boolean = listOfClaimantPairs.exists(claimant => if(claimant.isPartner == isPartner) claimant.elements.vouchers else false)
+        val voucherFlag: Boolean = listOfClaimantPairs.exists(claimant => if(claimant.isPartner == isPartner) claimant.vouchers else false)
         val taxSavings: BigDecimal = eligibleMonths * claimant.savings.taxSaving
         val NISavings: BigDecimal = eligibleMonths * claimant.savings.niSaving
         val allTotalSavings: BigDecimal = taxSavings + NISavings

@@ -19,13 +19,10 @@
                 "taxCode": "1100L",
                 "niCategory": "A"
               },
-              "elements": {
-                "vouchers": false
-              },
+                "vouchers": false,
               "escAmount": 350.00,
               "escAmountPeriod": "Month",
-              "escStartDate": "2013-08-27",
-              "failures": []
+              "escStartDate": "2013-08-27"
             },
             {
               "qualifying": false,
@@ -38,13 +35,10 @@
                 "taxCode": "1100L",
                 "niCategory": "B"
               },
-              "elements": {
-                "vouchers": false
-              },
+                "vouchers": false,
               "escAmount": 250.00,
               "escAmountPeriod": "Month",
-              "escStartDate": "2010-08-27",
-              "failures": []
+              "escStartDate": "2010-08-27"
             }
           ]
         }

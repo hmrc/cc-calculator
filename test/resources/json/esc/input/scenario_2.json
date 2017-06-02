@@ -19,9 +19,7 @@
                 "taxCode": "1060L",
                 "niCategory": "A"
               },
-              "elements": {
-                "vouchers": true
-              },
+                "vouchers": true,
               "escAmount": 150.00,
               "escAmountPeriod": "Month",
               "escStartDate": "2016-08-27",

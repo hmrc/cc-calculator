@@ -23,7 +23,6 @@ import play.api.libs.json.Json
 import uk.gov.hmrc.play.test.UnitSpec
 import utils.{FakeCCCalculatorApplication, Periods}
 
-
 class ESCCalculationSpec extends UnitSpec with FakeCCCalculatorApplication {
 
   "ESCCalculation models" should {
@@ -36,7 +35,7 @@ class ESCCalculationSpec extends UnitSpec with FakeCCCalculatorApplication {
       val claimant = models.output.esc.Claimant(
         eligibleMonthsInTaxYear = 0,
         income = Income(),
-        elements = models.output.esc.ClaimantElements(),
+        vouchers = false,
         escStartDate = from,
         escAmountPeriod = Periods.Monthly,
         savings = Savings(),
@@ -91,9 +90,7 @@ class ESCCalculationSpec extends UnitSpec with FakeCCCalculatorApplication {
           |                  "taxCode":"",
           |                  "niCategory":""
           |               },
-          |               "elements":{
-          |                  "vouchers":false
-          |               },
+          |               "vouchers":false,
           |               "escAmount":0.0,
           |               "escAmountPeriod":"Month",
           |               "escStartDate":"2016-08-27",

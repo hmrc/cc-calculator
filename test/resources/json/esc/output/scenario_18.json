@@ -31,9 +31,7 @@
             "taxCode": "1100L",
             "niCategory": "A"
           },
-          "elements": {
-            "vouchers": true
-          },
+          "vouchers": true,
           "savings": {
             "totalSaving": 1224.72,
             "taxSaving": 1166.40,
@@ -63,9 +61,7 @@
             "taxCode": "1100L",
             "niCategory": "B"
           },
-          "elements": {
-            "vouchers": true
-          },
+          "vouchers": true,
           "savings": {
             "totalSaving": 465.36,
             "taxSaving": 360.00,

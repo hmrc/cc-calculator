@@ -98,27 +98,13 @@ object Income extends MessagesObject {
     )(Income.apply _)
 }
 
-case class ClaimantElements(
-                             // claimants qualification is determined by employer providing esc and children's qualification
-                             // (if there is at least 1 qualifying child)
-                             vouchers : Boolean = false
-                             )
-
-object ClaimantElements {
-  implicit val claimantReads : Reads[ClaimantElements] = (JsPath \ "vouchers").read[Boolean].orElse(
-    Reads.pure(false)
-  ).map { vouchers =>
-    ClaimantElements(vouchers)
-  }
-}
-
 case class Claimant (
                      qualifying: Boolean = false,
                      isPartner: Boolean = false,
                      location: String,
                      eligibleMonthsInPeriod: Int,
                      income: Income,
-                     elements: ClaimantElements,
+                     vouchers: Boolean = false,
                      escStartDate: LocalDate,
                      escAmount: BigDecimal = BigDecimal(0.00),
                      escAmountPeriod: Periods.Period
@@ -140,7 +126,7 @@ object Claimant extends CCFormat with ESCConfig with MessagesObject {
           (JsPath \ "eligibleMonthsInPeriod").read[Int].filter(ValidationError(messages("cc.calc.invalid.number.of.months"))
                                                         )(months => months >= lowerMonthsLimitValidation && months < upperMonthsLimitValidation) and
             (JsPath \ "income").read[Income] and
-              (JsPath \ "elements").read[ClaimantElements] and
+              (JsPath \ "vouchers").read[Boolean] and
                 (JsPath \ "escStartDate").read[LocalDate](jodaLocalDateReads(datePattern)) and
                   (JsPath \ "escAmount").read[BigDecimal].filter(ValidationError(messages("cc.calc.voucher.amount.less.than.0"))
                                                           )(income => income >= BigDecimal(0.00)) and

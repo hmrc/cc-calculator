@@ -31,9 +31,7 @@
             "taxCode": "1150L",
             "niCategory": "A"
           },
-          "elements": {
-            "vouchers": false
-          },
+          "vouchers": false,
           "savings": {
             "totalSaving": 104.16,
             "taxSaving": 99.2,
