@@ -19,7 +19,6 @@ package models.input
 import calculators.ESCCalculator
 import com.fasterxml.jackson.databind.JsonNode
 import com.github.fge.jackson.JsonLoader
-import models.input.APIModels.Request
 import models.input.esc._
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat

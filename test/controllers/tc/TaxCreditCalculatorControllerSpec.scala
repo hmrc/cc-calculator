@@ -19,9 +19,7 @@ package controllers.tc
 import calculators.TCCalculator
 import com.fasterxml.jackson.databind.JsonNode
 import com.github.fge.jackson.JsonLoader
-import models.input.APIModels.Request
 import models.input.tc.TCEligibility
-import models.output.OutputAPIModel.AwardPeriod
 import models.output.tc.TCCalculation
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
@@ -33,14 +31,11 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import service.AuditEvents
-import utils.{CCJsonLogger, FakeCCCalculatorApplication}
-
+import utils.FakeCCCalculatorApplication
 import scala.concurrent.Future
 import play.api.i18n.Messages.Implicits._
-/**
- * Created by Ravi on 03/06/15.
- */
-class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with MockitoSugar with CCJsonLogger {
+
+class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with MockitoSugar {
 
   val mockTaxCreditCalculatorController = new TaxCreditCalculatorController(applicationMessagesApi) with TCCalculator {
     override val calculator =  mock[TCCalculatorService]

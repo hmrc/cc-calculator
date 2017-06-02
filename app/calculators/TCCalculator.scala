@@ -20,13 +20,8 @@ import models.input.tc._
 import models.output.tc.{Element, Elements, TCCalculation, TaxYear}
 import org.joda.time.{Days, LocalDate}
 import utils.{Periods, TCConfig}
-
 import scala.concurrent.Future
 import scala.math.BigDecimal.RoundingMode
-
-/**
-  * Created by adamconder on 08/06/15.
-  */
 
 object TCCalculator extends TCCalculator
 

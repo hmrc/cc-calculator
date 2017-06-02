@@ -16,23 +16,20 @@
 
 package calculators
 
-import models.input.APIModels.Request
 import models.input.tfc.{Child, TFCEligibility}
-import models.output.OutputAPIModel.AwardPeriod
 import models.output.tfc._
 import org.joda.time.LocalDate
 import play.api.Logger
 import utils.{MessagesObject, Periods, TFCTaxYearConfig}
 import scala.concurrent.Future
-import scala.util.Success
 
 object TFCCalculator extends TFCCalculator
 
-trait TFCCalculator extends CCCalculator {
+trait TFCCalculator {
 
   val calculator = new TFCCalculatorService
 
-  class TFCCalculatorService extends CCCalculatorService with MessagesObject {
+  class TFCCalculatorService extends CCCalculatorHelper with MessagesObject {
 
     import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -109,12 +106,8 @@ trait TFCCalculator extends CCCalculator {
     def getOutputChildren(period: models.input.tfc.TFCPeriod): List[OutputChild] = {
       for(child <- period.children) yield {
         OutputChild(
-          id = child.id,
-          name = child.name,
           childCareCost = child.childcareCost,
-          childContribution = getChildContribution(child, period.configRule, daysBetween(period.from, period.until), period.periodEligibility),
-          timeToMaximizeTopUp = 0,
-          failures = List()
+          childContribution = getChildContribution(child, period.configRule, daysBetween(period.from, period.until), period.periodEligibility)
         )
       }
 
@@ -152,21 +145,27 @@ trait TFCCalculator extends CCCalculator {
      def getTopUpPercentForChildCareCost(child: Child, tfcTaxYearConfig: TFCTaxYearConfig): BigDecimal =
        ((tfcTaxYearConfig.topUpPercent * getChildCareCostForPeriod(child)) / 100)
 
-    override def award(request : Request) : Future[AwardPeriod] = {
-      def getTFCCalculation(eligibility: TFCEligibility): TFCCalculation = {
-        TFCCalculation(
-          from = eligibility.from,
-          until = eligibility.until,
-          householdContribution = getHouseholdContribution(getCalculatedTFCPeriods(eligibility.periods)),
-          numberOfPeriods = eligibility.periods.length.toShort,
-          periods = getCalculatedTFCPeriods(eligibility.periods)
-        )
+    def award(request: TFCEligibility): Future[TFCCalculation] = {
+      if(request.householdEligibility) {
+        Future {
+          TFCCalculation(
+            from = request.from,
+            until = request.until,
+            householdContribution = getHouseholdContribution(getCalculatedTFCPeriods(request.periods)),
+            numberOfPeriods = request.periods.length.toShort,
+            periods = getCalculatedTFCPeriods(request.periods)
+          )
+        }
       }
-
-      Future {
-        request.getTFCEligibility match {
-          case Success(result) if(result.householdEligibility) => AwardPeriod(tfc = Some(getTFCCalculation(result)))
-          case _ => AwardPeriod()
+      else {
+        Future {
+          TFCCalculation(
+            from = null,
+            until = null,
+            householdContribution = Contribution(parent = 0, government = 0, totalChildCareSpend = 0),
+            numberOfPeriods = 0,
+            periods = List.empty
+          )
         }
       }
     }

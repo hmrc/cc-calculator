@@ -16,38 +16,20 @@
 
 package calculators
 
-import calculators.TestCalculator.TestCalculatorService
-import models.input.APIModels.Request
-import models.output.OutputAPIModel.AwardPeriod
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import uk.gov.hmrc.play.test.UnitSpec
 import utils.{FakeCCCalculatorApplication, Periods}
 
-import scala.concurrent.Future
-
-/**
- * Created by adamconder on 08/06/15.
- */
-
-trait TestCalculator extends CCCalculator {
+object TestCalculator  {
   val calculator = new TestCalculatorService
 
-  class TestCalculatorService extends CCCalculatorService {
-    override def award(request: Request) : Future[AwardPeriod] = ???
-  }
+  class TestCalculatorService extends CCCalculatorHelper
 }
 
-object TestCalculator extends TestCalculator
+class CCCalculatorHelperSpec extends UnitSpec with FakeCCCalculatorApplication {
 
-class CCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
-
-  "CCCalculator" should {
-
-    "return an instance of CCCalculatorService" in {
-      val calc = TestCalculator
-      calc.calculator.isInstanceOf[TestCalculatorService] shouldBe true
-    }
+  "CCCalculatorHelper" should {
 
     "calculate in a BigDecimal format" in {
       val cost = 12.249212342

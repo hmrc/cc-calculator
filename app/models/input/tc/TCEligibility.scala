@@ -16,7 +16,6 @@
 
 package models.input.tc
 
-import models.input.APIModels._
 import org.joda.time.LocalDate
 import play.api.data.validation._
 import play.api.libs.functional.syntax._
@@ -40,7 +39,7 @@ case class TaxYear(
                     periods: List[Period]
                     )
 
-object TaxYear extends MessagesObject{
+object TaxYear extends MessagesObject with CCFormat {
   private def houseHoldIncomeValidation(income: BigDecimal) : Boolean = {
     income >= BigDecimal(0.00)
   }

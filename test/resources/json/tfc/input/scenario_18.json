@@ -1,187 +1,155 @@
 {
-  "payload": {
-    "eligibility": {
-      "tfc":{
-        "from": "2016-06-07",
-        "until": "2017-06-07",
-        "householdEligibility": true,
-        "periods": [
-          {
-            "from": "2016-06-07",
-            "until": "2016-09-07",
-            "periodEligibility": true,
-            "children": [
-              {
-                "id": 0,
-                "name": "Child 1",
-                "qualifying": true,
-                "from": "2016-06-07",
-                "until": "2016-09-06",
-                "childcareCost": 1000.00,
-                "disability": {
-                  "disabled": false,
-                  "severelyDisabled": false
-                }
-              },
-              {
-                "id": 1,
-                "name": "Child 2",
-                "qualifying": true,
-                "from": "2016-06-07",
-                "until": "2016-09-06",
-                "childcareCost": 1500.00,
-                "disability": {
-                  "disabled": true,
-                  "severelyDisabled": false
-                }
-              },
-              {
-                "id": 2,
-                "name": "Child 3",
-                "qualifying": false,
-                "from": null,
-                "until": null,
-                "childcareCost": 0.00,
-                "disability": {
-                  "disabled": false,
-                  "severelyDisabled": false
-                }
-              }
-            ]
-          },
-          {
-            "from": "2016-09-07",
-            "until": "2016-12-07",
-            "periodEligibility": false,
-            "children": [
-              {
-                "id": 0,
-                "name": "Child 1",
-                "qualifying": false,
-                "from": null,
-                "until": null,
-                "childcareCost": 1000.00,
-                "disability": {
-                  "disabled": false,
-                  "severelyDisabled": false
-                }
-              },
-              {
-                "id": 1,
-                "name": "Child 2",
-                "qualifying": false,
-                "from": null,
-                "until": null,
-                "childcareCost": 1500.00,
-                "disability": {
-                  "disabled": true,
-                  "severelyDisabled": false
-                }
-              },
-              {
-                "id": 2,
-                "name": "Child 3",
-                "qualifying": false,
-                "from": null,
-                "until": null,
-                "childcareCost": 0.00,
-                "disability": {
-                  "disabled": false,
-                  "severelyDisabled": false
-                }
-              }
-            ]
-          },
-          {
-            "from": "2016-12-07",
-            "until": "2017-03-07",
-            "periodEligibility": true,
-            "children": [
-              {
-                "id": 0,
-                "name": "Child 1",
-                "qualifying": false,
-                "from": null,
-                "until": null,
-                "childcareCost": 1000.00,
-                "disability": {
-                  "disabled": false,
-                  "severelyDisabled": false
-                }
-              },
-              {
-                "id": 1,
-                "name": "Child 2",
-                "qualifying": false,
-                "from": null,
-                "until": null,
-                "childcareCost": 1500.00,
-                "disability": {
-                  "disabled": true,
-                  "severelyDisabled": false
-                }
-              },
-              {
-                "id": 2,
-                "name": "Child 3",
-                "qualifying": true,
-                "from": "2016-12-07",
-                "until": "2017-03-07",
-                "childcareCost": 1200.00,
-                "disability": {
-                  "disabled": false,
-                  "severelyDisabled": false
-                }
-              }
-            ]
-          },
-          {
-            "from": "2017-03-07",
-            "until": "2017-06-07",
-            "periodEligibility": true,
-            "children": [
-              {
-                "id": 0,
-                "name": "Child 1",
-                "qualifying": false,
-                "from": null,
-                "until": null,
-                "childcareCost": 1000.00,
-                "disability": {
-                  "disabled": false,
-                  "severelyDisabled": false
-                }
-              },
-              {
-                "id": 1,
-                "name": "Child 2",
-                "qualifying": false,
-                "from": null,
-                "until": null,
-                "childcareCost": 1500.00,
-                "disability": {
-                  "disabled": true,
-                  "severelyDisabled": false
-                }
-              },
-              {
-                "id": 2,
-                "name": "Child 3",
-                "qualifying": true,
-                "from": "2017-03-07",
-                "until": "2017-06-07",
-                "childcareCost": 1200.00,
-                "disability": {
-                  "disabled": false,
-                  "severelyDisabled": false
-                }
-              }
-            ]
+  "from": "2016-06-07",
+  "until": "2017-06-07",
+  "householdEligibility": true,
+  "periods": [
+    {
+      "from": "2016-06-07",
+      "until": "2016-09-07",
+      "periodEligibility": true,
+      "children": [
+        {
+          "qualifying": true,
+          "from": "2016-06-07",
+          "until": "2016-09-06",
+          "childcareCost": 1000.00,
+          "disability": {
+            "disabled": false,
+            "severelyDisabled": false
           }
-        ]
-      },
-      "tc": null,
-      "esc": null
+        },
+        {
+          "qualifying": true,
+          "from": "2016-06-07",
+          "until": "2016-09-06",
+          "childcareCost": 1500.00,
+          "disability": {
+            "disabled": true,
+            "severelyDisabled": false
+          }
+        },
+        {
+          "qualifying": false,
+          "from": null,
+          "until": null,
+          "childcareCost": 0.00,
+          "disability": {
+            "disabled": false,
+            "severelyDisabled": false
+          }
+        }
+      ]
+    },
+    {
+      "from": "2016-09-07",
+      "until": "2016-12-07",
+      "periodEligibility": false,
+      "children": [
+        {
+          "qualifying": false,
+          "from": null,
+          "until": null,
+          "childcareCost": 1000.00,
+          "disability": {
+            "disabled": false,
+            "severelyDisabled": false
+          }
+        },
+        {
+          "qualifying": false,
+          "from": null,
+          "until": null,
+          "childcareCost": 1500.00,
+          "disability": {
+            "disabled": true,
+            "severelyDisabled": false
+          }
+        },
+        {
+          "qualifying": false,
+          "from": null,
+          "until": null,
+          "childcareCost": 0.00,
+          "disability": {
+            "disabled": false,
+            "severelyDisabled": false
+          }
+        }
+      ]
+    },
+    {
+      "from": "2016-12-07",
+      "until": "2017-03-07",
+      "periodEligibility": true,
+      "children": [
+        {
+          "qualifying": false,
+          "from": null,
+          "until": null,
+          "childcareCost": 1000.00,
+          "disability": {
+            "disabled": false,
+            "severelyDisabled": false
+          }
+        },
+        {
+          "qualifying": false,
+          "from": null,
+          "until": null,
+          "childcareCost": 1500.00,
+          "disability": {
+            "disabled": true,
+            "severelyDisabled": false
+          }
+        },
+        {
+          "qualifying": true,
+          "from": "2016-12-07",
+          "until": "2017-03-07",
+          "childcareCost": 1200.00,
+          "disability": {
+            "disabled": false,
+            "severelyDisabled": false
+          }
+        }
+      ]
+    },
+    {
+      "from": "2017-03-07",
+      "until": "2017-06-07",
+      "periodEligibility": true,
+      "children": [
+        {
+          "qualifying": false,
+          "from": null,
+          "until": null,
+          "childcareCost": 1000.00,
+          "disability": {
+            "disabled": false,
+            "severelyDisabled": false
+          }
+        },
+        {
+          "qualifying": false,
+          "from": null,
+          "until": null,
+          "childcareCost": 1500.00,
+          "disability": {
+            "disabled": true,
+            "severelyDisabled": false
+          }
+        },
+        {
+          "qualifying": true,
+          "from": "2017-03-07",
+          "until": "2017-06-07",
+          "childcareCost": 1200.00,
+          "disability": {
+            "disabled": false,
+            "severelyDisabled": false
+          }
+        }
+      ]
     }
-  }
+  ]
 }

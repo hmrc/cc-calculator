@@ -18,7 +18,6 @@ package models.input
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.github.fge.jackson.JsonLoader
-import models.input.APIModels.{Payload, Request}
 import models.input.tc.TCEligibility._
 import models.input.tc._
 import org.joda.time.LocalDate
@@ -27,10 +26,7 @@ import play.api.libs.json.{JsSuccess, JsValue, Json}
 import uk.gov.hmrc.play.test.UnitSpec
 import utils._
 
-/**
- * Created by adamconder on 07/07/15.
- */
-class TCEligibilitySpec extends UnitSpec with FakeCCCalculatorApplication with CCJsonLogger {
+class TCEligibilitySpec extends UnitSpec with FakeCCCalculatorApplication {
 
   "TC Input JSON" should {
     "read a valid JSON input and convert to a specific type" in {

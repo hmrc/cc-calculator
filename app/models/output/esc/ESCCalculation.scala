@@ -17,9 +17,7 @@
 package models.output.esc
 
 import org.joda.time.LocalDate
-import play.api.libs.functional.syntax._
-import play.api.libs.json.Writes._
-import play.api.libs.json.{Format, JsPath, Json, Writes}
+import play.api.libs.json.{Format, Json, Writes}
 import utils.{CCFormat, Periods}
 
 /**
@@ -33,12 +31,7 @@ case class ESCCalculation(
                            )
 
 object ESCCalculation extends CCFormat {
-  implicit val escCalculationWrites: Writes[ESCCalculation] = (
-    (JsPath \ "from").write[LocalDate](jodaLocalDateWrites(datePattern)) and
-      (JsPath \ "until").write[LocalDate](jodaLocalDateWrites(datePattern)) and
-        (JsPath \ "totalSavings").write[Savings] and
-          (JsPath \ "taxYears").write[List[TaxYear]]
-    )(unlift(ESCCalculation.unapply))
+  implicit val escCalculationWrites: Writes[ESCCalculation] = Json.writes[ESCCalculation]
   }
 
 case class TaxYear(
@@ -49,12 +42,7 @@ case class TaxYear(
                     )
 
 object TaxYear extends CCFormat {
-  implicit val TaxYearWrites: Writes[TaxYear] = (
-    (JsPath \ "from").write[LocalDate](jodaLocalDateWrites(datePattern)) and
-      (JsPath \ "until").write[LocalDate](jodaLocalDateWrites(datePattern)) and
-        (JsPath \ "totalSavings").write[Savings] and
-          (JsPath \ "claimants").write[List[Claimant]]
-    )(unlift(TaxYear.unapply))
+  implicit val TaxYearWrites: Writes[TaxYear] = Json.writes[TaxYear]
   }
 
 case class Savings(
@@ -64,11 +52,7 @@ case class Savings(
                     )
 
 object Savings extends CCFormat {
-  implicit val SavingsWrites : Writes[Savings] = (
-    (JsPath \ "totalSaving").write[BigDecimal] and
-      (JsPath \ "taxSaving").write[BigDecimal] and
-        (JsPath \ "niSaving").write[BigDecimal]
-    )(unlift(Savings.unapply))
+  implicit val SavingsWrites : Writes[Savings] = Json.writes[Savings]
   }
 
 case class Claimant(
@@ -88,22 +72,8 @@ case class Claimant(
                      )
 
 object Claimant extends CCFormat {
-  implicit val claimantWrites: Writes[Claimant] = (
-    (JsPath \ "qualifying").write[Boolean] and
-      (JsPath \ "eligibleMonthsInTaxYear").write[Int] and
-        (JsPath \ "isPartner").write[Boolean] and
-          (JsPath \ "income").write[Income] and
-            (JsPath \ "elements").write[ClaimantElements] and
-              (JsPath \ "escAmount").write[BigDecimal] and
-                (JsPath \ "escAmountPeriod").write[Periods.Period] and
-                  (JsPath \ "escStartDate").write[LocalDate](jodaLocalDateWrites(datePattern)) and
-                    (JsPath \ "savings").write[Savings] and
-                      (JsPath \ "maximumRelief").write[BigDecimal] and
-                        (JsPath \ "maximumReliefPeriod").write[Periods.Period] and
-                          (JsPath \ "taxAndNIBeforeSacrifice").write[TaxAndNI] and
-                            (JsPath \ "taxAndNIAfterSacrifice").write[TaxAndNI]
-    )(unlift(Claimant.unapply))
-  }
+  implicit val claimantWrites: Writes[Claimant] = Json.writes[Claimant]
+}
 
 case class Income(
                    taxablePay: BigDecimal = BigDecimal(0.00),
@@ -113,12 +83,7 @@ case class Income(
                    )
 
 object Income extends CCFormat {
-  implicit val IncomeWrites : Writes[Income]=(
-    (JsPath \ "taxablePay").write[BigDecimal] and
-      (JsPath \ "gross").write[BigDecimal] and
-        (JsPath \ "taxCode").write[String] and
-          (JsPath \ "niCategory").write[String]
-    )(unlift(Income.unapply))
+  implicit val IncomeWrites : Writes[Income] = Json.writes[Income]
 }
 
 case class ClaimantElements(
@@ -135,8 +100,5 @@ case class TaxAndNI(
  )
 
 object TaxAndNI extends CCFormat {
-  implicit val taxAndNIWrites: Writes[TaxAndNI] = (
-    (JsPath \ "taxPaid").write[BigDecimal] and
-      (JsPath \ "niPaid").write[BigDecimal]
-    )(unlift(TaxAndNI.unapply))
+  implicit val taxAndNIWrites: Writes[TaxAndNI] = Json.writes[TaxAndNI]
 }

@@ -20,9 +20,7 @@ import akka.japi.Option.Some
 import calculators.ESCCalculator.ESCCalculatorService
 import com.fasterxml.jackson.databind.JsonNode
 import com.github.fge.jackson.JsonLoader
-import models.input.APIModels.{Eligibility, Payload, Request}
 import models.input.esc._
-import models.output.OutputAPIModel.AwardPeriod
 import models.output.esc.{ESCCalculation, Savings}
 import models.utility.{CalculationNIBands, CalculationTaxBands}
 import org.joda.time.LocalDate

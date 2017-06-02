@@ -16,33 +16,9 @@
 
 package calculators
 
-import java.text.NumberFormat
-import java.util.Locale
-import models.input.APIModels.Request
-import models.output.OutputAPIModel.AwardPeriod
 import org.joda.time.{Days, LocalDate}
 import utils.Periods
-import scala.concurrent.Future
 import scala.math.BigDecimal.RoundingMode
-
-/**
- * Created by adamconder on 08/06/15.
- */
-
-/**
- *
- * Calculator must be instantiated
- *
- * object ExampleCalculator extends ExampleCalculator
- *
- * trait ExampleCalculator extends CCCalculator {
- * val calculator = new ExampleCalculatorClient
- *
- * class ExampleCalculatorClient extends CCCalculatorCommon {
- * // service specific code
- * }
- * }
- */
 
 trait CCCalculatorHelper {
   /**
@@ -94,22 +70,6 @@ trait CCCalculatorHelper {
 
   def daysBetween(fromDate: LocalDate, toDate: LocalDate): Int = {
     Days.daysBetween(fromDate, toDate).getDays
-  }
-
-}
-
-trait CCCalculator {
-
-  val calculator: CCCalculatorService
-
-  protected trait CCCalculatorRules {
-
-  }
-
-  trait CCCalculatorService extends CCCalculatorRules with CCCalculatorHelper{
-
-    def award(request : Request) : Future[AwardPeriod]
-
   }
 
 }
