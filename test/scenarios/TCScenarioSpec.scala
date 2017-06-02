@@ -19,13 +19,12 @@ package scenarios
 import calculators.TCCalculator
 import com.fasterxml.jackson.databind.JsonNode
 import com.github.fge.jackson.JsonLoader
-import models.input.APIModels.Request
 import models.input.tc.TCEligibility
 import models.output.tc.{Element, Period}
 import org.joda.time.LocalDate
 import play.api.libs.json.{JsSuccess, JsValue, Json}
 import uk.gov.hmrc.play.test.UnitSpec
-import utils.{CCJsonLogger, FakeCCCalculatorApplication}
+import utils.FakeCCCalculatorApplication
 
 
 trait ValidateCalculations {
@@ -54,7 +53,7 @@ trait ValidateCalculations {
 
 }
 
-class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJsonLogger with ValidateCalculations {
+class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with ValidateCalculations {
 
   "ScenarioSpec" should {
 

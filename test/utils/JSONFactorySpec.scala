@@ -16,13 +16,10 @@
 
 package utils
 
-import calculators.{TCCalculator, TFCCalculator}
+import calculators.TCCalculator
 import com.fasterxml.jackson.databind.JsonNode
 import com.github.fge.jackson.JsonLoader
-import models.input.APIModels.Request
 import models.input.tc.TCEligibility
-import models.output.OutputAPIModel.AwardPeriod
-import models.output.tc.TCCalculation
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import play.api.data.validation.ValidationError
@@ -90,39 +87,6 @@ class JSONFactorySpec extends FakeCCCalculatorApplication {
 
       val result  = utils.JSONFactory.generateErrorJSON(status, Right(exception))
       result shouldBe outputJSON
-    }
-
-    "Return a valid response with calculation result" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
-      val firstPeriodFrom = LocalDate.parse("2016-09-27", formatter)
-      val firstPeriodTo = LocalDate.parse("2016-12-12", formatter)
-      val calculation = TCCalculation(
-                      from = firstPeriodFrom,
-                      until = firstPeriodTo,
-                      totalAwardAmount = 5000.00,
-                      houseHoldAdviceAmount = 0.00,
-                      taxYears = List())
-
-      val response = AwardPeriod(tc = Some(calculation))
-      val outputJson = Json.parse(
-        s"""
-          |{
-          |"calculation": {
-          | "tc": {
-          |   "from": "${firstPeriodFrom.toString("yyyy-MM-dd")}",
-          |   "until": "${firstPeriodTo.toString("yyyy-MM-dd")}",
-          |   "totalAwardAmount": 5000.00,
-          |   "houseHoldAdviceAmount": 0.00,
-          |   "taxYears": []
-          | },
-          | "tfc": null,
-          | "esc": null
-          |}
-          |}
-        """.stripMargin)
-
-      val result = utils.JSONFactory.generateResultJson(response)
-      result shouldBe outputJson
     }
 
     "Return a valid JSON response with calculation result (Scenario 51 input)" in {

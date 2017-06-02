@@ -19,9 +19,7 @@ package controllers.esc
 import calculators.ESCCalculator
 import com.fasterxml.jackson.databind.JsonNode
 import com.github.fge.jackson.JsonLoader
-import models.input.APIModels.Request
 import models.input.esc.ESCEligibility
-import models.output.OutputAPIModel.AwardPeriod
 import models.output.esc.{Savings, ESCCalculation}
 import org.mockito.Matchers.{eq => mockEq, _}
 import org.mockito.Mockito._
@@ -36,7 +34,6 @@ import play.api.Play
 import utils.FakeCCCalculatorApplication
 import scala.concurrent.Future
 import play.api.i18n.Messages.Implicits._
-
 import org.scalatest.prop.TableDrivenPropertyChecks._
 import org.scalatest.prop.Tables.Table
 import org.joda.time.LocalDate

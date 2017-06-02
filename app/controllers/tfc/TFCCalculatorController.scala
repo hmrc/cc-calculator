@@ -17,19 +17,15 @@
 package controllers.tfc
 
 import calculators.TFCCalculator
-import controllers.CalculatorController
-import models.input.APIModels.Request
 import models.input.tfc.TFCEligibility
 import models.output.tfc.TFCCalculation
 import play.api.Logger
-import play.api.i18n.Messages
 import play.api.libs.json.{Json, JsValue}
 import play.api.mvc.Action
 import service.AuditEvents
 import play.api.i18n.{I18nSupport, MessagesApi}
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.play.microservice.controller.BaseController
-
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 

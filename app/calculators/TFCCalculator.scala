@@ -16,15 +16,12 @@
 
 package calculators
 
-import models.input.APIModels.Request
 import models.input.tfc.{Child, TFCEligibility}
-import models.output.OutputAPIModel.AwardPeriod
 import models.output.tfc._
 import org.joda.time.LocalDate
 import play.api.Logger
 import utils.{MessagesObject, Periods, TFCTaxYearConfig}
 import scala.concurrent.Future
-import scala.util.Success
 
 object TFCCalculator extends TFCCalculator
 
@@ -149,14 +146,27 @@ trait TFCCalculator {
        ((tfcTaxYearConfig.topUpPercent * getChildCareCostForPeriod(child)) / 100)
 
     def award(request: TFCEligibility): Future[TFCCalculation] = {
-      Future {
-        TFCCalculation(
-          from = request.from,
-          until = request.until,
-          householdContribution = getHouseholdContribution(getCalculatedTFCPeriods(request.periods)),
-          numberOfPeriods = request.periods.length.toShort,
-          periods = getCalculatedTFCPeriods(request.periods)
-        )
+      if(request.householdEligibility) {
+        Future {
+          TFCCalculation(
+            from = request.from,
+            until = request.until,
+            householdContribution = getHouseholdContribution(getCalculatedTFCPeriods(request.periods)),
+            numberOfPeriods = request.periods.length.toShort,
+            periods = getCalculatedTFCPeriods(request.periods)
+          )
+        }
+      }
+      else {
+        Future {
+          TFCCalculation(
+            from = null,
+            until = null,
+            householdContribution = Contribution(parent = 0, government = 0, totalChildCareSpend = 0),
+            numberOfPeriods = 0,
+            periods = List.empty
+          )
+        }
       }
     }
   }

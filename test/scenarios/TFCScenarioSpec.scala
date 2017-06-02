@@ -19,17 +19,15 @@ package scenarios
 import calculators.TFCCalculator
 import com.fasterxml.jackson.databind.JsonNode
 import com.github.fge.jackson.JsonLoader
-import models.input.APIModels.Request
 import models.input.tfc.TFCEligibility
-import models.output.OutputAPIModel.AwardPeriod
 import models.output.tfc.TFCCalculation
 import play.api.libs.json.{JsSuccess, JsValue, Json}
 import uk.gov.hmrc.play.test.UnitSpec
-import utils.{FakeCCCalculatorApplication, CCJsonLogger, JSONFactory}
+import utils.FakeCCCalculatorApplication
 import org.scalatest.prop.TableDrivenPropertyChecks._
 import org.scalatest.prop.Tables.Table
 
-class TFCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with CCJsonLogger with ValidateCalculations {
+class TFCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication {
 
   "TFCScenarioSpec" should {
 

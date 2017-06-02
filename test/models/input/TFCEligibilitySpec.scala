@@ -19,18 +19,14 @@ package models.input
 import java.lang.Short
 import com.fasterxml.jackson.databind.JsonNode
 import com.github.fge.jackson.JsonLoader
-import models.input.APIModels.Request
 import models.input.tfc.{Child, Disability, TFCEligibility, TFCPeriod}
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import play.api.libs.json.{JsSuccess, JsValue, Json}
 import uk.gov.hmrc.play.test.UnitSpec
-import utils.{FakeCCCalculatorApplication, CCJsonLogger}
+import utils.FakeCCCalculatorApplication
 
-/**
- * Created by roma on 24/12/15.
- */
-class TFCEligibilitySpec extends UnitSpec with FakeCCCalculatorApplication with CCJsonLogger{
+class TFCEligibilitySpec extends UnitSpec with FakeCCCalculatorApplication{
 
   "TFC Input JSON" should {
     "read a valid JSON input and convert to a specific type" in {

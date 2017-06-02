@@ -13,46 +13,38 @@ Tax Free Childcare Calculator accepts Eligibility Microservice's output result w
 
     ```javascript
     {
-          payload: {
-            eligibility: {
-              tfc: {
-                from: [LocalDate],
-                until: [LocalDate],
-                householdEligibility: [Boolean] = true,
-                periods: [
-                    {
-                      from: [LocalDate],
-                      until: [LocalDate],
-                      periodEligibility: [Boolean] = true,
-                      children: [
-                        {
-                          id: [Short],
-                          name: [String] = None,
-                          qualifying: [Boolean] = true,
-                          from: [LocalDate],
-                          until: [LocalDate],
-                          childcareCost: [BigDecimal] = 0.00,
-                          childcareCostPeriod: [Enumeration]
-                             {
-                                Week,
-                                Fortnight,
-                                Month,
-                                3 month,
-                                Year,
-                                INVALID
-                             },
-                          disability:
-                          {
-                            disability: [Boolean] = false,
-                            severeDisability: [Boolean] = false,
-                          }
-                        }
-                      ]
-                    }
-                ]
-              }
+        from: [LocalDate],
+        until: [LocalDate],
+        householdEligibility: [Boolean] = true,
+        periods: [
+            {
+              from: [LocalDate],
+              until: [LocalDate],
+              periodEligibility: [Boolean] = true,
+              children: [
+                {
+                  qualifying: [Boolean] = true,
+                  from: [LocalDate],
+                  until: [LocalDate],
+                  childcareCost: [BigDecimal] = 0.00,
+                  childcareCostPeriod: [Enumeration]
+                     {
+                        Week,
+                        Fortnight,
+                        Month,
+                        3 month,
+                        Year,
+                        INVALID
+                     },
+                  disability:
+                  {
+                    disability: [Boolean] = false,
+                    severeDisability: [Boolean] = false,
+                  }
+                }
+              ]
             }
-          }
+        ]
         }
     ```
 
@@ -60,50 +52,42 @@ Tax Free Childcare Calculator accepts Eligibility Microservice's output result w
 
      ```javascript
     {
-        calculation : {
-          tfc: {
-            from: [LocalDate],
-            until: [LocalDate],
-            householdContribution: {
-                  parent: [BigDecimal] = 0.00,
-                  government: [BigDecimal] = 0.00,
-                  totalChildCareSpend: [BigDecimal] = 0.00
-                  },
-            numberOfPeriods: [Short] = 0,
-            periods: [
-                {
+        from: [LocalDate],
+        until: [LocalDate],
+        householdContribution: {
+              parent: [BigDecimal] = 0.00,
+              government: [BigDecimal] = 0.00,
+              totalChildCareSpend: [BigDecimal] = 0.00
+              },
+        numberOfPeriods: [Short] = 0,
+        periods: [
+        {
             from: [LocalDate],
             until: [LocalDate],
             periodContribution: {
-                parent: [BigDecimal] = 0.00,
-                government: [BigDecimal] = 0.00,
-                totalChildCareSpend: [BigDecimal] = 0.00
-                },
-            children: [
-              {
-               id: [Short],
-               name: [String] = None,
-               childcareCost: [BigDecimal] = 0.00,
-               childcareCostPeriod: [Enumeration] {
-                   Week,
-                   Fortnight,
-                   Month,
-                   3 month,
-                   Year,
-                   INVALID
-                   },
-               childContribution: {
-                  parent: [BigDecimal] = 0.00,
-                  government: [BigDecimal] = 0.00,
-                  totalChildCareSpend: [BigDecimal] = 0.00
-                },
-                timeToMaximizeTopUp : [BigDecimal] = 0.00,
-                failures : []
-              }
-            ]
+            parent: [BigDecimal] = 0.00,
+            government: [BigDecimal] = 0.00,
+            totalChildCareSpend: [BigDecimal] = 0.00
+        },
+        children: [
+          {
+           childcareCost: [BigDecimal] = 0.00,
+           childcareCostPeriod: [Enumeration] {
+               Week,
+               Fortnight,
+               Month,
+               3 month,
+               Year,
+               INVALID
+               },
+           childContribution: {
+              parent: [BigDecimal] = 0.00,
+              government: [BigDecimal] = 0.00,
+              totalChildCareSpend: [BigDecimal] = 0.00
+            }
           }
         ]
-      }
+      ]
     }
   }
   ```

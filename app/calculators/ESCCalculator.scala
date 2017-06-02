@@ -16,17 +16,13 @@
 
 package calculators
 
-import models.input.APIModels.Request
 import models.input.esc._
-import models.output.OutputAPIModel.AwardPeriod
 import models.output.esc.{ESCCalculation, Savings}
 import models.utility.{CalculationNIBands, CalculationTaxBands}
 import org.joda.time.LocalDate
 import play.api.Logger
 import utils.{MessagesObject, ESCConfig, ESCTaxYearConfig, Periods}
 import scala.concurrent.Future
-import scala.util.Success
-
 
 object ESCCalculator extends ESCCalculator
 

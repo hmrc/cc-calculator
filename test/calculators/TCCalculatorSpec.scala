@@ -19,24 +19,17 @@ package calculators
 import calculators.TCCalculator.TCCalculatorService
 import com.fasterxml.jackson.databind.JsonNode
 import com.github.fge.jackson.JsonLoader
-import models.input.APIModels._
 import models.input.tc._
-import models.output.OutputAPIModel.AwardPeriod
 import models.output.tc.{Element, Elements}
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import play.api.libs.json.{JsError, JsSuccess, JsValue, Json}
 import uk.gov.hmrc.play.test.UnitSpec
-import utils.{FakeCCCalculatorApplication, CCJsonLogger, Periods, TCConfig}
-
+import utils.{FakeCCCalculatorApplication, Periods, TCConfig}
 import scala.collection.immutable.Nil
 import scala.concurrent.ExecutionContext.Implicits.global
 
-/**
- * Created by adamconder on 08/06/15.
- */
-
-class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CCJsonLogger with org.scalatest.PrivateMethodTester {
+class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with org.scalatest.PrivateMethodTester {
 
   "TCCalculator" should {
 
@@ -2174,12 +2167,9 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with CC
             periods = List()
           ))
       )
-      val request = Request(payload = Payload(
-        eligibility = Eligibility(tc = Some(tcEligibility), tfc = None, esc = None)
-      )
-      )
-      val taxYear = request.getTaxCreditsEligibility.get.taxYears.head
-      val income = request.payload.eligibility.tc.get.taxYears.head.houseHoldIncome
+
+      val taxYear = tcEligibility.taxYears.head
+      val income = taxYear.houseHoldIncome
       val setup = TCCalculator.calculator.getCalculatedPeriods(taxYear, income)
 
       setup shouldBe Nil

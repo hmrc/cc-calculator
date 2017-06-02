@@ -17,9 +17,7 @@
 package calculators
 
 import calculators.TFCCalculator.TFCCalculatorService
-import models.input.APIModels.{Eligibility, Payload, Request}
 import models.input.tfc.{Child, Disability, TFCEligibility}
-import models.output.OutputAPIModel.AwardPeriod
 import models.output.tfc.{TFCCalculation, Contribution, OutputChild, TFCPeriod}
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat

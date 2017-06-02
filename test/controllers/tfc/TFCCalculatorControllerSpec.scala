@@ -19,9 +19,7 @@ package controllers.tfc
 import calculators.TFCCalculator
 import com.fasterxml.jackson.databind.JsonNode
 import com.github.fge.jackson.JsonLoader
-import models.input.APIModels.Request
 import models.input.tfc.TFCEligibility
-import models.output.OutputAPIModel.AwardPeriod
 import models.output.tfc.{Contribution, TFCCalculation}
 import org.joda.time.LocalDate
 import org.mockito.Matchers.{eq => mockEq, _}
@@ -36,9 +34,6 @@ import utils.FakeCCCalculatorApplication
 import scala.concurrent.Future
 import play.api.i18n.Messages.Implicits._
 
-/**
- * Created by roma on 30/12/15.
- */
 class TFCCalculatorControllerSpec extends FakeCCCalculatorApplication with MockitoSugar {
 
   implicit val request = FakeRequest()
