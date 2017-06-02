@@ -98,8 +98,5 @@ case class Disability(
                        )
 
 object Disability {
-  implicit val disabilityReads: Reads[Disability] = (
-    (JsPath \ "disabled").read[Boolean].orElse(Reads.pure(false)) and
-      (JsPath \ "severelyDisabled").read[Boolean].orElse(Reads.pure(false))
-  )(Disability.apply _)
+  implicit val disabilityReads: Reads[Disability] = Json.reads[Disability]
 }

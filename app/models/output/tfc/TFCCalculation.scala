@@ -17,9 +17,7 @@
 package models.output.tfc
 
 import org.joda.time.LocalDate
-import play.api.libs.functional.syntax._
-import play.api.libs.json.Writes._
-import play.api.libs.json.{JsPath, Writes}
+import play.api.libs.json.{Json, Writes}
 import utils.CCFormat
 
 /**
@@ -34,13 +32,7 @@ case class TFCCalculation(
                            )
 
 object TFCCalculation extends CCFormat {
-  implicit val tfcCalculationWrites : Writes[TFCCalculation] = (
-    (JsPath \ "from").write[LocalDate](jodaLocalDateWrites(datePattern)) and
-      (JsPath \ "until").write[LocalDate](jodaLocalDateWrites(datePattern)) and
-         (JsPath \ "householdContribution").write[Contribution] and
-          (JsPath \ "numberOfPeriods").write[Short] and
-           (JsPath \ "periods").write[List[TFCPeriod]]
-    )(unlift(TFCCalculation.unapply))
+  implicit val tfcCalculationWrites : Writes[TFCCalculation] = Json.writes[TFCCalculation]
 }
 
 case class TFCPeriod(
@@ -51,12 +43,7 @@ case class TFCPeriod(
                       )
 
 object TFCPeriod extends CCFormat{
-  implicit val periodWrites : Writes[TFCPeriod] = (
-    (JsPath \ "from").write[LocalDate](jodaLocalDateWrites(datePattern)) and
-      (JsPath \ "until").write[LocalDate](jodaLocalDateWrites(datePattern)) and
-        (JsPath \ "periodContribution").write[Contribution] and
-          (JsPath \ "children").write[List[OutputChild]]
-    )(unlift(TFCPeriod.unapply))
+  implicit val periodWrites : Writes[TFCPeriod] = Json.writes[TFCPeriod]
 }
 
 case class OutputChild(
@@ -65,10 +52,7 @@ case class OutputChild(
                         )
 
 object OutputChild extends CCFormat {
-  implicit val childWrites : Writes[OutputChild] = (
-          (JsPath \ "childCareCost").write[BigDecimal] and
-              (JsPath \ "childContribution").write[Contribution]
-    )(unlift(OutputChild.unapply))
+  implicit val childWrites : Writes[OutputChild] = Json.writes[OutputChild]
 }
 
 case class Contribution (
@@ -78,9 +62,5 @@ case class Contribution (
                           )
 
 object Contribution {
-  implicit val contributionWrites : Writes[Contribution] = (
-  (JsPath \ "parent").write[BigDecimal] and
-    (JsPath \ "government").write[BigDecimal] and
-      (JsPath \ "totalChildCareSpend").write[BigDecimal]
-    )(unlift(Contribution.unapply))
+  implicit val contributionWrites : Writes[Contribution] = Json.writes[Contribution]
 }

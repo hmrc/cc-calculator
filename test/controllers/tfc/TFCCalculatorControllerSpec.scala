@@ -296,7 +296,7 @@ class TFCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
       status(result) shouldBe Status.OK
     }
 
-    "Valid JSON at /tax-free-childcare/calculate(no disability field)" in {
+    "Invalid JSON at /tax-free-childcare/calculate(no disability field)" in {
 
       val mockTFCCalculatorController = new TFCCalculatorController(applicationMessagesApi) with TFCCalculator {
         override val calculator = mock[TFCCalculatorService]
@@ -309,7 +309,7 @@ class TFCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
 
       when(controller.calculator.award(any[TFCEligibility]())).thenReturn(Future.successful(mockTFCCalculation))
       val result = await(controller.calculate()(request))
-      status(result) shouldBe Status.OK
+      status(result) shouldBe Status.BAD_REQUEST
     }
 
     "Valid JSON at /tax-free-childcare/calculate(TFC Award Calculation Wire up)" in {
