@@ -68,7 +68,7 @@ object ESCPeriod extends CCFormat with ESCConfig with MessagesObject {
 }
 
 //gross and taxablePay are annual amounts
-case class Income(
+case class TotalIncome(
                    taxablePay: BigDecimal = BigDecimal(0.00),
                    gross: BigDecimal = BigDecimal(0.00),
                    taxCode: String = "",
@@ -89,13 +89,13 @@ case class Income(
   }
 }
 
-object Income extends MessagesObject {
-  implicit val incomeReads : Reads[Income] = (
+object TotalIncome extends MessagesObject {
+  implicit val incomeReads : Reads[TotalIncome] = (
     (JsPath \ "taxablePay").read[BigDecimal].filter(ValidationError(messages("cc.calc.taxable.pay.less.than.0")))(income => income >= BigDecimal(0.00)) and
       (JsPath \ "gross").read[BigDecimal].filter(ValidationError(messages("cc.calc.gross.amount.less.than.0")))(income => income >= BigDecimal(0.00)) and
         (JsPath \ "taxCode").read[String].orElse(Reads.pure("")) and
           (JsPath \ "niCategory").read[String].orElse(Reads.pure(""))
-    )(Income.apply _)
+    )(TotalIncome.apply _)
 }
 
 case class Claimant (
@@ -103,7 +103,7 @@ case class Claimant (
                      isPartner: Boolean = false,
                      location: String,
                      eligibleMonthsInPeriod: Int,
-                     income: Income,
+                     income: TotalIncome,
                      vouchers: Boolean = false,
                      escStartDate: LocalDate,
                      escAmount: BigDecimal = BigDecimal(0.00),
@@ -125,7 +125,7 @@ object Claimant extends CCFormat with ESCConfig with MessagesObject {
         (JsPath \ "location").read[String] and
           (JsPath \ "eligibleMonthsInPeriod").read[Int].filter(ValidationError(messages("cc.calc.invalid.number.of.months"))
                                                         )(months => months >= lowerMonthsLimitValidation && months < upperMonthsLimitValidation) and
-            (JsPath \ "income").read[Income] and
+            (JsPath \ "income").read[TotalIncome] and
               (JsPath \ "vouchers").read[Boolean] and
                 (JsPath \ "escStartDate").read[LocalDate](jodaLocalDateReads(datePattern)) and
                   (JsPath \ "escAmount").read[BigDecimal].filter(ValidationError(messages("cc.calc.voucher.amount.less.than.0"))
