@@ -18,7 +18,5 @@ cc.scheme.config.invalid.ni.category = Please enter valid NI category (Only lett
 cc.scheme.config.ni.category.not.found = Please ensure relevant configuration for NI category are made available in the configuration files .
 
 #####TFC#####
-cc.scheme.config.from.date= unspecified argument: from date
-cc.scheme.config.until.date = unspecified argument: until date
-cc.scheme.config.from.until.start.date = unspecified argument: from date until date
+cc.scheme.config.from.until.date = unspecified argument: from date until date
 
