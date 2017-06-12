@@ -91,9 +91,7 @@ case class TotalIncome(
 
 case class Income(
                    employmentIncome : Option[BigDecimal] = None,
-                   pension : Option[BigDecimal] = None,
-                   otherIncome : Option[BigDecimal] = None,
-                   benefits : Option[BigDecimal] = None
+                   pension : Option[BigDecimal] = None
                  )
 
 object Income {
