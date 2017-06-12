@@ -66,10 +66,7 @@ The service will accept a JSON request formatted according to Eligibility Micros
                        "claimantElements": {
                          "disability": false,
                          "severeDisability": false
-                       },
-                       "failures": [
-                         "hours30"
-                       ]
+                       }
                      }
                    ],
                    "children": [
@@ -85,8 +82,7 @@ The service will accept a JSON request formatted according to Eligibility Micros
                          "disability": false,
                          "severeDisability": false,
                          "childcare": true
-                       },
-                       "failures": []
+                       }
                      }
                    ]
                  }
