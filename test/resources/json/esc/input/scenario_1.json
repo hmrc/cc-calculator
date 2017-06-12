@@ -13,11 +13,8 @@
               "isPartner": false,
               "location": "scotland",
               "eligibleMonthsInPeriod": 0,
-              "income": {
-                "taxablePay": 50000.00,
-                "gross": 50000.00,
-                "taxCode": "1100L",
-                "niCategory": "A"
+              "currentIncome": {
+                "employmentIncome": 5000
               },
               "vouchers": false,
               "escAmount": 200.00,

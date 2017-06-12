@@ -13,12 +13,6 @@
               "isPartner": false,
               "location": "england",
               "eligibleMonthsInPeriod": 1,
-              "income": {
-                "taxablePay": 20000.00,
-                "gross": 20000.00,
-                "taxCode": "1060L",
-                "niCategory": "A"
-              },
                 "vouchers": true,
               "escAmount": 150.00,
               "escAmountPeriod": "Month",

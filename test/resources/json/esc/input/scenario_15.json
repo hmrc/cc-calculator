@@ -13,12 +13,6 @@
               "isPartner": false,
               "location": "england",
               "eligibleMonthsInPeriod": 0,
-              "income": {
-                "taxablePay": 50000.00,
-                "gross": 50000.00,
-                "taxCode": "1100L",
-                "niCategory": "A"
-              },
                 "vouchers": false,
               "escAmount": 350.00,
               "escAmountPeriod": "Month",
@@ -29,12 +23,6 @@
               "isPartner": true,
               "location": "england",
               "eligibleMonthsInPeriod": 0,
-              "income": {
-                "taxablePay": 35000.00,
-                "gross": 35000.00,
-                "taxCode": "1100L",
-                "niCategory": "B"
-              },
                 "vouchers": false,
               "escAmount": 250.00,
               "escAmountPeriod": "Month",

@@ -13,12 +13,6 @@
               "isPartner": false,
               "location": "england",
               "eligibleMonthsInPeriod": 3,
-              "income": {
-                "taxablePay": 41000.00,
-                "gross": 41000.00,
-                "taxCode": "1060Y",
-                "niCategory": "A"
-              },
                 "vouchers": true,
               "escAmount": 240.00,
               "escAmountPeriod": "Month",
@@ -29,12 +23,6 @@
               "isPartner": true,
               "location": "england",
               "eligibleMonthsInPeriod": 3,
-              "income": {
-                "taxablePay": 28000.00,
-                "gross": 28000.00,
-                "taxCode": "1060T",
-                "niCategory": "C"
-              },
                 "vouchers": true,
               "escAmount": 150.00,
               "escAmountPeriod": "Month",
@@ -57,12 +45,6 @@
               "isPartner": false,
               "location": "england",
               "eligibleMonthsInPeriod": 0,
-              "income": {
-                "taxablePay": 41000.00,
-                "gross": 41000.00,
-                "taxCode": "1100Y",
-                "niCategory": "A"
-              },
                 "vouchers": false,
               "escAmount": 240.00,
               "escAmountPeriod": "Month",
@@ -73,12 +55,6 @@
               "isPartner": true,
               "location": "england",
               "eligibleMonthsInPeriod": 0,
-              "income": {
-                "taxablePay": 32000.00,
-                "gross": 32000.00,
-                "taxCode": "1100T",
-                "niCategory": "C"
-              },
                 "vouchers": false,
               "escAmount": 150.00,
               "escAmountPeriod": "Month",
@@ -95,12 +71,6 @@
               "isPartner": false,
               "location": "england",
               "eligibleMonthsInPeriod": 6,
-              "income": {
-                "taxablePay": 41000.00,
-                "gross": 41000.00,
-                "taxCode": "1100Y",
-                "niCategory": "A"
-              },
                 "vouchers": true,
               "escAmount": 240.00,
               "escAmountPeriod": "Month",
@@ -111,12 +81,6 @@
               "isPartner": true,
               "location": "england",
               "eligibleMonthsInPeriod": 6,
-              "income": {
-                "taxablePay": 32000.00,
-                "gross": 32000.00,
-                "taxCode": "1100T",
-                "niCategory": "C"
-              },
                 "vouchers": true,
               "escAmount": 150.00,
               "escAmountPeriod": "Month",
