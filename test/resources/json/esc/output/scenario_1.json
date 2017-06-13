@@ -23,13 +23,13 @@
           "escAmount": 200,
           "escAmountPeriod": "Month",
           "escStartDate": "2013-08-27",
-          "maximumRelief": 124,
+          "maximumRelief": 0,
           "maximumReliefPeriod": "Month",
-          "income": {
-            "taxablePay": 50000,
-            "gross": 50000,
-            "taxCode": "1100L",
-            "niCategory": "A"
+          "income":{
+            "taxablePay":5000,
+            "gross":5000,
+            "taxCode":"",
+            "niCategory":"A"
           },
           "vouchers": false,
           "savings": {
@@ -38,12 +38,12 @@
             "niSaving": 0
           },
           "taxAndNIBeforeSacrifice": {
-            "taxPaid": 766.6,
-            "niPaid": 361.0
+            "taxPaid": 0,
+            "niPaid": 0
           },
           "taxAndNIAfterSacrifice": {
-            "taxPaid": 717.0,
-            "niPaid": 358.52
+            "taxPaid": 0,
+            "niPaid": 0
           }
         }
       ]

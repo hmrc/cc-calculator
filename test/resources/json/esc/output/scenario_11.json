@@ -2,51 +2,52 @@
   "from": "2016-04-06",
   "until": "2017-04-06",
   "totalSavings": {
-    "totalSaving": 0.00,
-    "taxSaving": 0.00,
-    "niSaving": 0.00
+    "totalSaving": 0,
+    "taxSaving": 0,
+    "niSaving": 0
   },
   "taxYears": [
     {
       "from": "2016-04-06",
       "until": "2017-04-06",
       "totalSavings": {
-        "totalSaving": 0.00,
-        "taxSaving": 0.00,
-        "niSaving": 0.00
+        "totalSaving": 0,
+        "taxSaving": 0,
+        "niSaving": 0
       },
       "claimants": [
         {
           "qualifying": false,
           "eligibleMonthsInTaxYear": 0,
           "isPartner": false,
-          "escAmount": 1000,
-          "escAmountPeriod": "Month",
-          "escStartDate":"2013-08-27",
-          "maximumRelief": 110,
-          "maximumReliefPeriod": "Month",
           "income": {
-            "taxablePay": 150001,
-            "gross": 150001,
-            "taxCode": "1100L",
+            "taxablePay": 0,
+            "gross": 0,
+            "taxCode": "",
             "niCategory": "A"
           },
           "vouchers": false,
+          "escAmount": 1000,
+          "escAmountPeriod": "Month",
+          "escStartDate": "2013-08-27",
           "savings": {
-            "totalSaving": 0.00,
-            "taxSaving": 0.00,
-            "niSaving": 0.00
+            "totalSaving": 0,
+            "taxSaving": 0,
+            "niSaving": 0
           },
+          "maximumRelief": 0,
+          "maximumReliefPeriod": "Month",
           "taxAndNIBeforeSacrifice": {
-            "taxPaid": 4099.80,
-            "niPaid": 527.66
+            "taxPaid": 0,
+            "niPaid": 0
           },
           "taxAndNIAfterSacrifice": {
-            "taxPaid": 4055.80,
-            "niPaid": 525.46
+            "taxPaid": 0,
+            "niPaid": 0
           }
         }
       ]
     }
   ]
 }
+

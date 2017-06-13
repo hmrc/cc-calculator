@@ -1,6 +1,4 @@
 {
-  "from": "2016-09-01",
-  "until": "2018-03-01",
   "householdContribution": {
     "parent": 45000.00,
     "government": 9000.00,

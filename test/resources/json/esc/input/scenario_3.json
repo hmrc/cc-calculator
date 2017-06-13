@@ -13,13 +13,10 @@
               "isPartner": false,
               "location": "england",
               "eligibleMonthsInPeriod": 12,
-              "income": {
-                "taxablePay": 40700.00,
-                "gross": 42700.00,
-                "taxCode": "1100L",
-                "niCategory": "A"
+              "currentIncome": {
+                "employmentIncome": 5000
               },
-                "vouchers": true,
+              "vouchers": true,
               "escAmount": 300.00,
               "escAmountPeriod": "Month",
               "escStartDate": "2013-08-27",
