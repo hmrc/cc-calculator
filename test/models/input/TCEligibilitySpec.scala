@@ -98,38 +98,6 @@ class TCEligibilitySpec extends UnitSpec with FakeCCCalculatorApplication {
     }
   }
 
-    //TODO: Proper income testing
-//    "return total household income" in {
-//      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
-//      val periodStart = LocalDate.parse ("2016-06-01",formatter)
-//      val periodEnd = LocalDate.parse ("2016-08-31",formatter)
-//      val tcEligibility = TCEligibility(
-//        taxYears = List(TaxYear(
-//          from = periodStart,
-//          until = periodEnd,
-//          previousHouseholdIncome = Income,
-//          currentHouseholdIncome = Income,
-//          periods = List()
-//        )))
-//      tcEligibility.taxYears.head.houseHoldIncome shouldBe BigDecimal(18000)
-//    }
-//
-//    "return BigDecimal(0.00) when no houseHold income" in {
-//      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
-//      val periodStart = LocalDate.parse ("2016-06-01",formatter)
-//      val periodEnd = LocalDate.parse ("2016-08-31",formatter)
-//      val tcEligibility = TCEligibility(
-//        taxYears = List(TaxYear(
-//          from = periodStart,
-//          until = periodEnd,
-//          houseHoldIncome = BigDecimal(0.00),
-//          periods = List()
-//        )))
-//      tcEligibility.taxYears.head.houseHoldIncome shouldBe BigDecimal(0.00)
-//    }
-//
-//  }
-
   "models.input.tc.Period" should {
 
     "(TY 2016/2017) return the correct config for the current tax year (the tax year the period falls into 2016)" in {

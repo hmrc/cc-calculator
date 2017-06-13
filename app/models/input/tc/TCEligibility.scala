@@ -40,11 +40,7 @@ case class TaxYear(
                     periods: List[Period]
                     )
 
-object TaxYear extends MessagesObject with CCFormat {
-  private def houseHoldIncomeValidation(income: BigDecimal) : Boolean = {
-    income >= BigDecimal(0.00)
-  }
-
+object TaxYear extends MessagesObject {
   implicit val taxYearsFormat: Reads[TaxYear] = Json.reads[TaxYear]
 }
 

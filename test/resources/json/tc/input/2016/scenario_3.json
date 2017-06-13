@@ -4,10 +4,10 @@
       "from": "2016-09-27",
       "until": "2017-04-06",
       "previousHouseholdIncome": {
-        "employment": [17000.00]
+        "employment": [12000.00, 5000.00]
       },
       "currentHouseholdIncome": {
-        "employment": [17000.00]
+        "employment": [10000.00, 7000.00]
       },
       "periods": [
         {
