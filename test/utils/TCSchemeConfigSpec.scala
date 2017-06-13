@@ -56,7 +56,7 @@ class TCSchemeConfigSpec extends FakeCCCalculatorApplication with TCConfig {
   )
 
   val taxYearConfig2016 = TCTaxYearConfig(
-    otherIncomeAdjustment = 0,
+    otherIncomeAdjustment = 300,
     currentIncomeFallDifferenceAmount = 2500,
     currentIncomeRiseDifferenceAmount = 2500,
     wtc = WTC(

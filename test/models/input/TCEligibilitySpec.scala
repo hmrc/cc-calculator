@@ -106,7 +106,7 @@ class TCEligibilitySpec extends UnitSpec with FakeCCCalculatorApplication {
       val periodEnd = LocalDate.parse("2016-04-05", formatter)
       val period = models.input.tc.Period(from = periodStart, until = periodEnd, householdElements = HouseHoldElements(), claimants = List(), children = List())
       val tcTaxYear = TCTaxYearConfig(
-        otherIncomeAdjustment = 0,
+        otherIncomeAdjustment = 300,
         currentIncomeFallDifferenceAmount = 2500,
         currentIncomeRiseDifferenceAmount = 2500,
         wtc = WTC(
@@ -140,7 +140,7 @@ class TCEligibilitySpec extends UnitSpec with FakeCCCalculatorApplication {
       val periodEnd = LocalDate.parse("2017-04-05", formatter)
       val period = models.input.tc.Period(from = periodStart, until = periodEnd, householdElements = HouseHoldElements(), claimants = List(), children = List())
       val tcTaxYear = TCTaxYearConfig(
-        otherIncomeAdjustment = 0,
+        otherIncomeAdjustment = 300,
         currentIncomeFallDifferenceAmount = 2500,
         currentIncomeRiseDifferenceAmount = 2500,
         wtc = WTC(
