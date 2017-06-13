@@ -1,79 +1,72 @@
 {
-
-      "taxYears":[
+  "taxYears":[
+    {
+      "from": "2016-09-27",
+      "until": "2017-04-06",
+      "previousHouseholdIncome": {
+        "employment": [34000.00]
+      },
+      "currentHouseholdIncome": {
+        "employment": [34000.00]
+      },
+      "periods": [
         {
-         "from": "2016-09-27",
-        "until": "2017-04-06",
-         "houseHoldIncome" : 34000.00,
-
-        "periods": [
-          {
-            "from": "2016-09-27",
-            "until": "2017-04-06",
-            "householdElements": {
-              "basic": true,
-              "hours30": true,
-              "childcare": true,
-              "loneParent": false,
-              "secondParent": true,
-              "family": true
+          "from": "2016-09-27",
+          "until": "2017-04-06",
+          "householdElements": {
+            "basic": true,
+            "hours30": true,
+            "childcare": true,
+            "loneParent": false,
+            "secondParent": true,
+            "family": true
+          },
+          "claimants": [
+            {
+              "qualifying": true,
+              "isPartner": false,
+              "claimantElements": {
+                "disability": true,
+                "severeDisability": true
+              }
             },
-            "claimants": [
-              {
-                "qualifying": true,
-                "isPartner": false,
-                "claimantElements": {
-                  "disability": true,
-                  "severeDisability": true
-                },
-                "failures": [
-                  "hours30"
-                ]
-              },
-              {
-                "qualifying": true,
-                "isPartner": true,
-                "claimantElements": {
-                  "disability": true,
-                  "severeDisability": true
-                },
-                "failures": []
+            {
+              "qualifying": true,
+              "isPartner": true,
+              "claimantElements": {
+                "disability": true,
+                "severeDisability": true
               }
-            ],
-            "children": [
-              {
-                "id": 0,
-                "name": "Child 1",
-                "childcareCost": 200.00,
-                "childcareCostPeriod": "Month",
-                "qualifying": true,
-                "childElements": {
-                  "child": true,
-                  "youngAdult": false,
-                  "disability": false,
-                  "severeDisability": false,
-                   "childcare": true
-                },
-                "failures": []
-              },
-              {
-                "id": 1,
-                "name": "Child 2",
-                "childcareCost": 200.00,
-                "childcareCostPeriod": "Month",
-                "qualifying": true,
-                "childElements": {
-                  "child": true,
-                  "youngAdult": false,
-                  "disability": true,
-                  "severeDisability": true,
-                   "childcare": true
-                },
-                "failures": []
+            }
+          ],
+          "children": [
+            {
+              "childcareCost": 200.00,
+              "childcareCostPeriod": "Month",
+              "qualifying": true,
+              "childElements": {
+                "child": true,
+                "youngAdult": false,
+                "disability": false,
+                "severeDisability": false,
+                 "childcare": true
               }
-            ]
-          }
-        ]
-          }
-        ]
-      }
+            },
+            {
+              "childcareCost": 200.00,
+              "childcareCostPeriod": "Month",
+              "qualifying": true,
+              "childElements": {
+                "child": true,
+                "youngAdult": false,
+                "disability": true,
+                "severeDisability": true,
+                "childcare": true
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -19,7 +19,7 @@ package calculators
 import models.input.tc._
 import models.output.tc.{Element, Elements, TCCalculation, TaxYear}
 import org.joda.time.{Days, LocalDate}
-import utils.{Periods, TCConfig}
+import utils.{TCConfig, Periods}
 import scala.concurrent.Future
 import scala.math.BigDecimal.RoundingMode
 
@@ -630,11 +630,47 @@ trait TCCalculator {
       }
     }
 
+    private def calculateHouseholdIncome(from: LocalDate, previousIncome: Income, currentIncome: Income): BigDecimal = {
+
+      val tcConfig = TCConfig.getConfig(from)
+
+      def getAmount(income: Income): BigDecimal = {
+        val employment: BigDecimal = income.employment.getOrElse(List()).foldLeft(BigDecimal(0))(_ + _)
+        val pension: BigDecimal = income.pension.getOrElse(List()).foldLeft(BigDecimal(0))(_ + _)
+        val benefits: BigDecimal = income.benefits.getOrElse(List()).foldLeft(BigDecimal(0))(_ + _)
+        val statutory: BigDecimal = income.statutory.getOrElse(List()).foldLeft(BigDecimal(0))((acc, stat) => acc + stat.weeks * stat.amount)
+        val other: BigDecimal = income.other.getOrElse(List()).foldLeft(BigDecimal(0))(_ + _)
+        val otherAdjustment: BigDecimal = if (other > tcConfig.otherIncomeAdjustment) {
+          tcConfig.otherIncomeAdjustment
+        }
+        else {
+          other
+        }
+
+        // benefits and pension are asked monthly so need to multiply it by 12
+        (benefits - pension) * TCConfig.monthsInTaxYear + employment + other - otherAdjustment - statutory
+      }
+
+      val previousAmount: BigDecimal = getAmount(previousIncome)
+      val currentAmount: BigDecimal = getAmount(currentIncome)
+
+      val difference: BigDecimal = Math.abs((currentAmount - previousAmount).toDouble)
+      (previousAmount, currentAmount) match {
+        case (previous, current) if (previous > current && difference > tcConfig.currentIncomeFallDifferenceAmount) =>
+          previous + tcConfig.currentIncomeFallDifferenceAmount - difference
+        case (previous, current) if (previous < current && difference > tcConfig.currentIncomeRiseDifferenceAmount) =>
+          previous + difference - tcConfig.currentIncomeRiseDifferenceAmount
+        case _ => previousAmount
+      }
+
+    }
+
     def getCalculatedTaxYears(inputTCEligibility: TCEligibility, incomeAdviceCalculation: Boolean = false): List[TaxYear] = {
       for (taxYear <- inputTCEligibility.taxYears) yield {
+        val householdIncome = calculateHouseholdIncome(taxYear.from, taxYear.previousHouseholdIncome, taxYear.currentHouseholdIncome)
         if (incomeAdviceCalculation) {
           //calculating the income advice
-          val calculatedPeriods = getCalculatedPeriods(taxYear, taxYear.houseHoldIncome, fullCalculationRequired = false)
+          val calculatedPeriods = getCalculatedPeriods(taxYear, householdIncome, fullCalculationRequired = false)
           val adviceAmount = calculatedPeriods.foldLeft(BigDecimal(0.00))((acc, period) => acc + period.periodAdviceAmount)
 
           models.output.tc.TaxYear(
@@ -645,7 +681,7 @@ trait TCCalculator {
           )
         } else {
           // full calculation including tapering
-          val calculatedPeriods = getCalculatedPeriods(taxYear, taxYear.houseHoldIncome, fullCalculationRequired = true)
+          val calculatedPeriods = getCalculatedPeriods(taxYear, householdIncome, fullCalculationRequired = true)
           val annualAward = calculatedPeriods.foldLeft(BigDecimal(0.00))((acc, period) => acc + period.periodNetAmount)
 
           models.output.tc.TaxYear(

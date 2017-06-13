@@ -1,49 +1,65 @@
 {
 
-        "taxYears":[
+  "taxYears":[
+    {
+      "from": "2016-09-27",
+      "until": "2017-04-06",
+      "previousHouseholdIncome": {
+        "employment": [20600.00],
+        "pension": [100.00, 200.00]
+      },
+      "currentHouseholdIncome": {
+        "benefits": [100.00],
+        "other": [10000.00, 5000.00],
+        "statutory": [
           {
-            "from": "2016-09-27",
-            "until": "2017-04-06",
-            "houseHoldIncome" : 17000.00,
-
-            "periods": [
-              {
-                "from": "2016-09-27",
-                "until": "2017-04-06",
-                "householdElements": {
-                  "basic": true,
-                  "hours30": false,
-                  "childcare": true,
-                  "loneParent": true,
-                  "secondParent": false,
-                  "family": true
-                },
-                "claimants": [
-                  {
-                    "qualifying": true,
-                    "isPartner": false,
-                    "claimantElements": {
-                      "disability": false,
-                      "severeDisability": false
-                    }
-                  }
-                ],
-                "children": [
-                  {
-                    "childcareCost": 200.00,
-                    "childcareCostPeriod": "Month",
-                    "qualifying": true,
-                    "childElements": {
-                      "child": true,
-                      "youngAdult": false,
-                      "disability": true,
-                      "severeDisability": true,
-                      "childcare": true
-                    }
-                  }
-                ]
-              }
-            ]
+            "weeks": 4.0,
+            "amount": 100.00
+          },
+          {
+            "weeks": 8.0,
+            "amount": 50.00
           }
         ]
-      }
+      },
+      "periods": [
+        {
+          "from": "2016-09-27",
+          "until": "2017-04-06",
+          "householdElements": {
+            "basic": true,
+            "hours30": false,
+            "childcare": true,
+            "loneParent": true,
+            "secondParent": false,
+            "family": true
+          },
+          "claimants": [
+            {
+              "qualifying": true,
+              "isPartner": false,
+              "claimantElements": {
+                "disability": false,
+                "severeDisability": false
+              }
+            }
+          ],
+          "children": [
+            {
+              "childcareCost": 200.00,
+              "childcareCostPeriod": "Month",
+              "qualifying": true,
+              "childElements": {
+                "child": true,
+                "youngAdult": false,
+                "disability": true,
+                "severeDisability": true,
+                "childcare": true
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

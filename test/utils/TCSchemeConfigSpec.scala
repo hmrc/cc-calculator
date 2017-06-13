@@ -27,6 +27,9 @@ class TCSchemeConfigSpec extends FakeCCCalculatorApplication with TCConfig {
   val formatter = DateTimeFormat.forPattern(pattern)
 
   val defaultTaxYearConfig = TCTaxYearConfig(
+    otherIncomeAdjustment = 300,
+    currentIncomeFallDifferenceAmount = 2500,
+    currentIncomeRiseDifferenceAmount = 2500,
     wtc = WTC(
       basicElement = 1960,
       coupleElement = 2010,
@@ -53,6 +56,9 @@ class TCSchemeConfigSpec extends FakeCCCalculatorApplication with TCConfig {
   )
 
   val taxYearConfig2016 = TCTaxYearConfig(
+    otherIncomeAdjustment = 300,
+    currentIncomeFallDifferenceAmount = 2500,
+    currentIncomeRiseDifferenceAmount = 2500,
     wtc = WTC(
       basicElement = 1960,
       coupleElement = 2010,
@@ -79,6 +85,9 @@ class TCSchemeConfigSpec extends FakeCCCalculatorApplication with TCConfig {
   )
 
   val taxYearConfig2017 = TCTaxYearConfig(
+    otherIncomeAdjustment = 300,
+    currentIncomeFallDifferenceAmount = 2500,
+    currentIncomeRiseDifferenceAmount = 2500,
     wtc = WTC(
       basicElement = 1960,
       coupleElement = 2010,
@@ -105,6 +114,9 @@ class TCSchemeConfigSpec extends FakeCCCalculatorApplication with TCConfig {
   )
 
   val taxYearConfig2018 = TCTaxYearConfig(
+    otherIncomeAdjustment = 300,
+    currentIncomeFallDifferenceAmount = 2500,
+    currentIncomeRiseDifferenceAmount = 2500,
     wtc = WTC(
       basicElement = 1960,
       coupleElement = 2010,

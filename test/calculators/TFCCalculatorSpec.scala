@@ -46,14 +46,15 @@ class TFCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
     "return an empty Future[AwardPeriod] result when household eligibility is false" in {
       val result = await(TFCCalculator.calculator.award(TFCEligibility(from = null,
         until = null, householdEligibility = false, periods = List())))
-      result shouldBe TFCCalculation(null,null,Contribution(0.00,0.00,0.00),0,List())
+      result shouldBe TFCCalculation(Contribution(0.00,0.00,0.00),0,List())
     }
 
     "return a calculated TFC for 1 TFC period with 1 child" in {
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
       val fromDate = LocalDate.parse("2016-05-01T18:46:17", formatter)
       val untilDate = LocalDate.parse("2016-05-21T18:46:17", formatter)
-      val child = Child(childcareCost = BigDecimal(200.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = Disability(disabled = false, severelyDisabled = false))
+      val child = Child(childcareCost = BigDecimal(200.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability =
+        Disability(disabled = false, severelyDisabled = false))
       val tfcPeriod = models.input.tfc.TFCPeriod(from = fromDate, until = untilDate, periodEligibility = false, children = List(child))
       val result = TFCCalculator.calculator.getCalculatedTFCPeriods(List(tfcPeriod))
 
@@ -211,7 +212,7 @@ class TFCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
 
     "return exception  when until date is present and from date is null" in {
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
-      val fromDate = null
+      val fromDate = None
       val untilDate = LocalDate.parse("2016-07-01T18:46:17", formatter)
       try {
         val result = TFCCalculator.calculator.getChildQualifyingDaysInTFCPeriod(fromDate, Some(untilDate))
@@ -223,25 +224,10 @@ class TFCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
       }
     }
 
-    "return exception  when start and until date is null" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
-      val fromDate = null
-      val untilDate = null
-      try
-      {
-        val result = TFCCalculator.calculator.getChildQualifyingDaysInTFCPeriod(fromDate, untilDate)
-        result shouldBe a[IllegalArgumentException]
-      }
-      catch {
-        case e: Exception =>
-          e shouldBe a[IllegalArgumentException]
-      }
-    }
-
     "return exception when from date is present but until date is null" in {
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
       val fromDate = LocalDate.parse("2016-07-01T18:46:17", formatter)
-      val untilDate = null
+      val untilDate = None
       try {
         val result = TFCCalculator.calculator.getChildQualifyingDaysInTFCPeriod(Some(fromDate), untilDate)
         result shouldBe a[IllegalArgumentException]

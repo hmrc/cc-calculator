@@ -24,8 +24,6 @@ import utils.CCFormat
  * Created by user on 18/06/15.
  */
 case class TFCCalculation(
-                           from: LocalDate,
-                           until: LocalDate,
                            householdContribution: Contribution,
                            numberOfPeriods: Short,
                            periods: List[TFCPeriod]

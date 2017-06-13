@@ -51,8 +51,6 @@ class TFCCalculationSpec extends UnitSpec with FakeCCCalculatorApplication {
       )
 
       val tfcCalculation = models.output.tfc.TFCCalculation(
-        from = from,
-        until = until,
         householdContribution = contribution,
         numberOfPeriods = numberOfPeriods.toShort,
         periods = List(tfcPeriod)
@@ -63,8 +61,6 @@ class TFCCalculationSpec extends UnitSpec with FakeCCCalculatorApplication {
       json shouldBe Json.parse(
         """
           |{
-          |	  "from": "2016-08-01",
-          |	  "until": "2016-11-01",
           |   "householdContribution": {
           |			  "parent": 0.0,
           |			  "government": 0.0,

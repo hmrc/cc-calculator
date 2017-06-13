@@ -51,19 +51,10 @@ trait TFCCalculator {
 
     def getChildQualifyingDaysInTFCPeriod(from: Option[LocalDate], until: Option[LocalDate]): Int = {
       (from, until) match {
-        case (null, Some(u)) =>
-          Logger.warn("TFCCalculator.TFCCalculatorService.getChildQualifyingDaysInTFCPeriod Exception - from date is null")
-          throw new IllegalArgumentException(messages("cc.scheme.config.from.date"))
-        case (Some(f), null) =>
-          Logger.warn("TFCCalculator.TFCCalculatorService.getChildQualifyingDaysInTFCPeriod Exception - until date is null")
-          throw new IllegalArgumentException(messages("cc.scheme.config.until.date"))
-        case (null,null) =>
-          Logger.warn("TFCCalculator.TFCCalculatorService.getChildQualifyingDaysInTFCPeriod Exception - from and until dates are null")
-          throw new IllegalArgumentException(messages("cc.scheme.config.from.until.date"))
         case (Some(f), Some(u)) => daysBetween(f,u)
         case (_, _) =>
           Logger.warn("TFCCalculator.TFCCalculatorService.getChildQualifyingDaysInTFCPeriod Exception - from and until dates are incorrect")
-          throw new IllegalArgumentException
+          throw new IllegalArgumentException(messages("cc.scheme.config.from.until.date"))
       }
     }
 
@@ -149,8 +140,6 @@ trait TFCCalculator {
       if(request.householdEligibility) {
         Future {
           TFCCalculation(
-            from = request.from,
-            until = request.until,
             householdContribution = getHouseholdContribution(getCalculatedTFCPeriods(request.periods)),
             numberOfPeriods = request.periods.length.toShort,
             periods = getCalculatedTFCPeriods(request.periods)
@@ -160,8 +149,6 @@ trait TFCCalculator {
       else {
         Future {
           TFCCalculation(
-            from = null,
-            until = null,
             householdContribution = Contribution(parent = 0, government = 0, totalChildCareSpend = 0),
             numberOfPeriods = 0,
             periods = List.empty

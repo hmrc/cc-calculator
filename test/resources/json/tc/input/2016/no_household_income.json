@@ -4,8 +4,10 @@
             {
             "from": "2016-09-27",
             "until": "2017-04-06",
-            "houseHoldIncome" : 0.00,
-
+            "previousHouseholdIncome": {
+            },
+            "currentHouseholdIncome": {
+            },
             "periods": [
               {
                 "from": "2016-09-27",

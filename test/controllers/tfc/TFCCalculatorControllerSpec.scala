@@ -21,7 +21,6 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.github.fge.jackson.JsonLoader
 import models.input.tfc.TFCEligibility
 import models.output.tfc.{Contribution, TFCCalculation}
-import org.joda.time.LocalDate
 import org.mockito.Matchers.{eq => mockEq, _}
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
@@ -38,7 +37,7 @@ class TFCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
 
   implicit val request = FakeRequest()
 
-  val mockTFCCalculation = TFCCalculation(from = LocalDate.now, until = LocalDate.now, householdContribution = Contribution(), numberOfPeriods = 1, periods = List())
+  val mockTFCCalculation = TFCCalculation(householdContribution = Contribution(), numberOfPeriods = 1, periods = List())
 
   "TFCCalculatorController" should {
 
