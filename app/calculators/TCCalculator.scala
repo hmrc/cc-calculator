@@ -639,7 +639,6 @@ trait TCCalculator {
         val pension: BigDecimal = income.pension.getOrElse(List()).foldLeft(BigDecimal(0))(_ + _)
         val benefits: BigDecimal = income.benefits.getOrElse(List()).foldLeft(BigDecimal(0))(_ + _)
         val statutory: BigDecimal = income.statutory.getOrElse(List()).foldLeft(BigDecimal(0))((acc, stat) => acc + stat.weeks * stat.amount)
-
         val other: BigDecimal = income.other.getOrElse(List()).foldLeft(BigDecimal(0))(_ + _)
         val otherAdjustment: BigDecimal = if (other > tcConfig.otherIncomeAdjustment) {
           tcConfig.otherIncomeAdjustment
