@@ -44,7 +44,7 @@ trait ESCCalculator {
     }
 
 
-    def validateTaxCode(period : ESCPeriod, income : Income) : (BigDecimal, String) = { //TODO - Add validations for OT and K tax codes
+    def validateTaxCode(period : ESCPeriod, income : TotalIncome) : (BigDecimal, String) = { //TODO - Add validations for OT and K tax codes
 
     def validateCode(code : String) : Boolean =  (code.equals("BR") || code.equals("D0") || code.equals("D1") || code.equals("NT"))
     def validateCodeBasedOnEndsWith(code : String) : Boolean =  code.endsWith("L") || code.endsWith("M") ||
@@ -68,7 +68,7 @@ trait ESCCalculator {
     }
 
 
-    def getPersonalAllowance(period : ESCPeriod, income : Income, config :ESCTaxYearConfig) : BigDecimal =  {
+    def getPersonalAllowance(period : ESCPeriod, income : TotalIncome, config :ESCTaxYearConfig) : BigDecimal =  {
       income.taxCode.trim match {
         case codeAsString if isEmpty(codeAsString) =>
           income.adjustPersonalAllowance(config.defaultPersonalAllowance)
@@ -77,7 +77,7 @@ trait ESCCalculator {
       }
     }
 
-    def getTaxCode(period : ESCPeriod, income : Income, config :ESCTaxYearConfig) : String = {
+    def getTaxCode(period : ESCPeriod, income : TotalIncome, config :ESCTaxYearConfig) : String = {
       income.taxCode.trim match {
         case codeAsString if isEmpty(codeAsString) =>
           config.defaultTaxCode
@@ -86,7 +86,7 @@ trait ESCCalculator {
       }
     }
 
-    def getAnnualRelevantEarnings(income: Income, period : ESCPeriod, config :ESCTaxYearConfig) : BigDecimal = {
+    def getAnnualRelevantEarnings(income: TotalIncome, period : ESCPeriod, config :ESCTaxYearConfig) : BigDecimal = {
       val higherRateCeiling = config.taxHigherBandUpperLimit
       val personalAllowance = config.defaultPersonalAllowance
       income.gross match {
@@ -471,7 +471,7 @@ trait ESCCalculator {
 
     private def createClaimantList(period: ESCPeriod):  List[Claimant]= {
       val calcPeriod = Periods.Monthly
-      def calcReliefAmount(income: Income, isESCStartDateBefore2011: Boolean, escAmount: BigDecimal, location: String) = {
+      def calcReliefAmount(income: TotalIncome, isESCStartDateBefore2011: Boolean, escAmount: BigDecimal, location: String) = {
         val config = ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location)
         val taxCode = getTaxCode(period, income, config)
         val personalAllowanceAmountMonthly: BigDecimal = annualAmountToPeriod(getPersonalAllowance(period, income, config), calcPeriod)

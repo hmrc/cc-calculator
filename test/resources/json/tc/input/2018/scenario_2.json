@@ -3,7 +3,12 @@
     {
       "from": "2018-09-27",
       "until": "2019-04-06",
-      "houseHoldIncome": 17000.00,
+      "previousHouseholdIncome": {
+        "employment": [17000.00]
+      },
+      "currentHouseholdIncome": {
+        "employment": [17000.00]
+      },
       "periods": [
         {
           "from": "2018-09-27",

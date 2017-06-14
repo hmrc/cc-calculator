@@ -659,16 +659,6 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
           |    "status": 400,
           |    "errors":
           |     [
-          |       {
-          |         "path": "/taxYears(0)/houseHoldIncome",
-          |         "validationErrors":
-          |         [
-          |             {
-          |                  "message": "Household income should not be less than 0.00",
-          |                  "args": []
-          |             }
-          |         ]
-          |        },
           |        {
           |        "path": "/taxYears(0)/periods(0)/children(0)/childcareCost",
           |         "validationErrors":

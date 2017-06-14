@@ -1006,6 +1006,8 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
           val period = x.taxYears.head.periods
           val threshold = TCCalculator.calculator.ctcIncomeThresholdForPeriod(period.head)
           threshold shouldBe BigDecimal(8426.92)
+          val test: Option[Boolean] = None
+          val res = test.isDefined
         case JsError(e) => throw new RuntimeException(e.toList.toString)
       }
     }
@@ -1018,7 +1020,8 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       result match {
         case JsSuccess(x, _) =>
           val period = x.taxYears.head.periods
-          val threshold = TCCalculator.calculator.incomeForPeriod(x.taxYears.head.houseHoldIncome, period.head)
+          val income = 17000 // x.taxYears.head.houseHoldIncome
+          val threshold = TCCalculator.calculator.incomeForPeriod(income, period.head)
           threshold shouldBe BigDecimal(8896.78)
         case JsError(e) => throw new RuntimeException(e.toList.toString)
       }
@@ -1032,7 +1035,8 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       result match {
         case JsSuccess(x, _) =>
           val period = x.taxYears.head.periods
-          val threshold = TCCalculator.calculator.incomeForPeriod(x.taxYears.head.houseHoldIncome, period.head)
+          val income = 34000 //x.taxYears.head.houseHoldIncome
+          val threshold = TCCalculator.calculator.incomeForPeriod(income, period.head)
           threshold shouldBe BigDecimal(17791.65)
         case JsError(e) => throw new RuntimeException(e.toList.toString)
       }
@@ -1404,7 +1408,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
         case JsSuccess(x, _) =>
           // period 1
           val p = x.taxYears.head.periods.head
-          val income = x.taxYears.head.houseHoldIncome
+          val income = 17000 //x.taxYears.head.houseHoldIncome
           val setup = TCCalculator.calculator.generateMaximumAmountsForPeriod(p)
           val i = TCCalculator.calculator.incomeForPeriod(income, p)
           val incomeThreshold = TCCalculator.calculator.wtcIncomeThresholdForPeriod(period = p)
@@ -2162,14 +2166,14 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
           TaxYear(
             from = fromDate,
             until = untilDate,
-            houseHoldIncome = BigDecimal(0.00),
-
+            previousHouseholdIncome = Income(None, None, None, None, None),
+            currentHouseholdIncome = Income(None, None, None, None, None),
             periods = List()
           ))
       )
 
       val taxYear = tcEligibility.taxYears.head
-      val income = taxYear.houseHoldIncome
+      val income = 0 //taxYear.houseHoldIncome
       val setup = TCCalculator.calculator.getCalculatedPeriods(taxYear, income)
 
       setup shouldBe Nil
@@ -2187,7 +2191,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
         case JsSuccess(x, _) =>
           // period 1
           val taxYear = x.taxYears.head
-          val income = x.taxYears.head.houseHoldIncome
+          val income = 17000 // x.taxYears.head.houseHoldIncome
           val setup = TCCalculator.calculator.getCalculatedPeriods(taxYear, income)
 
           setup.head should not be Nil
@@ -2218,7 +2222,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
         case JsSuccess(x, _) =>
           // period 1
           val taxYear = x.taxYears.head
-          val income = x.taxYears.head.houseHoldIncome
+          val income = 17000 //x.taxYears.head.houseHoldIncome
           val setup = TCCalculator.calculator.getCalculatedPeriods(taxYear, income)
 
           setup.head should not be Nil

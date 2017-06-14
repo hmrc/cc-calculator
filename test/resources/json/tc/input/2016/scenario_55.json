@@ -1,47 +1,48 @@
 {
-
-        "taxYears": [
+  "taxYears": [
+      {
+      "from": "2016-09-27",
+      "until": "2017-04-06",
+      "previousHouseholdIncome": {
+        "employment": [34000.00]
+      },
+      "currentHouseholdIncome": {
+        "employment": [34000.00]
+      },
+      "periods": [
+        {
+          "from": "2016-09-27",
+          "until": "2017-04-06",
+          "householdElements": {
+            "basic": true,
+            "hours30": false,
+            "childcare": false,
+            "loneParent": false,
+            "secondParent": false,
+            "family": false
+          },
+          "claimants": [
             {
-            "from": "2016-09-27",
-            "until": "2017-04-06",
-            "houseHoldIncome" : 34000.00,
-
-            "periods": [
-              {
-                "from": "2016-09-27",
-                "until": "2017-04-06",
-                "householdElements": {
-                  "basic": true,
-                  "hours30": false,
-                  "childcare": false,
-                  "loneParent": false,
-                  "secondParent": false,
-                  "family": false
-                },
-                "claimants": [
-                  {
-                    "qualifying": true,
-                    "isPartner": false,
-                    "claimantElements": {
-                      "disability": false,
-                      "severeDisability": false
-                    },
-                    "failures": []
-                  },
-                  {
-                    "qualifying": true,
-                    "isPartner": true,
-                    "claimantElements": {
-                      "disability": true,
-                      "severeDisability": false
-                    },
-                    "failures": []
-                  }
-                ],
-                "children": [
-                ]
+              "qualifying": true,
+              "isPartner": false,
+              "claimantElements": {
+                "disability": false,
+                "severeDisability": false
               }
-           ]
-          }
-        ]
-      }
+            },
+            {
+              "qualifying": true,
+              "isPartner": true,
+              "claimantElements": {
+                "disability": true,
+                "severeDisability": false
+              }
+            }
+          ],
+          "children": [
+          ]
+        }
+     ]
+    }
+  ]
+}

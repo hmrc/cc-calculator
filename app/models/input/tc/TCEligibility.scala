@@ -35,23 +35,33 @@ object TCEligibility {
 case class TaxYear(
                     from: LocalDate,
                     until: LocalDate,
-                    houseHoldIncome : BigDecimal,
+                    previousHouseholdIncome: Income,
+                    currentHouseholdIncome: Income,
                     periods: List[Period]
                     )
 
-object TaxYear extends MessagesObject with CCFormat {
-  private def houseHoldIncomeValidation(income: BigDecimal) : Boolean = {
-    income >= BigDecimal(0.00)
-  }
+object TaxYear extends MessagesObject {
+  implicit val taxYearsFormat: Reads[TaxYear] = Json.reads[TaxYear]
+}
 
-  implicit val taxYearsFormat: Reads[TaxYear] = (
-    (JsPath \ "from").read[LocalDate](jodaLocalDateReads(datePattern)) and
-      (JsPath \ "until").read[LocalDate](jodaLocalDateReads(datePattern)) and
-        (JsPath \ "houseHoldIncome").read[BigDecimal].filter(
-          ValidationError(messages("cc.calc.household.income.too.low"))
-        )(x => houseHoldIncomeValidation(x)) and
-          (JsPath \ "periods").read[List[Period]]
-    )(TaxYear.apply _)
+case class Income(
+                   employment: Option[List[BigDecimal]],
+                   pension: Option[List[BigDecimal]],
+                   other: Option[List[BigDecimal]],
+                   benefits: Option[List[BigDecimal]],
+                   statutory: Option[List[StatutoryIncome]]
+                   )
+
+object Income {
+  implicit val incomeFormat: Reads[Income] = Json.reads[Income]
+}
+
+case class StatutoryIncome(
+                            weeks: Double,
+                            amount: BigDecimal
+                            )
+object StatutoryIncome {
+  implicit val statutoryIncomeFormat: Reads[StatutoryIncome] = Json.reads[StatutoryIncome]
 }
 
 case class Period(from: LocalDate,

@@ -3,7 +3,12 @@
     {
       "from": "2016-09-27",
       "until": "2017-04-06",
-      "houseHoldIncome": 34000.00,
+      "previousHouseholdIncome": {
+        "employment": [34000.00]
+      },
+      "currentHouseholdIncome": {
+        "employment": [34000.00]
+      },
       "periods": [
         {
           "from": "2016-09-27",
@@ -23,8 +28,7 @@
               "claimantElements": {
                 "disability": false,
                 "severeDisability": false
-              },
-              "failures": []
+              }
             },
             {
               "qualifying": true,
@@ -32,14 +36,11 @@
               "claimantElements": {
                 "disability": true,
                 "severeDisability": false
-              },
-              "failures": []
+              }
             }
           ],
           "children": [
             {
-              "id": 0,
-              "name": "Child 1",
               "childcareCost": 200.00,
               "childcareCostPeriod": "Month",
               "qualifying": true,
@@ -49,12 +50,9 @@
                 "disability": true,
                 "severeDisability": true,
                 "childcare": true
-              },
-              "failures": []
+              }
             },
             {
-              "id": 1,
-              "name": "Child 2",
               "childcareCost": 200.00,
               "childcareCostPeriod": "Month",
               "qualifying": true,
@@ -64,8 +62,7 @@
                 "disability": true,
                 "severeDisability": true,
                 "childcare": true
-              },
-              "failures": []
+              }
             }
           ]
         }

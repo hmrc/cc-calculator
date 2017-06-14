@@ -28,6 +28,7 @@ import uk.gov.hmrc.play.config.ServicesConfig
 
 trait TCConfig extends ServicesConfig {
   val defaultMaxNameLength: Int = 25
+  lazy val monthsInTaxYear: Int = 12
   lazy val taxYearEndMonth = getInt(s"tc.end-of-tax-year-date.month")
   lazy val taxYearEndDay = getInt(s"tc.end-of-tax-year-date.day")
 }
@@ -58,6 +59,9 @@ case class Thresholds(
                        )
 
 case class TCTaxYearConfig(
+                            otherIncomeAdjustment: Double,
+                            currentIncomeFallDifferenceAmount: Double,
+                            currentIncomeRiseDifferenceAmount: Double,
                             wtc: WTC,
                             ctc: CTC,
                             thresholds: Thresholds
@@ -97,6 +101,9 @@ object TCConfig extends CCConfig with TCConfig with ServicesConfig with LoadConf
 
   def getTaxYear(config : Configuration): TCTaxYearConfig = {
     TCTaxYearConfig(
+      otherIncomeAdjustment = config.getDouble("other-adjustment").get,
+      currentIncomeFallDifferenceAmount = config.getDouble("current-income-fall-difference-amount").get,
+      currentIncomeRiseDifferenceAmount = config.getDouble("current-income-rise-difference-amount").get,
       wtc = WTC(
         basicElement = config.getInt("input-elements.wtc.basic-element").get,
         coupleElement = config.getInt("input-elements.wtc.second-adult-element").get,
