@@ -497,9 +497,9 @@ trait ESCCalculator {
           ) match {
           // parent income falls below personal allowance after the sacrifice assign the childcare spend to the partner
           case (x, y) if (x <= parentPersonalAllowanceAmountMonthly && y > partnerPersonalAllowanceAmountMonthly) =>
-            List(parent.copy(escAmount = BigDecimal(0.00)), partner.copy(escAmount = partner.escAmount * 2))
+            List(parent.copy(escAmount = BigDecimal(0.00)), partner.copy(escAmount = partner.escAmount))
           case (x, y) if (x > parentPersonalAllowanceAmountMonthly && y <= partnerPersonalAllowanceAmountMonthly) =>
-            List(parent.copy(escAmount = parent.escAmount * 2), partner.copy(escAmount = BigDecimal(0.00)))
+            List(parent.copy(escAmount = parent.escAmount), partner.copy(escAmount = BigDecimal(0.00)))
           case (_, _) =>
             period.claimants
         }
@@ -509,7 +509,10 @@ trait ESCCalculator {
           val parent = period.claimants.head
           val partner = period.claimants.tail.head
           if(parent.qualifying && partner.qualifying) {
-            selectClaimant(parent, partner)
+            //adjust the childcarecost to 50% each
+            val p1: Claimant = parent.copy(escAmount = parent.escAmount/2)
+            val p2: Claimant = partner.copy(escAmount = partner.escAmount/2)
+            selectClaimant(p1, p2)
           }
           else {
             period.claimants
