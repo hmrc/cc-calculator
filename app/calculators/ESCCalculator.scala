@@ -500,9 +500,7 @@ trait ESCCalculator {
             List(parent.copy(escAmount = parent.escAmount), partner.copy(escAmount = BigDecimal(0.00)))
           case (x, y) =>
             //adjust the childcarecost to 50% each only when both are qualified
-            val list = List(parent.copy(escAmount = parent.escAmount/2), partner.copy(escAmount = partner.escAmount/2))
-            println(s"******both eligible for PA>>>$list")
-            list
+            List(parent.copy(escAmount = parent.escAmount/2), partner.copy(escAmount = partner.escAmount/2))
         }
       }
       period.claimants.size match {
@@ -527,11 +525,8 @@ trait ESCCalculator {
 
     private def populateClaimant(claimantList: List[models.output.esc.Claimant]): models.output.esc.Claimant = {
       val eligibleMonths: Int = claimantList.foldLeft(0)((acc, c) => acc + c.eligibleMonthsInTaxYear)
-      println(s"****eligibleMonths>>>$eligibleMonths")
       val qualification: Boolean = claimantList.exists(_.qualifying)
-      println(s"****qualification>>>$qualification")
       val voucherFlag: Boolean = claimantList.exists(_.vouchers)
-      println(s"****voucherFlag>>>$voucherFlag")
       val taxSavings: BigDecimal = claimantList.foldLeft(BigDecimal(0))((acc, c) => {
         val amount = if(c.qualifying) {
           c.eligibleMonthsInTaxYear * c.savings.taxSaving
@@ -540,7 +535,6 @@ trait ESCCalculator {
         }
         acc + amount
       })
-      println(s"****taxSavings>>>$taxSavings")
       val NISavings: BigDecimal = claimantList.foldLeft(BigDecimal(0))((acc, c) => {
         val amount = if(c.qualifying) {
           c.eligibleMonthsInTaxYear * c.savings.niSaving
@@ -549,9 +543,7 @@ trait ESCCalculator {
         }
         acc + amount
       })
-      println(s"****NISavings>>>$NISavings")
       val allTotalSavings: BigDecimal = taxSavings + NISavings
-      println(s"****allTotalSavings>>>$allTotalSavings")
 
       val claimant = claimantList.head
       populateClaimantModel(
@@ -563,7 +555,7 @@ trait ESCCalculator {
         claimant.income.taxCode,
         claimant.income.niCategory,
         voucherFlag,
-        escAmount = claimantList.foldLeft(BigDecimal(0))((acc, c) => acc + c.escAmount),
+        escAmount = claimantList.map(_.escAmount).max,
         escAmountPeriod = claimant.escAmountPeriod,
         escStartDate = claimant.escStartDate,
         totalSaving = allTotalSavings,
@@ -580,15 +572,12 @@ trait ESCCalculator {
 
     private def determineClaimantsForTaxYear(listOfClaimants : List[models.output.esc.Claimant]): List[models.output.esc.Claimant] = {
       val overallParent = populateClaimant(listOfClaimants.filterNot(_.isPartner))
-      println(s"overallParent>>>>$overallParent")
       val partnerExists: Boolean = listOfClaimants.exists(partner => partner.isPartner)
       partnerExists match {
         case false =>
           List(overallParent)
         case true =>
           val overallPartner = populateClaimant(listOfClaimants.filter(_.isPartner))
-          println(s"overallPartner>>>>$overallPartner")
-          // val overallPartner = populateClaimant(true, listOfClaimants.tail.head)
           List(overallParent, overallPartner)
       }
     }
@@ -596,9 +585,7 @@ trait ESCCalculator {
     def getCalculatedTaxYears(taxYears: List[TaxYear]): List[models.output.esc.TaxYear] = {
       for(taxYear <- taxYears) yield {
         val claimantListForTY = determineCalculatedListOfClaimantsPairs(taxYear.periods)
-        println(s"******claimantListForTY>>>$claimantListForTY")
         val resultClaimantList = determineClaimantsForTaxYear(claimantListForTY)
-        println(s"******resultClaimantList>>>$resultClaimantList")
 
         val (overallTaxSavings, overallNISavings) = resultClaimantList.foldLeft(
           (BigDecimal(0.00), BigDecimal(0.00))

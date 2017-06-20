@@ -27,7 +27,7 @@
             "niCategory": "A"
           },
           "vouchers": false,
-          "escAmount": 150,
+          "escAmount": 0,
           "escAmountPeriod": "Month",
           "escStartDate": "2010-08-27",
           "savings": {
