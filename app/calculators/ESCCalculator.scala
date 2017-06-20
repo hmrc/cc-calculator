@@ -304,11 +304,10 @@ trait ESCCalculator {
     }
 
     def totalTaxDue(taxAmountPerBand: CalculationTaxBands, calcPeriod: Periods.Period): BigDecimal = {
-      val annualTaxAmount =
-        taxAmountPerBand.zeroRateBand + taxAmountPerBand.basicRateBand + taxAmountPerBand.higherRateBand + taxAmountPerBand.additionalRateBand
+      val annualTaxAmount = taxAmountPerBand.zeroRateBand + taxAmountPerBand.basicRateBand + taxAmountPerBand.higherRateBand +
+        taxAmountPerBand.additionalRateBand
       round(annualAmountToPeriod(annualTaxAmount, calcPeriod))
     }
-
 
     protected def calculateTaxSavings(
                                        period: ESCPeriod,
@@ -463,8 +462,7 @@ trait ESCCalculator {
     private def determineCalculatedListOfClaimantsPairs(periods: List[ESCPeriod]): List[models.output.esc.Claimant] = {
       val listOfPairs = for(period <- periods) yield {
         //if one of the claimant income falls below the personal allowance then assign the entire childcare spend to the other claimant.
-        val claimantList = createClaimantList(period)
-        determineSavingsPerClaimant(claimantList, period)
+        determineSavingsPerClaimant(createClaimantList(period), period)
       }
       listOfPairs.flatten
     }
@@ -486,7 +484,7 @@ trait ESCCalculator {
         )
         (personalAllowanceAmountMonthly, determineActualIncomeRelief(escAmount, maximumReliefAmount))
       }
-      def selectClaimant(parent: Claimant, partner: Claimant) = {
+      def selectClaimant(parent: Claimant, partner: Claimant): List[Claimant] = {
         val (parentPersonalAllowanceAmountMonthly, parentActualReliefAmount) =
           calcReliefAmount(parent.income, parent.isESCStartDateBefore2011, parent.escAmount, parent.location)
         val (partnerPersonalAllowanceAmountMonthly, partnerActualReliefAmount) =
@@ -494,80 +492,113 @@ trait ESCCalculator {
         (
           (annualAmountToPeriod(parent.income.taxablePay, calcPeriod) - parentActualReliefAmount),
           (annualAmountToPeriod(partner.income.taxablePay, calcPeriod) - partnerActualReliefAmount)
-          ) match {
+        ) match {
           // parent income falls below personal allowance after the sacrifice assign the childcare spend to the partner
           case (x, y) if (x <= parentPersonalAllowanceAmountMonthly && y > partnerPersonalAllowanceAmountMonthly) =>
-            List(parent.copy(escAmount = BigDecimal(0.00)), partner.copy(escAmount = partner.escAmount * 2))
+            List(parent.copy(escAmount = BigDecimal(0.00)), partner.copy(escAmount = partner.escAmount))
           case (x, y) if (x > parentPersonalAllowanceAmountMonthly && y <= partnerPersonalAllowanceAmountMonthly) =>
-            List(parent.copy(escAmount = parent.escAmount * 2), partner.copy(escAmount = BigDecimal(0.00)))
-          case (_, _) =>
-            period.claimants
+            List(parent.copy(escAmount = parent.escAmount), partner.copy(escAmount = BigDecimal(0.00)))
+          case (x, y) =>
+            //adjust the childcarecost to 50% each only when both are qualified
+            val list = List(parent.copy(escAmount = parent.escAmount/2), partner.copy(escAmount = partner.escAmount/2))
+            println(s"******both eligible for PA>>>$list")
+            list
         }
       }
       period.claimants.size match {
-        case 2 =>
+        case 2 => {
           val parent = period.claimants.head
           val partner = period.claimants.tail.head
-          if(parent.qualifying && partner.qualifying) {
-            //adjust the childcarecost to 50% each
-            val p1: Claimant = parent.copy(escAmount = parent.escAmount/2)
-            val p2: Claimant = partner.copy(escAmount = partner.escAmount/2)
-            selectClaimant(p1, p2)
+          if (parent.qualifying && partner.qualifying) {
+            selectClaimant(parent, partner)
           } else {
-            period.claimants
+            if (parent.qualifying) {
+              List(parent.copy(escAmount = parent.escAmount), partner.copy(escAmount = BigDecimal(0.00)))
+            } else if (partner.qualifying) {
+              List(parent.copy(escAmount = BigDecimal(0.00)), partner.copy(escAmount = partner.escAmount))
+            } else {
+              List(parent.copy(escAmount = BigDecimal(0.00)), partner.copy(escAmount = BigDecimal(0.00)))
+            }
           }
+        }
         case _ => period.claimants
       }
     }
 
-    private def determineClaimantsForTaxYear(listOfClaimantPairs : List[models.output.esc.Claimant]): List[models.output.esc.Claimant] = {
-      def populateClaimant(isPartner: Boolean, claimant: models.output.esc.Claimant): models.output.esc.Claimant = {
-        val eligibleMonths: Int = sumClaimantEligibleMonths(listOfClaimantPairs, (c: models.output.esc.Claimant) => c.isPartner == isPartner)
-        val qualification: Boolean = listOfClaimantPairs.exists(claimant => if(claimant.isPartner == isPartner) claimant.qualifying else false)
-        val voucherFlag: Boolean = listOfClaimantPairs.exists(claimant => if(claimant.isPartner == isPartner) claimant.vouchers else false)
-        val taxSavings: BigDecimal = eligibleMonths * claimant.savings.taxSaving
-        val NISavings: BigDecimal = eligibleMonths * claimant.savings.niSaving
-        val allTotalSavings: BigDecimal = taxSavings + NISavings
+    private def populateClaimant(claimantList: List[models.output.esc.Claimant]): models.output.esc.Claimant = {
+      val eligibleMonths: Int = claimantList.foldLeft(0)((acc, c) => acc + c.eligibleMonthsInTaxYear)
+      println(s"****eligibleMonths>>>$eligibleMonths")
+      val qualification: Boolean = claimantList.exists(_.qualifying)
+      println(s"****qualification>>>$qualification")
+      val voucherFlag: Boolean = claimantList.exists(_.vouchers)
+      println(s"****voucherFlag>>>$voucherFlag")
+      val taxSavings: BigDecimal = claimantList.foldLeft(BigDecimal(0))((acc, c) => {
+        val amount = if(c.qualifying) {
+          c.eligibleMonthsInTaxYear * c.savings.taxSaving
+        } else {
+          BigDecimal(0)
+        }
+        acc + amount
+      })
+      println(s"****taxSavings>>>$taxSavings")
+      val NISavings: BigDecimal = claimantList.foldLeft(BigDecimal(0))((acc, c) => {
+        val amount = if(c.qualifying) {
+          c.eligibleMonthsInTaxYear * c.savings.niSaving
+        } else {
+          BigDecimal(0)
+        }
+        acc + amount
+      })
+      println(s"****NISavings>>>$NISavings")
+      val allTotalSavings: BigDecimal = taxSavings + NISavings
+      println(s"****allTotalSavings>>>$allTotalSavings")
 
-        populateClaimantModel(
-          qualification,
-          eligibleMonths = eligibleMonths,
-          claimant.isPartner,
-          claimant.income.taxablePay,
-          claimant.income.gross,
-          claimant.income.taxCode,
-          claimant.income.niCategory,
-          voucherFlag,
-          claimant.escAmount,
-          escAmountPeriod = claimant.escAmountPeriod,
-          escStartDate = claimant.escStartDate,
-          totalSaving = allTotalSavings,
-          taxSavings,
-          niSaving = NISavings,
-          claimant.maximumRelief,
-          claimant.maximumReliefPeriod,
-          claimant.taxAndNIBeforeSacrifice.taxPaid,
-          niPaidPreSacrifice = claimant.taxAndNIBeforeSacrifice.niPaid,
-          claimant.taxAndNIAfterSacrifice.taxPaid,
-          niPaidPostSacrifice = claimant.taxAndNIAfterSacrifice.niPaid
-        )
-      }
-      val overallClaimant = populateClaimant(false, listOfClaimantPairs.head)
+      val claimant = claimantList.head
+      populateClaimantModel(
+        qualification,
+        eligibleMonths = eligibleMonths,
+        claimant.isPartner,
+        claimant.income.taxablePay,
+        claimant.income.gross,
+        claimant.income.taxCode,
+        claimant.income.niCategory,
+        voucherFlag,
+        escAmount = claimantList.foldLeft(BigDecimal(0))((acc, c) => acc + c.escAmount),
+        escAmountPeriod = claimant.escAmountPeriod,
+        escStartDate = claimant.escStartDate,
+        totalSaving = allTotalSavings,
+        taxSaving = taxSavings,
+        niSaving = NISavings,
+        claimant.maximumRelief,
+        claimant.maximumReliefPeriod,
+        taxPaidPreSacrifice = claimantList.foldLeft(BigDecimal(0))((acc, c) => acc + c.taxAndNIBeforeSacrifice.taxPaid),
+        niPaidPreSacrifice = claimantList.foldLeft(BigDecimal(0))((acc, c) => acc + c.taxAndNIBeforeSacrifice.niPaid),
+        taxPaidPostSacrifice = claimantList.foldLeft(BigDecimal(0))((acc, c) => acc + c.taxAndNIAfterSacrifice.taxPaid),
+        niPaidPostSacrifice = claimantList.foldLeft(BigDecimal(0))((acc, c) => acc + c.taxAndNIAfterSacrifice.niPaid)
+      )
+    }
 
-      val partnerExists: Boolean = listOfClaimantPairs.exists(partner => partner.isPartner)
+    private def determineClaimantsForTaxYear(listOfClaimants : List[models.output.esc.Claimant]): List[models.output.esc.Claimant] = {
+      val overallParent = populateClaimant(listOfClaimants.filterNot(_.isPartner))
+      println(s"overallParent>>>>$overallParent")
+      val partnerExists: Boolean = listOfClaimants.exists(partner => partner.isPartner)
       partnerExists match {
         case false =>
-          List(overallClaimant)
+          List(overallParent)
         case true =>
-          val overallPartner = populateClaimant(true, listOfClaimantPairs.tail.head)
-          List(overallClaimant, overallPartner)
+          val overallPartner = populateClaimant(listOfClaimants.filter(_.isPartner))
+          println(s"overallPartner>>>>$overallPartner")
+          // val overallPartner = populateClaimant(true, listOfClaimants.tail.head)
+          List(overallParent, overallPartner)
       }
     }
 
     def getCalculatedTaxYears(taxYears: List[TaxYear]): List[models.output.esc.TaxYear] = {
       for(taxYear <- taxYears) yield {
         val claimantListForTY = determineCalculatedListOfClaimantsPairs(taxYear.periods)
+        println(s"******claimantListForTY>>>$claimantListForTY")
         val resultClaimantList = determineClaimantsForTaxYear(claimantListForTY)
+        println(s"******resultClaimantList>>>$resultClaimantList")
 
         val (overallTaxSavings, overallNISavings) = resultClaimantList.foldLeft(
           (BigDecimal(0.00), BigDecimal(0.00))
