@@ -327,7 +327,6 @@ trait ESCCalculator {
       val totalTaxDueAfterSacrifice: BigDecimal = totalTaxDue(taxPerBandAfterSacrifice, Periods.Yearly)
       //Total tax savings per one month
       val taxSavingAmountPerMonth = determineTotalSavings(totalTaxDueBeforeSacrifice, totalTaxDueAfterSacrifice)
-
       (taxSavingAmountPerMonth, totalTaxDueBeforeSacrifice, totalTaxDueAfterSacrifice)
     }
   }
@@ -563,10 +562,38 @@ trait ESCCalculator {
         niSaving = NISavings,
         claimant.maximumRelief,
         claimant.maximumReliefPeriod,
-        taxPaidPreSacrifice = claimantList.foldLeft(BigDecimal(0))((acc, c) => acc + c.taxAndNIBeforeSacrifice.taxPaid),
-        niPaidPreSacrifice = claimantList.foldLeft(BigDecimal(0))((acc, c) => acc + c.taxAndNIBeforeSacrifice.niPaid),
-        taxPaidPostSacrifice = claimantList.foldLeft(BigDecimal(0))((acc, c) => acc + c.taxAndNIAfterSacrifice.taxPaid),
-        niPaidPostSacrifice = claimantList.foldLeft(BigDecimal(0))((acc, c) => acc + c.taxAndNIAfterSacrifice.niPaid)
+        taxPaidPreSacrifice = claimantList.foldLeft(BigDecimal(0))((acc, c) => {
+          val amount = if(c.qualifying) {
+            c.eligibleMonthsInTaxYear * c.taxAndNIBeforeSacrifice.taxPaid
+          } else {
+            BigDecimal(0)
+          }
+          acc + amount
+        }),
+        niPaidPreSacrifice = claimantList.foldLeft(BigDecimal(0))((acc, c) => {
+          val amount = if(c.qualifying) {
+            c.eligibleMonthsInTaxYear * c.taxAndNIBeforeSacrifice.niPaid
+          } else {
+            BigDecimal(0)
+          }
+          acc + amount
+        }),
+        taxPaidPostSacrifice = claimantList.foldLeft(BigDecimal(0))((acc, c) => {
+          val amount = if(c.qualifying) {
+            c.eligibleMonthsInTaxYear * c.taxAndNIAfterSacrifice.taxPaid
+          } else {
+            BigDecimal(0)
+          }
+          acc + amount
+        }),
+        niPaidPostSacrifice = claimantList.foldLeft(BigDecimal(0))((acc, c) => {
+          val amount = if(c.qualifying) {
+            c.eligibleMonthsInTaxYear * c.taxAndNIAfterSacrifice.niPaid
+          } else {
+            BigDecimal(0)
+          }
+          acc + amount
+        })
       )
     }
 
