@@ -17,112 +17,93 @@
 package calculators
 
 import org.joda.time.LocalDate
-import org.joda.time.format.DateTimeFormat
 import uk.gov.hmrc.play.test.UnitSpec
 import utils.{FakeCCCalculatorApplication, Periods}
 
-object TestCalculator  {
-  val calculator = new TestCalculatorService
-
-  class TestCalculatorService extends CCCalculatorHelper
-}
-
 class CCCalculatorHelperSpec extends UnitSpec with FakeCCCalculatorApplication {
+
+  object helper extends CCCalculatorHelper
 
   "CCCalculatorHelper" should {
 
-    "calculate in a BigDecimal format" in {
-      val cost = 12.249212342
-      val result = TestCalculator.calculator.round(cost)
+    "round up for double numbers to 2 digits" in {
+      val cost: BigDecimal = 12.249212342
+      val result: BigDecimal = helper.round(cost)
+      result shouldBe 12.25
       result.isInstanceOf[BigDecimal] shouldBe true
     }
 
-    "round up for double numbers if greater than 5" in {
-      val cost: BigDecimal = 12.249212342
-      val result: BigDecimal = TestCalculator.calculator.round(cost)
-      result shouldBe 12.25
-    }
-
-    "(Pound precision) round up for double numbers if greater than 5" in {
-      val cost : BigDecimal = 12.649212342
-      val result : BigDecimal = TestCalculator.calculator.roundToPound(cost)
-      result shouldBe 13
-    }
-
-    "round down for double numbers if less than 5" in {
+    "round down for double numbers to 2 digits" in {
       val cost: BigDecimal = 12.241212342
-      val result: BigDecimal = TestCalculator.calculator.round(cost)
+      val result: BigDecimal = helper.round(cost)
       result shouldBe 12.24
     }
 
-    "round down for double numbers if less than 5 (.011)" in {
-      val cost: BigDecimal = 12.01111111
-      val result: BigDecimal = TestCalculator.calculator.round(cost)
-      result shouldBe 12.01
+    "(Pound precision) round up for double numbers" in {
+      val cost: BigDecimal = 12.649212342
+      val result: BigDecimal = helper.roundToPound(cost)
+      result shouldBe 13
     }
 
-    "round down for double numbers if less than 5 (.444)" in {
-      val cost: BigDecimal = 12.44444
-      val result: BigDecimal = TestCalculator.calculator.round(cost)
-      result shouldBe 12.44
-    }
-
-    "(Pound precision) round down for double numbers if less than 5 - 1" in {
+    "(Pound precision) round down for double numbers" in {
       val cost : BigDecimal = 12.241212342
-      val result : BigDecimal = TestCalculator.calculator.roundToPound(cost)
+      val result : BigDecimal = helper.roundToPound(cost)
       result shouldBe 12
     }
 
-    "(Pound precision) round down for double numbers if less than 5 - 2" in {
-      val cost : BigDecimal = 12.445
-      val result : BigDecimal = TestCalculator.calculator.roundToPound(cost)
-      result shouldBe 12
+    "round up the double numbers to 2 digits for digits less than 5" in {
+      val cost: BigDecimal = 12.241212342
+      val result: BigDecimal = helper.roundup(cost)
+      result shouldBe 12.25
+    }
+
+    "round up the double numbers to 2 digits for digits greater than 5" in {
+      val cost: BigDecimal = 12.24932342
+      val result: BigDecimal = helper.roundup(cost)
+      result shouldBe 12.25
+    }
+
+    "round down the double numbers to 3 digits upper digits" in {
+      val cost: BigDecimal = 12.24932342
+      val result: BigDecimal = helper.roundDownToThreeDigits(cost)
+      result shouldBe 12.249
     }
 
     "convert the amount to a quarterly amount (weekly)" in {
       val cost : BigDecimal = 200.00 // per week
-      val result : BigDecimal = TestCalculator.calculator.amountToQuarterlyAmount(cost, Periods.Weekly)
+      val result : BigDecimal = helper.amountToQuarterlyAmount(cost, Periods.Weekly)
       result shouldBe 2600.00
     }
 
     "convert the amount to a quarterly amount (fortnightly)" in {
       val cost : BigDecimal = 200.00 // per fortnight
-      val result : BigDecimal = TestCalculator.calculator.amountToQuarterlyAmount(cost, Periods.Fortnightly)
+      val result : BigDecimal = helper.amountToQuarterlyAmount(cost, Periods.Fortnightly)
       result shouldBe 1300.00
     }
 
     "convert the amount to a quarterly amount (monthly)" in {
       val cost : BigDecimal = 200.00 // per month
-      val result : BigDecimal = TestCalculator.calculator.amountToQuarterlyAmount(cost, Periods.Monthly)
+      val result : BigDecimal = helper.amountToQuarterlyAmount(cost, Periods.Monthly)
       result shouldBe 600.00
     }
 
     "convert the amount to a quarterly amount (quarterly)" in {
       val cost : BigDecimal  = 200.00 // per quarter
-      val result : BigDecimal = TestCalculator.calculator.amountToQuarterlyAmount(cost, Periods.Quarterly)
+      val result : BigDecimal = helper.amountToQuarterlyAmount(cost, Periods.Quarterly)
       result shouldBe 200.00
     }
 
     "convert the amount to a quarterly amount (yearly)" in {
       val cost : BigDecimal = 200.00 // per year
-      val result : BigDecimal = TestCalculator.calculator.amountToQuarterlyAmount(cost, Periods.Yearly)
+      val result : BigDecimal = helper.amountToQuarterlyAmount(cost, Periods.Yearly)
       result shouldBe 50.00
     }
 
     "return the number of days between two dates" in {
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
-      val fromDate = LocalDate.parse("01-12-2014", formatter)
-      val toDate = LocalDate.parse("12-12-2014", formatter)
-      val result: Int = TestCalculator.calculator.daysBetween(fromDate, toDate)
+      val fromDate = LocalDate.now()
+      val toDate = fromDate.plusDays(11)
+      val result: Int = helper.daysBetween(fromDate, toDate)
       result shouldBe 11
-    }
-
-    "(leap year) return the number of days between two dates" in {
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
-      val fromDate = LocalDate.parse("20-02-2016", formatter)
-      val toDate = LocalDate.parse("01-03-2016", formatter)
-      val result: Int = TestCalculator.calculator.daysBetween(fromDate, toDate)
-      result shouldBe 10
     }
 
   }

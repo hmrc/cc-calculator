@@ -33,14 +33,6 @@ import scala.concurrent.Future
 class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
   val location = "england"
 
-  "ESCCalculator" should {
-
-    "return an instance of ESCEligibilityService" in {
-      val service = ESCCalculator
-      service.calculator shouldBe a[ESCCalculatorService]
-    }
-  }
-
   "ESCCalculatorService" should {
 
     "return a Future[AwardPeriod] result" in {

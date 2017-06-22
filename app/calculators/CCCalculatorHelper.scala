@@ -25,14 +25,15 @@ trait CCCalculatorHelper {
    * Unformatted:   5.465068
    * Formatted:      .46
    */
-  def round(value: BigDecimal): BigDecimal = value.setScale(2, RoundingMode.HALF_UP)
+  def round(value: BigDecimal): BigDecimal = {
+    value.setScale(2, RoundingMode.HALF_UP)
+  }
 
   def roundToPound(value: BigDecimal): BigDecimal = value.setScale(0, RoundingMode.HALF_UP)
 
   def roundup (value: BigDecimal): BigDecimal = value.setScale(2, RoundingMode.UP)
 
   def roundDownToThreeDigits(value: BigDecimal): BigDecimal = value.setScale(3, RoundingMode.DOWN)
-  def roundDownToTwoDigits(value: BigDecimal): BigDecimal = value.setScale(2, RoundingMode.HALF_EVEN)
 
   // normalise the monetary amount per quarter quarter
   def amountToQuarterlyAmount(cost: BigDecimal, fromPeriod: Periods.Period): BigDecimal = {
