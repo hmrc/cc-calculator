@@ -452,7 +452,7 @@ trait ESCCalculator extends ESCCalculatorHelpers with ESCCalculatorTax with ESCC
     listOfPairs.flatten
   }
 
-  def calcReliefAmount(period: ESCPeriod, income: TotalIncome, isESCStartDateBefore2011: Boolean, escAmount: BigDecimal, location: String) = {
+  protected def calcReliefAmount(period: ESCPeriod, income: TotalIncome, isESCStartDateBefore2011: Boolean, escAmount: BigDecimal, location: String) = {
     val config = ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location)
     val taxCode = getTaxCode(period, income, config)
     val personalAllowanceAmountMonthly: BigDecimal = annualAmountToPeriod(getPersonalAllowance(period, income, config), Periods.Monthly)
@@ -468,7 +468,7 @@ trait ESCCalculator extends ESCCalculatorHelpers with ESCCalculatorTax with ESCC
     (personalAllowanceAmountMonthly, determineActualIncomeRelief(escAmount, maximumReliefAmount))
   }
 
-  private def selectClaimant(period: ESCPeriod, parent: Claimant, partner: Claimant): List[Claimant] = {
+  protected def selectClaimant(period: ESCPeriod, parent: Claimant, partner: Claimant): List[Claimant] = {
     val (parentPersonalAllowanceAmountMonthly, parentActualReliefAmount) =
       calcReliefAmount(period, parent.income, parent.isESCStartDateBefore2011, parent.escAmount, parent.location)
     val (partnerPersonalAllowanceAmountMonthly, partnerActualReliefAmount) =
@@ -478,11 +478,11 @@ trait ESCCalculator extends ESCCalculatorHelpers with ESCCalculatorTax with ESCC
       annualAmountToPeriod(partner.income.taxablePay, Periods.Monthly) - partnerActualReliefAmount
     ) match {
       // parent income falls below personal allowance after the sacrifice assign the childcare spend to the partner
-      case (x, y) if (x <= parentPersonalAllowanceAmountMonthly && y > partnerPersonalAllowanceAmountMonthly) =>
+      case (parentIncome, partnerIncome) if (parentIncome <= parentPersonalAllowanceAmountMonthly && partnerIncome > partnerPersonalAllowanceAmountMonthly) =>
         List(parent.copy(escAmount = BigDecimal(0.00)), partner.copy(escAmount = partner.escAmount))
-      case (x, y) if (x > parentPersonalAllowanceAmountMonthly && y <= partnerPersonalAllowanceAmountMonthly) =>
+      case (parentIncome, partnerIncome) if (parentIncome > parentPersonalAllowanceAmountMonthly && partnerIncome <= partnerPersonalAllowanceAmountMonthly) =>
         List(parent.copy(escAmount = parent.escAmount), partner.copy(escAmount = BigDecimal(0.00)))
-      case (x, y) =>
+      case (parentIncome, partnerIncome) =>
         //adjust the childcarecost to 50% each only when both are qualified
         List(parent.copy(escAmount = parent.escAmount/2), partner.copy(escAmount = partner.escAmount/2))
     }
