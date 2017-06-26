@@ -75,22 +75,10 @@ class CCCalculatorHelperSpec extends UnitSpec with FakeCCCalculatorApplication {
       result shouldBe 2600.00
     }
 
-    "convert the amount to a quarterly amount (fortnightly)" in {
-      val cost : BigDecimal = 200.00 // per fortnight
-      val result : BigDecimal = helper.amountToQuarterlyAmount(cost, Periods.Fortnightly)
-      result shouldBe 1300.00
-    }
-
     "convert the amount to a quarterly amount (monthly)" in {
       val cost : BigDecimal = 200.00 // per month
       val result : BigDecimal = helper.amountToQuarterlyAmount(cost, Periods.Monthly)
       result shouldBe 600.00
-    }
-
-    "convert the amount to a quarterly amount (quarterly)" in {
-      val cost : BigDecimal  = 200.00 // per quarter
-      val result : BigDecimal = helper.amountToQuarterlyAmount(cost, Periods.Quarterly)
-      result shouldBe 200.00
     }
 
     "convert the amount to a quarterly amount (yearly)" in {

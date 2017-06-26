@@ -58,9 +58,7 @@ object Periods extends Enumeration with MessagesObject {
   private val invalidIndex = 5
 
   val Weekly = Value(0, "Week")
-  val Fortnightly = Value(1, "Fortnight")
   val Monthly = Value(2, "Month")
-  val Quarterly = Value(3, "3 month")
   val Yearly = Value(yearlyIndex, "Year")
   val INVALID = Value(invalidIndex, "INVALID")
 
@@ -71,9 +69,7 @@ object Periods extends Enumeration with MessagesObject {
   def toString(period: Value): String = {
     period match {
       case Weekly => messages("cc.period.weekly")
-      case Fortnightly => messages("cc.period.fortnightly")
       case Monthly => messages("cc.period.monthly")
-      case Quarterly => messages("cc.period.3monthly")
       case Yearly => messages("cc.period.yearly")
       case _ => messages("cc.period.invalid")
     }
@@ -82,7 +78,6 @@ object Periods extends Enumeration with MessagesObject {
   def toPeriod(period: String): Value = {
     period.toLowerCase match {
       case "monthly" => Monthly
-      case "3-monthly" => Quarterly
       case _ => INVALID
     }
   }
