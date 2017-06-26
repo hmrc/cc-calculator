@@ -26,9 +26,12 @@ import org.joda.time.format.DateTimeFormat
 import play.api.libs.json.{JsSuccess, JsValue, Json}
 import uk.gov.hmrc.play.test.UnitSpec
 import utils.{ESCConfig, FakeCCCalculatorApplication, Periods}
+import org.mockito.Matchers.{eq => mockEq, _}
 import scala.concurrent.Future
+import org.mockito.Mockito._
+import org.scalatest.mock.MockitoSugar
 
-class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
+class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with MockitoSugar with org.scalatest.PrivateMethodTester {
   val location = "england"
 
   "ESCCalculatorService" should {
@@ -1164,7 +1167,8 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
       resultTY shouldBe List(outputTY)
     }
 
-    "calculate tax savings per claimant (claimant 1 = period 1 - 10 eligible months, period 2 - 1 eligible months) (claimant 2 = period 1 - 1 eligible months, period 2 - 1 eligible months) (taxablePay both 50000.00) (Monthly)" in {
+    "calculate tax savings per claimant (claimant 1 = period 1 - 10 eligible months, period 2 - 1 eligible months) (claimant 2 = period 1 - 1 eligible months," +
+      " period 2 - 1 eligible months) (taxablePay both 50000.00) (Monthly)" in {
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val fromDate2 = LocalDate.parse("21-05-2017", formatter)
@@ -1244,7 +1248,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
         savings = Savings(totalSaving = 37.8, taxSaving = 36, niSaving = 1.8), maximumRelief = 124.00, maximumReliefPeriod = Periods.Monthly,
         taxAndNIBeforeSacrifice = models.output.esc.TaxAndNI(taxPaid = 766.60, niPaid = 361.00), taxAndNIAfterSacrifice = models.output.esc.TaxAndNI(taxPaid = 730.60, niPaid = 359.20))
 
-      val outputTY = models.output.esc.TaxYear(fromDate, toDate, Savings(totalSaving = 37.8, taxSaving = 36, niSaving = 1.8), List(outputClaimant, outputPartner))
+      val outputTY=models.output.esc.TaxYear(fromDate, toDate, Savings(totalSaving=37.8, taxSaving=36, niSaving=1.8), List(outputClaimant, outputPartner))
       val resultTY = ESCCalculator.getCalculatedTaxYears(List(taxYear))
 
       Json.toJson(resultTY) shouldBe Json.toJson(List(outputTY))
@@ -1803,7 +1807,6 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
     }
 
     "Validate tax code and return personal allowance (11000)" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val periodStart = LocalDate.parse("2016-05-06", formatter)
       val periodEnd = LocalDate.parse("2017-04-06", formatter)
 
@@ -1813,7 +1816,6 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
     }
 
     "Validate tax code and return personal allowance (9999)" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val periodStart = LocalDate.parse("2016-05-06", formatter)
       val periodEnd = LocalDate.parse("2017-04-06", formatter)
 
@@ -1823,7 +1825,6 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
     }
 
     "Validate tax code and return personal allowance (9Y)" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val periodStart = LocalDate.parse("2016-05-06", formatter)
       val periodEnd = LocalDate.parse("2017-04-06", formatter)
 
@@ -1833,7 +1834,6 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
     }
 
     "Validate tax code and return D1" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val periodStart = LocalDate.parse("2016-05-06", formatter)
       val periodEnd = LocalDate.parse("2017-04-06", formatter)
 
@@ -1843,7 +1843,6 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
     }
 
     "Return error for invalid tax code (Y)" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val periodStart = LocalDate.parse("2016-05-06", formatter)
       val periodEnd = LocalDate.parse("2017-04-06", formatter)
 
@@ -1858,8 +1857,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
       }
     }
 
-    "Return error for invalid tax code (D11)" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+    "return error for invalid tax code (D11)" in {
       val periodStart = LocalDate.parse("2016-05-06", formatter)
       val periodEnd = LocalDate.parse("2017-04-06", formatter)
 
@@ -1873,6 +1871,28 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
           e shouldBe a[NoSuchElementException]
       }
     }
+
+//    "assign full childcare cost to parent if parent income is greater than personal allowance" in {
+//      val startDate = LocalDate.now().withDayOfMonth(6).withMonthOfYear(4)
+//      val endDate = LocalDate.now().withDayOfMonth(1).withMonthOfYear(9)
+//      println(s"******startDate>>>$startDate")
+//      println(s"******endDate>>>$endDate")
+//      val inputPartner = Claimant(qualifying = true, isPartner = true, location = location,
+//        eligibleMonthsInPeriod = 0, previousIncome = None, currentIncome = Some(Income(Some(2000))), vouchers = true,
+//        escStartDate = startDate.minusYears(5), escAmount = 90.00, escAmountPeriod = Periods.Monthly)
+//      val inputClaimant = Claimant(qualifying = true, isPartner = false, location = location,
+//        eligibleMonthsInPeriod = 3, previousIncome = None, currentIncome = Some(Income(Some(3000))), vouchers = true,
+//        escStartDate = startDate.minusYears(5), escAmount = 90.00, escAmountPeriod = Periods.Monthly)
+//      val period = ESCPeriod(from = startDate, until = endDate, claimants = List(inputClaimant, inputPartner))
+//
+//      val reliefAmt = PrivateMethod[(BigDecimal, BigDecimal)]('calcReliefAmount)
+//      def callReliefAmt(a:ESCPeriod, b: TotalIncome, c: Boolean, d: BigDecimal, e:String):(BigDecimal, BigDecimal) = ESCCalculator invokePrivate reliefAmt(a, b, c, d, e)
+//      when(callReliefAmt(any(), any(),any(), any(), any())).thenReturn((BigDecimal(0), BigDecimal(3000)))
+//      val claimants = PrivateMethod[List[Claimant]]('selectClaimant)
+//      val result = ESCCalculator invokePrivate claimants(period, inputClaimant, inputPartner)
+//
+//      result shouldBe List(inputClaimant.copy(escAmount = BigDecimal(90)), inputPartner.copy(escAmount = 0))
+//    }
 
   }
 }
