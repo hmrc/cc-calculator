@@ -11,7 +11,6 @@
             {
               "qualifying": false,
               "isPartner": false,
-              "location": "england",
               "eligibleMonthsInPeriod": 0,
                 "vouchers": false,
               "escAmount": 350.00,
@@ -21,7 +20,6 @@
             {
               "qualifying": false,
               "isPartner": true,
-              "location": "england",
               "eligibleMonthsInPeriod": 0,
                 "vouchers": false,
               "escAmount": 250.00,
@@ -32,5 +30,6 @@
         }
       ]
     }
-  ]
+  ],
+  "location": "england"
 }

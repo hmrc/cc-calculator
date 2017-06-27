@@ -25,14 +25,16 @@ import play.api.libs.json.{JsPath, Json, Reads}
 import utils._
 
 case class ESCEligibility(
-                          taxYears: List[TaxYear]
+                          taxYears: List[TaxYear],
+                          location: String
                           )
 
 object ESCEligibility extends ESCConfig with MessagesObject {
-  implicit val escEligibilityReads : Reads[ESCEligibility] =
-      (JsPath \ "taxYears").read[List[TaxYear]].map { taxYears =>
-        ESCEligibility(taxYears)
-      }.filter(ValidationError(messages("cc.calc.invalid.number.of.ty")))(ty => ty.taxYears.length >= lowerTaxYearsLimitValidation)
+  implicit val escEligibilityReads : Reads[ESCEligibility] = (
+      (JsPath \ "taxYears").read[List[TaxYear]].filter(ValidationError(messages("cc.calc.invalid.number.of.ty")))
+      (taxYears => taxYears.length >= lowerTaxYearsLimitValidation) and
+        (JsPath \ "location").read[String]
+    )(ESCEligibility.apply _)
 }
 
 case class TaxYear(
@@ -101,7 +103,6 @@ object Income {
 case class Claimant (
                      qualifying: Boolean = false,
                      isPartner: Boolean = false,
-                     location: String,
                      eligibleMonthsInPeriod: Int,
                      previousIncome: Option[Income],
                      currentIncome: Option[Income],
@@ -146,7 +147,6 @@ object Claimant extends CCFormat with ESCConfig with MessagesObject {
   implicit val claimantReads : Reads[Claimant] = (
     (JsPath \ "qualifying").read[Boolean].orElse(Reads.pure(false)) and
       (JsPath \ "isPartner").read[Boolean].orElse(Reads.pure(false)) and
-        (JsPath \ "location").read[String] and
           (JsPath \ "eligibleMonthsInPeriod").read[Int].filter(ValidationError(messages("cc.calc.invalid.number.of.months"))
                                                         )(months => months >= lowerMonthsLimitValidation && months < upperMonthsLimitValidation) and
             (JsPath \ "previousIncome").readNullable[Income] and

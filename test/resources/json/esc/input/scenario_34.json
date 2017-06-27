@@ -11,7 +11,6 @@
             {
               "qualifying": true,
               "isPartner": false,
-              "location": "scotland",
               "eligibleMonthsInPeriod": 5,
               "income": {
                 "taxablePay": 25000.00,
@@ -27,7 +26,6 @@
             {
               "qualifying": true,
               "isPartner": true,
-              "location": "scotland",
               "eligibleMonthsInPeriod": 5,
               "income": {
                 "taxablePay": 20000.00,
@@ -44,5 +42,6 @@
         }
       ]
     }
-  ]
+  ],
+  "location": "scotland"
 }

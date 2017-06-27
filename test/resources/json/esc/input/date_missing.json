@@ -10,7 +10,6 @@
             {
               "qualifying": false,
               "isPartner": false,
-              "location": "england",
               "eligibleMonthsInPeriod": 2,
               "income": {
                 "taxablePay": 0.00,
@@ -28,5 +27,6 @@
         }
       ]
     }
-  ]
+  ],
+  "location": "england"
 }
