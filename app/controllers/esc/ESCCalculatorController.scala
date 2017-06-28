@@ -17,8 +17,8 @@
 package controllers.esc
 
 import calculators.ESCCalculator
-import models.input.esc.ESCEligibility
-import models.output.esc.ESCCalculation
+import models.input.esc.ESCCalculatorInput
+import models.output.esc.ESCCalculatorOutput
 import play.api.Logger
 import play.api.libs.json.{Json, JsValue}
 import play.api.mvc.Action
@@ -38,7 +38,7 @@ class ESCCalculatorController @Inject()(val messagesApi: MessagesApi) extends Ba
 
   def calculate: Action[JsValue] = Action.async(parse.json) {
     implicit request =>
-      request.body.validate[ESCEligibility].fold(
+      request.body.validate[ESCCalculatorInput].fold(
         error => {
           Logger.warn("ESC Calculator Validation JsError in ESCCalculatorController.calculate")
           Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(play.api.http.Status.BAD_REQUEST, Left(error))))
@@ -47,7 +47,7 @@ class ESCCalculatorController @Inject()(val messagesApi: MessagesApi) extends Ba
           auditEvent.auditESCRequest(result.toString)
           calculator.award(result).map {
             response =>
-              val jsonResponse = Json.toJson[ESCCalculation](response)
+              val jsonResponse = Json.toJson[ESCCalculatorOutput](response)
               auditEvent.auditESCResponse(jsonResponse.toString())
               Ok(jsonResponse)
           } recover {
