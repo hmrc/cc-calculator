@@ -25,13 +25,13 @@ import play.api.libs.json.{JsPath, Json, Reads}
 import utils._
 
 case class ESCEligibility(
-                          taxYears: List[TaxYear],
+                           escTaxYears: List[TaxYear],
                           location: String
                           )
 
 object ESCEligibility extends ESCConfig with MessagesObject {
   implicit val escEligibilityReads : Reads[ESCEligibility] = (
-      (JsPath \ "taxYears").read[List[TaxYear]].filter(ValidationError(messages("cc.calc.invalid.number.of.ty")))
+      (JsPath \ "escTaxYears").read[List[TaxYear]].filter(ValidationError(messages("cc.calc.invalid.number.of.ty")))
       (taxYears => taxYears.length >= lowerTaxYearsLimitValidation) and
         (JsPath \ "location").read[String]
     )(ESCEligibility.apply _)

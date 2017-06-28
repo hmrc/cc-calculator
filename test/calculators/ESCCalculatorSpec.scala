@@ -37,7 +37,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
   "ESCCalculatorService" should {
 
     "return a Future[AwardPeriod] result" in {
-      val result = ESCCalculator.award(ESCEligibility(taxYears = List(), location = "england"))
+      val result = ESCCalculator.award(ESCEligibility(escTaxYears = List(), location = "england"))
       result.isInstanceOf[Future[ESCCalculation]] shouldBe true
     }
 

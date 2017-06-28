@@ -38,7 +38,7 @@ class ESCEligibilitySpec extends UnitSpec with FakeCCCalculatorApplication {
         case JsSuccess(x, _) => {
           x shouldBe a[ESCEligibility]
 
-          val taxYear = x.taxYears.head
+          val taxYear = x.escTaxYears.head
           taxYear.startDate shouldBe a[LocalDate]
           taxYear.endDate shouldBe a[LocalDate]
 

@@ -574,7 +574,7 @@ trait ESCCalculator extends ESCCalculatorHelpers with ESCCalculatorTax with ESCC
   }
 
   def getCalculatedTaxYears(escEligibility: ESCEligibility): List[models.output.esc.TaxYear] = {
-    val taxYears = escEligibility.taxYears
+    val taxYears = escEligibility.escTaxYears
     for(taxYear <- taxYears) yield {
       val claimantListForTY = determineCalculatedListOfClaimantsPairs(taxYear.periods, escEligibility.location)
       val resultClaimantList = determineClaimantsForTaxYear(claimantListForTY)
@@ -627,8 +627,8 @@ trait ESCCalculator extends ESCCalculatorHelpers with ESCCalculatorTax with ESCC
       )
     Future{
       ESCCalculation(
-        from = eligibility.taxYears.head.startDate,
-        until = eligibility.taxYears.last.endDate,
+        from = eligibility.escTaxYears.head.startDate,
+        until = eligibility.escTaxYears.last.endDate,
         totalSavings = Savings(
           taxSaving = taxSavings,
           niSaving = niSavings,
