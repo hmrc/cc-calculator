@@ -18,7 +18,7 @@ package controllers.esc
 
 import calculators.ESCCalculator
 import models.input.esc.ESCCalculatorInput
-import models.output.esc.ESCCalculation
+import models.output.esc.ESCCalculatorOutput
 import play.api.Logger
 import play.api.libs.json.{Json, JsValue}
 import play.api.mvc.Action
@@ -47,7 +47,7 @@ class ESCCalculatorController @Inject()(val messagesApi: MessagesApi) extends Ba
           auditEvent.auditESCRequest(result.toString)
           calculator.award(result).map {
             response =>
-              val jsonResponse = Json.toJson[ESCCalculation](response)
+              val jsonResponse = Json.toJson[ESCCalculatorOutput](response)
               auditEvent.auditESCResponse(jsonResponse.toString())
               Ok(jsonResponse)
           } recover {

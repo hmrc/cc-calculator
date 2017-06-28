@@ -20,7 +20,7 @@ import calculators.ESCCalculator
 import com.fasterxml.jackson.databind.JsonNode
 import com.github.fge.jackson.JsonLoader
 import models.input.esc.ESCCalculatorInput
-import models.output.esc.ESCCalculation
+import models.output.esc.ESCCalculatorOutput
 import play.api.libs.json.{JsSuccess, JsValue, Json}
 import uk.gov.hmrc.play.test.UnitSpec
 import utils.FakeCCCalculatorApplication
@@ -76,10 +76,10 @@ class ESCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication {
         val inputJson = json.validate[ESCCalculatorInput]
         inputJson.isInstanceOf[JsSuccess[ESCCalculatorInput]] shouldBe true
 
-        val result: ESCCalculation = ESCCalculator.calculator.award(inputJson.get)
+        val result: ESCCalculatorOutput = ESCCalculator.calculator.award(inputJson.get)
         val resourceJson = JsonLoader.fromResource(s"/json/esc/output/scenario_${scenarioNumber}.json")
         val outputJson: JsValue = Json.parse(resourceJson.toString)
-        Json.toJson[ESCCalculation](result) shouldBe outputJson
+        Json.toJson[ESCCalculatorOutput](result) shouldBe outputJson
       }
     }
 

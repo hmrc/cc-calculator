@@ -16,7 +16,7 @@
 
 package models.output
 
-import models.output.esc.{TaxAndNI, Savings, Income}
+import models.output.esc.{ESCTaxAndNi, ESCSavings, ESCIncome}
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import play.api.libs.json.Json
@@ -32,34 +32,34 @@ class ESCCalculationSpec extends UnitSpec with FakeCCCalculatorApplication {
       val from = LocalDate.parse ("2016-08-27",formatter)
       val until = LocalDate.parse ("2016-05-06",formatter)
 
-      val claimant = models.output.esc.Claimant(
+      val claimant = models.output.esc.ESCClaimant(
         eligibleMonthsInTaxYear = 0,
-        income = Income(),
+        income = ESCIncome(),
         vouchers = false,
         escStartDate = from,
         escAmountPeriod = Periods.Monthly,
-        savings = Savings(),
+        savings = ESCSavings(),
         maximumRelief = BigDecimal(0.00),
         maximumReliefPeriod = Periods.Monthly,
-        taxAndNIAfterSacrifice = TaxAndNI(),
-        taxAndNIBeforeSacrifice = TaxAndNI()
+        taxAndNIAfterSacrifice = ESCTaxAndNi(),
+        taxAndNIBeforeSacrifice = ESCTaxAndNi()
       )
 
-      val taxYear = models.output.esc.TaxYear(
+      val taxYear = models.output.esc.ESCTaxYear(
         from = from,
         until = until,
-        totalSavings = Savings(),
+        totalSavings = ESCSavings(),
         claimants = List(claimant)
       )
 
-      val outputCalculation = models.output.esc.ESCCalculation(
+      val outputCalculation = models.output.esc.ESCCalculatorOutput(
         from = from,
         until = until,
-        totalSavings = Savings(),
+        totalSavings = ESCSavings(),
         taxYears = List(taxYear)
       )
 
-      val json = Json.toJson[models.output.esc.ESCCalculation](outputCalculation)
+      val json = Json.toJson[models.output.esc.ESCCalculatorOutput](outputCalculation)
       json shouldBe Json.parse(
         """
          {
