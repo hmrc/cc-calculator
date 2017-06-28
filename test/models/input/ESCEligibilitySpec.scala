@@ -188,11 +188,10 @@ class ESCEligibilitySpec extends UnitSpec with FakeCCCalculatorApplication {
       val periodStart = LocalDate.parse("2016-05-06", formatter)
       val periodEnd = LocalDate.parse("2017-04-06", formatter)
 
-      val service = ESCCalculator
       val period = ESCPeriod(from = periodStart, until = periodEnd, List())
       val income = TotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "1201NJI", niCategory = "")
       try {
-        val result = service.calculator.getPersonalAllowance(period, income, ESCConfig.getConfig(period.from, "", location))
+        val result = ESCCalculator.getPersonalAllowance(period, income, ESCConfig.getConfig(period.from, "", location))
         result shouldBe a[NoSuchElementException]
       } catch {
         case e: Exception =>

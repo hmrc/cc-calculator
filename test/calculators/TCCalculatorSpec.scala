@@ -35,62 +35,32 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
 
     "round up for double numbers if less than 5" in {
       val cost: BigDecimal = 12.241212342
-      val result: BigDecimal = TCCalculator.calculator.round(cost)
+      val result: BigDecimal = TCCalculator.calculator.roundup(cost)
       result shouldBe 12.25
     }
 
     "round up for double numbers if less than 5 (.00001)" in {
       val cost: BigDecimal = 12.00001
-      val result: BigDecimal = TCCalculator.calculator.round(cost)
+      val result: BigDecimal = TCCalculator.calculator.roundup(cost)
       result shouldBe 12.01
     }
 
     "round up for double numbers if more than 5 (.9599)" in {
       val cost: BigDecimal = 12.9599231531231
-      val result: BigDecimal = TCCalculator.calculator.round(cost)
+      val result: BigDecimal = TCCalculator.calculator.roundup(cost)
       result shouldBe 12.96
     }
 
     "round up for double numbers if less than 5 (.4444)" in {
       val cost: BigDecimal = 12.4444000000001
-      val result: BigDecimal = TCCalculator.calculator.round(cost)
+      val result: BigDecimal = TCCalculator.calculator.roundup(cost)
       result shouldBe 12.45
     }
 
     "not round up for double numbers if all digits after decimal point are 0" in {
       val cost: BigDecimal = 12.9800
-      val result: BigDecimal = TCCalculator.calculator.round(cost)
+      val result: BigDecimal = TCCalculator.calculator.roundup(cost)
       result shouldBe 12.98
-    }
-
-    "round up to pound for double numbers if less than 5 (.241212342)" in {
-      val cost: BigDecimal = 12.241212342
-      val result: BigDecimal = TCCalculator.calculator.roundToPound(cost)
-      result shouldBe 13
-    }
-
-    "round up to pound for double numbers if less than 5 (.01)" in {
-      val cost: BigDecimal = 12.01
-      val result: BigDecimal = TCCalculator.calculator.roundToPound(cost)
-      result shouldBe 13
-    }
-
-    "round up to pound for double numbers if more than 5 (.51)" in {
-      val cost: BigDecimal = 12.51
-      val result: BigDecimal = TCCalculator.calculator.roundToPound(cost)
-      result shouldBe 13
-    }
-
-    "round up to pound for double numbers if more than 5 (.99)" in {
-      val cost: BigDecimal = 12.99
-      val result: BigDecimal = TCCalculator.calculator.roundToPound(cost)
-      result shouldBe 13
-    }
-
-    "not round up to pound for double numbers if all digits after decimal point are 0" in {
-      val cost: BigDecimal = 12.00
-      val result: BigDecimal = TCCalculator.calculator.roundToPound(cost)
-      result shouldBe 12
     }
 
     "pro-tata an amount of money between two dates (after is before until date)" in {
@@ -112,16 +82,6 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       result shouldBe "2849.40"
     }
 
-    "(Fortnightly) pro-rata an amount of money between two dates (not rounded and not truncated)" in {
-      val cost: BigDecimal = 333.34
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
-      val fromDate = LocalDate.parse("01-05-2017", formatter)
-      val toDate = LocalDate.parse("21-05-2017", formatter)
-      //String representation in order to test the whole value
-      val result: String = TCCalculator.calculator.amountForDateRange(cost, Periods.Fortnightly, fromDate, toDate).toString()
-      result shouldBe "474.80"
-    }
-
     "(Monthly) pro-rata an amount of money between two dates (not rounded and not truncated)" in {
       val cost: BigDecimal = 100.99
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
@@ -130,16 +90,6 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       //String representation in order to test the whole value
       val result: String = TCCalculator.calculator.amountForDateRange(cost, Periods.Monthly, fromDate, toDate).toString()
       result shouldBe "66.40"
-    }
-
-    "(Quarterly) pro-rata an amount of money between two dates (not rounded and not truncated)" in {
-      val cost: BigDecimal = 2000.00
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
-      val fromDate = LocalDate.parse("01-05-2017", formatter)
-      val toDate = LocalDate.parse("21-05-2017", formatter)
-      //String representation in order to test the whole value
-      val result: String = TCCalculator.calculator.amountForDateRange(cost, Periods.Quarterly, fromDate, toDate).toString()
-      result shouldBe "438.40"
     }
 
     "(Yearly) pro-rata an amount of money between two dates (not rounded and not truncated)" in {
@@ -161,15 +111,6 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       result shouldBe 2849.40
     }
 
-    "(fortnightly) pro-rata an amount of money between two dates (not rounded and truncated)" in {
-      val cost: BigDecimal = 333.34
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
-      val fromDate = LocalDate.parse("01-05-2017", formatter)
-      val toDate = LocalDate.parse("21-05-2017", formatter)
-      val result: BigDecimal = TCCalculator.calculator.amountForDateRange(cost, Periods.Fortnightly, fromDate, toDate)
-      result shouldBe 474.80
-    }
-
     "(monthly) pro-rata an amount of money between two dates (not rounded and truncated)" in {
       val cost: BigDecimal = 100.99
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
@@ -177,15 +118,6 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val result: BigDecimal = TCCalculator.calculator.amountForDateRange(cost, Periods.Monthly, fromDate, toDate)
       result shouldBe 66.400
-    }
-
-    "(quarterly) pro-rata an amount of money between two dates (not rounded and truncated)" in {
-      val cost: BigDecimal = 2000.00
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
-      val fromDate = LocalDate.parse("01-05-2017", formatter)
-      val toDate = LocalDate.parse("21-05-2017", formatter)
-      val result: BigDecimal = TCCalculator.calculator.amountForDateRange(cost, Periods.Quarterly, fromDate, toDate)
-      result shouldBe 438.40
     }
 
     "(yearly) pro-rata an amount of money between two dates (not rounded and truncated)" in {
@@ -206,15 +138,6 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       result shouldBe 2849.40
     }
 
-    "(fortnightly) pro-rata an amount of money between two dates (rounded and truncated)" in {
-      val cost: BigDecimal = 333.34
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
-      val fromDate = LocalDate.parse("01-05-2017", formatter)
-      val toDate = LocalDate.parse("21-05-2017", formatter)
-      val result: BigDecimal = TCCalculator.calculator.amountForDateRange(cost, Periods.Fortnightly, fromDate, toDate)
-      result shouldBe 474.80
-    }
-
     "(monthly) pro-rota an amount of money between two dates (rounded and truncated)" in {
       val cost: BigDecimal = 100.99
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
@@ -222,15 +145,6 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val result: BigDecimal = TCCalculator.calculator.amountForDateRange(cost, Periods.Monthly, fromDate, toDate)
       result shouldBe 66.40
-    }
-
-    "(quarterly) pro-rata an amount of money between two dates (rounded and truncated)" in {
-      val cost: BigDecimal = 2000.00
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
-      val fromDate = LocalDate.parse("01-05-2017", formatter)
-      val toDate = LocalDate.parse("21-05-2017", formatter)
-      val result: BigDecimal = TCCalculator.calculator.amountForDateRange(cost, Periods.Quarterly, fromDate, toDate)
-      result shouldBe 438.40
     }
 
     "(yearly) pro-rata an amount of money between two dates (rounded and truncated)" in {
@@ -251,15 +165,6 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       result shouldBe 2849.40
     }
 
-    "(fortnightly) pro-rata an amount of money between two dates (rounded and not truncated)" in {
-      val cost: BigDecimal = 333.34
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
-      val fromDate = LocalDate.parse("01-05-2017", formatter)
-      val toDate = LocalDate.parse("21-05-2017", formatter)
-      val result: BigDecimal = TCCalculator.calculator.amountForDateRange(cost, Periods.Fortnightly, fromDate, toDate)
-      result shouldBe 474.80
-    }
-
     "(monthly) pro-rata an amount of money between two dates (rounded and not truncated)" in {
       val cost: BigDecimal = 100.99
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
@@ -267,15 +172,6 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val result: BigDecimal = TCCalculator.calculator.amountForDateRange(cost, Periods.Monthly, fromDate, toDate)
       result shouldBe 66.40
-    }
-
-    "(quarterly) pro-rata an amount of money between two dates (rounded and not truncated)" in {
-      val cost: BigDecimal = 2000.00
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
-      val fromDate = LocalDate.parse("01-05-2017", formatter)
-      val toDate = LocalDate.parse("21-05-2017", formatter)
-      val result: BigDecimal = TCCalculator.calculator.amountForDateRange(cost, Periods.Quarterly, fromDate, toDate)
-      result shouldBe 438.40
     }
 
     "(yearly) pro-rata an amount of money between two dates (rounded and not truncated)" in {
@@ -287,15 +183,6 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       result shouldBe 547.80
     }
 
-    "(Fortnightly) pro-rata an amount of money between two dates" in {
-      val cost: BigDecimal = 1000.00
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
-      val fromDate = LocalDate.parse("01-05-2017", formatter)
-      val toDate = LocalDate.parse("21-05-2017", formatter)
-      val result: BigDecimal = TCCalculator.calculator.amountForDateRange(cost, Periods.Fortnightly, fromDate, toDate)
-      result shouldBe 1424.60
-    }
-
     "(monthly) pro-rata an amount of money between two dates" in {
       val cost: BigDecimal = 1000.00
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
@@ -303,15 +190,6 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val result: BigDecimal = TCCalculator.calculator.amountForDateRange(cost, Periods.Monthly, fromDate, toDate)
       result shouldBe 657.60
-    }
-
-    "(quarterly) pro-rata an amount of money between two dates" in {
-      val cost: BigDecimal = 1000.00
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
-      val fromDate = LocalDate.parse("01-05-2017", formatter)
-      val toDate = LocalDate.parse("21-05-2017", formatter)
-      val result: BigDecimal = TCCalculator.calculator.amountForDateRange(cost, Periods.Quarterly, fromDate, toDate)
-      result shouldBe 219.20
     }
 
     "(yearly) pro-rata an amount of money between two dates" in {

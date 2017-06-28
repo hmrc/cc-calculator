@@ -30,7 +30,6 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import service.AuditEvents
-import play.api.Play
 import utils.FakeCCCalculatorApplication
 import scala.concurrent.Future
 import play.api.i18n.Messages.Implicits._
@@ -56,9 +55,9 @@ class ESCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
 
     forAll(validData) { case (description, data) =>
       s"Accept valid JSON at /employer-supported-childcare/calculate (${description})" in {
-        val controller = new ESCCalculatorController(applicationMessagesApi) with ESCCalculator {
-          override val calculator = mock[ESCCalculatorService]
+        val controller = new ESCCalculatorController(applicationMessagesApi) {
           override val auditEvent = mock[AuditEvents]
+          override val calculator = mock[ESCCalculator]
         }
 
         val inputJson: JsValue = Json.parse(JsonLoader.fromResource(s"/json/esc/input/${data}").toString)
@@ -71,8 +70,8 @@ class ESCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
     }
 
     "Accept invalid JSON at /employer-supported-childcare/calculate and return a BadRequest with an error (0 Tax Year)" in {
-      val controller = new ESCCalculatorController(applicationMessagesApi) with ESCCalculator {
-        override val calculator = mock[ESCCalculatorService]
+      val controller = new ESCCalculatorController(applicationMessagesApi) {
+        override val calculator = mock[ESCCalculator]
         override val auditEvent = mock[AuditEvents]
       }
 
@@ -107,8 +106,8 @@ class ESCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
     }
 
     "Accept invalid JSON at /employer-supported-childcare/calculate and return a BadRequest with an error (negative value in eligible months)" in {
-      val controller = new ESCCalculatorController(applicationMessagesApi) with ESCCalculator {
-        override val calculator = mock[ESCCalculatorService]
+      val controller = new ESCCalculatorController(applicationMessagesApi) {
+        override val calculator = mock[ESCCalculator]
         override val auditEvent = mock[AuditEvents]
       }
 
@@ -144,8 +143,8 @@ class ESCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
 
     "Accept invalid JSON at /employer-supported-childcare/calculate and return a BadRequest with an error (value more than 99 in eligible months)" in {
 
-      val controller = new ESCCalculatorController(applicationMessagesApi) with ESCCalculator {
-        override val calculator = mock[ESCCalculatorService]
+      val controller = new ESCCalculatorController(applicationMessagesApi) {
+        override val calculator = mock[ESCCalculator]
         override val auditEvent = mock[AuditEvents]
       }
 
@@ -181,8 +180,8 @@ class ESCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
     }
 
     "Accept invalid JSON at /employer-supported-childcare/calculate and return a BadRequest with an error (0 periods)" in {
-      val controller = new ESCCalculatorController(applicationMessagesApi) with ESCCalculator {
-        override val calculator = mock[ESCCalculatorService]
+      val controller = new ESCCalculatorController(applicationMessagesApi) {
+        override val calculator = mock[ESCCalculator]
         override val auditEvent = mock[AuditEvents]
       }
 
@@ -217,8 +216,8 @@ class ESCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
     }
 
     "Accept invalid JSON at /employer-supported-childcare/calculate and return a BadRequest with an error (0 claimants)" in {
-      val controller = new ESCCalculatorController(applicationMessagesApi) with ESCCalculator {
-        override val calculator = mock[ESCCalculatorService]
+      val controller = new ESCCalculatorController(applicationMessagesApi) {
+        override val calculator = mock[ESCCalculator]
         override val auditEvent = mock[AuditEvents]
       }
 
@@ -253,8 +252,8 @@ class ESCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
     }
 
     "Accept invalid JSON at /employer-supported-childcare/calculate and return a BadRequest with an error (negative voucher amount)" in {
-      val controller = new ESCCalculatorController(applicationMessagesApi) with ESCCalculator {
-        override val calculator = mock[ESCCalculatorService]
+      val controller = new ESCCalculatorController(applicationMessagesApi) {
+        override val calculator = mock[ESCCalculator]
         override val auditEvent = mock[AuditEvents]
       }
 
@@ -289,8 +288,8 @@ class ESCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
     }
 
     "Accept invalid JSON at /employer-supported-childcare/calculate and return a BadRequest with an error (date missing)" in {
-      val controller = new ESCCalculatorController(applicationMessagesApi) with ESCCalculator {
-        override val calculator = mock[ESCCalculatorService]
+      val controller = new ESCCalculatorController(applicationMessagesApi) {
+        override val calculator = mock[ESCCalculator]
         override val auditEvent = mock[AuditEvents]
       }
 
@@ -325,8 +324,8 @@ class ESCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
     }
 
     "Accept invalid JSON at /employer-supported-childcare/calculate and return a BadRequest with an error (incorrect data type)" in {
-      val controller = new ESCCalculatorController(applicationMessagesApi) with ESCCalculator {
-        override val calculator = mock[ESCCalculatorService]
+      val controller = new ESCCalculatorController(applicationMessagesApi) {
+        override val calculator = mock[ESCCalculator]
         override val auditEvent = mock[AuditEvents]
       }
 
@@ -361,8 +360,8 @@ class ESCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
     }
 
     "Return Internal Server Error with error message if an exception is thrown during calculation " in {
-      val controller = new ESCCalculatorController(applicationMessagesApi) with ESCCalculator {
-        override val calculator = mock[ESCCalculatorService]
+      val controller = new ESCCalculatorController(applicationMessagesApi) {
+        override val calculator = mock[ESCCalculator]
         override val auditEvent = mock[AuditEvents]
       }
 

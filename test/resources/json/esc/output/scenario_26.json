@@ -27,7 +27,7 @@
             "niCategory": "A"
           },
           "vouchers": true,
-          "escAmount": 350,
+          "escAmount": 175,
           "escAmountPeriod": "Month",
           "escStartDate": "2013-08-27",
           "savings": {
@@ -57,7 +57,7 @@
             "niCategory": "A"
           },
           "vouchers": true,
-          "escAmount": 250,
+          "escAmount": 125,
           "escAmountPeriod": "Month",
           "escStartDate": "2013-08-27",
           "savings": {
@@ -98,7 +98,7 @@
             "niCategory": "A"
           },
           "vouchers": true,
-          "escAmount": 350,
+          "escAmount": 175,
           "escAmountPeriod": "Month",
           "escStartDate": "2013-08-27",
           "savings": {
@@ -128,7 +128,7 @@
             "niCategory": "A"
           },
           "vouchers": true,
-          "escAmount": 250,
+          "escAmount": 125,
           "escAmountPeriod": "Month",
           "escStartDate": "2013-08-27",
           "savings": {

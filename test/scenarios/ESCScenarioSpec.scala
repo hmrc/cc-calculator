@@ -76,7 +76,7 @@ class ESCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication {
         val inputJson = json.validate[ESCEligibility]
         inputJson.isInstanceOf[JsSuccess[ESCEligibility]] shouldBe true
 
-        val result: ESCCalculation = ESCCalculator.calculator.award(inputJson.get)
+        val result: ESCCalculation = ESCCalculator.award(inputJson.get)
         val resourceJson = JsonLoader.fromResource(s"/json/esc/output/scenario_${scenarioNumber}.json")
         val outputJson: JsValue = Json.parse(resourceJson.toString)
         Json.toJson[ESCCalculation](result) shouldBe outputJson

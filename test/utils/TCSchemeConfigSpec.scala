@@ -23,8 +23,7 @@ import org.scalatest.prop.Tables.Table
 
 class TCSchemeConfigSpec extends FakeCCCalculatorApplication with TCConfig {
 
-  val pattern = "dd-MM-yyyy"
-  val formatter = DateTimeFormat.forPattern(pattern)
+  override val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
 
   val defaultTaxYearConfig = TCTaxYearConfig(
     otherIncomeAdjustment = 300,
