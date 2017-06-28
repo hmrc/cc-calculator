@@ -23,7 +23,7 @@ import play.api.libs.json.Json
 import uk.gov.hmrc.play.test.UnitSpec
 import utils.{FakeCCCalculatorApplication, Periods}
 
-class ESCCalculationSpec extends UnitSpec with FakeCCCalculatorApplication {
+class ESCCalculatorOutputSpec extends UnitSpec with FakeCCCalculatorApplication {
 
   "ESCCalculation models" should {
 

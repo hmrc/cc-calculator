@@ -26,7 +26,7 @@ import play.api.libs.json.{JsSuccess, JsValue, Json}
 import uk.gov.hmrc.play.test.UnitSpec
 import utils._
 
-class ESCEligibilitySpec extends UnitSpec with FakeCCCalculatorApplication {
+class ESCCalculatorInputSpec extends UnitSpec with FakeCCCalculatorApplication {
   val location = "england"
 
   "ESC Input JSON" should {
