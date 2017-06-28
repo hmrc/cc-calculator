@@ -1,5 +1,5 @@
 {
-  "taxYears": [
+  "escTaxYears": [
     {
       "startDate": "2016-08-27",
       "endDate": "2017-04-06",
@@ -11,7 +11,6 @@
             {
               "qualifying": true,
               "isPartner": false,
-              "location": "england",
               "eligibleMonthsInPeriod": 3,
                 "vouchers": true,
               "escAmount": 240.00,
@@ -21,7 +20,6 @@
             {
               "qualifying": true,
               "isPartner": true,
-              "location": "england",
               "eligibleMonthsInPeriod": 3,
                 "vouchers": true,
               "escAmount": 150.00,
@@ -43,7 +41,6 @@
             {
               "qualifying": false,
               "isPartner": false,
-              "location": "england",
               "eligibleMonthsInPeriod": 0,
                 "vouchers": false,
               "escAmount": 240.00,
@@ -53,7 +50,6 @@
             {
               "qualifying": false,
               "isPartner": true,
-              "location": "england",
               "eligibleMonthsInPeriod": 0,
                 "vouchers": false,
               "escAmount": 150.00,
@@ -69,7 +65,6 @@
             {
               "qualifying": true,
               "isPartner": false,
-              "location": "england",
               "eligibleMonthsInPeriod": 6,
                 "vouchers": true,
               "escAmount": 240.00,
@@ -79,7 +74,6 @@
             {
               "qualifying": true,
               "isPartner": true,
-              "location": "england",
               "eligibleMonthsInPeriod": 6,
                 "vouchers": true,
               "escAmount": 150.00,
@@ -90,5 +84,6 @@
         }
       ]
     }
-  ]
+  ],
+  "location": "england"
 }

@@ -1,5 +1,5 @@
 {
-  "taxYears": [
+  "escTaxYears": [
     {
       "startDate": "2015-08-27",
       "endDate": "2016-08-27",
@@ -10,7 +10,6 @@
             {
               "qualifying": false,
               "isPartner": false,
-              "location": "england",
               "eligibleMonthsInPeriod": 2,
               "income": {
                 "taxablePay": 0.00,
@@ -28,5 +27,6 @@
         }
       ]
     }
-  ]
+  ],
+  "location": "england"
 }
