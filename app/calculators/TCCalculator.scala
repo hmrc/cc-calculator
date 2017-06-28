@@ -586,8 +586,7 @@ trait TCCalculator {
         val other: BigDecimal = income.other.getOrElse(List()).foldLeft(BigDecimal(0))(_ + _)
         val otherAdjustment: BigDecimal = if (other > tcConfig.otherIncomeAdjustment) {
           tcConfig.otherIncomeAdjustment
-        }
-        else {
+        } else {
           other
         }
 
