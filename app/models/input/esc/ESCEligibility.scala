@@ -15,13 +15,14 @@
  */
 
 package models.input.esc
+
 import config.ConfigConstants._
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import play.api.data.validation.ValidationError
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Reads._
-import play.api.libs.json.{JsPath, Json, Reads}
+import play.api.libs.json.{Format, JsPath, Json, Reads}
 import utils._
 
 case class ESCEligibility(
@@ -56,7 +57,8 @@ object TaxYear extends CCFormat with ESCConfig with MessagesObject {
 case class ESCPeriod(
                       from: LocalDate,
                       until: LocalDate,
-                      claimants: List[Claimant]
+                      claimants: List[Claimant],
+                      children: List[Child]
                       )
 
 object ESCPeriod extends CCFormat with ESCConfig with MessagesObject {
@@ -64,9 +66,20 @@ object ESCPeriod extends CCFormat with ESCConfig with MessagesObject {
     (JsPath \ "from").read[LocalDate](jodaLocalDateReads(datePattern)) and
       (JsPath \ "until").read[LocalDate](jodaLocalDateReads(datePattern)) and
         (JsPath \ "claimants").read[List[Claimant]].filter(
-        ValidationError(messages("cc.calc.invalid.number.of.claimants"))
-        )(claimants => claimants.length >= lowerClaimantsLimitValidation)
+          ValidationError(messages("cc.calc.invalid.number.of.claimants"))
+        )(claimants => claimants.length >= lowerClaimantsLimitValidation) and
+          (JsPath \ "children").read[List[Child]]
     )(ESCPeriod.apply _)
+}
+
+case class Child(
+                   qualifying: Boolean = false,
+                   childCareCost: BigDecimal,
+                   childCareCostPeriod: Periods.Period = Periods.Monthly
+                   )
+
+object Child {
+  implicit val childFormat: Format[Child] = Json.format[Child]
 }
 
 //gross and taxablePay are annual amounts
@@ -106,9 +119,7 @@ case class Claimant (
                      previousIncome: Option[Income],
                      currentIncome: Option[Income],
                      vouchers: Boolean = false,
-                     escStartDate: LocalDate,
-                     escAmount: BigDecimal = BigDecimal(0.00),
-                     escAmountPeriod: Periods.Period
+                     escStartDate: LocalDate
                      ) extends CCFormat
 {
   def isESCStartDateBefore2011 : Boolean = {
@@ -151,9 +162,6 @@ object Claimant extends CCFormat with ESCConfig with MessagesObject {
             (JsPath \ "previousIncome").readNullable[Income] and
             (JsPath \ "currentIncome").readNullable[Income] and
               (JsPath \ "vouchers").read[Boolean] and
-                (JsPath \ "escStartDate").read[LocalDate](jodaLocalDateReads(datePattern)) and
-                  (JsPath \ "escAmount").read[BigDecimal].filter(ValidationError(messages("cc.calc.voucher.amount.less.than.0"))
-                    )(income => income >= BigDecimal(0.00)) and
-                    (JsPath \ "escAmountPeriod").read[Periods.Period]
+                (JsPath \ "escStartDate").read[LocalDate](jodaLocalDateReads(datePattern))
     )(Claimant.apply _)
 }
