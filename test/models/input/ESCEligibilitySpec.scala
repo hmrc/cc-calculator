@@ -52,8 +52,6 @@ class ESCEligibilitySpec extends UnitSpec with FakeCCCalculatorApplication {
           claimant.qualifying.isInstanceOf[Boolean] shouldBe true
           claimant.eligibleMonthsInPeriod.isInstanceOf[Int] shouldBe true
           claimant.isPartner.isInstanceOf[Boolean] shouldBe true
-          claimant.escAmount shouldBe a[BigDecimal]
-          claimant.escAmountPeriod.isInstanceOf[Periods.Period] shouldBe true
           claimant.escStartDate.isInstanceOf[LocalDate] shouldBe true
 
           val income = period.claimants.head.income
@@ -75,21 +73,21 @@ class ESCEligibilitySpec extends UnitSpec with FakeCCCalculatorApplication {
     "Assess ESC startdate where date is after 6 April 2011" in {
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val escStartDate = LocalDate.parse("2016-06-01", formatter)
-      val claimant = models.input.esc.Claimant(qualifying = true, eligibleMonthsInPeriod = 2, isPartner = false, previousIncome = None, currentIncome = None, vouchers = true, escAmount = 200.00, escAmountPeriod = Periods.Monthly, escStartDate = escStartDate)
+      val claimant = models.input.esc.Claimant(qualifying = true, eligibleMonthsInPeriod = 2, isPartner = false, previousIncome = None, currentIncome = None, vouchers = true, escStartDate = escStartDate)
       claimant.isESCStartDateBefore2011 shouldBe false
     }
 
     "Assess ESC startdate where date is before 6 April 2011" in {
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val escStartDate = LocalDate.parse("2010-06-01", formatter)
-      val claimant = models.input.esc.Claimant(qualifying = true, eligibleMonthsInPeriod = 2, isPartner = false, previousIncome = None, currentIncome = None, vouchers = true, escAmount = 200.00, escAmountPeriod = Periods.Monthly, escStartDate = escStartDate)
+      val claimant = models.input.esc.Claimant(qualifying = true, eligibleMonthsInPeriod = 2, isPartner = false, previousIncome = None, currentIncome = None, vouchers = true, escStartDate = escStartDate)
       claimant.isESCStartDateBefore2011 shouldBe true
     }
 
     "Assess ESC startdate where date is on 6 April 2011" in {
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val escStartDate = LocalDate.parse("2011-04-06", formatter)
-      val claimant = models.input.esc.Claimant(qualifying = true, eligibleMonthsInPeriod = 2, isPartner = false, previousIncome = None, currentIncome = None, vouchers = true, escAmount = 200.00, escAmountPeriod = Periods.Monthly, escStartDate = escStartDate)
+      val claimant = models.input.esc.Claimant(qualifying = true, eligibleMonthsInPeriod = 2, isPartner = false, previousIncome = None, currentIncome = None, vouchers = true, escStartDate = escStartDate)
       claimant.isESCStartDateBefore2011 shouldBe false
     }
   }
@@ -100,7 +98,7 @@ class ESCEligibilitySpec extends UnitSpec with FakeCCCalculatorApplication {
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val periodStart = LocalDate.parse("2017-05-06", formatter)
       val periodEnd = LocalDate.parse("2018-04-05", formatter)
-      val period = models.input.esc.ESCPeriod(from = periodStart, until = periodEnd, claimants = List())
+      val period = models.input.esc.ESCPeriod(from = periodStart, until = periodEnd, claimants = List(), children = List())
       val niCat = NiCategory(
         niCategoryCode = "C",
         lelMonthlyLowerLimitForCat = 0.00,
@@ -137,7 +135,7 @@ class ESCEligibilitySpec extends UnitSpec with FakeCCCalculatorApplication {
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val periodStart = LocalDate.parse("2016-05-06", formatter)
       val periodEnd = LocalDate.parse("2017-04-05", formatter)
-      val period = models.input.esc.ESCPeriod(from = periodStart, until = periodEnd, claimants = List())
+      val period = models.input.esc.ESCPeriod(from = periodStart, until = periodEnd, claimants = List(), children = List())
       val niCat = NiCategory(
         niCategoryCode = "A",
         lelMonthlyLowerLimitForCat = 0.00,
@@ -174,7 +172,7 @@ class ESCEligibilitySpec extends UnitSpec with FakeCCCalculatorApplication {
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val periodStart = LocalDate.parse("2017-05-06", formatter)
       val periodEnd = LocalDate.parse("2018-04-05", formatter)
-      val period = models.input.esc.ESCPeriod(from = periodStart, until = periodEnd, claimants = List())
+      val period = models.input.esc.ESCPeriod(from = periodStart, until = periodEnd, claimants = List(), children = List())
       try {
         ESCConfig.getConfig(period.from, "", location) should not be a[NoSuchElementException]
       } catch {
@@ -188,7 +186,7 @@ class ESCEligibilitySpec extends UnitSpec with FakeCCCalculatorApplication {
       val periodStart = LocalDate.parse("2016-05-06", formatter)
       val periodEnd = LocalDate.parse("2017-04-06", formatter)
 
-      val period = ESCPeriod(from = periodStart, until = periodEnd, List())
+      val period = ESCPeriod(from = periodStart, until = periodEnd, List(), children = List())
       val income = TotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "1201NJI", niCategory = "")
       try {
         val result = ESCCalculator.getPersonalAllowance(period, income, ESCConfig.getConfig(period.from, "", location))

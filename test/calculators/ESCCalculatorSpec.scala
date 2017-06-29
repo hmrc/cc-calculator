@@ -1215,33 +1215,33 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
 
       val inputClaimant = Claimant(qualifying = false, isPartner = false,
         eligibleMonthsInPeriod = 0, previousIncome = None, currentIncome = Some(Income(Some(50000))), vouchers = false,
-        escStartDate = fromDate, escAmount = 90.00, escAmountPeriod = Periods.Monthly)
+        escStartDate = fromDate)
       val inputPartner = Claimant(qualifying = false, isPartner = true,
         eligibleMonthsInPeriod = 0, previousIncome = None, currentIncome = Some(Income(Some(50000))), vouchers = false,
-        escStartDate = fromDate, escAmount = 90.00, escAmountPeriod = Periods.Monthly)
+        escStartDate = fromDate)
 
       val inputClaimant2 = Claimant(qualifying = false, isPartner = false,
         eligibleMonthsInPeriod = 0, previousIncome = None, currentIncome = Some(Income(Some(50000))), vouchers = false,
-        escStartDate = fromDate, escAmount = 90.00, escAmountPeriod = Periods.Monthly)
+        escStartDate = fromDate)
       val inputPartner2 = Claimant(qualifying = true, isPartner = true,
         eligibleMonthsInPeriod = 1, previousIncome = None, currentIncome = Some(Income(Some(50000))), vouchers = true,
-        escStartDate = fromDate, escAmount = 90.00, escAmountPeriod = Periods.Monthly)
+        escStartDate = fromDate)
 
-      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant, inputPartner))
-      val period2 = ESCPeriod(from = fromDate2, until = toDate2, claimants = List(inputClaimant2, inputPartner2))
+      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant, inputPartner), children = List[Child]())
+      val period2 = ESCPeriod(from = fromDate2, until = toDate2, claimants = List(inputClaimant2, inputPartner2), children = List[Child]())
 
       val taxYear = TaxYear(startDate = fromDate, endDate = toDate, periods = List(period, period2))
 
       val outputClaimant = models.output.esc.Claimant(qualifying = false, eligibleMonthsInTaxYear = 0,
         isPartner = false, income = models.output.esc.Income(taxablePay = 50000.00, gross = 50000.00, taxCode = "", niCategory = "A"),
         vouchers = false, escAmount = 0.0, escAmountPeriod = Periods.Monthly, escStartDate = fromDate,
-        savings = Savings(totalSaving = 0.00, taxSaving = 0.00, niSaving = 0.00), maximumRelief = 124.00, maximumReliefPeriod = Periods.Monthly,
+        savings = Savings(totalSaving = 0.00, taxSaving = 0.00, niSaving = 0.00),
         taxAndNIBeforeSacrifice = models.output.esc.TaxAndNI(taxPaid = 0, niPaid = 0), taxAndNIAfterSacrifice = models.output.esc.TaxAndNI(taxPaid = 0, niPaid = 0))
 
       val outputPartner = models.output.esc.Claimant(qualifying = true, eligibleMonthsInTaxYear = 1,
         isPartner = true, income = models.output.esc.Income(taxablePay = 50000.00, gross = 50000.00, taxCode = "", niCategory = "A"),
         vouchers = true, escAmount = 90.0, escAmountPeriod = Periods.Monthly, escStartDate = fromDate,
-        savings = Savings(totalSaving = 37.8, taxSaving = 36, niSaving = 1.8), maximumRelief = 124.00, maximumReliefPeriod = Periods.Monthly,
+        savings = Savings(totalSaving = 37.8, taxSaving = 36, niSaving = 1.8),
         taxAndNIBeforeSacrifice = models.output.esc.TaxAndNI(taxPaid = 766.60, niPaid = 361.00), taxAndNIAfterSacrifice = models.output.esc.TaxAndNI(taxPaid = 730.60, niPaid = 359.20))
 
       val outputTY=models.output.esc.TaxYear(fromDate, toDate, Savings(totalSaving=37.8, taxSaving=36, niSaving=1.8), List(outputClaimant, outputPartner))
@@ -1260,33 +1260,33 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
 
       val inputPartner = Claimant(qualifying = false, isPartner = true,
         eligibleMonthsInPeriod = 0, previousIncome = None, currentIncome = Some(Income(Some(50000))), vouchers = false,
-        escStartDate = fromDate, escAmount = 90.00, escAmountPeriod = Periods.Monthly)
+        escStartDate = fromDate)
       val inputClaimant = Claimant(qualifying = false, isPartner = false,
         eligibleMonthsInPeriod = 0, previousIncome = None, currentIncome = Some(Income(Some(50000))), vouchers = false,
-        escStartDate = fromDate, escAmount = 90.00, escAmountPeriod = Periods.Monthly)
+        escStartDate = fromDate)
 
       val inputPartner2 = Claimant(qualifying = false, isPartner = true,
         eligibleMonthsInPeriod = 0, previousIncome = None, currentIncome = Some(Income(Some(50000))), vouchers = false,
-        escStartDate = fromDate, escAmount = 90.00, escAmountPeriod = Periods.Monthly)
+        escStartDate = fromDate)
       val inputClaimant2 = Claimant(qualifying = true, isPartner = false,
         eligibleMonthsInPeriod = 1, previousIncome = None, currentIncome = Some(Income(Some(50000))), vouchers = true,
-        escStartDate = fromDate, escAmount = 90.00, escAmountPeriod = Periods.Monthly)
+        escStartDate = fromDate)
 
-      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant, inputPartner))
-      val period2 = ESCPeriod(from = fromDate2, until = toDate2, claimants = List(inputClaimant2, inputPartner2))
+      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant, inputPartner), children = List[Child]())
+      val period2 = ESCPeriod(from = fromDate2, until = toDate2, claimants = List(inputClaimant2, inputPartner2), children = List[Child]())
 
       val taxYear = TaxYear(startDate = fromDate, endDate = toDate, periods = List(period, period2))
 
       val outputPartner = models.output.esc.Claimant(qualifying = false, eligibleMonthsInTaxYear = 0,
         isPartner = true, income = models.output.esc.Income(taxablePay = 50000.00, gross = 50000.00, taxCode = "", niCategory = "A"),
         vouchers = false, escAmount = 0.0, escAmountPeriod = Periods.Monthly, escStartDate = fromDate,
-        savings = Savings(totalSaving = 0.00, taxSaving = 0.00, niSaving = 0.00), maximumRelief = 124.00, maximumReliefPeriod = Periods.Monthly,
+        savings = Savings(totalSaving = 0.00, taxSaving = 0.00, niSaving = 0.00),
         taxAndNIBeforeSacrifice = models.output.esc.TaxAndNI(taxPaid = 0, niPaid = 0), taxAndNIAfterSacrifice = models.output.esc.TaxAndNI(taxPaid = 0, niPaid = 0))
 
       val outputClaimant = models.output.esc.Claimant(qualifying = true, eligibleMonthsInTaxYear = 1,
         isPartner = false, income = models.output.esc.Income(taxablePay = 50000.00, gross = 50000.00, taxCode = "", niCategory = "A"),
         vouchers = true, escAmount = 90.0, escAmountPeriod = Periods.Monthly, escStartDate = fromDate,
-        savings = Savings(totalSaving = 37.8, taxSaving = 36, niSaving = 1.8), maximumRelief = 124.00, maximumReliefPeriod = Periods.Monthly,
+        savings = Savings(totalSaving = 37.8, taxSaving = 36, niSaving = 1.8),
         taxAndNIBeforeSacrifice = models.output.esc.TaxAndNI(taxPaid = 766.60, niPaid = 361.00), taxAndNIAfterSacrifice = models.output.esc.TaxAndNI(taxPaid = 730.60, niPaid = 359.20))
 
       val outputTY = models.output.esc.TaxYear(fromDate, toDate, Savings(totalSaving = 37.8, taxSaving = 36, niSaving = 1.8), List(outputClaimant, outputPartner))
@@ -1301,7 +1301,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
-      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List())
+      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
 
       val outputModel = CalculationNIBands(lowerEarningsBand = 485, primaryEarningsBand = 0, upperEarningsBand = 0, aboveUpperEarningsBand = 0)
       val result = ESCCalculator.allocateAmountToNIBands(grossPay, period,  ESCConfig.getConfig(period.from, "A", location))
@@ -1314,7 +1314,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
-      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List())
+      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
 
       val outputModel = CalculationNIBands(lowerEarningsBand = 485.00, primaryEarningsBand = 0.01, upperEarningsBand = 0, aboveUpperEarningsBand = 0)
       val result = ESCCalculator.allocateAmountToNIBands(grossPay, period, ESCConfig.getConfig(period.from, "A", location))
@@ -1327,7 +1327,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
-      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List())
+      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
 
       val outputModel = CalculationNIBands(lowerEarningsBand = 485.00, primaryEarningsBand = 187, upperEarningsBand = 0, aboveUpperEarningsBand = 0)
       val result = ESCCalculator.allocateAmountToNIBands(grossPay, period,  ESCConfig.getConfig(period.from, "B", location))
@@ -1340,7 +1340,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
-      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List())
+      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
 
       val outputModel = CalculationNIBands(lowerEarningsBand = 485.00, primaryEarningsBand = 187, upperEarningsBand = 0.01, aboveUpperEarningsBand = 0)
       val result = ESCCalculator.allocateAmountToNIBands(grossPay, period, ESCConfig.getConfig(period.from, "B", location))
@@ -1353,7 +1353,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
-      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List())
+      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
 
       val outputModel = CalculationNIBands(lowerEarningsBand = 485.00, primaryEarningsBand = 187, upperEarningsBand = 2665, aboveUpperEarningsBand = 0)
       val result = ESCCalculator.allocateAmountToNIBands(grossPay, period, ESCConfig.getConfig(period.from, "C", location))
@@ -1366,7 +1366,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
-      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List())
+      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
 
       val outputModel = CalculationNIBands(lowerEarningsBand = 485.00, primaryEarningsBand = 187, upperEarningsBand = 2665.01, aboveUpperEarningsBand = 0)
       val result = ESCCalculator.allocateAmountToNIBands(grossPay, period,  ESCConfig.getConfig(period.from, "A", location))
@@ -1379,7 +1379,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
-      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List())
+      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
 
       val outputModel = CalculationNIBands(lowerEarningsBand = 485.00, primaryEarningsBand = 187, upperEarningsBand = 2860, aboveUpperEarningsBand = 0)
       val result = ESCCalculator.allocateAmountToNIBands(grossPay, period, ESCConfig.getConfig(period.from, "C", location))
@@ -1392,7 +1392,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
-      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List())
+      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
 
       val outputModel = CalculationNIBands(lowerEarningsBand = 485.00, primaryEarningsBand = 187, upperEarningsBand = 2860.01, aboveUpperEarningsBand = 0.0)
       val result = ESCCalculator.allocateAmountToNIBands(grossPay, period,  ESCConfig.getConfig(period.from, "C", location))
@@ -1405,7 +1405,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2017", formatter)
       val toDate = LocalDate.parse("21-05-2018", formatter)
-      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List())
+      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
 
       val outputModel = CalculationNIBands(lowerEarningsBand = 490.00, primaryEarningsBand = 190, upperEarningsBand = 3073, aboveUpperEarningsBand = 6247)
       val result = ESCCalculator.allocateAmountToNIBands(grossPay, period, ESCConfig.getConfig(period.from, "B", location))
@@ -1417,7 +1417,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
-      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List())
+      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
 
       val inputModel = CalculationNIBands(lowerEarningsBand = 485, primaryEarningsBand = 0, upperEarningsBand = 0, aboveUpperEarningsBand = 0)
       val outputModel = CalculationNIBands(lowerEarningsBand = 0, primaryEarningsBand = 0, upperEarningsBand = 0, aboveUpperEarningsBand = 0)
@@ -1430,7 +1430,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
-      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List())
+      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
 
       val inputModel = CalculationNIBands(lowerEarningsBand = 485.00, primaryEarningsBand = 115, upperEarningsBand = 0, aboveUpperEarningsBand = 0)
       val outputModel = CalculationNIBands(lowerEarningsBand = 0, primaryEarningsBand = 0, upperEarningsBand = 0, aboveUpperEarningsBand = 0)
@@ -1443,7 +1443,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
-      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List())
+      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
 
       val inputModel = CalculationNIBands(lowerEarningsBand = 485.00, primaryEarningsBand = 187, upperEarningsBand = 0, aboveUpperEarningsBand = 0)
       val outputModel = CalculationNIBands(lowerEarningsBand = 0, primaryEarningsBand = 0, upperEarningsBand = 0, aboveUpperEarningsBand = 0)
@@ -1456,7 +1456,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2017", formatter)
       val toDate = LocalDate.parse("21-05-2018", formatter)
-      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List())
+      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
 
       val inputModel = CalculationNIBands(lowerEarningsBand = 485.00, primaryEarningsBand = 187, upperEarningsBand = 128, aboveUpperEarningsBand = 0)
       val outputModel = CalculationNIBands(lowerEarningsBand = 0, primaryEarningsBand = 0, upperEarningsBand = 15.36, aboveUpperEarningsBand = 0)
@@ -1469,7 +1469,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
-      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List())
+      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
 
       val inputModel = CalculationNIBands(lowerEarningsBand = 485.00, primaryEarningsBand = 187, upperEarningsBand = 128, aboveUpperEarningsBand = 0)
       val outputModel = CalculationNIBands(lowerEarningsBand = 0, primaryEarningsBand = 0, upperEarningsBand = 7.4880, aboveUpperEarningsBand = 0)
@@ -1482,7 +1482,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
-      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List())
+      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
 
       val inputModel = CalculationNIBands(lowerEarningsBand = 485.00, primaryEarningsBand = 187, upperEarningsBand = 128, aboveUpperEarningsBand = 0)
       val outputModel = CalculationNIBands(lowerEarningsBand = 0, primaryEarningsBand = 0, upperEarningsBand = 0, aboveUpperEarningsBand = 0)
@@ -1495,7 +1495,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
-      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List())
+      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
 
       val inputModel = CalculationNIBands(lowerEarningsBand = 485.00, primaryEarningsBand = 187, upperEarningsBand = 2828, aboveUpperEarningsBand = 0)
       val outputModel = CalculationNIBands(lowerEarningsBand = 0, primaryEarningsBand = 0, upperEarningsBand = 339.36, aboveUpperEarningsBand = 0)
@@ -1508,7 +1508,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
-      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List())
+      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
 
       val inputModel = CalculationNIBands(lowerEarningsBand = 485.00, primaryEarningsBand = 187, upperEarningsBand = 2828, aboveUpperEarningsBand = 0)
       val outputModel = CalculationNIBands(lowerEarningsBand = 0, primaryEarningsBand = 0, upperEarningsBand = 165.438, aboveUpperEarningsBand = 0)
@@ -1521,7 +1521,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
-      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List())
+      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
 
       val inputModel = CalculationNIBands(lowerEarningsBand = 485.00, primaryEarningsBand = 187, upperEarningsBand = 2828, aboveUpperEarningsBand = 0)
       val outputModel = CalculationNIBands(lowerEarningsBand = 0, primaryEarningsBand = 0, upperEarningsBand = 0, aboveUpperEarningsBand = 0)
@@ -1534,7 +1534,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
-      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List())
+      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
 
       val inputModel = CalculationNIBands(lowerEarningsBand = 485.00, primaryEarningsBand = 187, upperEarningsBand = 2680, aboveUpperEarningsBand = 468)
       val outputModel = CalculationNIBands(lowerEarningsBand = 0, primaryEarningsBand = 0, upperEarningsBand = 321.60, aboveUpperEarningsBand = 9.36)
@@ -1547,7 +1547,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
-      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List())
+      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
 
       val inputModel = CalculationNIBands(lowerEarningsBand = 485.00, primaryEarningsBand = 187, upperEarningsBand = 2680, aboveUpperEarningsBand = 468)
       val outputModel = CalculationNIBands(lowerEarningsBand = 0, primaryEarningsBand = 0, upperEarningsBand = 156.78, aboveUpperEarningsBand = 9.36)
@@ -1560,7 +1560,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
-      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List())
+      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
 
       val inputModel = CalculationNIBands(lowerEarningsBand = 485.00, primaryEarningsBand = 187, upperEarningsBand = 2680, aboveUpperEarningsBand = 468)
       val outputModel = CalculationNIBands(lowerEarningsBand = 0, primaryEarningsBand = 0, upperEarningsBand = 0, aboveUpperEarningsBand = 0)
@@ -1573,7 +1573,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2017", formatter)
       val toDate = LocalDate.parse("21-05-2018", formatter)
-      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List())
+      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
 
       val inputModel = CalculationNIBands(lowerEarningsBand = 485, primaryEarningsBand = 0, upperEarningsBand = 0, aboveUpperEarningsBand = 0)
       val outputModel = CalculationNIBands(lowerEarningsBand = 0, primaryEarningsBand = 0, upperEarningsBand = 0, aboveUpperEarningsBand = 0)
@@ -1586,7 +1586,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2017", formatter)
       val toDate = LocalDate.parse("21-05-2018", formatter)
-      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List())
+      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
 
       val inputModel = CalculationNIBands(lowerEarningsBand = 485.00, primaryEarningsBand = 115, upperEarningsBand = 0, aboveUpperEarningsBand = 0)
       val outputModel = CalculationNIBands(lowerEarningsBand = 0, primaryEarningsBand = 0, upperEarningsBand = 0, aboveUpperEarningsBand = 0)
@@ -1599,7 +1599,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2017", formatter)
       val toDate = LocalDate.parse("21-05-2018", formatter)
-      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List())
+      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
 
       val inputModel = CalculationNIBands(lowerEarningsBand = 485.00, primaryEarningsBand = 187, upperEarningsBand = 0, aboveUpperEarningsBand = 0)
       val outputModel = CalculationNIBands(lowerEarningsBand = 0, primaryEarningsBand = 0, upperEarningsBand = 0, aboveUpperEarningsBand = 0)
@@ -1612,7 +1612,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
-      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List())
+      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
 
       val inputModel = CalculationNIBands(lowerEarningsBand = 485.00, primaryEarningsBand = 187, upperEarningsBand = 128, aboveUpperEarningsBand = 0)
       val outputModel = CalculationNIBands(lowerEarningsBand = 0, primaryEarningsBand = 0, upperEarningsBand = 15.36, aboveUpperEarningsBand = 0)
@@ -1625,7 +1625,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2017", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
-      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List())
+      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
 
       val inputModel = CalculationNIBands(lowerEarningsBand = 485.00, primaryEarningsBand = 187, upperEarningsBand = 2828, aboveUpperEarningsBand = 0)
       val outputModel = CalculationNIBands(lowerEarningsBand = 0, primaryEarningsBand = 0, upperEarningsBand = 165.438, aboveUpperEarningsBand = 0)
@@ -1638,7 +1638,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2017", formatter)
       val toDate = LocalDate.parse("21-05-2018", formatter)
-      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List())
+      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
       val inputModel = CalculationNIBands(lowerEarningsBand = 485.00, primaryEarningsBand = 187, upperEarningsBand = 2860, aboveUpperEarningsBand = 468)
       val outputModel = CalculationNIBands(lowerEarningsBand = 0, primaryEarningsBand = 0, upperEarningsBand = 0, aboveUpperEarningsBand = 0)
       val result = ESCCalculator.calculateNIPerBand(inputModel, period,  ESCConfig.getConfig(period.from, "C", location))
@@ -1650,7 +1650,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("06-04-2017", formatter)
       val toDate = LocalDate.parse("05-04-2018", formatter)
-      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List())
+      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
       val inputModel = CalculationNIBands(lowerEarningsBand = 485.00, primaryEarningsBand = 187, upperEarningsBand = 2860, aboveUpperEarningsBand = 468)
       val outputModel = CalculationNIBands(lowerEarningsBand = 0, primaryEarningsBand = 0, upperEarningsBand = 167.31, aboveUpperEarningsBand = 9.36)
       val result = ESCCalculator.calculateNIPerBand(inputModel, period,  ESCConfig.getConfig(period.from, "B", location))
@@ -1662,7 +1662,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2018", formatter)
       val toDate = LocalDate.parse("05-04-2019", formatter)
-      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List())
+      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
       val inputModel = CalculationNIBands(lowerEarningsBand = 485.00, primaryEarningsBand = 187, upperEarningsBand = 2860, aboveUpperEarningsBand = 468)
       val outputModel = CalculationNIBands(lowerEarningsBand = 0, primaryEarningsBand = 0, upperEarningsBand = 343.20, aboveUpperEarningsBand = 9.36)
       val result = ESCCalculator.calculateNIPerBand(inputModel, period,  ESCConfig.getConfig(period.from, "A", location))
@@ -1674,7 +1674,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("06-04-2018", formatter)
       val toDate = LocalDate.parse("05-04-2019", formatter)
-      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List())
+      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
       val inputModel = CalculationNIBands(lowerEarningsBand = 485.00, primaryEarningsBand = 187, upperEarningsBand = 2860, aboveUpperEarningsBand = 468)
       val outputModel = CalculationNIBands(lowerEarningsBand = 0, primaryEarningsBand = 0, upperEarningsBand = 167.31, aboveUpperEarningsBand = 9.36)
       val result = ESCCalculator.calculateNIPerBand(inputModel, period,  ESCConfig.getConfig(period.from, "B", location))
@@ -1686,7 +1686,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2018", formatter)
       val toDate = LocalDate.parse("05-04-2019", formatter)
-      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List())
+      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
       val inputModel = CalculationNIBands(lowerEarningsBand = 485.00, primaryEarningsBand = 187, upperEarningsBand = 2860, aboveUpperEarningsBand = 468)
       val outputModel = CalculationNIBands(lowerEarningsBand = 0, primaryEarningsBand = 0, upperEarningsBand = 0, aboveUpperEarningsBand = 0)
       val result = ESCCalculator.calculateNIPerBand(inputModel, period,  ESCConfig.getConfig(period.from, "C", location))
@@ -1749,7 +1749,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
-      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List())
+      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
 
       val result = ESCCalculator.calculateNISavings(period, grossPay, reliefAmount, ESCConfig.getConfig(period.from, "A", location), calcPeriod)
       result._1 shouldBe BigDecimal(2.48)
@@ -1765,7 +1765,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
-      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List())
+      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
 
       val result = ESCCalculator.calculateNISavings(period, grossPay, reliefAmount, ESCConfig.getConfig(period.from, "B", location), calcPeriod)
       result._1 shouldBe BigDecimal(2.48)
@@ -1780,7 +1780,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2017", formatter)
       val toDate = LocalDate.parse("21-05-2018", formatter)
-      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List())
+      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
 
       val result = ESCCalculator.calculateNISavings(period, grossPay, reliefAmount, ESCConfig.getConfig(period.from, "A", location), calcPeriod)
       result._1 shouldBe BigDecimal(24)
@@ -1806,7 +1806,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val periodStart = LocalDate.parse("2016-05-06", formatter)
       val periodEnd = LocalDate.parse("2017-04-06", formatter)
 
-      val period = ESCPeriod(from = periodStart, until = periodEnd, List())
+      val period = ESCPeriod(from = periodStart, until = periodEnd, List(), children = List())
       val income = TotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "1100L", niCategory = "")
       ESCCalculator.getPersonalAllowance(period, income, ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location)) shouldBe 11000
     }
@@ -1815,7 +1815,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val periodStart = LocalDate.parse("2016-05-06", formatter)
       val periodEnd = LocalDate.parse("2017-04-06", formatter)
 
-      val period = ESCPeriod(from = periodStart, until = periodEnd, List())
+      val period = ESCPeriod(from = periodStart, until = periodEnd, List(), children = List())
       val income = TotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "9999M", niCategory = "")
       ESCCalculator.getPersonalAllowance(period, income, ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location)) shouldBe 99990
     }
@@ -1824,7 +1824,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val periodStart = LocalDate.parse("2016-05-06", formatter)
       val periodEnd = LocalDate.parse("2017-04-06", formatter)
 
-      val period = ESCPeriod(from = periodStart, until = periodEnd, List())
+      val period = ESCPeriod(from = periodStart, until = periodEnd, List(), children = List())
       val income = TotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "9Y", niCategory = "")
       ESCCalculator.getPersonalAllowance(period, income, ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location)) shouldBe 90
     }
@@ -1833,7 +1833,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val periodStart = LocalDate.parse("2016-05-06", formatter)
       val periodEnd = LocalDate.parse("2017-04-06", formatter)
 
-      val period = ESCPeriod(from = periodStart, until = periodEnd, List())
+      val period = ESCPeriod(from = periodStart, until = periodEnd, List(), children = List())
       val income = TotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "d1", niCategory = "")
       ESCCalculator.getTaxCode(period, income, ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location)) shouldBe "D1"
     }
@@ -1842,7 +1842,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val periodStart = LocalDate.parse("2016-05-06", formatter)
       val periodEnd = LocalDate.parse("2017-04-06", formatter)
 
-      val period = ESCPeriod(from = periodStart, until = periodEnd, List())
+      val period = ESCPeriod(from = periodStart, until = periodEnd, List(), children = List())
       val income = TotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "Y", niCategory = "")
       try {
         val result = ESCCalculator.getTaxCode(period, income, ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location))
@@ -1857,7 +1857,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val periodStart = LocalDate.parse("2016-05-06", formatter)
       val periodEnd = LocalDate.parse("2017-04-06", formatter)
 
-      val period = ESCPeriod(from = periodStart, until = periodEnd, List())
+      val period = ESCPeriod(from = periodStart, until = periodEnd, List(), children = List())
       val income = TotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "D11", niCategory = "")
       try {
         val result = ESCCalculator.getTaxCode(period, income, ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location))
@@ -1873,11 +1873,11 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val endDate = LocalDate.now().withDayOfMonth(1).withMonthOfYear(9)
       val inputPartner = Claimant(qualifying = true, isPartner = true,
         eligibleMonthsInPeriod = 0, previousIncome = None, currentIncome = Some(Income(Some(2000))), vouchers = true,
-        escStartDate = startDate.minusYears(5), escAmount = 90.00, escAmountPeriod = Periods.Monthly)
+        escStartDate = startDate.minusYears(5))
       val inputClaimant = Claimant(qualifying = true, isPartner = false,
         eligibleMonthsInPeriod = 3, previousIncome = None, currentIncome = Some(Income(Some(30000))), vouchers = true,
-        escStartDate = startDate.minusYears(5), escAmount = 90.00, escAmountPeriod = Periods.Monthly)
-      val period = ESCPeriod(from = startDate, until = endDate, claimants = List(inputClaimant, inputPartner))
+        escStartDate = startDate.minusYears(5))
+      val period = ESCPeriod(from = startDate, until = endDate, claimants = List(inputClaimant, inputPartner), children = List())
 
       val calculator = new ESCCalculator{
         override def calcReliefAmount(period: ESCPeriod, income: TotalIncome, isESCStartDateBefore2011: Boolean, escAmount: BigDecimal, location: String) =
@@ -1894,11 +1894,11 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val endDate = LocalDate.now().withDayOfMonth(1).withMonthOfYear(9)
       val inputClaimant = Claimant(qualifying = true, isPartner = false,
         eligibleMonthsInPeriod = 0, previousIncome = None, currentIncome = Some(Income(Some(2000))), vouchers = true,
-        escStartDate = startDate.minusYears(5), escAmount = 90.00, escAmountPeriod = Periods.Monthly)
+        escStartDate = startDate.minusYears(5))
       val inputPartner = Claimant(qualifying = true, isPartner = true,
         eligibleMonthsInPeriod = 3, previousIncome = None, currentIncome = Some(Income(Some(30000))), vouchers = true,
-        escStartDate = startDate.minusYears(5), escAmount = 90.00, escAmountPeriod = Periods.Monthly)
-      val period = ESCPeriod(from = startDate, until = endDate, claimants = List(inputClaimant, inputPartner))
+        escStartDate = startDate.minusYears(5))
+      val period = ESCPeriod(from = startDate, until = endDate, claimants = List(inputClaimant, inputPartner), children = List())
 
       val calculator = new ESCCalculator{
         override def calcReliefAmount(period: ESCPeriod, income: TotalIncome, isESCStartDateBefore2011: Boolean, escAmount: BigDecimal, location: String) =
