@@ -23,42 +23,42 @@ import utils.CCFormat
 /**
  * Created by user on 18/06/15.
  */
-case class TFCCalculation(
-                           householdContribution: Contribution,
-                           numberOfPeriods: Short,
-                           periods: List[TFCPeriod]
+case class TFCCalculatorOutput(
+                                householdContribution: TFCContribution,
+                                numberOfPeriods: Short,
+                                periods: List[TFCPeriod]
                            )
 
-object TFCCalculation extends CCFormat {
-  implicit val tfcCalculationWrites : Writes[TFCCalculation] = Json.writes[TFCCalculation]
+object TFCCalculatorOutput extends CCFormat {
+  implicit val tfcCalculationWrites : Writes[TFCCalculatorOutput] = Json.writes[TFCCalculatorOutput]
 }
 
 case class TFCPeriod(
                       from: LocalDate,
                       until: LocalDate,
-                      periodContribution : Contribution,
-                      children: List[OutputChild]
+                      periodContribution : TFCContribution,
+                      children: List[TFCOutputChild]
                       )
 
 object TFCPeriod extends CCFormat{
   implicit val periodWrites : Writes[TFCPeriod] = Json.writes[TFCPeriod]
 }
 
-case class OutputChild(
+case class TFCOutputChild(
                         childCareCost : BigDecimal = BigDecimal(0.00),
-                        childContribution : Contribution
+                        childContribution : TFCContribution
                         )
 
-object OutputChild extends CCFormat {
-  implicit val childWrites : Writes[OutputChild] = Json.writes[OutputChild]
+object TFCOutputChild extends CCFormat {
+  implicit val childWrites : Writes[TFCOutputChild] = Json.writes[TFCOutputChild]
 }
 
-case class Contribution (
+case class TFCContribution(
                           parent : BigDecimal = BigDecimal(0.00),
                           government : BigDecimal = BigDecimal(0.00),
                           totalChildCareSpend : BigDecimal = BigDecimal(0.00)
                           )
 
-object Contribution {
-  implicit val contributionWrites : Writes[Contribution] = Json.writes[Contribution]
+object TFCContribution {
+  implicit val contributionWrites : Writes[TFCContribution] = Json.writes[TFCContribution]
 }

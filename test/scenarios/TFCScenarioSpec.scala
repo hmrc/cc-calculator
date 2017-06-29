@@ -19,8 +19,8 @@ package scenarios
 import calculators.TFCCalculator
 import com.fasterxml.jackson.databind.JsonNode
 import com.github.fge.jackson.JsonLoader
-import models.input.tfc.TFCEligibility
-import models.output.tfc.TFCCalculation
+import models.input.tfc.TFCCalculatorInput
+import models.output.tfc.TFCCalculatorOutput
 import play.api.libs.json.{JsSuccess, JsValue, Json}
 import uk.gov.hmrc.play.test.UnitSpec
 import utils.FakeCCCalculatorApplication
@@ -66,10 +66,10 @@ class TFCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication {
       s"(Scenario ${scenario}) ${description}" in {
         val resource: JsonNode = JsonLoader.fromResource(s"/json/tfc/input/${scenario}.json")
         val json: JsValue = Json.parse(resource.toString)
-        val inputJson = json.validate[TFCEligibility]
-        inputJson.isInstanceOf[JsSuccess[TFCEligibility]] shouldBe true
+        val inputJson = json.validate[TFCCalculatorInput]
+        inputJson.isInstanceOf[JsSuccess[TFCCalculatorInput]] shouldBe true
 
-        val result: TFCCalculation = TFCCalculator.calculator.award(inputJson.get)
+        val result: TFCCalculatorOutput = TFCCalculator.calculator.award(inputJson.get)
         val resourceJson = JsonLoader.fromResource(s"/json/tfc/output/${scenario}.json")
         val outputJson: JsValue = Json.parse(resourceJson.toString)
 
