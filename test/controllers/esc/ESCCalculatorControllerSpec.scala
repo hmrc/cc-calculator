@@ -30,7 +30,6 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import service.AuditEvents
-import play.api.Play
 import utils.FakeCCCalculatorApplication
 import scala.concurrent.Future
 import play.api.i18n.Messages.Implicits._
