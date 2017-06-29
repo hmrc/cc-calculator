@@ -260,4 +260,3 @@ class TCEligibilitySpec extends UnitSpec with FakeCCCalculatorApplication {
 
   }
 }
-

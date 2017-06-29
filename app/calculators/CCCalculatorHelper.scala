@@ -25,22 +25,23 @@ trait CCCalculatorHelper {
    * Unformatted:   5.465068
    * Formatted:      .46
    */
-  def round(value: BigDecimal): BigDecimal = value.setScale(2, RoundingMode.HALF_UP)
+  def round(value: BigDecimal): BigDecimal = {
+    value.setScale(2, RoundingMode.HALF_UP)
+  }
 
   def roundToPound(value: BigDecimal): BigDecimal = value.setScale(0, RoundingMode.HALF_UP)
 
   def roundup (value: BigDecimal): BigDecimal = value.setScale(2, RoundingMode.UP)
 
   def roundDownToThreeDigits(value: BigDecimal): BigDecimal = value.setScale(3, RoundingMode.DOWN)
+
   def roundDownToTwoDigits(value: BigDecimal): BigDecimal = value.setScale(2, RoundingMode.HALF_EVEN)
 
   // normalise the monetary amount per quarter quarter
   def amountToQuarterlyAmount(cost: BigDecimal, fromPeriod: Periods.Period): BigDecimal = {
     fromPeriod match {
       case Periods.Weekly => (cost * 52) / 4
-      case Periods.Fortnightly => (cost * 26) / 4
       case Periods.Monthly => cost * 3
-      case Periods.Quarterly => cost
       case Periods.Yearly => cost / 4
       case _ => 0.00 //error
     }
@@ -49,9 +50,7 @@ trait CCCalculatorHelper {
   def annualAmountToPeriod(cost: BigDecimal, fromPeriod: Periods.Period): BigDecimal = {
     fromPeriod match {
       case Periods.Weekly => cost / 52
-      case Periods.Fortnightly => cost / 26
       case Periods.Monthly => cost / 12
-      case Periods.Quarterly => cost / 4
       case Periods.Yearly => cost
       case _ => 0.00 //error
     }
@@ -60,12 +59,38 @@ trait CCCalculatorHelper {
   def monthlyAmountToPeriod(cost: BigDecimal, fromPeriod: Periods.Period): BigDecimal = {
     fromPeriod match {
       case Periods.Weekly => (cost * 12) / 52
-      case Periods.Fortnightly => (cost * 12) / 26
       case Periods.Monthly => cost
-      case Periods.Quarterly => cost * 4
       case Periods.Yearly => cost * 12
       case _ => 0.00 //error
     }
+  }
+
+  def amountToAnnualAmount(cost: BigDecimal, fromPeriod: Periods.Period): BigDecimal = {
+    fromPeriod match {
+      case Periods.Weekly => cost * 52
+      case Periods.Monthly => cost * 12
+      case Periods.Yearly => cost
+      case _ => 0.00 //error
+    }
+  }
+
+  def amountToWeeklyAmount(cost: BigDecimal, fromPeriod: Periods.Period): BigDecimal = {
+    fromPeriod match {
+      case Periods.Weekly => cost
+      case Periods.Monthly => (cost * 12) / 52
+      case Periods.Yearly => cost / 52
+      case _ => 0.00 //error
+    }
+  }
+
+  def amountFromPeriodToDaily(cost: BigDecimal, fromPeriod: Periods.Period, daysInTheYear: Int): BigDecimal = {
+    val amount: BigDecimal = fromPeriod match {
+      case Periods.Weekly => (cost * 52) / daysInTheYear
+      case Periods.Monthly => (cost * 12) / daysInTheYear
+      case Periods.Yearly => cost / daysInTheYear
+      case _ => 0.00 //error
+    }
+    amount
   }
 
   def daysBetween(fromDate: LocalDate, toDate: LocalDate): Int = {

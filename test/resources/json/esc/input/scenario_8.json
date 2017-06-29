@@ -1,5 +1,5 @@
 {
-  "taxYears": [
+  "escTaxYears": [
     {
       "startDate": "2016-04-06",
       "endDate": "2017-04-06",
@@ -11,7 +11,6 @@
             {
               "qualifying": true,
               "isPartner": false,
-              "location": "england",
               "eligibleMonthsInPeriod": 9,
                 "vouchers": true,
               "escAmount": 100.00,
@@ -23,5 +22,6 @@
         }
       ]
     }
-  ]
+  ],
+  "location": "england"
 }

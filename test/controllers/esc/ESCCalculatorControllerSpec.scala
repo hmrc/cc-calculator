@@ -55,9 +55,9 @@ class ESCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
 
     forAll(validData) { case (description, data) =>
       s"Accept valid JSON at /employer-supported-childcare/calculate (${description})" in {
-        val controller = new ESCCalculatorController(applicationMessagesApi) with ESCCalculator {
-          override val calculator = mock[ESCCalculatorService]
+        val controller = new ESCCalculatorController(applicationMessagesApi) {
           override val auditEvent = mock[AuditEvents]
+          override val calculator = mock[ESCCalculator]
         }
 
         val inputJson: JsValue = Json.parse(JsonLoader.fromResource(s"/json/esc/input/${data}").toString)
@@ -70,8 +70,8 @@ class ESCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
     }
 
     "Accept invalid JSON at /employer-supported-childcare/calculate and return a BadRequest with an error (0 Tax Year)" in {
-      val controller = new ESCCalculatorController(applicationMessagesApi) with ESCCalculator {
-        override val calculator = mock[ESCCalculatorService]
+      val controller = new ESCCalculatorController(applicationMessagesApi) {
+        override val calculator = mock[ESCCalculator]
         override val auditEvent = mock[AuditEvents]
       }
 
@@ -88,7 +88,7 @@ class ESCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
           |   "status":400,
           |   "errors":[
           |      {
-          |         "path":"/taxYears",
+          |         "path":"/escTaxYears",
           |         "validationErrors":[
           |            {
           |               "message":"Please provide at least 1 Tax Year",
@@ -106,8 +106,8 @@ class ESCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
     }
 
     "Accept invalid JSON at /employer-supported-childcare/calculate and return a BadRequest with an error (negative value in eligible months)" in {
-      val controller = new ESCCalculatorController(applicationMessagesApi) with ESCCalculator {
-        override val calculator = mock[ESCCalculatorService]
+      val controller = new ESCCalculatorController(applicationMessagesApi) {
+        override val calculator = mock[ESCCalculator]
         override val auditEvent = mock[AuditEvents]
       }
 
@@ -124,7 +124,7 @@ class ESCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
           |   "status":400,
           |   "errors":[
           |      {
-          |         "path":"/taxYears(0)/periods(0)/claimants(0)/eligibleMonthsInPeriod",
+          |         "path":"/escTaxYears(0)/periods(0)/claimants(0)/eligibleMonthsInPeriod",
           |         "validationErrors":[
           |            {
           |               "message":"Number of months should not be less than 0 and not more than 99",
@@ -143,8 +143,8 @@ class ESCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
 
     "Accept invalid JSON at /employer-supported-childcare/calculate and return a BadRequest with an error (value more than 99 in eligible months)" in {
 
-      val controller = new ESCCalculatorController(applicationMessagesApi) with ESCCalculator {
-        override val calculator = mock[ESCCalculatorService]
+      val controller = new ESCCalculatorController(applicationMessagesApi) {
+        override val calculator = mock[ESCCalculator]
         override val auditEvent = mock[AuditEvents]
       }
 
@@ -162,7 +162,7 @@ class ESCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
           |   "status":400,
           |   "errors":[
           |      {
-          |         "path":"/taxYears(0)/periods(0)/claimants(0)/eligibleMonthsInPeriod",
+          |         "path":"/escTaxYears(0)/periods(0)/claimants(0)/eligibleMonthsInPeriod",
           |         "validationErrors":[
           |            {
           |               "message":"Number of months should not be less than 0 and not more than 99",
@@ -180,8 +180,8 @@ class ESCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
     }
 
     "Accept invalid JSON at /employer-supported-childcare/calculate and return a BadRequest with an error (0 periods)" in {
-      val controller = new ESCCalculatorController(applicationMessagesApi) with ESCCalculator {
-        override val calculator = mock[ESCCalculatorService]
+      val controller = new ESCCalculatorController(applicationMessagesApi) {
+        override val calculator = mock[ESCCalculator]
         override val auditEvent = mock[AuditEvents]
       }
 
@@ -198,7 +198,7 @@ class ESCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
           |   "status":400,
           |   "errors":[
           |      {
-          |         "path":"/taxYears(0)/periods",
+          |         "path":"/escTaxYears(0)/periods",
           |         "validationErrors":[
           |            {
           |               "message":"Please provide at least 1 Period",
@@ -216,8 +216,8 @@ class ESCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
     }
 
     "Accept invalid JSON at /employer-supported-childcare/calculate and return a BadRequest with an error (0 claimants)" in {
-      val controller = new ESCCalculatorController(applicationMessagesApi) with ESCCalculator {
-        override val calculator = mock[ESCCalculatorService]
+      val controller = new ESCCalculatorController(applicationMessagesApi) {
+        override val calculator = mock[ESCCalculator]
         override val auditEvent = mock[AuditEvents]
       }
 
@@ -234,7 +234,7 @@ class ESCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
           |   "status":400,
           |   "errors":[
           |      {
-          |         "path":"/taxYears(0)/periods(0)/claimants",
+          |         "path":"/escTaxYears(0)/periods(0)/claimants",
           |         "validationErrors":[
           |            {
           |               "message":"Please provide at least 1 claimant",
@@ -252,8 +252,8 @@ class ESCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
     }
 
     "Accept invalid JSON at /employer-supported-childcare/calculate and return a BadRequest with an error (negative voucher amount)" in {
-      val controller = new ESCCalculatorController(applicationMessagesApi) with ESCCalculator {
-        override val calculator = mock[ESCCalculatorService]
+      val controller = new ESCCalculatorController(applicationMessagesApi) {
+        override val calculator = mock[ESCCalculator]
         override val auditEvent = mock[AuditEvents]
       }
 
@@ -270,7 +270,7 @@ class ESCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
           |   "status":400,
           |   "errors":[
           |      {
-          |         "path":"/taxYears(0)/periods(0)/claimants(0)/escAmount",
+          |         "path":"/escTaxYears(0)/periods(0)/claimants(0)/escAmount",
           |         "validationErrors":[
           |            {
           |               "message":"Voucher amount should not be less than 0.00",
@@ -288,8 +288,8 @@ class ESCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
     }
 
     "Accept invalid JSON at /employer-supported-childcare/calculate and return a BadRequest with an error (date missing)" in {
-      val controller = new ESCCalculatorController(applicationMessagesApi) with ESCCalculator {
-        override val calculator = mock[ESCCalculatorService]
+      val controller = new ESCCalculatorController(applicationMessagesApi) {
+        override val calculator = mock[ESCCalculator]
         override val auditEvent = mock[AuditEvents]
       }
 
@@ -306,7 +306,7 @@ class ESCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
           |   "status":400,
           |   "errors":[
           |      {
-          |         "path":"/taxYears(0)/periods(0)/until",
+          |         "path":"/escTaxYears(0)/periods(0)/until",
           |         "validationErrors":[
           |            {
           |               "message":"error.path.missing",
@@ -324,8 +324,8 @@ class ESCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
     }
 
     "Accept invalid JSON at /employer-supported-childcare/calculate and return a BadRequest with an error (incorrect data type)" in {
-      val controller = new ESCCalculatorController(applicationMessagesApi) with ESCCalculator {
-        override val calculator = mock[ESCCalculatorService]
+      val controller = new ESCCalculatorController(applicationMessagesApi) {
+        override val calculator = mock[ESCCalculator]
         override val auditEvent = mock[AuditEvents]
       }
 
@@ -342,7 +342,7 @@ class ESCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
           |   "status":400,
           |   "errors":[
           |      {
-          |         "path":"/taxYears(0)/periods(0)/claimants(0)/eligibleMonthsInPeriod",
+          |         "path":"/escTaxYears(0)/periods(0)/claimants(0)/eligibleMonthsInPeriod",
           |         "validationErrors":[
           |            {
           |               "message":"error.expected.jsnumber",
@@ -360,8 +360,8 @@ class ESCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
     }
 
     "Return Internal Server Error with error message if an exception is thrown during calculation " in {
-      val controller = new ESCCalculatorController(applicationMessagesApi) with ESCCalculator {
-        override val calculator = mock[ESCCalculatorService]
+      val controller = new ESCCalculatorController(applicationMessagesApi) {
+        override val calculator = mock[ESCCalculator]
         override val auditEvent = mock[AuditEvents]
       }
 

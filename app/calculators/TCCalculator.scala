@@ -387,7 +387,7 @@ trait TCCalculator {
                             ): BigDecimal = {
       val taperRate = inputPeriod.config.thresholds.taperRatePercent
       val incomeToTaperVal = incomeToTaper / taperRate * 100 + wtcIncomeThreshold
-      val roundedIncomeToTaperElementsNil = round(roundDownToTwoDigits(incomeToTaperVal))
+      val roundedIncomeToTaperElementsNil = roundup(roundDownToTwoDigits(incomeToTaperVal))
       getHigherAmount(ctcIncomeThreshold, roundedIncomeToTaperElementsNil)
     }
 
@@ -524,28 +524,6 @@ trait TCCalculator {
   trait TCCalculatorHelpers {
     this: TCCalculatorService =>
 
-    /**
-      * Unformatted:   5.46102
-      * Formatted:     5.47
-      *
-      * For TC uses a different rounding rules, where rounding always increments the digit prior to a non-zero value
-      */
-    def round(value: BigDecimal): BigDecimal = value.setScale(2, RoundingMode.UP)
-
-    /**
-      * Unformatted:   5.001
-      * Formatted:     6.00
-      *
-      * For TC uses a different rounding rules, where rounding always increments the digit prior to a non-zero value
-      */
-    def roundToPound(value: BigDecimal): BigDecimal = value.setScale(0, RoundingMode.UP)
-
-    def roundDownToTwoDigits(value: BigDecimal): BigDecimal = value.setScale(2, RoundingMode.HALF_EVEN)
-
-    def daysBetween(fromDate: LocalDate, toDate: LocalDate): Int = {
-      Days.daysBetween(fromDate, toDate).getDays
-    }
-
     def amountForDateRange(
                             cost: BigDecimal,
                             period: Periods.Period,
@@ -567,40 +545,6 @@ trait TCCalculator {
       }
     }
 
-    def amountToAnnualAmount(cost: BigDecimal, fromPeriod: Periods.Period): BigDecimal = {
-      fromPeriod match {
-        case Periods.Weekly => cost * 52
-        case Periods.Fortnightly => cost * 26
-        case Periods.Monthly => cost * 12
-        case Periods.Quarterly => cost * 4
-        case Periods.Yearly => cost
-        case _ => 0.00 //error
-      }
-    }
-
-    def amountToWeeklyAmount(cost: BigDecimal, fromPeriod: Periods.Period): BigDecimal = {
-      fromPeriod match {
-        case Periods.Weekly => cost
-        case Periods.Fortnightly => cost / 2
-        case Periods.Monthly => (cost * 12) / 52
-        case Periods.Quarterly => (cost * 4) / 52
-        case Periods.Yearly => cost / 52
-        case _ => 0.00 //error
-      }
-    }
-
-    def amountFromPeriodToDaily(cost: BigDecimal, fromPeriod: Periods.Period, daysInTheYear: Int): BigDecimal = {
-      val amount: BigDecimal = fromPeriod match {
-        case Periods.Weekly => (cost * 52) / daysInTheYear
-        case Periods.Fortnightly => (cost * 26) / daysInTheYear
-        case Periods.Monthly => (cost * 12) / daysInTheYear
-        case Periods.Quarterly => (cost * 4) / daysInTheYear
-        case Periods.Yearly => cost / daysInTheYear
-        case _ => 0.00 //error
-      }
-      amount
-    }
-
     def getTotalMaximumAmountPerPeriod(period: models.output.tc.Period): BigDecimal = {
       period.elements.wtcWorkElement.maximumAmount +
         period.elements.wtcChildcareElement.maximumAmount +
@@ -611,7 +555,7 @@ trait TCCalculator {
   }
 
   class TCCalculatorService extends TCCalculatorElements with TCCalculatorTapering with
-    TCCalculatorHelpers {
+    TCCalculatorHelpers with CCCalculatorHelper {
 
     import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -642,8 +586,7 @@ trait TCCalculator {
         val other: BigDecimal = income.other.getOrElse(List()).foldLeft(BigDecimal(0))(_ + _)
         val otherAdjustment: BigDecimal = if (other > tcConfig.otherIncomeAdjustment) {
           tcConfig.otherIncomeAdjustment
-        }
-        else {
+        } else {
           other
         }
 

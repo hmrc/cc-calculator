@@ -17,6 +17,7 @@
 package utils
 
 import akka.stream.Materializer
+import org.joda.time.format.DateTimeFormat
 import org.scalatest.Suite
 import org.scalatestplus.play.OneAppPerSuite
 import play.api.Application
@@ -35,6 +36,7 @@ trait FakeCCCalculatorApplication extends UnitSpec with OneAppPerSuite {
     "esc.local-tax-enabled" -> true
   )
 
+  val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
   implicit override lazy val app: Application = new GuiceApplicationBuilder()
     .configure(config)
     .build()

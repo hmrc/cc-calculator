@@ -35,11 +35,6 @@ class PeriodsSpec extends FakeCCCalculatorApplication {
       Periods.toPeriod(monthly) shouldBe Periods.Monthly
     }
 
-    "convert to Periods.Quarterly" in {
-      val quarterly = "3-monthly"
-      Periods.toPeriod(quarterly) shouldBe Periods.Quarterly
-    }
-
     "return INVALID for an incorrect Period" in {
       val invalid = "invalid"
       Periods.toPeriod(invalid) shouldBe Periods.INVALID
@@ -50,19 +45,9 @@ class PeriodsSpec extends FakeCCCalculatorApplication {
       Periods.toString(weekly) shouldBe messages("cc.period.weekly")
     }
 
-    "convert Fortnightly to string" in {
-      val fortnightly = Periods.Fortnightly
-      Periods.toString(fortnightly) shouldBe messages("cc.period.fortnightly")
-    }
-
     "convert Monthly to string" in {
       val monthly = Periods.Monthly
       Periods.toString(monthly) shouldBe messages("cc.period.monthly")
-    }
-
-    "convert Quarterly to string" in {
-      val quarterly = Periods.Quarterly
-      Periods.toString(quarterly) shouldBe messages("cc.period.3monthly")
     }
 
     "convert Yearly to string" in {
