@@ -17,7 +17,7 @@
 package calculators
 
 import models.input.esc._
-import models.output.esc.{ESCCalculation, Savings}
+import models.output.esc.{ESCCalculatorOutput, ESCSavings}
 import models.utility.{CalculationNIBands, CalculationTaxBands}
 import org.joda.time.LocalDate
 import play.api.Logger
@@ -44,7 +44,7 @@ trait ESCCalculator {
     }
 
 
-    def validateTaxCode(period : ESCPeriod, income : TotalIncome) : (BigDecimal, String) = { //TODO - Add validations for OT and K tax codes
+    def validateTaxCode(period : ESCPeriod, income : ESCTotalIncome) : (BigDecimal, String) = { //TODO - Add validations for OT and K tax codes
 
     def validateCode(code : String) : Boolean =  (code.equals("BR") || code.equals("D0") || code.equals("D1") || code.equals("NT"))
     def validateCodeBasedOnEndsWith(code : String) : Boolean =  code.endsWith("L") || code.endsWith("M") ||
@@ -68,7 +68,7 @@ trait ESCCalculator {
     }
 
 
-    def getPersonalAllowance(period : ESCPeriod, income : TotalIncome, config :ESCTaxYearConfig) : BigDecimal =  {
+    def getPersonalAllowance(period : ESCPeriod, income : ESCTotalIncome, config :ESCTaxYearConfig) : BigDecimal =  {
       income.taxCode.trim match {
         case codeAsString if isEmpty(codeAsString) =>
           income.adjustPersonalAllowance(config.defaultPersonalAllowance)
@@ -77,7 +77,7 @@ trait ESCCalculator {
       }
     }
 
-    def getTaxCode(period : ESCPeriod, income : TotalIncome, config :ESCTaxYearConfig) : String = {
+    def getTaxCode(period : ESCPeriod, income : ESCTotalIncome, config :ESCTaxYearConfig) : String = {
       income.taxCode.trim match {
         case codeAsString if isEmpty(codeAsString) =>
           config.defaultTaxCode
@@ -86,7 +86,7 @@ trait ESCCalculator {
       }
     }
 
-    def getAnnualRelevantEarnings(income: TotalIncome, period : ESCPeriod, config :ESCTaxYearConfig) : BigDecimal = {
+    def getAnnualRelevantEarnings(income: ESCTotalIncome, period : ESCPeriod, config :ESCTaxYearConfig) : BigDecimal = {
       val higherRateCeiling = config.taxHigherBandUpperLimit
       val personalAllowance = config.defaultPersonalAllowance
       income.gross match {
@@ -189,7 +189,7 @@ trait ESCCalculator {
       }
     }
 
-    protected def sumClaimantEligibleMonths(listOfClaimants : List[models.output.esc.Claimant], f: models.output.esc.Claimant => Boolean) : Int = {
+    protected def sumClaimantEligibleMonths(listOfClaimants : List[models.output.esc.ESCClaimant], f: models.output.esc.ESCClaimant => Boolean) : Int = {
       listOfClaimants.foldLeft(0)((acc, c) => if (f(c)) acc + c.eligibleMonthsInTaxYear else acc)
     }
 
@@ -214,21 +214,21 @@ trait ESCCalculator {
                                          niPaidPreSacrifice: BigDecimal,
                                          taxPaidPostSacrifice: BigDecimal,
                                          niPaidPostSacrifice: BigDecimal
-                                         ): models.output.esc.Claimant = {
-      models.output.esc.Claimant(
+                                         ): models.output.esc.ESCClaimant = {
+      models.output.esc.ESCClaimant(
         qualifying = qualifying,
         eligibleMonthsInTaxYear = eligibleMonths,
         isPartner = isPartner,
-        income = models.output.esc.Income(taxablePay = taxablePay, gross = grossPay, taxCode = taxCode, niCategory = niCategory),
+        income = models.output.esc.ESCIncome(taxablePay = taxablePay, gross = grossPay, taxCode = taxCode, niCategory = niCategory),
         vouchers = vouchers,
         escAmount = escAmount,
         escAmountPeriod = escAmountPeriod,
         escStartDate = escStartDate,
-        savings = models.output.esc.Savings(totalSaving = totalSaving, taxSaving = taxSaving, niSaving = niSaving),
+        savings = models.output.esc.ESCSavings(totalSaving = totalSaving, taxSaving = taxSaving, niSaving = niSaving),
         maximumRelief = maximumRelief,
         maximumReliefPeriod = maximumReliefPeriod,
-        taxAndNIBeforeSacrifice = models.output.esc.TaxAndNI(taxPaid = taxPaidPreSacrifice, niPaid = niPaidPreSacrifice),
-        taxAndNIAfterSacrifice = models.output.esc.TaxAndNI(taxPaid = taxPaidPostSacrifice, niPaid = niPaidPostSacrifice)
+        taxAndNIBeforeSacrifice = models.output.esc.ESCTaxAndNi(taxPaid = taxPaidPreSacrifice, niPaid = niPaidPreSacrifice),
+        taxAndNIAfterSacrifice = models.output.esc.ESCTaxAndNi(taxPaid = taxPaidPostSacrifice, niPaid = niPaidPostSacrifice)
       )
     }
   }
@@ -415,7 +415,7 @@ trait ESCCalculator {
   class ESCCalculatorService extends ESCCalculatorHelpers with ESCCalculatorTax with ESCCalculatorNi {
     import scala.concurrent.ExecutionContext.Implicits.global
 
-    def determineSavingsPerClaimant(claimants: List[Claimant], period: ESCPeriod): List[models.output.esc.Claimant] = {
+    def determineSavingsPerClaimant(claimants: List[ESCClaimant], period: ESCPeriod): List[models.output.esc.ESCClaimant] = {
       for(claimant <- claimants) yield {
         //Use monthly values for calculation
         val calcPeriod = Periods.Monthly
@@ -460,7 +460,7 @@ trait ESCCalculator {
       }
     }
 
-    private def determineCalculatedListOfClaimantsPairs(periods: List[ESCPeriod]): List[models.output.esc.Claimant] = {
+    private def determineCalculatedListOfClaimantsPairs(periods: List[ESCPeriod]): List[models.output.esc.ESCClaimant] = {
       val listOfPairs = for(period <- periods) yield {
         //if one of the claimant income falls below the personal allowance then assign the entire childcare spend to the other claimant.
         val claimantList = createClaimantList(period)
@@ -469,9 +469,9 @@ trait ESCCalculator {
       listOfPairs.flatten
     }
 
-    private def createClaimantList(period: ESCPeriod):  List[Claimant]= {
+    private def createClaimantList(period: ESCPeriod):  List[ESCClaimant]= {
       val calcPeriod = Periods.Monthly
-      def calcReliefAmount(income: TotalIncome, isESCStartDateBefore2011: Boolean, escAmount: BigDecimal, location: String) = {
+      def calcReliefAmount(income: ESCTotalIncome, isESCStartDateBefore2011: Boolean, escAmount: BigDecimal, location: String) = {
         val config = ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location)
         val taxCode = getTaxCode(period, income, config)
         val personalAllowanceAmountMonthly: BigDecimal = annualAmountToPeriod(getPersonalAllowance(period, income, config), calcPeriod)
@@ -486,7 +486,7 @@ trait ESCCalculator {
         )
         (personalAllowanceAmountMonthly, determineActualIncomeRelief(escAmount, maximumReliefAmount))
       }
-      def selectClaimant(parent: Claimant, partner: Claimant) = {
+      def selectClaimant(parent: ESCClaimant, partner: ESCClaimant) = {
         val (parentPersonalAllowanceAmountMonthly, parentActualReliefAmount) =
           calcReliefAmount(parent.income, parent.isESCStartDateBefore2011, parent.escAmount, parent.location)
         val (partnerPersonalAllowanceAmountMonthly, partnerActualReliefAmount) =
@@ -518,9 +518,9 @@ trait ESCCalculator {
       }
     }
 
-    private def determineClaimantsForTaxYear(listOfClaimantPairs : List[models.output.esc.Claimant]): List[models.output.esc.Claimant] = {
-      def populateClaimant(isPartner: Boolean, claimant: models.output.esc.Claimant): models.output.esc.Claimant = {
-        val eligibleMonths: Int = sumClaimantEligibleMonths(listOfClaimantPairs, (c: models.output.esc.Claimant) => c.isPartner == isPartner)
+    private def determineClaimantsForTaxYear(listOfClaimantPairs : List[models.output.esc.ESCClaimant]): List[models.output.esc.ESCClaimant] = {
+      def populateClaimant(isPartner: Boolean, claimant: models.output.esc.ESCClaimant): models.output.esc.ESCClaimant = {
+        val eligibleMonths: Int = sumClaimantEligibleMonths(listOfClaimantPairs, (c: models.output.esc.ESCClaimant) => c.isPartner == isPartner)
         val qualification: Boolean = listOfClaimantPairs.exists(claimant => if(claimant.isPartner == isPartner) claimant.qualifying else false)
         val voucherFlag: Boolean = listOfClaimantPairs.exists(claimant => if(claimant.isPartner == isPartner) claimant.vouchers else false)
         val taxSavings: BigDecimal = eligibleMonths * claimant.savings.taxSaving
@@ -562,7 +562,7 @@ trait ESCCalculator {
       }
     }
 
-    def getCalculatedTaxYears(taxYears: List[TaxYear]): List[models.output.esc.TaxYear] = {
+    def getCalculatedTaxYears(taxYears: List[ESCTaxYear]): List[models.output.esc.ESCTaxYear] = {
       for(taxYear <- taxYears) yield {
         val claimantListForTY = determineCalculatedListOfClaimantsPairs(taxYear.periods)
         val resultClaimantList = determineClaimantsForTaxYear(claimantListForTY)
@@ -579,10 +579,10 @@ trait ESCCalculator {
           }
         )
 
-        models.output.esc.TaxYear(
+        models.output.esc.ESCTaxYear(
           from = taxYear.startDate,
           until = taxYear.endDate,
-          totalSavings = models.output.esc.Savings(
+          totalSavings = models.output.esc.ESCSavings(
             totalSaving  = overallTaxSavings + overallNISavings,
             taxSaving = overallTaxSavings,
             niSaving = overallNISavings
@@ -592,9 +592,9 @@ trait ESCCalculator {
       }
     }
 
-    def award(eligibility: ESCEligibility): Future[ESCCalculation] = {
+    def award(eligibility: ESCCalculatorInput): Future[ESCCalculatorOutput] = {
 
-      val calculatedTaxYears: List[models.output.esc.TaxYear] = getCalculatedTaxYears(eligibility.taxYears)
+      val calculatedTaxYears: List[models.output.esc.ESCTaxYear] = getCalculatedTaxYears(eligibility.taxYears)
 
       val (taxSavings, niSavings, totalSavings) =
         calculatedTaxYears.foldLeft(
@@ -614,10 +614,10 @@ trait ESCCalculator {
           }
         )
       Future{
-        ESCCalculation(
+        ESCCalculatorOutput(
           from = eligibility.taxYears.head.startDate,
           until = eligibility.taxYears.last.endDate,
-          totalSavings = Savings(
+          totalSavings = ESCSavings(
             taxSaving = taxSavings,
             niSaving = niSavings,
             totalSaving = totalSavings

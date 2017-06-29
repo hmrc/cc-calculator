@@ -24,51 +24,51 @@ import play.api.libs.json.Reads._
 import play.api.libs.json.{JsPath, Json, Reads}
 import utils._
 
-case class ESCEligibility(
-                          taxYears: List[TaxYear]
+case class ESCCalculatorInput(
+                          taxYears: List[ESCTaxYear]
                           )
 
-object ESCEligibility extends ESCConfig with MessagesObject {
-  implicit val escEligibilityReads : Reads[ESCEligibility] =
-      (JsPath \ "taxYears").read[List[TaxYear]].map { taxYears =>
-        ESCEligibility(taxYears)
+object ESCCalculatorInput extends ESCConfig with MessagesObject {
+  implicit val escEligibilityReads : Reads[ESCCalculatorInput] =
+      (JsPath \ "taxYears").read[List[ESCTaxYear]].map { taxYears =>
+        ESCCalculatorInput(taxYears)
       }.filter(ValidationError(messages("cc.calc.invalid.number.of.ty")))(ty => ty.taxYears.length >= lowerTaxYearsLimitValidation)
 }
 
-case class TaxYear(
+case class ESCTaxYear(
                     startDate: LocalDate,
                     endDate: LocalDate,
                     periods: List[ESCPeriod]
                     )
 
-object TaxYear extends CCFormat with ESCConfig with MessagesObject {
-  implicit val taxYearReads: Reads[TaxYear] = (
+object ESCTaxYear extends CCFormat with ESCConfig with MessagesObject {
+  implicit val taxYearReads: Reads[ESCTaxYear] = (
     (JsPath \ "startDate").read[LocalDate](jodaLocalDateReads(datePattern)) and
       (JsPath \ "endDate").read[LocalDate](jodaLocalDateReads(datePattern)) and
         (JsPath \ "periods").read[List[ESCPeriod]].filter(
         ValidationError(messages("cc.calc.invalid.number.of.periods"))
         )(periods => periods.length >= lowerPeriodsLimitValidation)
-    )(TaxYear.apply _)
+    )(ESCTaxYear.apply _)
 }
 
 case class ESCPeriod(
                       from: LocalDate,
                       until: LocalDate,
-                      claimants: List[Claimant]
+                      claimants: List[ESCClaimant]
                       )
 
 object ESCPeriod extends CCFormat with ESCConfig with MessagesObject {
   implicit val periodReads : Reads[ESCPeriod] = (
     (JsPath \ "from").read[LocalDate](jodaLocalDateReads(datePattern)) and
       (JsPath \ "until").read[LocalDate](jodaLocalDateReads(datePattern)) and
-        (JsPath \ "claimants").read[List[Claimant]].filter(
+        (JsPath \ "claimants").read[List[ESCClaimant]].filter(
         ValidationError(messages("cc.calc.invalid.number.of.claimants"))
         )(claimants => claimants.length >= lowerClaimantsLimitValidation)
     )(ESCPeriod.apply _)
 }
 
 //gross and taxablePay are annual amounts
-case class TotalIncome(
+case class ESCTotalIncome(
                    taxablePay: BigDecimal = BigDecimal(0.00),
                    gross: BigDecimal = BigDecimal(0.00),
                    taxCode: String = "",
@@ -89,26 +89,26 @@ case class TotalIncome(
   }
 }
 
-case class Income(
+case class ESCIncome(
                    employmentIncome : Option[BigDecimal] = None,
                    pension : Option[BigDecimal] = None
                  )
 
-object Income {
-  implicit val formats = Json.format[Income]
+object ESCIncome {
+  implicit val formats = Json.format[ESCIncome]
 }
 
-case class Claimant (
-                     qualifying: Boolean = false,
-                     isPartner: Boolean = false,
-                     location: String,
-                     eligibleMonthsInPeriod: Int,
-                     previousIncome: Option[Income],
-                     currentIncome: Option[Income],
-                     vouchers: Boolean = false,
-                     escStartDate: LocalDate,
-                     escAmount: BigDecimal = BigDecimal(0.00),
-                     escAmountPeriod: Periods.Period
+case class ESCClaimant(
+                      qualifying: Boolean = false,
+                      isPartner: Boolean = false,
+                      location: String,
+                      eligibleMonthsInPeriod: Int,
+                      previousIncome: Option[ESCIncome],
+                      currentIncome: Option[ESCIncome],
+                      vouchers: Boolean = false,
+                      escStartDate: LocalDate,
+                      escAmount: BigDecimal = BigDecimal(0.00),
+                      escAmountPeriod: Periods.Period
                      ) extends CCFormat
 {
   def isESCStartDateBefore2011 : Boolean = {
@@ -118,9 +118,9 @@ case class Claimant (
     escStartDate.isBefore(date2011)
   }
 
-  val income: TotalIncome = {
+  val income: ESCTotalIncome = {
     val (empIncome, pension) = getTotalIncome(previousIncome, currentIncome)
-    TotalIncome(
+    ESCTotalIncome(
       taxablePay = (empIncome.getOrElse(defaultAmount) - (pension.getOrElse(defaultAmount) * noOfMonths)),
       gross = empIncome.getOrElse(defaultAmount),
       taxCode = "",
@@ -128,12 +128,12 @@ case class Claimant (
     )
   }
 
-  private def determineIncomeElems(income: Option[Income]) = income  match {
+  private def determineIncomeElems(income: Option[ESCIncome]) = income  match {
     case Some(x) => (x.employmentIncome, x.pension)
     case _ => (None, None)
   }
 
-  private def getTotalIncome(previousIncome : Option[Income], currentIncome: Option[Income]) = {
+  private def getTotalIncome(previousIncome : Option[ESCIncome], currentIncome: Option[ESCIncome]) = {
     val (empPrevious, pensionPrevious) = determineIncomeElems(previousIncome)
     val (emp, pension) = determineIncomeElems(currentIncome)
 
@@ -142,19 +142,19 @@ case class Claimant (
   }
 }
 
-object Claimant extends CCFormat with ESCConfig with MessagesObject {
-  implicit val claimantReads : Reads[Claimant] = (
+object ESCClaimant extends CCFormat with ESCConfig with MessagesObject {
+  implicit val claimantReads : Reads[ESCClaimant] = (
     (JsPath \ "qualifying").read[Boolean].orElse(Reads.pure(false)) and
       (JsPath \ "isPartner").read[Boolean].orElse(Reads.pure(false)) and
         (JsPath \ "location").read[String] and
           (JsPath \ "eligibleMonthsInPeriod").read[Int].filter(ValidationError(messages("cc.calc.invalid.number.of.months"))
                                                         )(months => months >= lowerMonthsLimitValidation && months < upperMonthsLimitValidation) and
-            (JsPath \ "previousIncome").readNullable[Income] and
-            (JsPath \ "currentIncome").readNullable[Income] and
+            (JsPath \ "previousIncome").readNullable[ESCIncome] and
+            (JsPath \ "currentIncome").readNullable[ESCIncome] and
               (JsPath \ "vouchers").read[Boolean] and
                 (JsPath \ "escStartDate").read[LocalDate](jodaLocalDateReads(datePattern)) and
                   (JsPath \ "escAmount").read[BigDecimal].filter(ValidationError(messages("cc.calc.voucher.amount.less.than.0"))
                                                           )(income => income >= BigDecimal(0.00)) and
                     (JsPath \ "escAmountPeriod").read[Periods.Period]
-    )(Claimant.apply _)
+    )(ESCClaimant.apply _)
 }
