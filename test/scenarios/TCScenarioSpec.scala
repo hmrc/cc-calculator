@@ -19,7 +19,7 @@ package scenarios
 import calculators.TCCalculator
 import com.fasterxml.jackson.databind.JsonNode
 import com.github.fge.jackson.JsonLoader
-import models.input.tc.TCEligibility
+import models.input.tc.TCCalculatorInput
 import models.output.tc.{Element, Period}
 import org.joda.time.LocalDate
 import play.api.libs.json.{JsSuccess, JsValue, Json}
@@ -60,8 +60,8 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
   "(TY 2016/2017 Scenario 1) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_1.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
-      result.isInstanceOf[JsSuccess[TCEligibility]] shouldBe true
+      val result = json.validate[TCCalculatorInput]
+      result.isInstanceOf[JsSuccess[TCCalculatorInput]] shouldBe true
 
       val award = await(TCCalculator.calculator.award(result.get))
       val incomeAdvice = await(TCCalculator.calculator.incomeAdvice(result.get))
@@ -97,7 +97,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 2) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_2.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
       val incomeAdvice = await(TCCalculator.calculator.incomeAdvice(result.get))
@@ -133,7 +133,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 3) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_3.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
       val award = await(TCCalculator.calculator.award(result.get))
 
       try {
@@ -157,7 +157,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 4) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_4.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
 
 
@@ -184,7 +184,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 5) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_5.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
 
@@ -209,7 +209,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 6) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_6.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
 
@@ -234,7 +234,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 7) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_7.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
       val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
@@ -270,7 +270,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 8) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_8.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
       val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
@@ -305,7 +305,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 9) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_9.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
 
@@ -330,7 +330,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 10) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_10.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
       val award = await(TCCalculator.calculator.award(result.get))
 
       try {
@@ -354,7 +354,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 11) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_11.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
 
@@ -379,7 +379,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 12) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_12.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
 
@@ -404,7 +404,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 13) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_13.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
       val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
@@ -439,7 +439,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 14) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_14.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
       val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
@@ -474,7 +474,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 15) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_15.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
 
@@ -499,7 +499,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 16) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_16.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
 
@@ -524,7 +524,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 17) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_17.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
 
@@ -549,7 +549,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 18) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_18.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
 
@@ -574,7 +574,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 19) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_19.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
       val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
@@ -609,7 +609,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 20) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_20.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
       val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
@@ -644,7 +644,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 21) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_21.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
 
@@ -669,7 +669,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 22) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_22.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
 
@@ -694,7 +694,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 23) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_23.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
 
@@ -720,7 +720,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 24) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_24.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
 
@@ -745,7 +745,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 25) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_25.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
 
@@ -770,7 +770,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 26) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_26.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
 
@@ -795,7 +795,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 27) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_27.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
 
@@ -820,7 +820,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 28) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_28.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
 
@@ -845,7 +845,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 29) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_29.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
 
@@ -870,7 +870,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 30) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_30.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
 
@@ -895,7 +895,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 31) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_31.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
 
@@ -920,7 +920,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 32) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_32.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
 
@@ -945,7 +945,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 33) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_33.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
 
@@ -970,7 +970,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 34) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_34.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
 
@@ -995,7 +995,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 35) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_35.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
       val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
@@ -1030,7 +1030,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 36) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_36.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
       val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
@@ -1065,7 +1065,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 37) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_37.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
 
@@ -1091,7 +1091,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 38) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_38.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
 
@@ -1116,7 +1116,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 39) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_39.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
 
@@ -1141,7 +1141,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 40) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_40.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
 
@@ -1166,7 +1166,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 41) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_41.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
 
@@ -1191,7 +1191,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 42) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_42.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
 
@@ -1216,7 +1216,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 43) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_43.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
 
@@ -1241,7 +1241,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 44) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_44.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
       val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
@@ -1276,7 +1276,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 45) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_45.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
 
@@ -1301,7 +1301,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 46) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_46.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
 
@@ -1326,7 +1326,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 47) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_47.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
       val award = await(TCCalculator.calculator.award(result.get))
 
       try {
@@ -1351,7 +1351,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 48) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_48.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
       val award = await(TCCalculator.calculator.award(result.get))
 
       try {
@@ -1375,7 +1375,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 49) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_49.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
       val award = await(TCCalculator.calculator.award(result.get))
 
       try {
@@ -1399,7 +1399,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 50) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_50.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
 
@@ -1428,7 +1428,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 51) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_51.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
       val award = await(TCCalculator.calculator.award(result.get))
       val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
 
@@ -1471,7 +1471,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 52) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_52.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
       val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
@@ -1515,7 +1515,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 53) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_53.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
       val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
@@ -1559,7 +1559,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 54) Generate total award with periods with elements (not applicable for our journey)" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_54.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
       val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
@@ -1594,7 +1594,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 55) Generate total award with periods with elements (not applicable for our journey)" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_55.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
       val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
@@ -1630,7 +1630,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 56) Generate total award with periods with elements (not applicable for our journey)" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_56.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
       val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
@@ -1666,7 +1666,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 57) Generate total award with periods with elements (not applicable for our journey)" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_57.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
       val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
@@ -1702,7 +1702,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 58, Child being born mid tax year) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_58.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
       val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
@@ -1747,7 +1747,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 59, doesNotTaper is true) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_59.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
       val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
@@ -1792,7 +1792,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 60, doesNotTaper is false) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_60.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
       val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
@@ -1837,7 +1837,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 Scenario 61) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_61.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val taxYearProRataAward = await(TCCalculator.calculator.award(result.get))
       val taxYearProRataIncomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
@@ -1881,7 +1881,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2017/2018 Scenario 62) Generate total award with periods with elements" in {
         val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2017/scenario_1.json")
         val json: JsValue = Json.parse(resource.toString)
-        val result = json.validate[TCEligibility]
+        val result = json.validate[TCCalculatorInput]
 
         val award = await(TCCalculator.calculator.award(result.get))
         val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
@@ -1929,7 +1929,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2017/2018 Scenario 63) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2017/scenario_2.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
       val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
@@ -1977,7 +1977,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 - 2017/2018 Scenario 64) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2017/scenario_3.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
       val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
@@ -2058,7 +2058,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2016/2017 - 2017/2018 Scenario 65) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2017/scenario_4.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
       val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
@@ -2139,7 +2139,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(Proratering) (TY 2016/2017 - 2017/2018 Scenario 66) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2017/scenario_5.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
       val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
@@ -2222,7 +2222,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2018/2019 Scenario 67) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2018/scenario_1.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
       val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
@@ -2270,7 +2270,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2018/2019 Scenario 68) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2018/scenario_2.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
       val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
@@ -2318,7 +2318,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2017/2018 - 2018/2019 Scenario 69) Generate total award with periods with elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2018/scenario_3.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
       val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
@@ -2399,7 +2399,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
     "(TY 2017/2018 - 2018/2019 Scenario 70) Generate total award with periods and elements" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2018/scenario_4.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
 
       val award = await(TCCalculator.calculator.award(result.get))
       val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
