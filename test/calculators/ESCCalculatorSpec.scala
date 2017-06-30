@@ -1868,46 +1868,6 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       }
     }
 
-    "assign full childcare cost to parent if parent income is greater than personal allowance" in {
-      val startDate = LocalDate.now().withDayOfMonth(6).withMonthOfYear(4)
-      val endDate = LocalDate.now().withDayOfMonth(1).withMonthOfYear(9)
-      val inputPartner = Claimant(qualifying = true, isPartner = true,
-        eligibleMonthsInPeriod = 0, previousIncome = None, currentIncome = Some(Income(Some(2000))), vouchers = true,
-        escStartDate = startDate.minusYears(5))
-      val inputClaimant = Claimant(qualifying = true, isPartner = false,
-        eligibleMonthsInPeriod = 3, previousIncome = None, currentIncome = Some(Income(Some(30000))), vouchers = true,
-        escStartDate = startDate.minusYears(5))
-      val period = ESCPeriod(from = startDate, until = endDate, claimants = List(inputClaimant, inputPartner), children = List())
 
-      val calculator = new ESCCalculator{
-        override def calcReliefAmount(period: ESCPeriod, income: TotalIncome, isESCStartDateBefore2011: Boolean, escAmount: BigDecimal, location: String) =
-          (BigDecimal(0), 200)
-      }
-      val claimants = PrivateMethod[List[Claimant]]('selectClaimant)
-      val result = calculator invokePrivate claimants(period, inputClaimant, inputPartner, location)
-
-      result shouldBe List(inputClaimant.copy(escAmount = BigDecimal(90)), inputPartner.copy(escAmount = 0))
-    }
-
-    "assign full childcare cost to partner if partner income is greater than personal allowance" in {
-      val startDate = LocalDate.now().withDayOfMonth(6).withMonthOfYear(4)
-      val endDate = LocalDate.now().withDayOfMonth(1).withMonthOfYear(9)
-      val inputClaimant = Claimant(qualifying = true, isPartner = false,
-        eligibleMonthsInPeriod = 0, previousIncome = None, currentIncome = Some(Income(Some(2000))), vouchers = true,
-        escStartDate = startDate.minusYears(5))
-      val inputPartner = Claimant(qualifying = true, isPartner = true,
-        eligibleMonthsInPeriod = 3, previousIncome = None, currentIncome = Some(Income(Some(30000))), vouchers = true,
-        escStartDate = startDate.minusYears(5))
-      val period = ESCPeriod(from = startDate, until = endDate, claimants = List(inputClaimant, inputPartner), children = List())
-
-      val calculator = new ESCCalculator{
-        override def calcReliefAmount(period: ESCPeriod, income: TotalIncome, isESCStartDateBefore2011: Boolean, escAmount: BigDecimal, location: String) =
-          (BigDecimal(0), 200)
-      }
-      val claimants = PrivateMethod[List[Claimant]]('selectClaimant)
-      val result = calculator invokePrivate claimants(period, inputClaimant, inputPartner, location)
-
-      result shouldBe List(inputClaimant.copy(escAmount = BigDecimal(0)), inputPartner.copy(escAmount = BigDecimal(90)))
-    }
   }
 }

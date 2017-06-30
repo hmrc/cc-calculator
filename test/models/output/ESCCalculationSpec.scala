@@ -39,8 +39,6 @@ class ESCCalculationSpec extends UnitSpec with FakeCCCalculatorApplication {
         escStartDate = from,
         escAmountPeriod = Periods.Monthly,
         savings = Savings(),
-        maximumRelief = BigDecimal(0.00),
-        maximumReliefPeriod = Periods.Monthly,
         taxAndNIAfterSacrifice = TaxAndNI(),
         taxAndNIBeforeSacrifice = TaxAndNI()
       )
