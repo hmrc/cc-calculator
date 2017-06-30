@@ -23,52 +23,52 @@ import play.api.libs.json.Reads._
 import play.api.libs.json._
 import utils._
 
-case class TCEligibility(
-                          taxYears: List[TaxYear]
+case class TCCalculatorInput(
+                          taxYears: List[TCTaxYear]
                           )
 
-object TCEligibility {
-  implicit val tcEligibilityFormat: Reads[TCEligibility] =
-    (JsPath \ "taxYears").read[List[TaxYear]].map {taxYears => TCEligibility(taxYears)}
+object TCCalculatorInput {
+  implicit val tcEligibilityFormat: Reads[TCCalculatorInput] =
+    (JsPath \ "taxYears").read[List[TCTaxYear]].map { taxYears => TCCalculatorInput(taxYears)}
 }
 
-case class TaxYear(
-                    from: LocalDate,
-                    until: LocalDate,
-                    previousHouseholdIncome: Income,
-                    currentHouseholdIncome: Income,
-                    periods: List[Period]
+case class TCTaxYear(
+                      from: LocalDate,
+                      until: LocalDate,
+                      previousHouseholdIncome: TCIncome,
+                      currentHouseholdIncome: TCIncome,
+                      periods: List[TCPeriod]
                     )
 
-object TaxYear extends MessagesObject {
-  implicit val taxYearsFormat: Reads[TaxYear] = Json.reads[TaxYear]
+object TCTaxYear extends MessagesObject {
+  implicit val taxYearsFormat: Reads[TCTaxYear] = Json.reads[TCTaxYear]
 }
 
-case class Income(
+case class TCIncome(
                    employment: Option[List[BigDecimal]],
                    pension: Option[List[BigDecimal]],
                    other: Option[List[BigDecimal]],
                    benefits: Option[List[BigDecimal]],
-                   statutory: Option[List[StatutoryIncome]]
+                   statutory: Option[List[TCStatutoryIncome]]
                    )
 
-object Income {
-  implicit val incomeFormat: Reads[Income] = Json.reads[Income]
+object TCIncome {
+  implicit val incomeFormat: Reads[TCIncome] = Json.reads[TCIncome]
 }
 
-case class StatutoryIncome(
+case class TCStatutoryIncome(
                             weeks: Double,
                             amount: BigDecimal
                             )
-object StatutoryIncome {
-  implicit val statutoryIncomeFormat: Reads[StatutoryIncome] = Json.reads[StatutoryIncome]
+object TCStatutoryIncome {
+  implicit val statutoryIncomeFormat: Reads[TCStatutoryIncome] = Json.reads[TCStatutoryIncome]
 }
 
-case class Period(from: LocalDate,
-                  until: LocalDate,
-                  householdElements: HouseHoldElements,
-                  claimants: List[Claimant],
-                  children: List[Child]
+case class TCPeriod(from: LocalDate,
+                    until: LocalDate,
+                    householdElements: TCHouseholdElements,
+                    claimants: List[TCClaimant],
+                    children: List[TCChild]
                  ) {
 
   def getChildCareForPeriod: Boolean = {
@@ -82,24 +82,24 @@ case class Period(from: LocalDate,
   }
 }
 
-object Period {
-  implicit val periodFormat: Reads[Period] = Json.reads[Period]
+object TCPeriod {
+  implicit val periodFormat: Reads[TCPeriod] = Json.reads[TCPeriod]
 }
 
-case class ChildElements(child: Boolean = false,
-                         youngAdult: Boolean = false,
-                         disability: Boolean = false,
-                         severeDisability: Boolean = false,
-                         childcare: Boolean = false)
+case class TCChildElements(child: Boolean = false,
+                           youngAdult: Boolean = false,
+                           disability: Boolean = false,
+                           severeDisability: Boolean = false,
+                           childcare: Boolean = false)
 
-object ChildElements {
-  implicit val childElementsReads: Reads[ChildElements] = Json.reads[ChildElements]
+object TCChildElements {
+  implicit val childElementsReads: Reads[TCChildElements] = Json.reads[TCChildElements]
 }
 
-case class Child(qualifying: Boolean = false,
-                 childcareCost : BigDecimal,
-                 childcareCostPeriod: Periods.Period,
-                 childElements: ChildElements) {
+case class TCChild(qualifying: Boolean = false,
+                   childcareCost : BigDecimal,
+                   childcareCostPeriod: Periods.Period,
+                   childElements: TCChildElements) {
 
   def isQualifyingWTC: Boolean = {
     qualifying && childElements.childcare
@@ -119,36 +119,36 @@ case class Child(qualifying: Boolean = false,
 
 }
 
-object Child extends MessagesObject {
+object TCChild extends MessagesObject {
 
   def childSpendValidation(cost: BigDecimal) : Boolean = {
     cost >= BigDecimal(0.00)
   }
 
-  implicit val childFormat: Reads[Child] = (
+  implicit val childFormat: Reads[TCChild] = (
        (JsPath \ "qualifying").read[Boolean] and
         (JsPath \ "childcareCost").read[BigDecimal].filter(
           ValidationError(messages("cc.calc.childcare.spend.too.low"))
         )(x => childSpendValidation(x)) and
         //childcareCost max value should be 30,000 per year (This will be based on childcareCost Period, hence should be handled in frontend)
           (JsPath \ "childcareCostPeriod").read[Periods.Period] and
-            (JsPath \ "childElements").read[ChildElements]
-    )(Child.apply _)
+            (JsPath \ "childElements").read[TCChildElements]
+    )(TCChild.apply _)
 }
 
-case class ClaimantDisability(
+case class TCDisability(
                              disability: Boolean = false,
                              severeDisability: Boolean = false
                              )
 
-object ClaimantDisability {
-  implicit val claimantDisabilityFormat: Reads[ClaimantDisability] = Json.reads[ClaimantDisability]
+object TCDisability {
+  implicit val claimantDisabilityFormat: Reads[TCDisability] = Json.reads[TCDisability]
 }
 
-case class Claimant(qualifying: Boolean,
-                    isPartner: Boolean,
-                    claimantElements: ClaimantDisability,
-                    doesNotTaper : Boolean = false) {
+case class TCClaimant(qualifying: Boolean,
+                      isPartner: Boolean,
+                      claimantElements: TCDisability,
+                      doesNotTaper : Boolean = false) {
 
   def getsDisabilityElement: Boolean = {
     qualifying && claimantElements.disability
@@ -160,24 +160,24 @@ case class Claimant(qualifying: Boolean,
 
 }
 
-object Claimant {
+object TCClaimant {
 
-  implicit val claimantFormat: Reads[Claimant] = (
+  implicit val claimantFormat: Reads[TCClaimant] = (
     (JsPath \ "qualifying").read[Boolean] and
       (JsPath \ "isPartner").read[Boolean] and
-        (JsPath \ "claimantElements").read[ClaimantDisability] and
+        (JsPath \ "claimantElements").read[TCDisability] and
           ((JsPath \ "doesNotTaper").read[Boolean] or Reads.pure(false))
-    )(Claimant.apply _)
+    )(TCClaimant.apply _)
 }
 
-case class HouseHoldElements(basic: Boolean = false,
-                             hours30: Boolean = false,
-                             childcare: Boolean = false,
-                             loneParent: Boolean = false,
-                             secondParent: Boolean = false,
-                             family: Boolean = false
+case class TCHouseholdElements(basic: Boolean = false,
+                               hours30: Boolean = false,
+                               childcare: Boolean = false,
+                               loneParent: Boolean = false,
+                               secondParent: Boolean = false,
+                               family: Boolean = false
                               )
 
-object HouseHoldElements {
-  implicit val householdElementsFormat: Reads[HouseHoldElements] = Json.reads[HouseHoldElements]
+object TCHouseholdElements {
+  implicit val householdElementsFormat: Reads[TCHouseholdElements] = Json.reads[TCHouseholdElements]
 }

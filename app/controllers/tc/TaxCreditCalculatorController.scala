@@ -19,7 +19,7 @@ package controllers.tc
 import javax.inject.{Inject, Singleton}
 
 import calculators.TCCalculator
-import models.input.tc.TCEligibility
+import models.input.tc.TCCalculatorInput
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json._
@@ -40,7 +40,7 @@ class TaxCreditCalculatorController @Inject()(val messagesApi: MessagesApi) exte
 
   def incomeAdvice: Action[JsValue] = Action.async(parse.json) {
     implicit request =>
-      request.body.validate[TCEligibility].fold(
+      request.body.validate[TCCalculatorInput].fold(
         error => {
           Logger.warn("TC Calculator Validation JsError in TaxCreditCalculatorController.incomeAdvice")
           Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(play.api.http.Status.BAD_REQUEST, Left(error))))
@@ -61,7 +61,7 @@ class TaxCreditCalculatorController @Inject()(val messagesApi: MessagesApi) exte
 
   def calculate: Action[JsValue] = Action.async(parse.json) {
     implicit request =>
-      request.body.validate[TCEligibility].fold(
+      request.body.validate[TCCalculatorInput].fold(
         error => {
           Logger.warn(s"TC Calculator Validation JsError in TaxCreditCalculatorController.calculate")
           Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(play.api.http.Status.BAD_REQUEST, Left(error))))
