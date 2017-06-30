@@ -452,7 +452,7 @@ trait ESCCalculator extends ESCCalculatorHelpers with ESCCalculatorTax with ESCC
       case (_, Some(partner)) if partner.qualifying => {
         val (_, maximumReliefAmount) =
           calcReliefAmount(period, partner.income, partner.isESCStartDateBefore2011, escAmountForPeriod, location)
-        (maximumReliefAmount, 0)
+        (0, maximumReliefAmount)
       }
       case (_, _) =>
         (0, 0)
