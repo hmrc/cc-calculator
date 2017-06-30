@@ -13,7 +13,8 @@
               "isPartner": false,
               "eligibleMonthsInPeriod": 12,
               "currentIncome": {
-                "employmentIncome": 5000
+                "employmentIncome": 42700,
+                "pension" : 166.67
               },
               "vouchers": true,
               "escStartDate": "2013-08-27"

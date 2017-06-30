@@ -37,6 +37,7 @@ class ESCCalculatorController @Inject()(val messagesApi: MessagesApi) extends Ba
 
   def calculate: Action[JsValue] = Action.async(parse.json) {
     implicit request =>
+
       request.body.validate[ESCEligibility].fold(
         error => {
           Logger.warn("ESC Calculator Validation JsError in ESCCalculatorController.calculate")

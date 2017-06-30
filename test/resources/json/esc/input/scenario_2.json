@@ -12,6 +12,9 @@
               "qualifying": true,
               "isPartner": false,
               "eligibleMonthsInPeriod": 1,
+              "currentIncome": {
+                "employmentIncome": 50000
+              },
               "vouchers": true,
               "escStartDate": "2016-08-27"
             }

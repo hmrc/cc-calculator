@@ -17,12 +17,14 @@
 package models.input.esc
 
 import config.ConfigConstants._
-import org.joda.time.LocalDate
+import models.input.tc.Child.{childSpendValidation, messages}
 import org.joda.time.format.DateTimeFormat
 import play.api.data.validation.ValidationError
+import play.api.libs.json.{JsPath, Json, Reads}
+import utils.Periods
+import org.joda.time.LocalDate
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Reads._
-import play.api.libs.json.{Format, JsPath, Json, Reads}
 import utils._
 
 case class ESCEligibility(
@@ -76,10 +78,23 @@ case class Child(
                    qualifying: Boolean = false,
                    childCareCost: BigDecimal,
                    childCareCostPeriod: Periods.Period = Periods.Monthly
-                   )
+                   ) {
+}
 
 object Child {
-  implicit val childFormat: Format[Child] = Json.format[Child]
+
+  def childSpendValidation(cost: BigDecimal) : Boolean = {
+    cost >= BigDecimal(0.00)
+  }
+
+  implicit val childReads : Reads[Child] = (
+    (JsPath \ "qualifying").read[Boolean] and
+      (JsPath \ "childcareCost").read[BigDecimal].filter(
+        ValidationError(messages("cc.calc.childcare.spend.too.low"))
+      )(x => childSpendValidation(x)) and
+  (JsPath \ "childCareCostPeriod").read[Periods.Period]
+  )(Child.apply _)
+
 }
 
 //gross and taxablePay are annual amounts

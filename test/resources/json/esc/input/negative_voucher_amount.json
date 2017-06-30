@@ -12,11 +12,8 @@
               "qualifying": false,
               "isPartner": false,
               "eligibleMonthsInPeriod": 2,
-              "income": {
-                "taxablePay": 0.00,
-                "gross": 0.00,
-                "taxCode": "1060L",
-                "niCategory": "a"
+              "currentIncome": {
+                "employmentIncome": 50000
               },
               "vouchers": true,
               "escStartDate": "2016-08-2"
