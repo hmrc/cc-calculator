@@ -89,7 +89,7 @@ object Child {
 
   implicit val childReads : Reads[Child] = (
     (JsPath \ "qualifying").read[Boolean] and
-      (JsPath \ "childcareCost").read[BigDecimal].filter(
+      (JsPath \ "childCareCost").read[BigDecimal].filter(
         ValidationError(messages("cc.calc.childcare.spend.too.low"))
       )(x => childSpendValidation(x)) and
   (JsPath \ "childCareCostPeriod").read[Periods.Period]
