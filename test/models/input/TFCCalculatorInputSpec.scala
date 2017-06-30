@@ -16,26 +16,25 @@
 
 package models.input
 
-import java.lang.Short
 import com.fasterxml.jackson.databind.JsonNode
 import com.github.fge.jackson.JsonLoader
-import models.input.tfc.{Child, Disability, TFCEligibility, TFCPeriod}
+import models.input.tfc.{TFCChild, TFCDisability, TFCCalculatorInput, TFCPeriod}
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import play.api.libs.json.{JsSuccess, JsValue, Json}
 import uk.gov.hmrc.play.test.UnitSpec
 import utils.FakeCCCalculatorApplication
 
-class TFCEligibilitySpec extends UnitSpec with FakeCCCalculatorApplication{
+class TFCCalculatorInputSpec extends UnitSpec with FakeCCCalculatorApplication{
 
   "TFC Input JSON" should {
     "read a valid JSON input and convert to a specific type" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tfc/input/calculator_input_test.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TFCEligibility]
+      val result = json.validate[TFCCalculatorInput]
       result match {
         case JsSuccess(x, _) => {
-          x shouldBe a[TFCEligibility]
+          x shouldBe a[TFCCalculatorInput]
 
           x.from shouldBe a[LocalDate]
           x.until shouldBe a[LocalDate]
@@ -50,7 +49,7 @@ class TFCEligibilitySpec extends UnitSpec with FakeCCCalculatorApplication{
 
           //Child model
           val child = period.children.head
-          child shouldBe a[Child]
+          child shouldBe a[TFCChild]
           child.qualifying.isInstanceOf[Boolean] shouldBe true
           child.from.isInstanceOf[Option[LocalDate]] shouldBe true
           child.until.isInstanceOf[Option[LocalDate]] shouldBe true
@@ -58,7 +57,7 @@ class TFCEligibilitySpec extends UnitSpec with FakeCCCalculatorApplication{
 
           //Child Disability model
           val disability = child.disability
-          disability shouldBe a[Disability]
+          disability shouldBe a[TFCDisability]
           disability.disabled.isInstanceOf[Boolean] shouldBe true
           disability.severelyDisabled.isInstanceOf[Boolean] shouldBe true
         }
@@ -73,10 +72,10 @@ class TFCEligibilitySpec extends UnitSpec with FakeCCCalculatorApplication{
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
       val periodStart = LocalDate.parse ("2016-06-01T18:46:17",formatter)
       val periodEnd = LocalDate.parse ("2016-08-31T18:46:17",formatter)
-      val child = Child(qualifying = true, from = Some(periodStart), until = Some(periodEnd),childcareCost= BigDecimal(18000), disability = Disability(disabled = false, severelyDisabled = false))
+      val child = TFCChild(qualifying = true, from = Some(periodStart), until = Some(periodEnd),childcareCost= BigDecimal(18000), disability = TFCDisability(disabled = false, severelyDisabled = false))
       val tfcPeriod = TFCPeriod(from = periodStart, until = periodEnd, periodEligibility = true, List(child))
 
-      val tfcEligibility = TFCEligibility(
+      val tfcEligibility = TFCCalculatorInput(
       from = periodStart,
       until = periodEnd,
       householdEligibility = true,
@@ -89,10 +88,10 @@ class TFCEligibilitySpec extends UnitSpec with FakeCCCalculatorApplication{
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
       val periodStart = LocalDate.parse ("2016-06-01T18:46:17",formatter)
       val periodEnd = LocalDate.parse ("2016-08-31T18:46:17",formatter)
-      val child = Child(qualifying = true, from = Some(periodStart), until = Some(periodEnd),childcareCost= BigDecimal(18000), disability = Disability(disabled = false, severelyDisabled = false))
+      val child = TFCChild(qualifying = true, from = Some(periodStart), until = Some(periodEnd),childcareCost= BigDecimal(18000), disability = TFCDisability(disabled = false, severelyDisabled = false))
       val tfcPeriod = TFCPeriod(from = periodStart, until = periodEnd, periodEligibility = true, List(child))
 
-      val tfcEligibility = TFCEligibility(
+      val tfcEligibility = TFCCalculatorInput(
         from = periodStart,
         until = periodEnd,
         householdEligibility = true,
@@ -135,25 +134,25 @@ class TFCEligibilitySpec extends UnitSpec with FakeCCCalculatorApplication{
   "TFC Input Child" should {
 
     "return child disabled status for not disabled & not severely disabled child" in {
-      val child = Child(qualifying = true, from = null, until = null, childcareCost= BigDecimal(18000), disability = Disability(disabled = false, severelyDisabled = false))
+      val child = TFCChild(qualifying = true, from = null, until = null, childcareCost= BigDecimal(18000), disability = TFCDisability(disabled = false, severelyDisabled = false))
       child.getChildDisability shouldBe false
       child.getChildSevereDisability shouldBe false
     }
 
     "return child disabled status for disabled & severely disabled child" in {
-      val child = Child(qualifying = true, from = null, until = null, childcareCost= BigDecimal(18000), disability = Disability(disabled = true, severelyDisabled = true))
+      val child = TFCChild(qualifying = true, from = null, until = null, childcareCost= BigDecimal(18000), disability = TFCDisability(disabled = true, severelyDisabled = true))
       child.getChildDisability shouldBe true
       child.getChildSevereDisability shouldBe true
     }
 
     "return child disabled status for not disabled & severely disabled child" in {
-      val child = Child(qualifying = true, from = null, until = null, childcareCost= BigDecimal(18000), disability = Disability(disabled = false, severelyDisabled = true))
+      val child = TFCChild(qualifying = true, from = null, until = null, childcareCost= BigDecimal(18000), disability = TFCDisability(disabled = false, severelyDisabled = true))
       child.getChildDisability shouldBe true
       child.getChildSevereDisability shouldBe true
     }
 
     "return child disabled status for disabled child" in {
-      val child = Child(qualifying = true, from = null, until = null, childcareCost= BigDecimal(18000), disability = Disability(disabled = true, severelyDisabled = false))
+      val child = TFCChild(qualifying = true, from = null, until = null, childcareCost= BigDecimal(18000), disability = TFCDisability(disabled = true, severelyDisabled = false))
       child.getChildDisability shouldBe true
       child.getChildSevereDisability shouldBe false
     }

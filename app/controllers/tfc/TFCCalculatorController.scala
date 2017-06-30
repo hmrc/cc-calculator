@@ -17,8 +17,8 @@
 package controllers.tfc
 
 import calculators.TFCCalculator
-import models.input.tfc.TFCEligibility
-import models.output.tfc.TFCCalculation
+import models.input.tfc.TFCCalculatorInput
+import models.output.tfc.TFCCalculatorOutput
 import play.api.Logger
 import play.api.libs.json.{Json, JsValue}
 import play.api.mvc.Action
@@ -37,7 +37,7 @@ class TFCCalculatorController @Inject()(val messagesApi: MessagesApi) extends Ba
 
   def calculate: Action[JsValue] = Action.async(parse.json) {
     implicit request =>
-      request.body.validate[TFCEligibility].fold(
+      request.body.validate[TFCCalculatorInput].fold(
         error => {
           Logger.warn(s"TFC Calculator Validation JsError in TFCCalculatorController.calculate")
           Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(play.api.http.Status.BAD_REQUEST, Left(error))))
@@ -46,7 +46,7 @@ class TFCCalculatorController @Inject()(val messagesApi: MessagesApi) extends Ba
           auditEvent.auditTFCRequest(result.toString)
           calculator.award(result).map {
             response =>
-              val jsonResponse = Json.toJson[TFCCalculation](response)
+              val jsonResponse = Json.toJson[TFCCalculatorOutput](response)
               auditEvent.auditTFCResponse(jsonResponse.toString())
               Ok(jsonResponse)
           } recover {

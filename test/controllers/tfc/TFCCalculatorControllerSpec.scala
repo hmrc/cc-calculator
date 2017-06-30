@@ -19,8 +19,8 @@ package controllers.tfc
 import calculators.TFCCalculator
 import com.fasterxml.jackson.databind.JsonNode
 import com.github.fge.jackson.JsonLoader
-import models.input.tfc.TFCEligibility
-import models.output.tfc.{Contribution, TFCCalculation}
+import models.input.tfc.TFCCalculatorInput
+import models.output.tfc.{TFCContribution, TFCCalculatorOutput}
 import org.mockito.Matchers.{eq => mockEq, _}
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
@@ -37,7 +37,7 @@ class TFCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
 
   implicit val request = FakeRequest()
 
-  val mockTFCCalculation = TFCCalculation(householdContribution = Contribution(), numberOfPeriods = 1, periods = List())
+  val mockTFCCalculation = TFCCalculatorOutput(householdContribution = TFCContribution(), numberOfPeriods = 1, periods = List())
 
   "TFCCalculatorController" should {
 
@@ -58,7 +58,7 @@ class TFCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
       val resource: JsonNode = JsonLoader.fromResource("/json/tfc/input/calculator_input_test.json")
       val inputJson: JsValue = Json.parse(resource.toString)
       val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
-      val JsonResult = inputJson.validate[TFCEligibility]
+      val JsonResult = inputJson.validate[TFCCalculatorInput]
 
       when(controller.calculator.award(mockEq(JsonResult.get))).thenReturn(Future.failed(new Exception("Something bad happened")))
       val result = await(controller.calculate()(request))
@@ -86,7 +86,7 @@ class TFCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
       val inputJson: JsValue = Json.parse(JsonLoader.fromResource("/json/tfc/input/calculator_input_test.json").toString)
       val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.calculator.award(any[TFCEligibility]())).thenReturn(Future.successful(mockTFCCalculation))
+      when(controller.calculator.award(any[TFCCalculatorInput]())).thenReturn(Future.successful(mockTFCCalculation))
       val result = await(controller.calculate()(request))
       status(result) shouldBe Status.OK
     }
@@ -102,7 +102,7 @@ class TFCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
       val inputJson: JsValue = Json.parse(JsonLoader.fromResource("/json/tfc/input/no_period.json").toString)
       val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.calculator.award(any[TFCEligibility]())).thenReturn(Future.successful(mockTFCCalculation))
+      when(controller.calculator.award(any[TFCCalculatorInput]())).thenReturn(Future.successful(mockTFCCalculation))
       val result = await(controller.calculate()(request))
       status(result) shouldBe Status.BAD_REQUEST
 
@@ -140,7 +140,7 @@ class TFCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
       val inputJson: JsValue = Json.parse(JsonLoader.fromResource("/json/tfc/input/negative_childcareCost.json").toString)
       val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.calculator.award(any[TFCEligibility]())).thenReturn(Future.successful(mockTFCCalculation))
+      when(controller.calculator.award(any[TFCCalculatorInput]())).thenReturn(Future.successful(mockTFCCalculation))
       val result = await(controller.calculate()(request))
       status(result) shouldBe Status.BAD_REQUEST
 
@@ -178,7 +178,7 @@ class TFCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
       val inputJson: JsValue = Json.parse(JsonLoader.fromResource("/json/tfc/input/no_children.json").toString)
       val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.calculator.award(any[TFCEligibility]())).thenReturn(Future.successful(mockTFCCalculation))
+      when(controller.calculator.award(any[TFCCalculatorInput]())).thenReturn(Future.successful(mockTFCCalculation))
       val result = await(controller.calculate()(request))
       status(result) shouldBe Status.BAD_REQUEST
 
@@ -216,7 +216,7 @@ class TFCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
       val inputJson: JsValue = Json.parse(JsonLoader.fromResource("/json/tfc/input/date_missing.json").toString)
       val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.calculator.award(any[TFCEligibility]())).thenReturn(Future.successful(mockTFCCalculation))
+      when(controller.calculator.award(any[TFCCalculatorInput]())).thenReturn(Future.successful(mockTFCCalculation))
       val result = await(controller.calculate()(request))
       status(result) shouldBe Status.BAD_REQUEST
 
@@ -254,7 +254,7 @@ class TFCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
       val inputJson: JsValue = Json.parse(JsonLoader.fromResource("/json/tfc/input/invalid_data_type.json").toString)
       val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.calculator.award(any[TFCEligibility]())).thenReturn(Future.successful(mockTFCCalculation))
+      when(controller.calculator.award(any[TFCCalculatorInput]())).thenReturn(Future.successful(mockTFCCalculation))
       val result = await(controller.calculate()(request))
       status(result) shouldBe Status.BAD_REQUEST
 
@@ -290,7 +290,7 @@ class TFCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
       val inputJson: JsValue = Json.parse(JsonLoader.fromResource("/json/tfc/input/child_from_until_date_null.json").toString)
       val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.calculator.award(any[TFCEligibility]())).thenReturn(Future.successful(mockTFCCalculation))
+      when(controller.calculator.award(any[TFCCalculatorInput]())).thenReturn(Future.successful(mockTFCCalculation))
       val result = await(controller.calculate()(request))
       status(result) shouldBe Status.OK
     }
@@ -306,7 +306,7 @@ class TFCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
       val inputJson: JsValue = Json.parse(JsonLoader.fromResource("/json/tfc/input/no_disability.json").toString)
       val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.calculator.award(any[TFCEligibility]())).thenReturn(Future.successful(mockTFCCalculation))
+      when(controller.calculator.award(any[TFCCalculatorInput]())).thenReturn(Future.successful(mockTFCCalculation))
       val result = await(controller.calculate()(request))
       status(result) shouldBe Status.BAD_REQUEST
     }
@@ -322,7 +322,7 @@ class TFCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
       val inputJson: JsValue = Json.parse(JsonLoader.fromResource("/json/tfc/input/wire_up_flow_through.json").toString)
       val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.calculator.award(any[TFCEligibility]())).thenReturn(Future.successful(mockTFCCalculation))
+      when(controller.calculator.award(any[TFCCalculatorInput]())).thenReturn(Future.successful(mockTFCCalculation))
       val result = await(controller.calculate()(request))
       status(result) shouldBe Status.OK
     }
@@ -338,7 +338,7 @@ class TFCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
       val inputJson: JsValue = Json.parse(JsonLoader.fromResource("/json/tfc/input/incorrect_scheme_name.json").toString)
       val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.calculator.award(any[TFCEligibility]())).thenReturn(Future.successful(mockTFCCalculation))
+      when(controller.calculator.award(any[TFCCalculatorInput]())).thenReturn(Future.successful(mockTFCCalculation))
       val result = await(controller.calculate()(request))
       status(result) shouldBe Status.BAD_REQUEST
     }

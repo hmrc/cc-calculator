@@ -16,7 +16,7 @@
 
 package calculators
 
-import models.input.tfc.{Child, TFCEligibility}
+import models.input.tfc.{TFCChild, TFCCalculatorInput}
 import models.output.tfc._
 import org.joda.time.LocalDate
 import play.api.Logger
@@ -33,7 +33,7 @@ trait TFCCalculator {
 
     import scala.concurrent.ExecutionContext.Implicits.global
 
-    def getHouseholdContribution(periods: List[TFCPeriod]) : Contribution = {
+    def getHouseholdContribution(periods: List[TFCPeriod]) : TFCContribution = {
       val householdTotalParentContribution: BigDecimal =
         periods.foldLeft(BigDecimal(0.00))((acc, TFCPeriod) => acc + TFCPeriod.periodContribution.parent)
       val householdTotalGovernmentContribution: BigDecimal =
@@ -41,7 +41,7 @@ trait TFCCalculator {
       val householdTotalChildcareSpend: BigDecimal =
         periods.foldLeft(BigDecimal(0.00))((acc, TFCPeriod) => acc + TFCPeriod.periodContribution.totalChildCareSpend)
 
-      Contribution(
+      TFCContribution(
         parent = round(householdTotalParentContribution),
         government = round(householdTotalGovernmentContribution),
         totalChildCareSpend = round(householdTotalChildcareSpend)
@@ -58,7 +58,7 @@ trait TFCCalculator {
       }
     }
 
-    def getMaximumTopup(child : models.input.tfc.Child, tfcTaxYearConfig : TFCTaxYearConfig): BigDecimal = {
+    def getMaximumTopup(child : models.input.tfc.TFCChild, tfcTaxYearConfig : TFCTaxYearConfig): BigDecimal = {
       val maximumTopupConfig = child.getChildDisability match {
         case true => tfcTaxYearConfig.maxGovtContributionForDisabled
         case _ => tfcTaxYearConfig.maxGovtContribution
@@ -82,21 +82,21 @@ trait TFCCalculator {
       }
     }
 
-    def getPeriodContribution(Children : List[OutputChild]) : Contribution = {
+    def getPeriodContribution(Children : List[TFCOutputChild]) : TFCContribution = {
       val periodParentContribution: BigDecimal = Children.foldLeft(BigDecimal(0.00))((acc, child) => acc + child.childContribution.parent)
       val periodGovernmentContribution: BigDecimal = Children.foldLeft(BigDecimal(0.00))((acc, child) => acc + child.childContribution.government)
       val periodTotalChildcareSpend: BigDecimal = Children.foldLeft(BigDecimal(0.00))((acc, child) => acc + child.childContribution.totalChildCareSpend)
 
-      Contribution(
+      TFCContribution(
         parent = round(periodParentContribution),
         government = round(periodGovernmentContribution),
         totalChildCareSpend = round(periodTotalChildcareSpend)
       )
     }
 
-    def getOutputChildren(period: models.input.tfc.TFCPeriod): List[OutputChild] = {
+    def getOutputChildren(period: models.input.tfc.TFCPeriod): List[TFCOutputChild] = {
       for(child <- period.children) yield {
-        OutputChild(
+        TFCOutputChild(
           childCareCost = child.childcareCost,
           childContribution = getChildContribution(child, period.configRule, daysBetween(period.from, period.until), period.periodEligibility)
         )
@@ -104,7 +104,7 @@ trait TFCCalculator {
 
     }
 
-    def getChildContribution(child: Child, tfcTaxYearConfig: TFCTaxYearConfig, noOfDaysInAPeriod: Int, periodEligible: Boolean): Contribution = {
+    def getChildContribution(child: TFCChild, tfcTaxYearConfig: TFCTaxYearConfig, noOfDaysInAPeriod: Int, periodEligible: Boolean): TFCContribution = {
 
       val totalChildCareSpend: BigDecimal  = getChildCareCostForPeriod(child)
 
@@ -117,13 +117,13 @@ trait TFCCalculator {
 
       val governmentContributionRounded = roundup(roundDownToThreeDigits(governmentContribution))
       if(periodEligible) {
-        Contribution(
+        TFCContribution(
           parent = totalChildCareSpend - governmentContributionRounded,
           government = governmentContributionRounded,
           totalChildCareSpend = totalChildCareSpend
         )
       } else { //if both parent and child not eligible in 3 months period government contribution is zero
-        Contribution(
+        TFCContribution(
           parent = totalChildCareSpend,
           government = 0,
           totalChildCareSpend = totalChildCareSpend
@@ -131,15 +131,15 @@ trait TFCCalculator {
       }
     }
 
-     def getChildCareCostForPeriod(child: Child): BigDecimal = amountToQuarterlyAmount(child.childcareCost, Periods.Monthly)
+     def getChildCareCostForPeriod(child: TFCChild): BigDecimal = amountToQuarterlyAmount(child.childcareCost, Periods.Monthly)
 
-     def getTopUpPercentForChildCareCost(child: Child, tfcTaxYearConfig: TFCTaxYearConfig): BigDecimal =
+     def getTopUpPercentForChildCareCost(child: TFCChild, tfcTaxYearConfig: TFCTaxYearConfig): BigDecimal =
        ((tfcTaxYearConfig.topUpPercent * getChildCareCostForPeriod(child)) / 100)
 
-    def award(request: TFCEligibility): Future[TFCCalculation] = {
+    def award(request: TFCCalculatorInput): Future[TFCCalculatorOutput] = {
       if(request.householdEligibility) {
         Future {
-          TFCCalculation(
+          TFCCalculatorOutput(
             householdContribution = getHouseholdContribution(getCalculatedTFCPeriods(request.periods)),
             numberOfPeriods = request.periods.length.toShort,
             periods = getCalculatedTFCPeriods(request.periods)
@@ -148,8 +148,8 @@ trait TFCCalculator {
       }
       else {
         Future {
-          TFCCalculation(
-            householdContribution = Contribution(parent = 0, government = 0, totalChildCareSpend = 0),
+          TFCCalculatorOutput(
+            householdContribution = TFCContribution(parent = 0, government = 0, totalChildCareSpend = 0),
             numberOfPeriods = 0,
             periods = List.empty
           )
