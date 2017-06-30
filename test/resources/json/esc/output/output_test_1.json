@@ -27,7 +27,7 @@
             "niCategory": "A"
           },
           "vouchers": false,
-          "escAmount": 200,
+          "escAmount": 0,
           "escAmountPeriod": "Month",
           "escStartDate": "2012-08-27",
           "savings": {
@@ -35,8 +35,6 @@
             "taxSaving": 0,
             "niSaving": 0
           },
-          "maximumRelief": 0,
-          "maximumReliefPeriod": "Month",
           "taxAndNIBeforeSacrifice": {
             "taxPaid": 0,
             "niPaid": 0
