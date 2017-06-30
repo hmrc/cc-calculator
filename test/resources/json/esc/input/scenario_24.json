@@ -13,8 +13,6 @@
               "isPartner": false,
               "eligibleMonthsInPeriod": 0,
                 "vouchers": false,
-              "escAmount": 250.00,
-              "escAmountPeriod": "Month",
               "escStartDate": "2013-08-27"
             },
             {
@@ -22,9 +20,14 @@
               "isPartner": true,
               "eligibleMonthsInPeriod": 0,
                 "vouchers": false,
-              "escAmount": 300.00,
-              "escAmountPeriod": "Month",
               "escStartDate": "2006-08-27"
+            }
+          ],
+          "children" : [
+            {
+              "qualifying": true,
+              "childCareCost": 550.00,
+              "childCareCostPeriod": "Month"
             }
           ]
         },
@@ -37,8 +40,6 @@
               "isPartner": false,
               "eligibleMonthsInPeriod": 0,
                 "vouchers": false,
-              "escAmount": 250.00,
-              "escAmountPeriod": "Month",
               "escStartDate": "2013-08-27"
             },
             {
@@ -46,9 +47,14 @@
               "isPartner": true,
               "eligibleMonthsInPeriod": 0,
                 "vouchers": false,
-              "escAmount": 300.00,
-              "escAmountPeriod": "Month",
               "escStartDate": "2006-08-27"
+            }
+          ],
+          "children" : [
+            {
+              "qualifying": true,
+              "childCareCost": 550.00,
+              "childCareCostPeriod": "Month"
             }
           ]
         }

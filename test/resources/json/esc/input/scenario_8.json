@@ -13,10 +13,14 @@
               "isPartner": false,
               "eligibleMonthsInPeriod": 9,
                 "vouchers": true,
-              "escAmount": 100.00,
-              "escAmountPeriod": "Month",
-              "escStartDate": "2013-08-27",
-              "failures": []
+              "escStartDate": "2013-08-27"
+            }
+          ],
+          "children" : [
+            {
+              "qualifying": true,
+              "childCareCost": 100.00,
+              "childCareCostPeriod": "Month"
             }
           ]
         }

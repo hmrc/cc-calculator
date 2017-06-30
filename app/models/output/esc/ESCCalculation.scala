@@ -20,9 +20,6 @@ import org.joda.time.LocalDate
 import play.api.libs.json.{Json, Writes}
 import utils.{CCFormat, Periods}
 
-/**
- * Created by user on 18/06/15.
- */
 case class ESCCalculation(
                            from: LocalDate,
                            until: LocalDate,

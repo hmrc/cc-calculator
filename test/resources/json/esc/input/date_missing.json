@@ -18,10 +18,14 @@
                 "niCategory": "a"
               },
               "vouchers": true,
-              "escStartDate": "2016-08-27",
-              "escAmount": 0.00,
-              "escAmountPeriod": "Month",
-              "failures": []
+              "escStartDate": "2016-08-27"
+            }
+          ],
+          "children" : [
+            {
+              "qualifying": true,
+              "childCareCost": 0.00,
+              "childCareCostPeriod": "month"
             }
           ]
         }

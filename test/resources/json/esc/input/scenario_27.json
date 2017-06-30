@@ -13,8 +13,6 @@
               "isPartner": false,
               "eligibleMonthsInPeriod": 3,
                 "vouchers": true,
-              "escAmount": 240.00,
-              "escAmountPeriod": "Month",
               "escStartDate": "2005-08-27"
             },
             {
@@ -22,9 +20,14 @@
               "isPartner": true,
               "eligibleMonthsInPeriod": 3,
                 "vouchers": true,
-              "escAmount": 150.00,
-              "escAmountPeriod": "Month",
               "escStartDate": "2012-08-27"
+            }
+          ],
+          "children" : [
+            {
+              "qualifying": true,
+              "childCareCost": 390.00,
+              "childCareCostPeriod": "Month"
             }
           ]
         }
@@ -43,8 +46,6 @@
               "isPartner": false,
               "eligibleMonthsInPeriod": 0,
                 "vouchers": false,
-              "escAmount": 240.00,
-              "escAmountPeriod": "Month",
               "escStartDate": "2005-08-27"
             },
             {
@@ -52,9 +53,14 @@
               "isPartner": true,
               "eligibleMonthsInPeriod": 0,
                 "vouchers": false,
-              "escAmount": 150.00,
-              "escAmountPeriod": "Month",
               "escStartDate": "2012-08-27"
+            }
+          ],
+          "children" : [
+            {
+              "qualifying": true,
+              "childCareCost": 390.00,
+              "childCareCostPeriod": "Month"
             }
           ]
         },
@@ -67,8 +73,6 @@
               "isPartner": false,
               "eligibleMonthsInPeriod": 6,
                 "vouchers": true,
-              "escAmount": 240.00,
-              "escAmountPeriod": "Month",
               "escStartDate": "2005-08-27"
             },
             {
@@ -76,9 +80,14 @@
               "isPartner": true,
               "eligibleMonthsInPeriod": 6,
                 "vouchers": true,
-              "escAmount": 150.00,
-              "escAmountPeriod": "Month",
               "escStartDate": "2012-08-27"
+            }
+          ],
+          "children" : [
+            {
+              "qualifying": true,
+              "childCareCost": 390.00,
+              "childCareCostPeriod": "Month"
             }
           ]
         }

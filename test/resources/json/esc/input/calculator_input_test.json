@@ -17,9 +17,14 @@
                 "employmentIncome": 5000
               },
               "vouchers": false,
-              "escAmount": 200.00,
-              "escAmountPeriod": "Month",
               "escStartDate": "2012-08-27"
+            }
+          ],
+          "children" : [
+            {
+              "qualifying": true,
+              "childCareCost": 200.00,
+              "childCareCostPeriod": "Month"
             }
           ]
         }

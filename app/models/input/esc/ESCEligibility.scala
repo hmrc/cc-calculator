@@ -103,6 +103,7 @@ case class TotalIncome(
   }
 }
 
+
 case class Income(
                    employmentIncome : Option[BigDecimal] = None,
                    pension : Option[BigDecimal] = None

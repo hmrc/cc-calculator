@@ -19,9 +19,14 @@
                 "niCategory": "A"
               },
                 "vouchers": true,
-              "escAmount": 500.00,
-              "escAmountPeriod": "Month",
               "escStartDate": "2012-08-27"
+            }
+          ],
+          "children" : [
+            {
+              "qualifying": true,
+              "childCareCost": 500.00,
+              "childCareCostPeriod": "Month"
             }
           ]
         }

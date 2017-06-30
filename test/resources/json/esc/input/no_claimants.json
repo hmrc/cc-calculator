@@ -7,7 +7,14 @@
         {
           "from": "2015-08-27",
           "until": "2016-08-27",
-          "claimants": []
+          "claimants": [],
+          "children" : [
+            {
+              "qualifying": true,
+              "childCareCost": 200.00,
+              "childCareCostPeriod": "Month"
+            }
+          ]
         }
       ]
     }
