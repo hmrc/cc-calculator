@@ -11,17 +11,18 @@
               "qualifying": false,
               "isPartner": false,
               "eligibleMonthsInPeriod": 2,
-              "income": {
-                "taxablePay": 0.00,
-                "gross": 0.00,
-                "taxCode": "1060L",
-                "niCategory": "a"
+              "currentIncome": {
+                "employmentIncome": 5000
               },
               "vouchers": true,
-              "escStartDate": "2016-08-27",
-              "escAmount": 0.00,
-              "escAmountPeriod": "Month",
-              "failures": []
+              "escStartDate": "2016-08-27"
+            }
+          ],
+          "children" : [
+            {
+              "qualifying": true,
+              "childCareCost": 0.00,
+              "childCareCostPeriod": "Month"
             }
           ]
         }

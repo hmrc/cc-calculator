@@ -39,8 +39,6 @@ class ESCCalculatorOutputSpec extends UnitSpec with FakeCCCalculatorApplication 
         escStartDate = from,
         escAmountPeriod = Periods.Monthly,
         savings = ESCSavings(),
-        maximumRelief = BigDecimal(0.00),
-        maximumReliefPeriod = Periods.Monthly,
         taxAndNIAfterSacrifice = ESCTaxAndNi(),
         taxAndNIBeforeSacrifice = ESCTaxAndNi()
       )
@@ -99,8 +97,6 @@ class ESCCalculatorOutputSpec extends UnitSpec with FakeCCCalculatorApplication 
           |                  "taxSaving":0.0,
           |                  "niSaving":0.0
           |               },
-          |               "maximumRelief":0.0,
-          |               "maximumReliefPeriod":"Month",
           |               "taxAndNIBeforeSacrifice":{
           |                  "taxPaid":0.0,
           |                  "niPaid":0.0

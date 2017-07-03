@@ -21,8 +21,14 @@
               "vouchers": true,
               "escStartDate": "2016-08-27",
               "escAmount": 0.00,
-              "escAmountPeriod": "Month",
-              "failures": []
+              "escAmountPeriod": "Month"
+            }
+          ],
+          "children" : [
+            {
+              "qualifying": true,
+              "childCareCost": 0.00,
+              "childCareCostPeriod": "Month"
             }
           ]
         }

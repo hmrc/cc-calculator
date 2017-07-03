@@ -65,8 +65,6 @@ case class ESCClaimant(
                         escAmountPeriod: Periods.Period,
                         escStartDate: LocalDate,
                         savings: ESCSavings,
-                        maximumRelief: BigDecimal = BigDecimal(0.00),
-                        maximumReliefPeriod: Periods.Period,
                         taxAndNIBeforeSacrifice: ESCTaxAndNi,
                         taxAndNIAfterSacrifice: ESCTaxAndNi
                      )

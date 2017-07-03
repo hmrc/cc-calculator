@@ -20,11 +20,9 @@
           "qualifying": false,
           "eligibleMonthsInTaxYear": 0,
           "isPartner": false,
-          "escAmount": 200,
+          "escAmount": 0,
           "escAmountPeriod": "Month",
           "escStartDate": "2013-08-27",
-          "maximumRelief": 0,
-          "maximumReliefPeriod": "Month",
           "income":{
             "taxablePay":5000,
             "gross":5000,
