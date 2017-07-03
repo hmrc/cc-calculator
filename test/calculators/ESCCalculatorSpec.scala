@@ -19,16 +19,14 @@ package calculators
 import com.fasterxml.jackson.databind.JsonNode
 import com.github.fge.jackson.JsonLoader
 import models.input.esc._
-import models.output.esc.{ESCCalculation, Savings, TaxAndNI}
+import models.output.esc.{ESCCalculatorOutput, ESCSavings, ESCTaxAndNi}
 import models.utility.{CalculationNIBands, CalculationTaxBands}
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import play.api.libs.json.{JsSuccess, JsValue, Json}
 import uk.gov.hmrc.play.test.UnitSpec
 import utils.{ESCConfig, FakeCCCalculatorApplication, Periods}
-import org.mockito.Matchers.{eq => mockEq, _}
 import scala.concurrent.Future
-import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
 
 class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with MockitoSugar with org.scalatest.PrivateMethodTester {
@@ -43,8 +41,8 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
   "ESCCalculatorService" should {
 
     "return a Future[AwardPeriod] result" in {
-      val result = ESCCalculator.award(ESCEligibility(escTaxYears = List(), location = "england"))
-      result.isInstanceOf[Future[ESCCalculation]] shouldBe true
+      val result = ESCCalculator.award(ESCCalculatorInput(escTaxYears = List(), location = "england"))
+      result.isInstanceOf[Future[ESCCalculatorOutput]] shouldBe true
     }
 
     "(TY2016) get revised personal allowance when tax code is not provided (gross < 100000) " in {
@@ -52,7 +50,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val periodEnd = LocalDate.parse("2017-04-06", formatter)
 
       val period = ESCPeriod(from = periodStart, until = periodEnd, List(), children = List())
-      val income = TotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(89000.00), taxCode = "", niCategory = "")
+      val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(89000.00), taxCode = "", niCategory = "")
       val result = ESCCalculator.getPersonalAllowance(period, income, ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location))
       result shouldBe BigDecimal(11000.00)
     }
@@ -62,7 +60,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val periodEnd = LocalDate.parse("2017-04-06", formatter)
 
       val period = ESCPeriod(from = periodStart, until = periodEnd, List(), children = List())
-      val income = TotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(110000.00), taxCode = "", niCategory = "")
+      val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(110000.00), taxCode = "", niCategory = "")
       val result = ESCCalculator.getPersonalAllowance(period, income, ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location))
       result shouldBe BigDecimal(6000.00)
     }
@@ -72,7 +70,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val periodEnd = LocalDate.parse("2017-04-06", formatter)
 
       val period = ESCPeriod(from = periodStart, until = periodEnd, List(), children = List())
-      val income = TotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "1060L", niCategory = "")
+      val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "1060L", niCategory = "")
       val result = ESCCalculator.getPersonalAllowance(period, income, ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location))
       result shouldBe BigDecimal(10600.00)
     }
@@ -82,7 +80,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val periodEnd = LocalDate.parse("2017-04-06", formatter)
 
       val period = ESCPeriod(from = periodStart, until = periodEnd, List(), children = List())
-      val income = TotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "1200m", niCategory = "")
+      val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "1200m", niCategory = "")
       val result = ESCCalculator.getPersonalAllowance(period, income, ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location))
       result shouldBe BigDecimal(12000.00)
     }
@@ -92,7 +90,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val periodEnd = LocalDate.parse("2017-04-06", formatter)
 
       val period = ESCPeriod(from = periodStart, until = periodEnd, List(), children = List())
-      val income = TotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "1201N", niCategory = "")
+      val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "1201N", niCategory = "")
       val result = ESCCalculator.getPersonalAllowance(period, income, ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location))
       result shouldBe BigDecimal(12010.00)
     }
@@ -102,7 +100,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val periodEnd = LocalDate.parse("2017-04-06", formatter)
 
       val period = ESCPeriod(from = periodStart, until = periodEnd, List(), children = List())
-      val income = TotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "1039T", niCategory = "")
+      val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "1039T", niCategory = "")
       val result = ESCCalculator.getPersonalAllowance(period, income, ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location))
       result shouldBe BigDecimal(10390.00)
     }
@@ -112,7 +110,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val periodEnd = LocalDate.parse("2017-04-06", formatter)
 
       val period = ESCPeriod(from = periodStart, until = periodEnd, List(), children = List())
-      val income = TotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "1103y", niCategory = "")
+      val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "1103y", niCategory = "")
       val result = ESCCalculator.getPersonalAllowance(period, income, ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location))
       result shouldBe BigDecimal(11030.00)
     }
@@ -122,7 +120,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val periodEnd = LocalDate.parse("2017-04-06", formatter)
 
       val period = ESCPeriod(from = periodStart, until = periodEnd, List(), children = List())
-      val income = TotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "BR", niCategory = "")
+      val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "BR", niCategory = "")
       val result = ESCCalculator.getPersonalAllowance(period, income, ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location))
       result shouldBe BigDecimal(0.00)
     }
@@ -132,7 +130,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val periodEnd = LocalDate.parse("2017-04-06", formatter)
 
       val period = ESCPeriod(from = periodStart, until = periodEnd, List(), children = List())
-      val income = TotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "d0", niCategory = "")
+      val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "d0", niCategory = "")
       val result = ESCCalculator.getPersonalAllowance(period, income, ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location))
       result shouldBe BigDecimal(0.00)
     }
@@ -142,7 +140,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val periodEnd = LocalDate.parse("2017-04-06", formatter)
 
       val period = ESCPeriod(from = periodStart, until = periodEnd, List(), children = List())
-      val income = TotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "D1", niCategory = "")
+      val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "D1", niCategory = "")
       val result = ESCCalculator.getPersonalAllowance(period, income, ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location))
       result shouldBe BigDecimal(0.00)
     }
@@ -152,7 +150,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val periodEnd = LocalDate.parse("2017-04-06", formatter)
 
       val period = ESCPeriod(from = periodStart, until = periodEnd, List(), children = List())
-      val income = TotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "NT", niCategory = "")
+      val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "NT", niCategory = "")
       val result = ESCCalculator.getPersonalAllowance(period, income, ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location))
       result shouldBe BigDecimal(0.00)
     }
@@ -161,8 +159,8 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val periodStart = LocalDate.parse("2017-05-06", formatter)
       val periodEnd = LocalDate.parse("2018-04-06", formatter)
 
-      val period = ESCPeriod(from = periodStart, until = periodEnd, List(), children = List())
-      val income = TotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "", niCategory = "")
+      val period = ESCPeriod(from = periodStart, until = periodEnd, List(), List())
+      val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "", niCategory = "")
       val result = ESCCalculator.getPersonalAllowance(period, income, ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location))
       result shouldBe BigDecimal(11500.00)
     }
@@ -420,7 +418,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
-      val claimant = models.input.esc.Claimant(qualifying = true, eligibleMonthsInPeriod = 2, isPartner = false, previousIncome = None, currentIncome = None, vouchers = true, escStartDate = escStartDate)
+      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, isPartner = false, previousIncome = None, currentIncome = None, vouchers = true, escAmount = 200.00, escStartDate = escStartDate, escAmountPeriod = Periods.Monthly)
       val pre2011 = claimant.isESCStartDateBefore2011
       val calcPeriod = Periods.Monthly
 
@@ -438,7 +436,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
-      val claimant = models.input.esc.Claimant(qualifying = true, eligibleMonthsInPeriod = 2, isPartner = false, previousIncome = None, currentIncome = None, vouchers = true, escStartDate = escStartDate)
+      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, isPartner = false, previousIncome = None, currentIncome = None, vouchers = true, escAmount = 200.00, escStartDate = escStartDate, escAmountPeriod = Periods.Monthly)
       val pre2011 = claimant.isESCStartDateBefore2011
 
       val result = ESCCalculator.determineMaximumIncomeRelief(period, pre2011, relevantEarnings, Periods.Monthly, taxCode, ESCConfig.getConfig(period.from, "", location))
@@ -453,7 +451,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
-      val claimant = models.input.esc.Claimant(qualifying = true, eligibleMonthsInPeriod = 2, isPartner = false, previousIncome = None, currentIncome = None, vouchers = true, escStartDate = escStartDate)
+      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, isPartner = false, previousIncome = None, currentIncome = None, vouchers = true, escAmount = 200.00, escAmountPeriod = Periods.Monthly, escStartDate = escStartDate)
       val pre2011 = claimant.isESCStartDateBefore2011
       val calcPeriod = Periods.Yearly
 
@@ -469,7 +467,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
-      val claimant = models.input.esc.Claimant(qualifying = true, eligibleMonthsInPeriod = 2, isPartner = false, previousIncome = None, currentIncome = None, vouchers = true, escStartDate = escStartDate)
+      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, isPartner = false, previousIncome = None, currentIncome = None, vouchers = true, escAmount = 200.00, escStartDate = escStartDate, escAmountPeriod = Periods.Monthly)
       val pre2011 = claimant.isESCStartDateBefore2011
 
       val result = ESCCalculator.determineMaximumIncomeRelief(period, pre2011, relevantEarnings, Periods.Monthly, taxCode, ESCConfig.getConfig(period.from, "", location))
@@ -484,7 +482,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
-      val claimant = models.input.esc.Claimant(qualifying = true, eligibleMonthsInPeriod = 2, isPartner = false, previousIncome = None, currentIncome = None, vouchers = true, escStartDate = escStartDate)
+      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, isPartner = false, previousIncome = None, currentIncome = None, vouchers = true, escAmount = 200.00, escAmountPeriod = Periods.Monthly, escStartDate = escStartDate)
       val pre2011 = claimant.isESCStartDateBefore2011
       val calcPeriod = Periods.Yearly
 
@@ -500,7 +498,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
-      val claimant = models.input.esc.Claimant(qualifying = true, eligibleMonthsInPeriod = 2, isPartner = false, previousIncome = None, currentIncome = None, vouchers = true, escStartDate = escStartDate)
+      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, isPartner = false, previousIncome = None, currentIncome = None, vouchers = true, escAmount = 200.00, escAmountPeriod = Periods.Monthly, escStartDate = escStartDate)
       val pre2011 = claimant.isESCStartDateBefore2011
       val calcPeriod = Periods.Monthly
 
@@ -516,7 +514,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
-      val claimant = models.input.esc.Claimant(qualifying = true, eligibleMonthsInPeriod = 2, isPartner = false, previousIncome = None, currentIncome = None, vouchers = true, escStartDate = escStartDate)
+      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, isPartner = false, previousIncome = None, currentIncome = None, vouchers = true, escAmount = 200.00, escAmountPeriod = Periods.Monthly, escStartDate = escStartDate)
       val pre2011 = claimant.isESCStartDateBefore2011
       val calcPeriod = Periods.Yearly
 
@@ -532,7 +530,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2017", formatter)
       val toDate = LocalDate.parse("21-05-2018", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
-      val claimant = models.input.esc.Claimant(qualifying = true, eligibleMonthsInPeriod = 2, isPartner = false, previousIncome = None, currentIncome = None, vouchers = true, escStartDate = escStartDate)
+      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, isPartner = false, previousIncome = None, currentIncome = None, vouchers = true, escAmount = 200.00, escStartDate = escStartDate, escAmountPeriod = Periods.Monthly)
       val pre2011 = claimant.isESCStartDateBefore2011
 
       val result = ESCCalculator.determineMaximumIncomeRelief(period, pre2011, relevantEarnings, Periods.Monthly, taxCode, ESCConfig.getConfig(period.from, "", location))
@@ -547,7 +545,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
-      val claimant = models.input.esc.Claimant(qualifying = true, eligibleMonthsInPeriod = 2, isPartner = false, previousIncome = None, currentIncome = None, vouchers = true, escStartDate = escStartDate)
+      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, isPartner = false, previousIncome = None, currentIncome = None, vouchers = true, escAmount = 200.00, escStartDate = escStartDate, escAmountPeriod = Periods.Monthly)
       val pre2011 = claimant.isESCStartDateBefore2011
 
       val result = ESCCalculator.determineMaximumIncomeRelief(period, pre2011, relevantEarnings, Periods.Monthly, taxCode, ESCConfig.getConfig(period.from, "", location))
@@ -562,7 +560,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
-      val claimant = models.input.esc.Claimant(qualifying = true, eligibleMonthsInPeriod = 2, isPartner = false, previousIncome = None, currentIncome = None, vouchers = true, escStartDate = escStartDate)
+      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, isPartner = false, previousIncome = None, currentIncome = None, vouchers = true, escAmount = 200.00, escAmountPeriod = Periods.Monthly, escStartDate = escStartDate)
       val pre2011 = claimant.isESCStartDateBefore2011
       val calcPeriod = Periods.Monthly
 
@@ -578,7 +576,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
-      val claimant = models.input.esc.Claimant(qualifying = true, eligibleMonthsInPeriod = 2, isPartner = false, previousIncome = None, currentIncome = None, vouchers = true, escStartDate = escStartDate)
+      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, isPartner = false, previousIncome = None, currentIncome = None, vouchers = true, escAmount = 200.00, escStartDate = escStartDate, escAmountPeriod = Periods.Monthly)
       val pre2011 = claimant.isESCStartDateBefore2011
 
       val result = ESCCalculator.determineMaximumIncomeRelief(period, pre2011, relevantEarnings, Periods.Monthly, taxCode, ESCConfig.getConfig(period.from, "", location))
@@ -594,7 +592,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
-      val claimant = models.input.esc.Claimant(qualifying = true, eligibleMonthsInPeriod = 2, isPartner = false, previousIncome = None, currentIncome = None, vouchers = true, escStartDate = escStartDate)
+      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, isPartner = false, previousIncome = None, currentIncome = None, vouchers = true, escAmount = 200.00, escAmountPeriod = Periods.Monthly, escStartDate = escStartDate)
       val pre2011 = claimant.isESCStartDateBefore2011
       val calcPeriod = Periods.Yearly
 
@@ -610,7 +608,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("02-05-2017", formatter)
       val toDate = LocalDate.parse("01-05-2018", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
-      val claimant = models.input.esc.Claimant(qualifying = true, eligibleMonthsInPeriod = 2, isPartner = false, previousIncome = None, currentIncome = None, vouchers = true, escStartDate = escStartDate)
+      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, isPartner = false, previousIncome = None, currentIncome = None, vouchers = true, escAmount = 200.00, escStartDate = escStartDate, escAmountPeriod = Periods.Monthly)
       val pre2011 = claimant.isESCStartDateBefore2011
 
       val result = ESCCalculator.determineMaximumIncomeRelief(period, pre2011, relevantEarnings, Periods.Yearly, taxCode, ESCConfig.getConfig(period.from, "", location))
@@ -625,7 +623,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
-      val claimant = models.input.esc.Claimant(qualifying = true, eligibleMonthsInPeriod = 2, isPartner = false, previousIncome = None, currentIncome = None, vouchers = true, escStartDate = escStartDate)
+      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, isPartner = false, previousIncome = None, currentIncome = None, vouchers = true, escAmount = 200.00, escAmountPeriod = Periods.Monthly, escStartDate = escStartDate)
       val pre2011 = claimant.isESCStartDateBefore2011
       val calcPeriod = Periods.Monthly
 
@@ -641,7 +639,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2017", formatter)
       val toDate = LocalDate.parse("21-05-2018", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
-      val claimant = models.input.esc.Claimant(qualifying = true, eligibleMonthsInPeriod = 2, isPartner = false, previousIncome = None, currentIncome = None, vouchers = true, escStartDate = escStartDate)
+      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, isPartner = false, previousIncome = None, currentIncome = None, vouchers = true, escAmount = 200.00, escAmountPeriod = Periods.Monthly, escStartDate = escStartDate)
       val pre2011 = claimant.isESCStartDateBefore2011
       val calcPeriod = Periods.Yearly
 
@@ -657,7 +655,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
-      val claimant = models.input.esc.Claimant(qualifying = true, eligibleMonthsInPeriod = 2, isPartner = false, previousIncome = None, currentIncome = None, vouchers = true, escStartDate = escStartDate)
+      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, isPartner = false, previousIncome = None, currentIncome = None, vouchers = true, escAmount = 200.00, escAmountPeriod = Periods.Monthly, escStartDate = escStartDate)
       val pre2011 = claimant.isESCStartDateBefore2011
       val calcPeriod = Periods.Yearly
 
@@ -875,7 +873,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
-      val income = TotalIncome(taxablePay = BigDecimal(9000), gross = BigDecimal(9000))
+      val income = ESCTotalIncome(taxablePay = BigDecimal(9000), gross = BigDecimal(9000))
       val result = ESCCalculator.getAnnualRelevantEarnings(income, period, ESCConfig.getConfig(period.from, "", location))
       result shouldBe BigDecimal(0.00)
     }
@@ -885,7 +883,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
-      val income = TotalIncome(taxablePay = BigDecimal(12000), gross = BigDecimal(12000))
+      val income = ESCTotalIncome(taxablePay = BigDecimal(12000), gross = BigDecimal(12000))
       val result = ESCCalculator.getAnnualRelevantEarnings(income, period, ESCConfig.getConfig(period.from, "", location))
       result shouldBe BigDecimal(1000.00)
     }
@@ -895,7 +893,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2017", formatter)
       val toDate = LocalDate.parse("21-05-2018", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
-      val income = TotalIncome(taxablePay = BigDecimal(150000), gross = BigDecimal(150000))
+      val income = ESCTotalIncome(taxablePay = BigDecimal(150000), gross = BigDecimal(150000))
       val result = ESCCalculator.getAnnualRelevantEarnings(income, period, ESCConfig.getConfig(period.from, "", location))
       result shouldBe BigDecimal(138500.00)
     }
@@ -905,7 +903,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
-      val income = TotalIncome(taxablePay = BigDecimal(155000), gross = BigDecimal(160000)) //gross include pension amount of 50000
+      val income = ESCTotalIncome(taxablePay = BigDecimal(155000), gross = BigDecimal(160000)) //gross include pension amount of 50000
       val result = ESCCalculator.getAnnualRelevantEarnings(income, period, ESCConfig.getConfig(period.from, "", location))
       result shouldBe BigDecimal(155000.00)
     }
@@ -915,25 +913,25 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
 
-      val inputClaimant = Claimant(qualifying = true, isPartner = false,
+      val inputClaimant = ESCClaimant(qualifying = true, isPartner = false,
         eligibleMonthsInPeriod = 1, previousIncome = None,
-        currentIncome = Some(Income(Some(10000.00), Some(95.00))), vouchers = true, escStartDate = fromDate)
+        currentIncome = Some(ESCIncome(Some(10000.00), Some(95.00))), vouchers = true, escStartDate = fromDate)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant), children = List(buildChild(childCareCost = 500)))
 
       val result = ESCCalculator.determineSavingsPerClaimant(period, location)
 
-      val outputClaimant = models.output.esc.Claimant(qualifying = true, eligibleMonthsInTaxYear = 1,
+      val outputClaimant = models.output.esc.ESCClaimant(qualifying = true, eligibleMonthsInTaxYear = 1,
         isPartner = false,
-        income = models.output.esc.Income(taxablePay = 8860.00,
+        income = models.output.esc.ESCIncome(taxablePay = 8860.00,
           gross = 10000.00,
           taxCode = "",
           niCategory = "A"),
         vouchers = true, escAmount = 0.0,
         escAmountPeriod = Periods.Monthly,
         escStartDate = fromDate,
-        savings = Savings(taxSaving = 0.00,
+        savings = ESCSavings(taxSaving = 0.00,
           niSaving = 0.00, totalSaving = 0.00),
-        taxAndNIBeforeSacrifice = models.output.esc.TaxAndNI(niPaid = 19.32), taxAndNIAfterSacrifice = models.output.esc.TaxAndNI(niPaid = 19.32))
+        taxAndNIBeforeSacrifice = models.output.esc.ESCTaxAndNi(niPaid = 19.32), taxAndNIAfterSacrifice = models.output.esc.ESCTaxAndNi(niPaid = 19.32))
 
       result shouldBe List(outputClaimant)
     }
@@ -943,17 +941,17 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2017", formatter)
       val toDate = LocalDate.parse("21-05-2018", formatter)
 
-      val inputClaimant = Claimant(qualifying = true, isPartner = false,
-        eligibleMonthsInPeriod = 12, previousIncome = Some(Income(Some(42700.00), Some(100.00))), currentIncome = None, vouchers = true, escStartDate = fromDate)
+      val inputClaimant = ESCClaimant(qualifying = true, isPartner = false,
+        eligibleMonthsInPeriod = 12, previousIncome = Some(ESCIncome(Some(42700.00), Some(100.00))), currentIncome = None, vouchers = true, escStartDate = fromDate)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant), children = List(buildChild(childCareCost = 500)))
 
       val result = ESCCalculator.determineSavingsPerClaimant(period, location = location)
 
-      val outputClaimant = models.output.esc.Claimant(qualifying = true, eligibleMonthsInTaxYear = 12,
-        isPartner = false, income = models.output.esc.Income(taxablePay = 41500.00, gross = 42700.00, taxCode = "", niCategory = "A"),
-        vouchers = true, escAmount = 243.00, escAmountPeriod = Periods.Monthly, escStartDate = fromDate,
-        savings = Savings(taxSaving = 48.60, niSaving = 29.16, totalSaving = 77.76),
-        taxAndNIBeforeSacrifice = models.output.esc.TaxAndNI(taxPaid = 500.00, niPaid = 345.36), taxAndNIAfterSacrifice = models.output.esc.TaxAndNI(taxPaid = 451.40, niPaid = 316.20))
+      val outputClaimant = models.output.esc.ESCClaimant(qualifying = true, eligibleMonthsInTaxYear = 12,
+        isPartner = false, income = models.output.esc.ESCIncome(taxablePay = 41500.00, gross = 42700.00, taxCode = "", niCategory = "A"),
+        vouchers = true, escAmount = 500.00, escAmountPeriod = Periods.Monthly, escStartDate = fromDate,
+        savings = ESCSavings(taxSaving = 48.60, niSaving = 29.16, totalSaving = 77.76),
+        taxAndNIBeforeSacrifice = models.output.esc.ESCTaxAndNi(taxPaid = 500.00, niPaid = 345.36), taxAndNIAfterSacrifice = models.output.esc.ESCTaxAndNi(taxPaid = 451.40, niPaid = 316.20))
 
       result shouldBe List(outputClaimant)
     }
@@ -963,17 +961,17 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
 
-      val inputClaimant = Claimant(qualifying = true, isPartner = false, eligibleMonthsInPeriod = 1, previousIncome = Some(Income(Some(50000.00))), currentIncome = None, vouchers = true, escStartDate = fromDate)
+      val inputClaimant = ESCClaimant(qualifying = true, isPartner = false, eligibleMonthsInPeriod = 1, previousIncome = Some(ESCIncome(Some(50000.00))), currentIncome = None, vouchers = true, escStartDate = fromDate, escAmount = 90.00, escAmountPeriod = Periods.Monthly)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant), children = List(buildChild(childCareCost = 90)))
 
       val result = ESCCalculator.determineSavingsPerClaimant(period, location = location)
 
-      val outputClaimant = models.output.esc.Claimant(qualifying = true,
+      val outputClaimant = models.output.esc.ESCClaimant(qualifying = true,
         eligibleMonthsInTaxYear = 1, isPartner = false,
-        income = models.output.esc.Income(taxablePay = 50000.00, gross = 50000.00, taxCode = "", niCategory = "A"),
+        income = models.output.esc.ESCIncome(taxablePay = 50000.00, gross = 50000.00, taxCode = "", niCategory = "A"),
         vouchers = true, escAmount = 90.0, escAmountPeriod = Periods.Monthly, escStartDate = fromDate,
-        savings = Savings(37.80,36.00,1.80),
-        TaxAndNI(766.60,361.00),TaxAndNI(730.60,359.20))
+        savings = ESCSavings(37.80,36.00,1.80),
+        ESCTaxAndNi(766.60,361.00),ESCTaxAndNi(730.60,359.20))
 
       Json.toJson(result) shouldBe Json.toJson(List(outputClaimant))
     }
@@ -983,17 +981,17 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
 
-      val inputClaimant = Claimant(qualifying = true, isPartner = false, eligibleMonthsInPeriod = 1, previousIncome = None,
-        currentIncome = Some(Income(Some(150001))), vouchers = true, escStartDate = fromDate)
+      val inputClaimant = ESCClaimant(qualifying = true, isPartner = false, eligibleMonthsInPeriod = 1, previousIncome = None,
+        currentIncome = Some(ESCIncome(Some(150001))), vouchers = true, escStartDate = fromDate)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant), children = List(buildChild(childCareCost = 500)))
 
       val result = ESCCalculator.determineSavingsPerClaimant(period, location = location)
 
-      val outputClaimant = models.output.esc.Claimant(qualifying = true, eligibleMonthsInTaxYear = 1,
-        isPartner = false, income = models.output.esc.Income(taxablePay = 150001, gross = 150001, taxCode = "", niCategory = "A"),
-        vouchers = true, escAmount = 110.00, escAmountPeriod = Periods.Monthly, escStartDate = fromDate,
-        savings = Savings(taxSaving = 44.0, niSaving = 2.2, totalSaving =46.2 ),
-        taxAndNIBeforeSacrifice = models.output.esc.TaxAndNI(taxPaid = 4466.60, niPaid = 527.66), taxAndNIAfterSacrifice = models.output.esc.TaxAndNI(taxPaid = 4422.60,niPaid = 525.46))
+      val outputClaimant = models.output.esc.ESCClaimant(qualifying = true, eligibleMonthsInTaxYear = 1,
+        isPartner = false, income = models.output.esc.ESCIncome(taxablePay = 150001, gross = 150001, taxCode = "", niCategory = "A"),
+        vouchers = true, escAmount = 500.00, escAmountPeriod = Periods.Monthly, escStartDate = fromDate,
+        savings = ESCSavings(taxSaving = 44.0, niSaving = 2.2, totalSaving =46.2 ),
+        taxAndNIBeforeSacrifice = models.output.esc.ESCTaxAndNi(taxPaid = 4466.60, niPaid = 527.66), taxAndNIAfterSacrifice = models.output.esc.ESCTaxAndNi(taxPaid = 4422.60,niPaid = 525.46))
 
       result shouldBe List(outputClaimant)
     }
@@ -1003,29 +1001,29 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
 
-      val inputClaimant = Claimant(qualifying = true, isPartner = false, eligibleMonthsInPeriod = 1, previousIncome = None,
-        currentIncome = Some(Income(Some(150001))), vouchers = true, escStartDate = fromDate)
-      val inputClaimant2 = Claimant(qualifying = true, isPartner = true, eligibleMonthsInPeriod = 1, previousIncome = Some(Income(Some(150001))),
+      val inputClaimant = ESCClaimant(qualifying = true, isPartner = false, eligibleMonthsInPeriod = 1, previousIncome = None,
+        currentIncome = Some(ESCIncome(Some(150001))), vouchers = true, escStartDate = fromDate)
+      val inputClaimant2 = ESCClaimant(qualifying = true, isPartner = true, eligibleMonthsInPeriod = 1, previousIncome = Some(ESCIncome(Some(150001))),
         currentIncome = None, vouchers = true, escStartDate = fromDate)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant, inputClaimant2), children = List(buildChild(childCareCost = 80), buildChild(childCareCost = 120)))
 
       val result = ESCCalculator.determineSavingsPerClaimant(period, location = location)
 
-      val outputClaimant = models.output.esc.Claimant(qualifying = true, eligibleMonthsInTaxYear = 1,
-        isPartner = false, income = models.output.esc.Income(taxablePay = 150001, gross = 150001, taxCode = "",
+      val outputClaimant = models.output.esc.ESCClaimant(qualifying = true, eligibleMonthsInTaxYear = 1,
+        isPartner = false, income = models.output.esc.ESCIncome(taxablePay = 150001, gross = 150001, taxCode = "",
           niCategory = "A"),
-        vouchers = true, escAmount = 110, escAmountPeriod = Periods.Monthly, escStartDate = fromDate,
-        savings = Savings(taxSaving = 44.00, niSaving = 2.2, totalSaving = 46.2 ),
-        taxAndNIBeforeSacrifice = models.output.esc.TaxAndNI(taxPaid = 4466.60,niPaid = 527.66),
-        taxAndNIAfterSacrifice = models.output.esc.TaxAndNI(taxPaid = 4422.60, niPaid = 525.46))
+        vouchers = true, escAmount = 80, escAmountPeriod = Periods.Monthly, escStartDate = fromDate,
+        savings = ESCSavings(taxSaving = 32.00, niSaving = 1.6, totalSaving = 33.6 ),
+        taxAndNIBeforeSacrifice = models.output.esc.ESCTaxAndNi(taxPaid = 4466.60,niPaid = 527.66),
+        taxAndNIAfterSacrifice = models.output.esc.ESCTaxAndNi(taxPaid = 4434.60, niPaid = 526.06))
 
-      val outputClaimant2 = models.output.esc.Claimant(qualifying = true, eligibleMonthsInTaxYear = 1,
-        isPartner = true, income = models.output.esc.Income(taxablePay = 150001, gross = 150001, taxCode = "",
+      val outputClaimant2 = models.output.esc.ESCClaimant(qualifying = true, eligibleMonthsInTaxYear = 1,
+        isPartner = true, income = models.output.esc.ESCIncome(taxablePay = 150001, gross = 150001, taxCode = "",
           niCategory = "A"),
-        vouchers = true, escAmount = 90, escAmountPeriod = Periods.Monthly, escStartDate = fromDate,
-        savings = Savings(taxSaving = 36.00, niSaving = 1.8 , totalSaving = 37.80 ),
-        taxAndNIBeforeSacrifice = models.output.esc.TaxAndNI(taxPaid = 4466.60,niPaid = 527.66),
-        taxAndNIAfterSacrifice = models.output.esc.TaxAndNI(taxPaid = 4430.60, niPaid = 525.86))
+        vouchers = true, escAmount = 120, escAmountPeriod = Periods.Monthly, escStartDate = fromDate,
+        savings = ESCSavings(taxSaving = 44.00, niSaving = 2.2 , totalSaving = 46.20 ),
+        taxAndNIBeforeSacrifice = models.output.esc.ESCTaxAndNi(taxPaid = 4466.60,niPaid = 527.66),
+        taxAndNIAfterSacrifice = models.output.esc.ESCTaxAndNi(taxPaid = 4422.60, niPaid = 525.46))
 
       result shouldBe List(outputClaimant, outputClaimant2)
     }
@@ -1037,17 +1035,17 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
 
-      val inputClaimant = Claimant(qualifying = true, isPartner = false, eligibleMonthsInPeriod = 1, previousIncome = Some(Income(Some(150001))),
+      val inputClaimant = ESCClaimant(qualifying = true, isPartner = false, eligibleMonthsInPeriod = 1, previousIncome = Some(ESCIncome(Some(150001))),
         currentIncome = None, vouchers = true, escStartDate = escStartDate)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant), children = List(buildChild(childCareCost = 500)))
 
       val result = ESCCalculator.determineSavingsPerClaimant(period, location = location)
 
-      val outputClaimant = models.output.esc.Claimant(qualifying = true, eligibleMonthsInTaxYear = 1,
-        isPartner = false, income = models.output.esc.Income(taxablePay = 150001, gross = 150001, taxCode = "", niCategory = "A"),
-        vouchers = true, escAmount = 243, escAmountPeriod = Periods.Monthly, escStartDate = escStartDate,
-        savings = Savings(taxSaving = 97.20, niSaving = 4.86, totalSaving = 102.06),
-        taxAndNIBeforeSacrifice = models.output.esc.TaxAndNI(taxPaid = 4466.60, niPaid = 527.66), taxAndNIAfterSacrifice = models.output.esc.TaxAndNI(taxPaid = 4369.40, niPaid = 522.80))
+      val outputClaimant = models.output.esc.ESCClaimant(qualifying = true, eligibleMonthsInTaxYear = 1,
+        isPartner = false, income = models.output.esc.ESCIncome(taxablePay = 150001, gross = 150001, taxCode = "", niCategory = "A"),
+        vouchers = true, escAmount = 500, escAmountPeriod = Periods.Monthly, escStartDate = escStartDate,
+        savings = ESCSavings(taxSaving = 97.20, niSaving = 4.86, totalSaving = 102.06),
+        taxAndNIBeforeSacrifice = models.output.esc.ESCTaxAndNi(taxPaid = 4466.60, niPaid = 527.66), taxAndNIAfterSacrifice = models.output.esc.ESCTaxAndNi(taxPaid = 4369.40, niPaid = 522.80))
 
       result shouldBe List(outputClaimant)
     }
@@ -1056,20 +1054,20 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
-      val inputClaimant = Claimant(qualifying = false, isPartner = false, eligibleMonthsInPeriod = 0, previousIncome = None, currentIncome = None, vouchers = false,
+      val inputClaimant = ESCClaimant(qualifying = false, isPartner = false, eligibleMonthsInPeriod = 0, previousIncome = None, currentIncome = None, vouchers = false,
         escStartDate = fromDate)
 
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant), children = List())
-      val taxYear = TaxYear(startDate = fromDate, endDate = toDate, periods = List(period))
+      val taxYear = ESCTaxYear(startDate = fromDate, endDate = toDate, periods = List(period))
 
-      val outputClaimant = models.output.esc.Claimant(qualifying = false, eligibleMonthsInTaxYear = 0, isPartner = false,
-        income = models.output.esc.Income(niCategory = "A"),
+      val outputClaimant = models.output.esc.ESCClaimant(qualifying = false, eligibleMonthsInTaxYear = 0, isPartner = false,
+        income = models.output.esc.ESCIncome(niCategory = "A"),
         vouchers = false, escAmount = 0.0, escAmountPeriod = Periods.Monthly,escStartDate = fromDate,
-        savings = Savings(),
-        taxAndNIBeforeSacrifice = models.output.esc.TaxAndNI(), taxAndNIAfterSacrifice = models.output.esc.TaxAndNI())
+        savings = ESCSavings(),
+        taxAndNIBeforeSacrifice = models.output.esc.ESCTaxAndNi(), taxAndNIAfterSacrifice = models.output.esc.ESCTaxAndNi())
 
-      val outputTY = models.output.esc.TaxYear(fromDate, toDate, Savings(), List(outputClaimant))
-      val resultTY = ESCCalculator.getCalculatedTaxYears(ESCEligibility(List(taxYear), location))
+      val outputTY = models.output.esc.ESCTaxYear(fromDate, toDate, ESCSavings(), List(outputClaimant))
+      val resultTY = ESCCalculator.getCalculatedTaxYears(ESCCalculatorInput(List(taxYear), location))
 
       resultTY shouldBe List(outputTY)
     }
@@ -1078,21 +1076,21 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
-      val inputClaimant = Claimant(qualifying = false, isPartner = false,
+      val inputClaimant = ESCClaimant(qualifying = false, isPartner = false,
         eligibleMonthsInPeriod = 9, previousIncome = None, currentIncome = None, vouchers = false,
         escStartDate = fromDate)
 
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant), children = List())
-      val taxYear = TaxYear(startDate = fromDate, endDate = toDate, periods = List(period))
+      val taxYear = ESCTaxYear(startDate = fromDate, endDate = toDate, periods = List(period))
 
-      val outputClaimant = models.output.esc.Claimant(qualifying = false, eligibleMonthsInTaxYear = 9,
-        isPartner = false, income = models.output.esc.Income(niCategory = "A"),
+      val outputClaimant = models.output.esc.ESCClaimant(qualifying = false, eligibleMonthsInTaxYear = 9,
+        isPartner = false, income = models.output.esc.ESCIncome(niCategory = "A"),
         vouchers = false, escAmount = 0.0, escAmountPeriod = Periods.Monthly,escStartDate = fromDate,
-        savings = Savings(),
-        taxAndNIBeforeSacrifice = models.output.esc.TaxAndNI(), taxAndNIAfterSacrifice = models.output.esc.TaxAndNI())
+        savings = ESCSavings(),
+        taxAndNIBeforeSacrifice = models.output.esc.ESCTaxAndNi(), taxAndNIAfterSacrifice = models.output.esc.ESCTaxAndNi())
 
-      val outputTY = models.output.esc.TaxYear(fromDate, toDate, Savings(), List(outputClaimant))
-      val resultTY = ESCCalculator.getCalculatedTaxYears(ESCEligibility(List(taxYear), location))
+      val outputTY = models.output.esc.ESCTaxYear(fromDate, toDate, ESCSavings(), List(outputClaimant))
+      val resultTY = ESCCalculator.getCalculatedTaxYears(ESCCalculatorInput(List(taxYear), location))
 
       resultTY shouldBe List(outputTY)
     }
@@ -1104,28 +1102,28 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val toDate2 = LocalDate.parse("21-10-2017", formatter)
 
-      val inputClaimant = Claimant(qualifying = true, isPartner = false,
-        eligibleMonthsInPeriod = 9, previousIncome = None, currentIncome = Some(Income(Some(50000.00))), vouchers = true,
+      val inputClaimant = ESCClaimant(qualifying = true, isPartner = false,
+        eligibleMonthsInPeriod = 9, previousIncome = None, currentIncome = Some(ESCIncome(Some(50000.00))), vouchers = true,
         escStartDate = fromDate)
 
-      val inputClaimant2 = Claimant(qualifying = true, isPartner = false,
-        eligibleMonthsInPeriod = 2, previousIncome = Some(Income(Some(50000.00))),
+      val inputClaimant2 = ESCClaimant(qualifying = true, isPartner = false,
+        eligibleMonthsInPeriod = 2, previousIncome = Some(ESCIncome(Some(50000.00))),
         currentIncome = None, vouchers = true,
         escStartDate = fromDate)
 
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant), children = List(buildChild(childCareCost = 90)))
       val period2 = ESCPeriod(from = fromDate2, until = toDate2, claimants = List(inputClaimant2), children = List(buildChild(childCareCost = 90)))
-      val taxYear = TaxYear(startDate = fromDate, endDate = toDate, periods = List(period, period2))
+      val taxYear = ESCTaxYear(startDate = fromDate, endDate = toDate, periods = List(period, period2))
 
-      val outputClaimant = models.output.esc.Claimant(qualifying = true, eligibleMonthsInTaxYear = 11,
-        isPartner = false, income = models.output.esc.Income(taxablePay = 50000.00, gross = 50000.00,
+      val outputClaimant = models.output.esc.ESCClaimant(qualifying = true, eligibleMonthsInTaxYear = 11,
+        isPartner = false, income = models.output.esc.ESCIncome(taxablePay = 50000.00, gross = 50000.00,
           taxCode = "", niCategory = "A"),
         vouchers = true, escAmount = 90.0, escAmountPeriod = Periods.Monthly, escStartDate = fromDate,
-        savings = Savings(taxSaving = 396, niSaving = 19.8, totalSaving = 415.8),
-        taxAndNIBeforeSacrifice = models.output.esc.TaxAndNI(taxPaid = 8349.80, niPaid = 4003.08), taxAndNIAfterSacrifice = models.output.esc.TaxAndNI(taxPaid = 7953.80, niPaid = 3983.28))
+        savings = ESCSavings(taxSaving = 396, niSaving = 19.8, totalSaving = 415.8),
+        taxAndNIBeforeSacrifice = models.output.esc.ESCTaxAndNi(taxPaid = 8349.80, niPaid = 4003.08), taxAndNIAfterSacrifice = models.output.esc.ESCTaxAndNi(taxPaid = 7953.80, niPaid = 3983.28))
 
-      val outputTY = models.output.esc.TaxYear(fromDate, toDate, Savings(taxSaving = 396, niSaving = 19.8, totalSaving = 415.8), List(outputClaimant))
-      val resultTY = ESCCalculator.getCalculatedTaxYears(ESCEligibility(List(taxYear), location))
+      val outputTY = models.output.esc.ESCTaxYear(fromDate, toDate, ESCSavings(taxSaving = 396, niSaving = 19.8, totalSaving = 415.8), List(outputClaimant))
+      val resultTY = ESCCalculator.getCalculatedTaxYears(ESCCalculatorInput(List(taxYear), location))
 
       Json.toJson(resultTY) shouldBe Json.toJson(List(outputTY))
     }
@@ -1137,28 +1135,28 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val toDate2 = LocalDate.parse("21-10-2017", formatter)
 
-      val inputClaimant = Claimant(qualifying = true, isPartner = false,
-        eligibleMonthsInPeriod = 2, previousIncome = Some(Income(Some(50000.00))),
+      val inputClaimant = ESCClaimant(qualifying = true, isPartner = false,
+        eligibleMonthsInPeriod = 2, previousIncome = Some(ESCIncome(Some(50000.00))),
         currentIncome = None, vouchers = true,
         escStartDate = fromDate)
 
-      val inputClaimant2 = Claimant(qualifying = false, isPartner = false,
+      val inputClaimant2 = ESCClaimant(qualifying = false, isPartner = false,
         eligibleMonthsInPeriod = 0, previousIncome = None, currentIncome = None, vouchers = false,
         escStartDate = fromDate)
 
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant), children = List(buildChild(childCareCost = 90)))
       val period2 = ESCPeriod(from = fromDate2, until = toDate2, claimants = List(inputClaimant2), children = List(buildChild(childCareCost = 90)))
-      val taxYear = TaxYear(startDate = fromDate, endDate = toDate, periods = List(period, period2))
+      val taxYear = ESCTaxYear(startDate = fromDate, endDate = toDate, periods = List(period, period2))
 
-      val outputClaimant = models.output.esc.Claimant(qualifying = true, eligibleMonthsInTaxYear = 2,
-        isPartner = false, income = models.output.esc.Income(taxablePay = 50000.00, gross = 50000.00, taxCode = "", niCategory = "A"),
+      val outputClaimant = models.output.esc.ESCClaimant(qualifying = true, eligibleMonthsInTaxYear = 2,
+        isPartner = false, income = models.output.esc.ESCIncome(taxablePay = 50000.00, gross = 50000.00, taxCode = "", niCategory = "A"),
         vouchers = true, escAmount = 90.0, escAmountPeriod = Periods.Monthly, escStartDate = fromDate,
-        savings = Savings(totalSaving = 75.6, taxSaving = 72, niSaving = 3.6),
-        taxAndNIBeforeSacrifice = models.output.esc.TaxAndNI(taxPaid = 1533.2, niPaid = 722.00),
-        taxAndNIAfterSacrifice = models.output.esc.TaxAndNI(taxPaid = 1461.20, niPaid = 718.40))
+        savings = ESCSavings(totalSaving = 75.6, taxSaving = 72, niSaving = 3.6),
+        taxAndNIBeforeSacrifice = models.output.esc.ESCTaxAndNi(taxPaid = 1533.2, niPaid = 722.00),
+        taxAndNIAfterSacrifice = models.output.esc.ESCTaxAndNi(taxPaid = 1461.20, niPaid = 718.40))
 
-      val outputTY = models.output.esc.TaxYear(fromDate, toDate, Savings(totalSaving = 75.6, taxSaving = 72, niSaving = 3.6), List(outputClaimant))
-      val resultTY = ESCCalculator.getCalculatedTaxYears(ESCEligibility(List(taxYear), location))
+      val outputTY = models.output.esc.ESCTaxYear(fromDate, toDate, ESCSavings(totalSaving = 75.6, taxSaving = 72, niSaving = 3.6), List(outputClaimant))
+      val resultTY = ESCCalculator.getCalculatedTaxYears(ESCCalculatorInput(List(taxYear), location))
 
       resultTY shouldBe List(outputTY)
     }
@@ -1171,36 +1169,36 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val toDate2 = LocalDate.parse("21-10-2017", formatter)
 
-      val inputClaimant = Claimant(qualifying = true, isPartner = false,
-        eligibleMonthsInPeriod = 10, previousIncome = Some(Income(Some(50000))), currentIncome = None, vouchers = true,
+      val inputClaimant = ESCClaimant(qualifying = true, isPartner = false,
+        eligibleMonthsInPeriod = 10, previousIncome = Some(ESCIncome(Some(50000))), currentIncome = None, vouchers = true,
         escStartDate = fromDate)
-      val inputPartner = Claimant(qualifying = true, isPartner = true,
-        eligibleMonthsInPeriod = 1, previousIncome = Some(Income(Some(50000))), currentIncome = None, vouchers = true,
+      val inputPartner = ESCClaimant(qualifying = true, isPartner = true,
+        eligibleMonthsInPeriod = 1, previousIncome = Some(ESCIncome(Some(50000))), currentIncome = None, vouchers = true,
         escStartDate = fromDate)
 
-      val inputClaimant2 = Claimant(qualifying = true, isPartner = false, eligibleMonthsInPeriod = 1, previousIncome = None, currentIncome = None, vouchers = true,
+      val inputClaimant2 = ESCClaimant(qualifying = true, isPartner = false, eligibleMonthsInPeriod = 1, previousIncome = None, currentIncome = None, vouchers = true,
         escStartDate = fromDate)
-      val inputPartner2 = Claimant(qualifying = true, isPartner = true, eligibleMonthsInPeriod = 1, previousIncome = None, currentIncome = None, vouchers = true,
+      val inputPartner2 = ESCClaimant(qualifying = true, isPartner = true, eligibleMonthsInPeriod = 1, previousIncome = None, currentIncome = None, vouchers = true,
         escStartDate = fromDate)
 
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant, inputPartner), children = List(buildChild(childCareCost = 180)))
       val period2 = ESCPeriod(from = fromDate2, until = toDate2, claimants = List(inputClaimant2, inputPartner2), children = List(buildChild(childCareCost = 180)))
 
-      val taxYear = TaxYear(startDate = fromDate, endDate = toDate, periods = List(period, period2))
+      val taxYear = ESCTaxYear(startDate = fromDate, endDate = toDate, periods = List(period, period2))
 
-      val outputClaimant = models.output.esc.Claimant(qualifying = true, eligibleMonthsInTaxYear = 11,
-        isPartner = false, income = models.output.esc.Income(taxablePay = 50000.00, gross = 50000.00, taxCode = "", niCategory = "A"),
-        vouchers = true, escAmount = 124.0, escAmountPeriod = Periods.Monthly, escStartDate = fromDate,
-        savings = Savings(totalSaving = 520.80, taxSaving = 496.00, niSaving = 24.80),
-        taxAndNIBeforeSacrifice = models.output.esc.TaxAndNI(taxPaid = 7666.00, niPaid = 3610.00), taxAndNIAfterSacrifice = models.output.esc.TaxAndNI(taxPaid = 7170.00, niPaid = 3585.20))
+      val outputClaimant = models.output.esc.ESCClaimant(qualifying = true, eligibleMonthsInTaxYear = 11,
+        isPartner = false, income = models.output.esc.ESCIncome(taxablePay = 50000.00, gross = 50000.00, taxCode = "", niCategory = "A"),
+        vouchers = true, escAmount = 90.0, escAmountPeriod = Periods.Monthly, escStartDate = fromDate,
+        savings = ESCSavings(totalSaving = 378.00, taxSaving = 360.00, niSaving = 18.00),
+        taxAndNIBeforeSacrifice = models.output.esc.ESCTaxAndNi(taxPaid = 7666.00, niPaid = 3610.00), taxAndNIAfterSacrifice = models.output.esc.ESCTaxAndNi(taxPaid = 7306.00, niPaid = 3592.00))
 
-      val outputPartner = models.output.esc.Claimant(qualifying = true, eligibleMonthsInTaxYear = 2, isPartner = true, income = models.output.esc.Income(taxablePay = 50000.00, gross = 50000.00, taxCode = "", niCategory = "A"),
-        vouchers = true, escAmount = 56.0, escAmountPeriod = Periods.Monthly, escStartDate = fromDate,
-        savings = Savings(totalSaving = 23.52, taxSaving = 22.40, niSaving = 1.12),
-        taxAndNIBeforeSacrifice = models.output.esc.TaxAndNI(taxPaid = 766.60, niPaid = 361.00), taxAndNIAfterSacrifice = models.output.esc.TaxAndNI(taxPaid = 744.20, niPaid = 359.88))
+      val outputPartner = models.output.esc.ESCClaimant(qualifying = true, eligibleMonthsInTaxYear = 2, isPartner = true, income = models.output.esc.ESCIncome(taxablePay = 50000.00, gross = 50000.00, taxCode = "", niCategory = "A"),
+        vouchers = true, escAmount = 90.0, escAmountPeriod = Periods.Monthly, escStartDate = fromDate,
+        savings = ESCSavings(totalSaving = 37.80, taxSaving = 36.00, niSaving = 1.8),
+        taxAndNIBeforeSacrifice = models.output.esc.ESCTaxAndNi(taxPaid = 766.60, niPaid = 361.00), taxAndNIAfterSacrifice = models.output.esc.ESCTaxAndNi(taxPaid = 730.60, niPaid = 359.20))
 
-      val outputTY = models.output.esc.TaxYear(fromDate, toDate, Savings(totalSaving = 544.32, taxSaving = 518.40, niSaving = 25.92), List(outputClaimant, outputPartner))
-      val resultTY = ESCCalculator.getCalculatedTaxYears(ESCEligibility(List(taxYear), location))
+      val outputTY = models.output.esc.ESCTaxYear(fromDate, toDate, ESCSavings(totalSaving = 415.80, taxSaving = 396.00, niSaving = 19.80), List(outputClaimant, outputPartner))
+      val resultTY = ESCCalculator.getCalculatedTaxYears(ESCCalculatorInput(List(taxYear), location))
 
       resultTY shouldBe List(outputTY)
     }
@@ -1213,39 +1211,39 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val fromDate2 = LocalDate.parse("21-12-2016", formatter)
       val toDate2 = LocalDate.parse("06-04-2017", formatter)
 
-      val inputClaimant = Claimant(qualifying = false, isPartner = false,
-        eligibleMonthsInPeriod = 0, previousIncome = None, currentIncome = Some(Income(Some(50000))), vouchers = false,
+      val inputClaimant = ESCClaimant(qualifying = false, isPartner = false,
+        eligibleMonthsInPeriod = 0, previousIncome = None, currentIncome = Some(ESCIncome(Some(50000))), vouchers = false,
         escStartDate = fromDate)
-      val inputPartner = Claimant(qualifying = false, isPartner = true,
-        eligibleMonthsInPeriod = 0, previousIncome = None, currentIncome = Some(Income(Some(50000))), vouchers = false,
+      val inputPartner = ESCClaimant(qualifying = false, isPartner = true,
+        eligibleMonthsInPeriod = 0, previousIncome = None, currentIncome = Some(ESCIncome(Some(50000))), vouchers = false,
         escStartDate = fromDate)
 
-      val inputClaimant2 = Claimant(qualifying = false, isPartner = false,
-        eligibleMonthsInPeriod = 0, previousIncome = None, currentIncome = Some(Income(Some(50000))), vouchers = false,
+      val inputClaimant2 = ESCClaimant(qualifying = false, isPartner = false,
+        eligibleMonthsInPeriod = 0, previousIncome = None, currentIncome = Some(ESCIncome(Some(50000))), vouchers = false,
         escStartDate = fromDate)
-      val inputPartner2 = Claimant(qualifying = true, isPartner = true,
-        eligibleMonthsInPeriod = 1, previousIncome = None, currentIncome = Some(Income(Some(50000))), vouchers = true,
+      val inputPartner2 = ESCClaimant(qualifying = true, isPartner = true,
+        eligibleMonthsInPeriod = 1, previousIncome = None, currentIncome = Some(ESCIncome(Some(50000))), vouchers = true,
         escStartDate = fromDate)
 
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant, inputPartner), children = List(buildChild(childCareCost = 90)))
       val period2 = ESCPeriod(from = fromDate2, until = toDate2, claimants = List(inputClaimant2, inputPartner2), children = List(buildChild(childCareCost = 90)))
 
-      val taxYear = TaxYear(startDate = fromDate, endDate = toDate, periods = List(period, period2))
+      val taxYear = ESCTaxYear(startDate = fromDate, endDate = toDate, periods = List(period, period2))
 
-      val outputClaimant = models.output.esc.Claimant(qualifying = false, eligibleMonthsInTaxYear = 0,
-        isPartner = false, income = models.output.esc.Income(taxablePay = 50000.00, gross = 50000.00, taxCode = "", niCategory = "A"),
+      val outputClaimant = models.output.esc.ESCClaimant(qualifying = false, eligibleMonthsInTaxYear = 0,
+        isPartner = false, income = models.output.esc.ESCIncome(taxablePay = 50000.00, gross = 50000.00, taxCode = "", niCategory = "A"),
         vouchers = false, escAmount = 0.0, escAmountPeriod = Periods.Monthly, escStartDate = fromDate,
-        savings = Savings(totalSaving = 0.00, taxSaving = 0.00, niSaving = 0.00),
-        taxAndNIBeforeSacrifice = models.output.esc.TaxAndNI(taxPaid = 0, niPaid = 0), taxAndNIAfterSacrifice = models.output.esc.TaxAndNI(taxPaid = 0, niPaid = 0))
+        savings = ESCSavings(totalSaving = 0.00, taxSaving = 0.00, niSaving = 0.00),
+        taxAndNIBeforeSacrifice = models.output.esc.ESCTaxAndNi(taxPaid = 0, niPaid = 0), taxAndNIAfterSacrifice = models.output.esc.ESCTaxAndNi(taxPaid = 0, niPaid = 0))
 
-      val outputPartner = models.output.esc.Claimant(qualifying = true, eligibleMonthsInTaxYear = 1,
-        isPartner = true, income = models.output.esc.Income(taxablePay = 50000.00, gross = 50000.00, taxCode = "", niCategory = "A"),
+      val outputPartner = models.output.esc.ESCClaimant(qualifying = true, eligibleMonthsInTaxYear = 1,
+        isPartner = true, income = models.output.esc.ESCIncome(taxablePay = 50000.00, gross = 50000.00, taxCode = "", niCategory = "A"),
         vouchers = true, escAmount = 90.0, escAmountPeriod = Periods.Monthly, escStartDate = fromDate,
-        savings = Savings(totalSaving = 37.8, taxSaving = 36, niSaving = 1.8),
-        taxAndNIBeforeSacrifice = models.output.esc.TaxAndNI(taxPaid = 766.60, niPaid = 361.00), taxAndNIAfterSacrifice = models.output.esc.TaxAndNI(taxPaid = 730.60, niPaid = 359.20))
+        savings = ESCSavings(totalSaving = 37.8, taxSaving = 36, niSaving = 1.8),
+        taxAndNIBeforeSacrifice = models.output.esc.ESCTaxAndNi(taxPaid = 766.60, niPaid = 361.00), taxAndNIAfterSacrifice = models.output.esc.ESCTaxAndNi(taxPaid = 730.60, niPaid = 359.20))
 
-      val outputTY=models.output.esc.TaxYear(fromDate, toDate, Savings(totalSaving=37.8, taxSaving=36, niSaving=1.8), List(outputClaimant, outputPartner))
-      val resultTY = ESCCalculator.getCalculatedTaxYears(ESCEligibility(List(taxYear), location))
+      val outputTY=models.output.esc.ESCTaxYear(fromDate, toDate, ESCSavings(totalSaving=37.8, taxSaving=36, niSaving=1.8), List(outputClaimant, outputPartner))
+      val resultTY = ESCCalculator.getCalculatedTaxYears(ESCCalculatorInput(List(taxYear), location))
 
       resultTY shouldBe List(outputTY)
     }
@@ -1258,39 +1256,39 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val fromDate2 = LocalDate.parse("21-12-2016", formatter)
       val toDate2 = LocalDate.parse("06-04-2017", formatter)
 
-      val inputPartner = Claimant(qualifying = false, isPartner = true,
-        eligibleMonthsInPeriod = 0, previousIncome = None, currentIncome = Some(Income(Some(50000))), vouchers = false,
+      val inputPartner = ESCClaimant(qualifying = false, isPartner = true,
+        eligibleMonthsInPeriod = 0, previousIncome = None, currentIncome = Some(ESCIncome(Some(50000))), vouchers = false,
         escStartDate = fromDate)
-      val inputClaimant = Claimant(qualifying = false, isPartner = false,
-        eligibleMonthsInPeriod = 0, previousIncome = None, currentIncome = Some(Income(Some(50000))), vouchers = false,
+      val inputClaimant = ESCClaimant(qualifying = false, isPartner = false,
+        eligibleMonthsInPeriod = 0, previousIncome = None, currentIncome = Some(ESCIncome(Some(50000))), vouchers = false,
         escStartDate = fromDate)
 
-      val inputPartner2 = Claimant(qualifying = false, isPartner = true,
-        eligibleMonthsInPeriod = 0, previousIncome = None, currentIncome = Some(Income(Some(50000))), vouchers = false,
+      val inputPartner2 = ESCClaimant(qualifying = false, isPartner = true,
+        eligibleMonthsInPeriod = 0, previousIncome = None, currentIncome = Some(ESCIncome(Some(50000))), vouchers = false,
         escStartDate = fromDate)
-      val inputClaimant2 = Claimant(qualifying = true, isPartner = false,
-        eligibleMonthsInPeriod = 1, previousIncome = None, currentIncome = Some(Income(Some(50000))), vouchers = true,
+      val inputClaimant2 = ESCClaimant(qualifying = true, isPartner = false,
+        eligibleMonthsInPeriod = 1, previousIncome = None, currentIncome = Some(ESCIncome(Some(50000))), vouchers = true,
         escStartDate = fromDate)
 
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant, inputPartner), children = List(buildChild(childCareCost = 90)))
       val period2 = ESCPeriod(from = fromDate2, until = toDate2, claimants = List(inputClaimant2, inputPartner2), children = List(buildChild(childCareCost = 90)))
 
-      val taxYear = TaxYear(startDate = fromDate, endDate = toDate, periods = List(period, period2))
+      val taxYear = ESCTaxYear(startDate = fromDate, endDate = toDate, periods = List(period, period2))
 
-      val outputPartner = models.output.esc.Claimant(qualifying = false, eligibleMonthsInTaxYear = 0,
-        isPartner = true, income = models.output.esc.Income(taxablePay = 50000.00, gross = 50000.00, taxCode = "", niCategory = "A"),
+      val outputPartner = models.output.esc.ESCClaimant(qualifying = false, eligibleMonthsInTaxYear = 0,
+        isPartner = true, income = models.output.esc.ESCIncome(taxablePay = 50000.00, gross = 50000.00, taxCode = "", niCategory = "A"),
         vouchers = false, escAmount = 0.0, escAmountPeriod = Periods.Monthly, escStartDate = fromDate,
-        savings = Savings(totalSaving = 0.00, taxSaving = 0.00, niSaving = 0.00),
-        taxAndNIBeforeSacrifice = models.output.esc.TaxAndNI(taxPaid = 0, niPaid = 0), taxAndNIAfterSacrifice = models.output.esc.TaxAndNI(taxPaid = 0, niPaid = 0))
+        savings = ESCSavings(totalSaving = 0.00, taxSaving = 0.00, niSaving = 0.00),
+        taxAndNIBeforeSacrifice = models.output.esc.ESCTaxAndNi(taxPaid = 0, niPaid = 0), taxAndNIAfterSacrifice = models.output.esc.ESCTaxAndNi(taxPaid = 0, niPaid = 0))
 
-      val outputClaimant = models.output.esc.Claimant(qualifying = true, eligibleMonthsInTaxYear = 1,
-        isPartner = false, income = models.output.esc.Income(taxablePay = 50000.00, gross = 50000.00, taxCode = "", niCategory = "A"),
+      val outputClaimant = models.output.esc.ESCClaimant(qualifying = true, eligibleMonthsInTaxYear = 1,
+        isPartner = false, income = models.output.esc.ESCIncome(taxablePay = 50000.00, gross = 50000.00, taxCode = "", niCategory = "A"),
         vouchers = true, escAmount = 90.0, escAmountPeriod = Periods.Monthly, escStartDate = fromDate,
-        savings = Savings(totalSaving = 37.8, taxSaving = 36, niSaving = 1.8),
-        taxAndNIBeforeSacrifice = models.output.esc.TaxAndNI(taxPaid = 766.60, niPaid = 361.00), taxAndNIAfterSacrifice = models.output.esc.TaxAndNI(taxPaid = 730.60, niPaid = 359.20))
+        savings = ESCSavings(totalSaving = 37.8, taxSaving = 36, niSaving = 1.8),
+        taxAndNIBeforeSacrifice = models.output.esc.ESCTaxAndNi(taxPaid = 766.60, niPaid = 361.00), taxAndNIAfterSacrifice = models.output.esc.ESCTaxAndNi(taxPaid = 730.60, niPaid = 359.20))
 
-      val outputTY = models.output.esc.TaxYear(fromDate, toDate, Savings(totalSaving = 37.8, taxSaving = 36, niSaving = 1.8), List(outputClaimant, outputPartner))
-      val resultTY = ESCCalculator.getCalculatedTaxYears(ESCEligibility(List(taxYear), location))
+      val outputTY = models.output.esc.ESCTaxYear(fromDate, toDate, ESCSavings(totalSaving = 37.8, taxSaving = 36, niSaving = 1.8), List(outputClaimant, outputPartner))
+      val resultTY = ESCCalculator.getCalculatedTaxYears(ESCCalculatorInput(List(taxYear), location))
 
       resultTY shouldBe List(outputTY)
     }
@@ -1791,10 +1789,10 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
     "Generate total award with claimants (Total Award test)" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/esc/input/calculator_input_test.json")
       val json: JsValue = Json.parse(resource.toString)
-      val inputJson = json.validate[ESCEligibility]
-      inputJson.isInstanceOf[JsSuccess[ESCEligibility]] shouldBe true
+      val inputJson = json.validate[ESCCalculatorInput]
+      inputJson.isInstanceOf[JsSuccess[ESCCalculatorInput]] shouldBe true
 
-      val result: ESCCalculation = ESCCalculator.award(inputJson.get)
+      val result: ESCCalculatorOutput = ESCCalculator.award(inputJson.get)
 
       val resourceJson = JsonLoader.fromResource("/json/esc/output/output_test_1.json")
       val outputJson: JsValue = Json.parse(resourceJson.toString)
@@ -1807,7 +1805,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val periodEnd = LocalDate.parse("2017-04-06", formatter)
 
       val period = ESCPeriod(from = periodStart, until = periodEnd, List(), children = List())
-      val income = TotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "1100L", niCategory = "")
+      val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "1100L", niCategory = "")
       ESCCalculator.getPersonalAllowance(period, income, ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location)) shouldBe 11000
     }
 
@@ -1816,7 +1814,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val periodEnd = LocalDate.parse("2017-04-06", formatter)
 
       val period = ESCPeriod(from = periodStart, until = periodEnd, List(), children = List())
-      val income = TotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "9999M", niCategory = "")
+      val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "9999M", niCategory = "")
       ESCCalculator.getPersonalAllowance(period, income, ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location)) shouldBe 99990
     }
 
@@ -1825,7 +1823,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val periodEnd = LocalDate.parse("2017-04-06", formatter)
 
       val period = ESCPeriod(from = periodStart, until = periodEnd, List(), children = List())
-      val income = TotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "9Y", niCategory = "")
+      val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "9Y", niCategory = "")
       ESCCalculator.getPersonalAllowance(period, income, ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location)) shouldBe 90
     }
 
@@ -1834,7 +1832,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val periodEnd = LocalDate.parse("2017-04-06", formatter)
 
       val period = ESCPeriod(from = periodStart, until = periodEnd, List(), children = List())
-      val income = TotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "d1", niCategory = "")
+      val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "d1", niCategory = "")
       ESCCalculator.getTaxCode(period, income, ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location)) shouldBe "D1"
     }
 
@@ -1843,7 +1841,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val periodEnd = LocalDate.parse("2017-04-06", formatter)
 
       val period = ESCPeriod(from = periodStart, until = periodEnd, List(), children = List())
-      val income = TotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "Y", niCategory = "")
+      val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "Y", niCategory = "")
       try {
         val result = ESCCalculator.getTaxCode(period, income, ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location))
         result shouldBe a[NoSuchElementException]
@@ -1858,7 +1856,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val periodEnd = LocalDate.parse("2017-04-06", formatter)
 
       val period = ESCPeriod(from = periodStart, until = periodEnd, List(), children = List())
-      val income = TotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "D11", niCategory = "")
+      val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "D11", niCategory = "")
       try {
         val result = ESCCalculator.getTaxCode(period, income, ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location))
         result shouldBe a[NoSuchElementException]

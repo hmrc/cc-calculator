@@ -18,7 +18,7 @@ package models.input
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.github.fge.jackson.JsonLoader
-import models.input.tc.TCEligibility._
+import models.input.tc.TCCalculatorInput._
 import models.input.tc._
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
@@ -26,30 +26,30 @@ import play.api.libs.json.{JsSuccess, JsValue, Json}
 import uk.gov.hmrc.play.test.UnitSpec
 import utils._
 
-class TCEligibilitySpec extends UnitSpec with FakeCCCalculatorApplication {
+class TCCalculatorInputSpec extends UnitSpec with FakeCCCalculatorApplication {
 
   "TC Input JSON" should {
     "read a valid JSON input and convert to a specific type" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2017/scenario_1.json")
       val json: JsValue = Json.parse(resource.toString)
-      val result = json.validate[TCEligibility]
-      result.get shouldBe a[TCEligibility]
+      val result = json.validate[TCCalculatorInput]
+      result.get shouldBe a[TCCalculatorInput]
 
-      result.get.taxYears.isInstanceOf[List[TaxYear]] shouldBe true
+      result.get.taxYears.isInstanceOf[List[TCTaxYear]] shouldBe true
 
       val taxYear = result.get.taxYears.head
       taxYear.from shouldBe a[LocalDate]
       taxYear.until shouldBe a[LocalDate]
-      taxYear.previousHouseholdIncome shouldBe a[Income]
-      taxYear.currentHouseholdIncome shouldBe a[Income]
-      taxYear.periods.isInstanceOf[List[Period]] shouldBe true
+      taxYear.previousHouseholdIncome shouldBe a[TCIncome]
+      taxYear.currentHouseholdIncome shouldBe a[TCIncome]
+      taxYear.periods.isInstanceOf[List[TCPeriod]] shouldBe true
 
       val period = taxYear.periods.head
       period.from shouldBe a[LocalDate]
       period.until shouldBe a[LocalDate]
-      period.householdElements shouldBe a[HouseHoldElements]
-      period.claimants.isInstanceOf[List[Claimant]] shouldBe true
-      period.children.isInstanceOf[List[Child]] shouldBe true
+      period.householdElements shouldBe a[TCHouseholdElements]
+      period.claimants.isInstanceOf[List[TCClaimant]] shouldBe true
+      period.children.isInstanceOf[List[TCChild]] shouldBe true
 
       val householdElaments = period.householdElements
       householdElaments.basic.isInstanceOf[Boolean] shouldBe true
@@ -62,7 +62,7 @@ class TCEligibilitySpec extends UnitSpec with FakeCCCalculatorApplication {
       val claimant = period.claimants.head
       claimant.qualifying.isInstanceOf[Boolean] shouldBe true
       claimant.isPartner.isInstanceOf[Boolean] shouldBe true
-      claimant.claimantElements shouldBe a[ClaimantDisability]
+      claimant.claimantElements shouldBe a[TCDisability]
       claimant.doesNotTaper.isInstanceOf[Boolean] shouldBe true
 
       claimant.claimantElements.disability.isInstanceOf[Boolean] shouldBe true
@@ -74,7 +74,7 @@ class TCEligibilitySpec extends UnitSpec with FakeCCCalculatorApplication {
       child.childcareCostPeriod shouldBe a[Periods.Period]
 
       val childElements = child.childElements
-      childElements shouldBe a[ChildElements]
+      childElements shouldBe a[TCChildElements]
       childElements.child.isInstanceOf[Boolean] shouldBe true
       childElements.youngAdult.isInstanceOf[Boolean] shouldBe true
       childElements.childcare.isInstanceOf[Boolean] shouldBe true
@@ -91,8 +91,8 @@ class TCEligibilitySpec extends UnitSpec with FakeCCCalculatorApplication {
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val periodStart = LocalDate.parse("2016-06-01", formatter)
       val periodEnd = LocalDate.parse("2016-08-31", formatter)
-      val child = Child(childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, childElements = ChildElements())
-      val period = Period(from = periodStart, until = periodEnd, householdElements = HouseHoldElements(childcare = true), claimants = List(),
+      val child = TCChild(childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, childElements = TCChildElements())
+      val period = TCPeriod(from = periodStart, until = periodEnd, householdElements = TCHouseholdElements(childcare = true), claimants = List(),
         children = List(child))
       period.getChildCareForPeriod shouldBe true
     }
@@ -104,7 +104,7 @@ class TCEligibilitySpec extends UnitSpec with FakeCCCalculatorApplication {
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val periodStart = LocalDate.parse("2016-05-06", formatter)
       val periodEnd = LocalDate.parse("2016-04-05", formatter)
-      val period = models.input.tc.Period(from = periodStart, until = periodEnd, householdElements = HouseHoldElements(), claimants = List(), children = List())
+      val period = models.input.tc.TCPeriod(from = periodStart, until = periodEnd, householdElements = TCHouseholdElements(), claimants = List(), children = List())
       val tcTaxYear = TCTaxYearConfig(
         otherIncomeAdjustment = 300,
         currentIncomeFallDifferenceAmount = 2500,
@@ -138,7 +138,7 @@ class TCEligibilitySpec extends UnitSpec with FakeCCCalculatorApplication {
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val periodStart = LocalDate.parse("2016-05-06", formatter)
       val periodEnd = LocalDate.parse("2017-04-05", formatter)
-      val period = models.input.tc.Period(from = periodStart, until = periodEnd, householdElements = HouseHoldElements(), claimants = List(), children = List())
+      val period = models.input.tc.TCPeriod(from = periodStart, until = periodEnd, householdElements = TCHouseholdElements(), claimants = List(), children = List())
       val tcTaxYear = TCTaxYearConfig(
         otherIncomeAdjustment = 300,
         currentIncomeFallDifferenceAmount = 2500,
@@ -172,7 +172,7 @@ class TCEligibilitySpec extends UnitSpec with FakeCCCalculatorApplication {
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val periodStart = LocalDate.parse("2017-05-06", formatter)
       val periodEnd = LocalDate.parse("2018-04-05", formatter)
-      val period = models.input.tc.Period(from = periodStart, until = periodEnd, householdElements = HouseHoldElements(), claimants = List(), children = List())
+      val period = models.input.tc.TCPeriod(from = periodStart, until = periodEnd, householdElements = TCHouseholdElements(), claimants = List(), children = List())
       try {
         period.config should not be a[NoSuchElementException]
       } catch {
@@ -186,9 +186,9 @@ class TCEligibilitySpec extends UnitSpec with FakeCCCalculatorApplication {
       val periodStart = LocalDate.parse("2017-05-06", formatter)
       val periodEnd = LocalDate.parse("2018-04-05", formatter)
 
-      val claimant = models.input.tc.Claimant(qualifying = true, isPartner = false, claimantElements = ClaimantDisability())
+      val claimant = models.input.tc.TCClaimant(qualifying = true, isPartner = false, claimantElements = TCDisability())
 
-      val period = models.input.tc.Period(from = periodStart, until = periodEnd, householdElements = HouseHoldElements(), claimants = List(claimant),
+      val period = models.input.tc.TCPeriod(from = periodStart, until = periodEnd, householdElements = TCHouseholdElements(), claimants = List(claimant),
         children = List())
       period.atLeastOneClaimantIsClaimingSocialSecurityBenefit shouldBe false
     }
@@ -198,9 +198,9 @@ class TCEligibilitySpec extends UnitSpec with FakeCCCalculatorApplication {
       val periodStart = LocalDate.parse("2017-05-06", formatter)
       val periodEnd = LocalDate.parse("2018-04-05", formatter)
 
-      val claimant = models.input.tc.Claimant(qualifying = true, isPartner = false, doesNotTaper = true, claimantElements = ClaimantDisability())
+      val claimant = models.input.tc.TCClaimant(qualifying = true, isPartner = false, doesNotTaper = true, claimantElements = TCDisability())
 
-      val period = models.input.tc.Period(from = periodStart, until = periodEnd, householdElements = HouseHoldElements(), claimants = List(claimant),
+      val period = models.input.tc.TCPeriod(from = periodStart, until = periodEnd, householdElements = TCHouseholdElements(), claimants = List(claimant),
         children = List())
       period.atLeastOneClaimantIsClaimingSocialSecurityBenefit shouldBe true
     }
@@ -210,10 +210,10 @@ class TCEligibilitySpec extends UnitSpec with FakeCCCalculatorApplication {
       val periodStart = LocalDate.parse("2017-05-06", formatter)
       val periodEnd = LocalDate.parse("2018-04-05", formatter)
 
-      val claimant = models.input.tc.Claimant(qualifying = true, isPartner = false, claimantElements = ClaimantDisability())
-      val claimant2 = models.input.tc.Claimant(qualifying = true, isPartner = false, claimantElements = ClaimantDisability())
+      val claimant = models.input.tc.TCClaimant(qualifying = true, isPartner = false, claimantElements = TCDisability())
+      val claimant2 = models.input.tc.TCClaimant(qualifying = true, isPartner = false, claimantElements = TCDisability())
 
-      val period = models.input.tc.Period(from = periodStart, until = periodEnd, householdElements = HouseHoldElements(), claimants = List(claimant, claimant2),
+      val period = models.input.tc.TCPeriod(from = periodStart, until = periodEnd, householdElements = TCHouseholdElements(), claimants = List(claimant, claimant2),
         children = List())
       period.atLeastOneClaimantIsClaimingSocialSecurityBenefit shouldBe false
     }
@@ -223,10 +223,10 @@ class TCEligibilitySpec extends UnitSpec with FakeCCCalculatorApplication {
       val periodStart = LocalDate.parse("2017-05-06", formatter)
       val periodEnd = LocalDate.parse("2018-04-05", formatter)
 
-      val claimant = models.input.tc.Claimant(qualifying = true, isPartner = false, doesNotTaper = true, claimantElements = ClaimantDisability())
-      val claimant2 = models.input.tc.Claimant(qualifying = true, isPartner = false, doesNotTaper = true, claimantElements = ClaimantDisability())
+      val claimant = models.input.tc.TCClaimant(qualifying = true, isPartner = false, doesNotTaper = true, claimantElements = TCDisability())
+      val claimant2 = models.input.tc.TCClaimant(qualifying = true, isPartner = false, doesNotTaper = true, claimantElements = TCDisability())
 
-      val period = models.input.tc.Period(from = periodStart, until = periodEnd, householdElements = HouseHoldElements(), claimants = List(claimant, claimant2),
+      val period = models.input.tc.TCPeriod(from = periodStart, until = periodEnd, householdElements = TCHouseholdElements(), claimants = List(claimant, claimant2),
         children = List())
       period.atLeastOneClaimantIsClaimingSocialSecurityBenefit shouldBe true
     }
@@ -236,10 +236,10 @@ class TCEligibilitySpec extends UnitSpec with FakeCCCalculatorApplication {
       val periodStart = LocalDate.parse("2017-05-06", formatter)
       val periodEnd = LocalDate.parse("2018-04-05", formatter)
 
-      val claimant = models.input.tc.Claimant(qualifying = true, isPartner = false, doesNotTaper = true, claimantElements = ClaimantDisability())
-      val claimant2 = models.input.tc.Claimant(qualifying = true, isPartner = false, claimantElements = ClaimantDisability())
+      val claimant = models.input.tc.TCClaimant(qualifying = true, isPartner = false, doesNotTaper = true, claimantElements = TCDisability())
+      val claimant2 = models.input.tc.TCClaimant(qualifying = true, isPartner = false, claimantElements = TCDisability())
 
-      val period = models.input.tc.Period(from = periodStart, until = periodEnd, householdElements = HouseHoldElements(), claimants = List(claimant, claimant2),
+      val period = models.input.tc.TCPeriod(from = periodStart, until = periodEnd, householdElements = TCHouseholdElements(), claimants = List(claimant, claimant2),
         children = List())
       period.atLeastOneClaimantIsClaimingSocialSecurityBenefit shouldBe true
     }
@@ -249,12 +249,12 @@ class TCEligibilitySpec extends UnitSpec with FakeCCCalculatorApplication {
   "models.input.tc.Claimant" should {
 
     "(Claiming) determine if a claimant is claiming social security benefit" in {
-      val claimant = models.input.tc.Claimant(qualifying = true, isPartner = false, doesNotTaper = true, claimantElements = ClaimantDisability())
+      val claimant = models.input.tc.TCClaimant(qualifying = true, isPartner = false, doesNotTaper = true, claimantElements = TCDisability())
       claimant.doesNotTaper shouldBe true
     }
 
     "(Not Claiming) determine if a claimant is claiming social security benefit" in {
-      val claimant = models.input.tc.Claimant(qualifying = true, isPartner = false, doesNotTaper = false, claimantElements = ClaimantDisability())
+      val claimant = models.input.tc.TCClaimant(qualifying = true, isPartner = false, doesNotTaper = false, claimantElements = TCDisability())
       claimant.doesNotTaper shouldBe false
     }
 

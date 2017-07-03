@@ -23,7 +23,7 @@ import play.api.libs.json.Reads._
 import play.api.libs.json._
 import utils._
 
-case class TFCEligibility(
+case class TFCCalculatorInput(
                            from: LocalDate,
                            until: LocalDate,
                            householdEligibility: Boolean,
@@ -31,20 +31,20 @@ case class TFCEligibility(
                            )
 
 
-object TFCEligibility extends CCFormat with MessagesObject {
-  implicit val tfcEligibilityFormat: Reads[TFCEligibility] = (
+object TFCCalculatorInput extends CCFormat with MessagesObject {
+  implicit val tfcEligibilityFormat: Reads[TFCCalculatorInput] = (
     (JsPath \ "from").read[LocalDate](jodaLocalDateReads(datePattern)) and
       (JsPath \ "until").read[LocalDate](jodaLocalDateReads(datePattern)) and
         (JsPath \ "householdEligibility").read[Boolean] and
           (JsPath \ "periods").read[List[TFCPeriod]].filter(ValidationError(messages("cc.calc.invalid.number.of.periods")))(periods => periods.length > 0)
-    )(TFCEligibility.apply _)
+    )(TFCCalculatorInput.apply _)
 }
 
 case class TFCPeriod(
                       from: LocalDate,
                       until: LocalDate,
                       periodEligibility: Boolean,
-                      children: List[Child]
+                      children: List[TFCChild]
                       ){
   def configRule : TFCTaxYearConfig = TFCConfig.getConfig(from)
 }
@@ -55,18 +55,18 @@ object TFCPeriod extends CCFormat with MessagesObject {
     (JsPath \ "from").read[LocalDate](jodaLocalDateReads(datePattern)) and
       (JsPath \ "until").read[LocalDate](jodaLocalDateReads(datePattern)) and
         (JsPath \ "periodEligibility").read[Boolean] and
-          (JsPath \ "children").read[List[Child]].filter(
+          (JsPath \ "children").read[List[TFCChild]].filter(
           ValidationError(messages("cc.calc.invalid.number.of.children"))
           )(children => children.length > 0 && children.length <= TFCConfig.maxNoOfChildren)
     )(TFCPeriod.apply _)
 }
 
-case class Child(
+case class TFCChild(
                   qualifying: Boolean,
                   from: Option[LocalDate],
                   until: Option[LocalDate],
                   childcareCost : BigDecimal,
-                  disability :Disability
+                  disability :TFCDisability
                   ) {
   def getChildDisability: Boolean = {
     disability.disabled || disability.severelyDisabled
@@ -78,25 +78,25 @@ case class Child(
 
 }
 
-object Child extends CCFormat with MessagesObject {
+object TFCChild extends CCFormat with MessagesObject {
 
   def childSpendValidation(cost: BigDecimal) : Boolean = {
     cost >= BigDecimal(0.00)
   }
-  implicit val childFormat : Reads[Child] = (
+  implicit val childFormat : Reads[TFCChild] = (
         (JsPath \ "qualifying").read[Boolean] and
           ((JsPath \ "from").readNullable[LocalDate](jodaLocalDateReads(datePattern)) or Reads.optionWithNull(jodaLocalDateReads(datePattern))) and
             ((JsPath \ "until").readNullable[LocalDate](jodaLocalDateReads(datePattern)) or Reads.optionWithNull(jodaLocalDateReads(datePattern))) and
               (JsPath \ "childcareCost").read[BigDecimal].filter(ValidationError(messages("cc.calc.childcare.spend.too.low")))(x => childSpendValidation(x)) and
-                (JsPath \ "disability").read[Disability]
-    )(Child.apply _)
+                (JsPath \ "disability").read[TFCDisability]
+    )(TFCChild.apply _)
 }
 
-case class Disability(
+case class TFCDisability(
                        disabled: Boolean = false,
                        severelyDisabled: Boolean = false
                        )
 
-object Disability {
-  implicit val disabilityReads: Reads[Disability] = Json.reads[Disability]
+object TFCDisability {
+  implicit val disabilityReads: Reads[TFCDisability] = Json.reads[TFCDisability]
 }

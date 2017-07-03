@@ -22,7 +22,7 @@ import play.api.Play.current
 import play.api.{Configuration, Play}
 import uk.gov.hmrc.play.config.ServicesConfig
 
-trait ESCConfig extends ServicesConfig with LoadConfig {
+trait ESCConfig extends CCConfig with ServicesConfig with MessagesObject with LoadConfig {
   lazy val upperMonthsLimitValidation = getInt(s"esc.months-upper-limit")
   lazy val lowerMonthsLimitValidation = getInt(s"esc.months-lower-limit")
   lazy val lowerPeriodsLimitValidation = getInt(s"esc.periods-lower-limit")
@@ -30,47 +30,14 @@ trait ESCConfig extends ServicesConfig with LoadConfig {
   lazy val lowerClaimantsLimitValidation = getInt(s"esc.claimants-lower-limit")
   lazy val pre2011MaxExemptionMonthly = conf.getDouble(s"esc.pre-2011-maximum-exemption.basic-higher-additional.monthly").getOrElse(0.00)
   lazy val localTaxEnabled: Boolean = getBoolean("esc.local-tax-enabled")
-}
-
-case class NiCategory(
-          niCategoryCode: String,
-          lelMonthlyLowerLimitForCat: Double,
-          lelMonthlyUpperLimitForCat: Double,
-          lelRateForCat: Double,
-          lelPtMonthlyLowerLimitForCat: Double,
-          lelPtMonthlyUpperLimitForCat: Double,
-          lelPtRateForCat: Double,
-          ptUelMonthlyLowerLimitForCat: Double,
-          ptUelMonthlyUpperLimitForCat: Double,
-          ptUelRateForCat: Double,
-          aboveUelMonthlyLowerLimitForCat: Double,
-          aboveUelRateForCat: Double
-                       )
-case class ESCTaxYearConfig (
-                             post2011MaxExemptionMonthlyBasic: Double,
-                             post2011MaxExemptionMonthlyHigher: Double,
-                             post2011MaxExemptionMonthlyAdditional: Double,
-                             defaultTaxCode: String,
-                             personalAllowanceRate: Double,
-                             defaultPersonalAllowance: Double,
-                             taxBasicRate: Double ,
-                             taxBasicBandCapacity: Double ,
-                             taxHigherRate: Double,
-                             taxHigherBandUpperLimit: Double,
-                             taxAdditionalRate: Double,
-                             taxAdditionalBandLowerLimit: Double,
-                             niCategory: NiCategory
-                             )
-
-object ESCConfig extends CCConfig with ServicesConfig with ESCConfig with MessagesObject with LoadConfig {
 
   def getConfig(currentDate: LocalDate, niCategoryCode: String, location: String): ESCTaxYearConfig = {
     val configs: Seq[play.api.Configuration] = conf.getConfigSeq("esc.rule-change").get
 
     // get the default config and keep
     val defaultConfig = configs.filter(x => {
-          x.getString("rule-date").equals(Some("default"))
-        }).head
+      x.getString("rule-date").equals(Some("default"))
+    }).head
     // fetch the config if it matches the particular year
     val result = getConfigForTaxYear(currentDate, configs).getOrElse(defaultConfig)
     getTaxYear(niCategoryCode, result, location)
@@ -110,7 +77,7 @@ object ESCConfig extends CCConfig with ServicesConfig with ESCConfig with Messag
       case cat if cat.equals("A") || cat.equals("B") || cat.equals("C") => cat
       case _ => throw new NoSuchElementException(messages("cc.scheme.config.invalid.ni.category"))
     }
-   getNiCategoryHelper(niCode, config.getConfigSeq("niCategories").get, None) match {
+    getNiCategoryHelper(niCode, config.getConfigSeq("niCategories").get, None) match {
       case Some(z) => z
       case _ =>   throw new NoSuchElementException(messages("cc.scheme.config.ni.category.not.found"))
     }
@@ -143,3 +110,37 @@ object ESCConfig extends CCConfig with ServicesConfig with ESCConfig with Messag
     }
   }
 }
+
+object ESCConfig extends ESCConfig
+
+case class NiCategory(
+          niCategoryCode: String,
+          lelMonthlyLowerLimitForCat: Double,
+          lelMonthlyUpperLimitForCat: Double,
+          lelRateForCat: Double,
+          lelPtMonthlyLowerLimitForCat: Double,
+          lelPtMonthlyUpperLimitForCat: Double,
+          lelPtRateForCat: Double,
+          ptUelMonthlyLowerLimitForCat: Double,
+          ptUelMonthlyUpperLimitForCat: Double,
+          ptUelRateForCat: Double,
+          aboveUelMonthlyLowerLimitForCat: Double,
+          aboveUelRateForCat: Double
+                       )
+case class ESCTaxYearConfig (
+                             post2011MaxExemptionMonthlyBasic: Double,
+                             post2011MaxExemptionMonthlyHigher: Double,
+                             post2011MaxExemptionMonthlyAdditional: Double,
+                             defaultTaxCode: String,
+                             personalAllowanceRate: Double,
+                             defaultPersonalAllowance: Double,
+                             taxBasicRate: Double ,
+                             taxBasicBandCapacity: Double ,
+                             taxHigherRate: Double,
+                             taxHigherBandUpperLimit: Double,
+                             taxAdditionalRate: Double,
+                             taxAdditionalBandLowerLimit: Double,
+                             niCategory: NiCategory
+                             )
+
+

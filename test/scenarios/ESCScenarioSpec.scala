@@ -19,8 +19,8 @@ package scenarios
 import calculators.ESCCalculator
 import com.fasterxml.jackson.databind.JsonNode
 import com.github.fge.jackson.JsonLoader
-import models.input.esc.ESCEligibility
-import models.output.esc.ESCCalculation
+import models.input.esc.ESCCalculatorInput
+import models.output.esc.ESCCalculatorOutput
 import play.api.libs.json.{JsSuccess, JsValue, Json}
 import uk.gov.hmrc.play.test.UnitSpec
 import utils.FakeCCCalculatorApplication
@@ -73,14 +73,13 @@ class ESCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication {
       s"(TY ${taxYear} Scenario ${scenarioNumber}) Generate total award with claimants : input " in {
         val resource: JsonNode = JsonLoader.fromResource(s"/json/esc/input/scenario_${scenarioNumber}.json")
         val json: JsValue = Json.parse(resource.toString)
-        val inputJson = json.validate[ESCEligibility]
-        //println(inputJson)
-        inputJson.isInstanceOf[JsSuccess[ESCEligibility]] shouldBe true
-        val result: ESCCalculation = ESCCalculator.award(inputJson.get)
+        val inputJson = json.validate[ESCCalculatorInput]
+        inputJson.isInstanceOf[JsSuccess[ESCCalculatorInput]] shouldBe true
+
+        val result: ESCCalculatorOutput = ESCCalculator.award(inputJson.get)
         val resourceJson = JsonLoader.fromResource(s"/json/esc/output/scenario_${scenarioNumber}.json")
         val outputJson: JsValue = Json.parse(resourceJson.toString)
-        Json.toJson[ESCCalculation](result) shouldBe outputJson
-
+        Json.toJson[ESCCalculatorOutput](result) shouldBe outputJson
       }
     }
 

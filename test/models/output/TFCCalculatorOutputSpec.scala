@@ -22,7 +22,7 @@ import play.api.libs.json.Json
 import uk.gov.hmrc.play.test.UnitSpec
 import utils.FakeCCCalculatorApplication
 
-class TFCCalculationSpec extends UnitSpec with FakeCCCalculatorApplication {
+class TFCCalculatorOutputSpec extends UnitSpec with FakeCCCalculatorApplication {
 
   "TFCCalculation models" should {
 
@@ -32,13 +32,13 @@ class TFCCalculationSpec extends UnitSpec with FakeCCCalculatorApplication {
       val until = LocalDate.parse ("2016-11-01",formatter)
       val numberOfPeriods = 0
 
-      val contribution = models.output.tfc.Contribution(
+      val contribution = models.output.tfc.TFCContribution(
         BigDecimal(0.00),
         BigDecimal(0.00),
         BigDecimal(0.00)
       )
 
-      val outputChild = models.output.tfc.OutputChild(
+      val outputChild = models.output.tfc.TFCOutputChild(
         childCareCost =  BigDecimal(0.00),
         childContribution = contribution
       )
@@ -50,13 +50,13 @@ class TFCCalculationSpec extends UnitSpec with FakeCCCalculatorApplication {
         children = List(outputChild)
       )
 
-      val tfcCalculation = models.output.tfc.TFCCalculation(
+      val tfcCalculation = models.output.tfc.TFCCalculatorOutput(
         householdContribution = contribution,
         numberOfPeriods = numberOfPeriods.toShort,
         periods = List(tfcPeriod)
       )
 
-      val json = Json.toJson[models.output.tfc.TFCCalculation](tfcCalculation)
+      val json = Json.toJson[models.output.tfc.TFCCalculatorOutput](tfcCalculation)
 
       json shouldBe Json.parse(
         """
