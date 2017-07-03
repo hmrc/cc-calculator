@@ -397,9 +397,9 @@ trait ESCCalculator extends ESCCalculatorHelpers with ESCCalculatorTax with ESCC
   import scala.concurrent.ExecutionContext.Implicits.global
 
   def determineSavingsPerClaimant(period: ESCPeriod, location: String): List[models.output.esc.ESCClaimant] = {
-    // TODO: Make sure these are monthly cost
+
     val escAmountForPeriod = period.children.filter(_.qualifying).foldLeft(BigDecimal(0))((acc, child) => {
-      acc + child.childCareCost
+      acc + amountToMonthlyAmount(child.childCareCost, child.childCareCostPeriod)
     })
 
     val periodParent: Option[ESCClaimant] = period.claimants.find(_.isPartner == false)

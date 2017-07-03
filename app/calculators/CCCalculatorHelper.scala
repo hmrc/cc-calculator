@@ -47,8 +47,8 @@ trait CCCalculatorHelper {
     }
   }
 
-  def annualAmountToPeriod(cost: BigDecimal, fromPeriod: Periods.Period): BigDecimal = {
-    fromPeriod match {
+  def annualAmountToPeriod(cost: BigDecimal, toPeriod: Periods.Period): BigDecimal = {
+    toPeriod match {
       case Periods.Weekly => cost / 52
       case Periods.Monthly => cost / 12
       case Periods.Yearly => cost
@@ -56,8 +56,8 @@ trait CCCalculatorHelper {
     }
   }
 
-  def monthlyAmountToPeriod(cost: BigDecimal, fromPeriod: Periods.Period): BigDecimal = {
-    fromPeriod match {
+  def monthlyAmountToPeriod(cost: BigDecimal, toPeriod: Periods.Period): BigDecimal = {
+    toPeriod match {
       case Periods.Weekly => (cost * 12) / 52
       case Periods.Monthly => cost
       case Periods.Yearly => cost * 12
@@ -70,6 +70,15 @@ trait CCCalculatorHelper {
       case Periods.Weekly => cost * 52
       case Periods.Monthly => cost * 12
       case Periods.Yearly => cost
+      case _ => 0.00 //error
+    }
+  }
+
+  def amountToMonthlyAmount(cost: BigDecimal, fromPeriod: Periods.Period): BigDecimal = {
+    fromPeriod match {
+      case Periods.Weekly => cost * 52 / 12
+      case Periods.Monthly => cost
+      case Periods.Yearly => cost / 12
       case _ => 0.00 //error
     }
   }

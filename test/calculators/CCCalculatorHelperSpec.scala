@@ -94,5 +94,21 @@ class CCCalculatorHelperSpec extends UnitSpec with FakeCCCalculatorApplication {
       result shouldBe 11
     }
 
+    "amountToMonthlyAmount" should {
+      "convert weekly amount to monthly" in {
+        val result = helper.amountToMonthlyAmount(120, Periods.Weekly)
+        result shouldBe 520
+      }
+
+      "convert monthly amount to monthly" in {
+        val result = helper.amountToMonthlyAmount(520, Periods.Monthly)
+        result shouldBe 520
+      }
+
+      "convert yearly amount to monthly" in {
+        val result = helper.amountToMonthlyAmount(6240, Periods.Yearly)
+        result shouldBe 520
+      }
+    }
   }
 }
