@@ -17,7 +17,6 @@
 package models.input.esc
 
 import config.ConfigConstants._
-import models.input.tc.Child.{childSpendValidation, messages}
 import org.joda.time.format.DateTimeFormat
 import play.api.data.validation.ValidationError
 import play.api.libs.json.{JsPath, Json, Reads}
@@ -75,13 +74,13 @@ object ESCPeriod extends CCFormat with ESCConfig with MessagesObject {
 }
 
 case class Child(
-                   qualifying: Boolean = false,
-                   childCareCost: BigDecimal,
-                   childCareCostPeriod: Periods.Period = Periods.Monthly
-                   ) {
+                  qualifying: Boolean = false,
+                  childCareCost: BigDecimal,
+                  childCareCostPeriod: Periods.Period = Periods.Monthly
+                ) {
 }
 
-object Child {
+object Child extends MessagesObject {
 
   def childSpendValidation(cost: BigDecimal) : Boolean = {
     cost >= BigDecimal(0.00)
@@ -92,11 +91,10 @@ object Child {
       (JsPath \ "childCareCost").read[BigDecimal].filter(
         ValidationError(messages("cc.calc.childcare.spend.too.low"))
       )(x => childSpendValidation(x)) and
-  (JsPath \ "childCareCostPeriod").read[Periods.Period]
-  )(Child.apply _)
+      (JsPath \ "childCareCostPeriod").read[Periods.Period]
+    )(Child.apply _)
 
 }
-
 //gross and taxablePay are annual amounts
 case class ESCTotalIncome(
                    taxablePay: BigDecimal = BigDecimal(0.00),

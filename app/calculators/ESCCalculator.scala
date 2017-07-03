@@ -396,22 +396,20 @@ trait ESCCalculatorNi extends ESCConfig with ESCCalculatorHelpers {
 trait ESCCalculator extends ESCCalculatorHelpers with ESCCalculatorTax with ESCCalculatorNi {
   import scala.concurrent.ExecutionContext.Implicits.global
 
-  def determineSavingsPerClaimant(claimants: List[ESCClaimant], period: ESCPeriod, location: String): List[models.output.esc.ESCClaimant] = {
-    for(claimant <- claimants) yield {
-  def determineSavingsPerClaimant(period: ESCPeriod, location: String): List[models.output.esc.Claimant] = {
+  def determineSavingsPerClaimant(period: ESCPeriod, location: String): List[models.output.esc.ESCClaimant] = {
     // TODO: Make sure these are monthly cost
     val escAmountForPeriod = period.children.filter(_.qualifying).foldLeft(BigDecimal(0))((acc, child) => {
       acc + child.childCareCost
     })
 
-    val periodParent: Option[Claimant] = period.claimants.find(_.isPartner == false)
-    val periodPartner: Option[Claimant] = period.claimants.find(_.isPartner == true)
+    val periodParent: Option[ESCClaimant] = period.claimants.find(_.isPartner == false)
+    val periodPartner: Option[ESCClaimant] = period.claimants.find(_.isPartner == true)
 
     val (parentESCAmount, partnerESCAmount): (BigDecimal, BigDecimal) = (periodParent, periodPartner) match {
       case (Some(parent), Some(partner)) if parent.qualifying && partner.qualifying => {
-        val claimantsByIncome: List[Claimant] = period.claimants.sortBy(_.income.taxablePay)
-        val highestIncomeClaimant: Claimant = claimantsByIncome.head
-        val lowestIncomeClaimant: Claimant = claimantsByIncome.last
+        val claimantsByIncome: List[ESCClaimant] = period.claimants.sortBy(_.income.taxablePay)
+        val highestIncomeClaimant: ESCClaimant = claimantsByIncome.head
+        val lowestIncomeClaimant: ESCClaimant = claimantsByIncome.last
 
         val (personalAllowanceMonthlyHighestIncome, maximumReliefAmountHighestIncome) =
           calcReliefAmount(period, highestIncomeClaimant.income, highestIncomeClaimant.isESCStartDateBefore2011, escAmountForPeriod, location)
