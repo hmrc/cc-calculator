@@ -69,7 +69,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication {
         val inputJson = json.validate[TFCCalculatorInput]
         inputJson.isInstanceOf[JsSuccess[TFCCalculatorInput]] shouldBe true
 
-        val result: TFCCalculatorOutput = TFCCalculator.calculator.award(inputJson.get)
+        val result: TFCCalculatorOutput = TFCCalculator.award(inputJson.get)
         val resourceJson = JsonLoader.fromResource(s"/json/tfc/output/${scenario}.json")
         val outputJson: JsValue = Json.parse(resourceJson.toString)
 
