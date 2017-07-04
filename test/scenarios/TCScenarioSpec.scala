@@ -63,8 +63,8 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val result = json.validate[TCCalculatorInput]
       result.isInstanceOf[JsSuccess[TCCalculatorInput]] shouldBe true
 
-      val award = await(TCCalculator.calculator.award(result.get))
-      val incomeAdvice = await(TCCalculator.calculator.incomeAdvice(result.get))
+      val award = await(TCCalculator.award(result.get))
+      val incomeAdvice = await(TCCalculator.incomeAdvice(result.get))
 
       try {
         // loop over each period checking it's values
@@ -99,8 +99,8 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
-      val incomeAdvice = await(TCCalculator.calculator.incomeAdvice(result.get))
+      val award = await(TCCalculator.award(result.get))
+      val incomeAdvice = await(TCCalculator.incomeAdvice(result.get))
 
       try {
         // loop over each period checking it's values
@@ -134,7 +134,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_3.json")
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
-      val award = await(TCCalculator.calculator.award(result.get))
+      val award = await(TCCalculator.award(result.get))
 
       try {
         // loop over each period checking it's values
@@ -161,7 +161,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
 
 
 
-      val award = await(TCCalculator.calculator.award(result.get))
+      val award = await(TCCalculator.award(result.get))
 
       try {
         // loop over each period checking it's values
@@ -186,7 +186,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
+      val award = await(TCCalculator.award(result.get))
 
       try {
         // loop over each period checking it's values
@@ -211,7 +211,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
+      val award = await(TCCalculator.award(result.get))
 
       try {
         // loop over each period checking it's values
@@ -236,8 +236,8 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
-      val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
+      val award = await(TCCalculator.award(result.get))
+      val incomeAdvice = TCCalculator.incomeAdvice(result.get)
 
       try {
         // loop over each period checking it's values
@@ -272,8 +272,8 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
-      val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
+      val award = await(TCCalculator.award(result.get))
+      val incomeAdvice = TCCalculator.incomeAdvice(result.get)
 
       try {
         // loop over each period checking it's values
@@ -307,7 +307,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
+      val award = await(TCCalculator.award(result.get))
 
       try {
         // loop over each period checking it's values
@@ -331,7 +331,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_10.json")
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
-      val award = await(TCCalculator.calculator.award(result.get))
+      val award = await(TCCalculator.award(result.get))
 
       try {
         // loop over each period checking it's values
@@ -356,7 +356,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
+      val award = await(TCCalculator.award(result.get))
 
       try {
         // loop over each period checking it's values
@@ -381,7 +381,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
+      val award = await(TCCalculator.award(result.get))
 
       try {
         // loop over each period checking it's values
@@ -406,8 +406,8 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
-      val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
+      val award = await(TCCalculator.award(result.get))
+      val incomeAdvice = TCCalculator.incomeAdvice(result.get)
 
       try {
         // loop over each period checking it's values
@@ -441,8 +441,8 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
-      val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
+      val award = await(TCCalculator.award(result.get))
+      val incomeAdvice = TCCalculator.incomeAdvice(result.get)
 
       try {
         // loop over each period checking it's values
@@ -476,7 +476,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
+      val award = await(TCCalculator.award(result.get))
 
       try {
         // loop over each period checking it's values
@@ -501,7 +501,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
+      val award = await(TCCalculator.award(result.get))
 
       try {
         // loop over each period checking it's values
@@ -526,7 +526,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
+      val award = await(TCCalculator.award(result.get))
 
       try {
         // loop over each period checking it's values
@@ -551,7 +551,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
+      val award = await(TCCalculator.award(result.get))
 
       try {
         // loop over each period checking it's values
@@ -576,8 +576,8 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
-      val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
+      val award = await(TCCalculator.award(result.get))
+      val incomeAdvice = TCCalculator.incomeAdvice(result.get)
 
       try {
         // loop over each period checking it's values
@@ -611,8 +611,8 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
-      val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
+      val award = await(TCCalculator.award(result.get))
+      val incomeAdvice = TCCalculator.incomeAdvice(result.get)
 
       try {
         // loop over each period checking it's values
@@ -646,7 +646,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
+      val award = await(TCCalculator.award(result.get))
 
       try {
         // loop over each period checking it's values
@@ -671,7 +671,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
+      val award = await(TCCalculator.award(result.get))
 
       try {
         // loop over each period checking it's values
@@ -696,7 +696,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
+      val award = await(TCCalculator.award(result.get))
 
       try {
         // loop over each period checking it's values
@@ -722,7 +722,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
+      val award = await(TCCalculator.award(result.get))
 
       try {
         // loop over each period checking it's values
@@ -747,7 +747,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
+      val award = await(TCCalculator.award(result.get))
 
       try {
         // loop over each period checking it's values
@@ -772,7 +772,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
+      val award = await(TCCalculator.award(result.get))
 
       try {
         // loop over each period checking it's values
@@ -797,7 +797,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
+      val award = await(TCCalculator.award(result.get))
 
       try {
         // loop over each period checking it's values
@@ -822,7 +822,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
+      val award = await(TCCalculator.award(result.get))
 
       try {
         // loop over each period checking it's values
@@ -847,7 +847,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
+      val award = await(TCCalculator.award(result.get))
 
       try {
         // loop over each period checking it's values
@@ -872,7 +872,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
+      val award = await(TCCalculator.award(result.get))
 
       try {
         // loop over each period checking it's values
@@ -897,7 +897,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
+      val award = await(TCCalculator.award(result.get))
 
       try {
         // loop over each period checking it's values
@@ -922,7 +922,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
+      val award = await(TCCalculator.award(result.get))
 
       try {
         // loop over each period checking it's values
@@ -947,7 +947,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
+      val award = await(TCCalculator.award(result.get))
 
       try {
         // loop over each period checking it's values
@@ -972,7 +972,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
+      val award = await(TCCalculator.award(result.get))
 
       try {
         // loop over each period checking it's values
@@ -997,8 +997,8 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
-      val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
+      val award = await(TCCalculator.award(result.get))
+      val incomeAdvice = TCCalculator.incomeAdvice(result.get)
 
       try {
         // loop over each period checking it's values
@@ -1032,8 +1032,8 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
-      val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
+      val award = await(TCCalculator.award(result.get))
+      val incomeAdvice = TCCalculator.incomeAdvice(result.get)
 
       try {
         // loop over each period checking it's values
@@ -1067,7 +1067,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
+      val award = await(TCCalculator.award(result.get))
 
       try {
         // loop over each period checking it's values
@@ -1093,7 +1093,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
+      val award = await(TCCalculator.award(result.get))
 
       try {
         // loop over each period checking it's values
@@ -1118,7 +1118,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
+      val award = await(TCCalculator.award(result.get))
 
       try {
         // loop over each period checking it's values
@@ -1143,7 +1143,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
+      val award = await(TCCalculator.award(result.get))
 
       try {
         // loop over each period checking it's values
@@ -1168,7 +1168,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
+      val award = await(TCCalculator.award(result.get))
 
       try {
         // loop over each period checking it's values
@@ -1193,7 +1193,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
+      val award = await(TCCalculator.award(result.get))
 
       try {
         // loop over each period checking it's values
@@ -1218,7 +1218,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
+      val award = await(TCCalculator.award(result.get))
 
       try {
         // loop over each period checking it's values
@@ -1243,8 +1243,8 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
-      val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
+      val award = await(TCCalculator.award(result.get))
+      val incomeAdvice = TCCalculator.incomeAdvice(result.get)
 
       try {
         // loop over each period checking it's values
@@ -1278,7 +1278,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
+      val award = await(TCCalculator.award(result.get))
 
       try {
         // loop over each period checking it's values
@@ -1303,7 +1303,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
+      val award = await(TCCalculator.award(result.get))
 
       try {
         // loop over each period checking it's values
@@ -1327,7 +1327,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_47.json")
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
-      val award = await(TCCalculator.calculator.award(result.get))
+      val award = await(TCCalculator.award(result.get))
 
       try {
         // loop over each period checking it's values
@@ -1352,7 +1352,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_48.json")
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
-      val award = await(TCCalculator.calculator.award(result.get))
+      val award = await(TCCalculator.award(result.get))
 
       try {
         // loop over each period checking it's values
@@ -1376,7 +1376,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_49.json")
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
-      val award = await(TCCalculator.calculator.award(result.get))
+      val award = await(TCCalculator.award(result.get))
 
       try {
         // loop over each period checking it's values
@@ -1401,7 +1401,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
+      val award = await(TCCalculator.award(result.get))
 
       try {
         // loop over each period checking it's values
@@ -1429,8 +1429,8 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_51.json")
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
-      val award = await(TCCalculator.calculator.award(result.get))
-      val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
+      val award = await(TCCalculator.award(result.get))
+      val incomeAdvice = TCCalculator.incomeAdvice(result.get)
 
       try {
         // loop over each period checking it's values
@@ -1473,8 +1473,8 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
-      val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
+      val award = await(TCCalculator.award(result.get))
+      val incomeAdvice = TCCalculator.incomeAdvice(result.get)
 
       try {
         // loop over each period checking it's values
@@ -1517,8 +1517,8 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
-      val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
+      val award = await(TCCalculator.award(result.get))
+      val incomeAdvice = TCCalculator.incomeAdvice(result.get)
 
       try {
         // loop over each period checking it's values
@@ -1561,8 +1561,8 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
-      val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
+      val award = await(TCCalculator.award(result.get))
+      val incomeAdvice = TCCalculator.incomeAdvice(result.get)
 
       try {
         // loop over each period checking it's values
@@ -1596,8 +1596,8 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
-      val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
+      val award = await(TCCalculator.award(result.get))
+      val incomeAdvice = TCCalculator.incomeAdvice(result.get)
 
       try {
         // loop over each period checking it's values
@@ -1632,8 +1632,8 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
-      val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
+      val award = await(TCCalculator.award(result.get))
+      val incomeAdvice = TCCalculator.incomeAdvice(result.get)
 
       try {
         // loop over each period checking it's values
@@ -1668,8 +1668,8 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
-      val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
+      val award = await(TCCalculator.award(result.get))
+      val incomeAdvice = TCCalculator.incomeAdvice(result.get)
 
       try {
         // loop over each period checking it's values
@@ -1704,8 +1704,8 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
-      val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
+      val award = await(TCCalculator.award(result.get))
+      val incomeAdvice = TCCalculator.incomeAdvice(result.get)
 
       try {
         // loop over each period checking it's values
@@ -1749,8 +1749,8 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
-      val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
+      val award = await(TCCalculator.award(result.get))
+      val incomeAdvice = TCCalculator.incomeAdvice(result.get)
 
       try {
         // loop over each period checking it's values
@@ -1794,8 +1794,8 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
-      val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
+      val award = await(TCCalculator.award(result.get))
+      val incomeAdvice = TCCalculator.incomeAdvice(result.get)
 
       try {
         // loop over each period checking it's values
@@ -1839,8 +1839,8 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val taxYearProRataAward = await(TCCalculator.calculator.award(result.get))
-      val taxYearProRataIncomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
+      val taxYearProRataAward = await(TCCalculator.award(result.get))
+      val taxYearProRataIncomeAdvice = TCCalculator.incomeAdvice(result.get)
 
       try {
         // loop over each period checking it's values
@@ -1883,8 +1883,8 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
         val json: JsValue = Json.parse(resource.toString)
         val result = json.validate[TCCalculatorInput]
 
-        val award = await(TCCalculator.calculator.award(result.get))
-        val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
+        val award = await(TCCalculator.award(result.get))
+        val incomeAdvice = TCCalculator.incomeAdvice(result.get)
 
          try {
           val tys = award.taxYears.zipWithIndex
@@ -1931,8 +1931,8 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
-      val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
+      val award = await(TCCalculator.award(result.get))
+      val incomeAdvice = TCCalculator.incomeAdvice(result.get)
 
       try {
         // loop over each period checking it's values
@@ -1979,8 +1979,8 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
-      val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
+      val award = await(TCCalculator.award(result.get))
+      val incomeAdvice = TCCalculator.incomeAdvice(result.get)
 
       try {
         val taxYears = award.taxYears
@@ -2060,8 +2060,8 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
-      val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
+      val award = await(TCCalculator.award(result.get))
+      val incomeAdvice = TCCalculator.incomeAdvice(result.get)
 
       try {
         val taxYears = award.taxYears
@@ -2141,8 +2141,8 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
-      val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
+      val award = await(TCCalculator.award(result.get))
+      val incomeAdvice = TCCalculator.incomeAdvice(result.get)
 
       try {
         val taxYears = award.taxYears
@@ -2224,8 +2224,8 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
-      val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
+      val award = await(TCCalculator.award(result.get))
+      val incomeAdvice = TCCalculator.incomeAdvice(result.get)
 
       try {
         val tys = award.taxYears.zipWithIndex
@@ -2272,8 +2272,8 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
-      val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
+      val award = await(TCCalculator.award(result.get))
+      val incomeAdvice = TCCalculator.incomeAdvice(result.get)
 
       try {
         // loop over each period checking it's values
@@ -2320,8 +2320,8 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
-      val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
+      val award = await(TCCalculator.award(result.get))
+      val incomeAdvice = TCCalculator.incomeAdvice(result.get)
 
       try {
         val taxYears = award.taxYears
@@ -2401,8 +2401,8 @@ class TCScenarioSpec extends UnitSpec with FakeCCCalculatorApplication with Vali
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
 
-      val award = await(TCCalculator.calculator.award(result.get))
-      val incomeAdvice = TCCalculator.calculator.incomeAdvice(result.get)
+      val award = await(TCCalculator.award(result.get))
+      val incomeAdvice = TCCalculator.incomeAdvice(result.get)
 
       try {
         val taxYears = award.taxYears
