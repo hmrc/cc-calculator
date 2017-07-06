@@ -29,7 +29,7 @@ trait ESCConfig extends CCConfig with ServicesConfig with MessagesObject with Lo
   lazy val lowerTaxYearsLimitValidation = getInt(s"esc.tax-years-lower-limit")
   lazy val lowerClaimantsLimitValidation = getInt(s"esc.claimants-lower-limit")
   lazy val pre2011MaxExemptionMonthly = conf.getDouble(s"esc.pre-2011-maximum-exemption.basic-higher-additional.monthly").getOrElse(0.00)
-  lazy val localTaxEnabled: Boolean = getBoolean("esc.local-tax-enabled")
+
 
   def getConfig(currentDate: LocalDate, niCategoryCode: String, location: String): ESCTaxYearConfig = {
     val configs: Seq[play.api.Configuration] = conf.getConfigSeq("esc.rule-change").get
@@ -47,12 +47,8 @@ trait ESCConfig extends CCConfig with ServicesConfig with MessagesObject with Lo
     // get the ni Category
     val niCat = getNiCategory(niCategoryCode, config)
 
-    val localConfig = if(localTaxEnabled) {
-      config.getConfig(s"tax.${location}").getOrElse(config.getConfig("tax.default").get)
-    }
-    else {
-      config.getConfig("tax.default").get
-    }
+    val localConfig = config.getConfig(s"tax.${location}").getOrElse(config.getConfig("tax.default").get)
+
     ESCTaxYearConfig(
       post2011MaxExemptionMonthlyBasic = config.getDouble("post-2011-maximum-exemption.basic.monthly").get,
       post2011MaxExemptionMonthlyHigher = config.getDouble("post-2011-maximum-exemption.higher.monthly").get,

@@ -358,51 +358,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication {
       val escTaxYearConfig = ESCConfig.getConfig(fromDate,"A", location)
       escTaxYearConfig.taxBasicBandCapacity shouldBe 32000.00
     }
-
-    "Return ESCTaxYearConfig when localTaxEnabled is false and niCategoryCode is empty" in {
-
-      class TestConfig extends ESCConfig {
-        override lazy val localTaxEnabled: Boolean = false
-      }
-
-      val testConfig = new TestConfig
-      val pattern = "dd-MM-yyyy"
-      val formatter = DateTimeFormat.forPattern(pattern)
-      val fromDate = LocalDate.parse("23-05-2016", formatter)
-      val config = testConfig.getConfig(fromDate,"", location)
-
-      val niCat = NiCategory(
-        niCategoryCode = "A",
-        lelMonthlyLowerLimitForCat = 0.00,
-        lelMonthlyUpperLimitForCat = 485.00,
-        lelRateForCat = 0.00,
-        lelPtMonthlyLowerLimitForCat = 486.00,
-        lelPtMonthlyUpperLimitForCat = 672.00,
-        lelPtRateForCat = 0.00,
-        ptUelMonthlyLowerLimitForCat = 673.00,
-        ptUelMonthlyUpperLimitForCat = 3583.00,
-        ptUelRateForCat = 12.00,
-        aboveUelMonthlyLowerLimitForCat = 3584.00,
-        aboveUelRateForCat = 2.00
-      )
-      val taxYear =  ESCTaxYearConfig(
-        post2011MaxExemptionMonthlyBasic = 243.00,
-        post2011MaxExemptionMonthlyHigher = 124.00,
-        post2011MaxExemptionMonthlyAdditional = 110.00,
-        defaultTaxCode = "1100L",
-        personalAllowanceRate = 0.00,
-        defaultPersonalAllowance = 11000,
-        taxBasicRate = 20.00,
-        taxBasicBandCapacity = 32000.00,
-        taxHigherRate = 40.00,
-        taxHigherBandUpperLimit = 150000.00,
-        taxAdditionalRate = 45.00,
-        taxAdditionalBandLowerLimit= 150000.01,
-        niCategory = niCat
-      )
-      config shouldBe taxYear
-
-    }
+    
 
   }
 }
