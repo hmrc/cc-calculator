@@ -87,6 +87,11 @@ class CCCalculatorHelperSpec extends UnitSpec with FakeCCCalculatorApplication {
       result shouldBe 50.00
     }
 
+    "return 0 if invalid period is given" in {
+      val result : BigDecimal = helper.amountToQuarterlyAmount(200, Periods.INVALID)
+      result shouldBe 0
+    }
+
     "return the number of days between two dates" in {
       val fromDate = LocalDate.now()
       val toDate = fromDate.plusDays(11)
@@ -108,6 +113,106 @@ class CCCalculatorHelperSpec extends UnitSpec with FakeCCCalculatorApplication {
       "convert yearly amount to monthly" in {
         val result = helper.amountToMonthlyAmount(6240, Periods.Yearly)
         result shouldBe 520
+      }
+
+      "return 0 if invalid period is given" in {
+        val result = helper.amountToMonthlyAmount(6240, Periods.INVALID)
+        result shouldBe 0
+      }
+    }
+
+    "amountFromPeriodToDaily" should {
+      "return 0 if invalid period is given" in {
+        val result = helper.amountFromPeriodToDaily(6240, Periods.INVALID, 365)
+        result shouldBe 0
+      }
+    }
+
+    "amountToWeeklyAmount" should {
+      "convert weekly amount to weekly" in {
+        val result = helper.amountToWeeklyAmount(120, Periods.Weekly)
+        result shouldBe 120
+      }
+
+      "convert monthly amount to weekly" in {
+        val result = helper.amountToWeeklyAmount(520, Periods.Monthly)
+        result shouldBe 120
+      }
+
+      "convert yearly amount to weekly" in {
+        val result = helper.amountToWeeklyAmount(6240, Periods.Yearly)
+        result shouldBe 120
+      }
+
+      "return 0 if invalid period is given" in {
+        val result = helper.amountToWeeklyAmount(6240, Periods.INVALID)
+        result shouldBe 0
+      }
+    }
+
+    "amountToAnnualAmount" should {
+      "convert weekly amount to yearly" in {
+        val result = helper.amountToAnnualAmount(120, Periods.Weekly)
+        result shouldBe 6240
+      }
+
+      "convert monthly amount to yearly" in {
+        val result = helper.amountToAnnualAmount(520, Periods.Monthly)
+        result shouldBe 6240
+      }
+
+      "convert yearly amount to yearly" in {
+        val result = helper.amountToAnnualAmount(6240, Periods.Yearly)
+        result shouldBe 6240
+      }
+
+      "return 0 if invalid period is given" in {
+        val result = helper.amountToAnnualAmount(6240, Periods.INVALID)
+        result shouldBe 0
+      }
+    }
+
+    "monthlyAmountToPeriod" should {
+      "convert monthly amount to weekly" in {
+        val result = helper.monthlyAmountToPeriod(520, Periods.Weekly)
+        result shouldBe 120
+      }
+
+      "convert monthly amount to monthly" in {
+        val result = helper.monthlyAmountToPeriod(520, Periods.Monthly)
+        result shouldBe 520
+      }
+
+      "convert monthly amount to yearly" in {
+        val result = helper.monthlyAmountToPeriod(520, Periods.Yearly)
+        result shouldBe 6240
+      }
+
+      "return 0 if invalid period is given" in {
+        val result = helper.monthlyAmountToPeriod(520, Periods.INVALID)
+        result shouldBe 0
+      }
+    }
+
+    "annualAmountToPeriod" should {
+      "convert yearly amount to weekly" in {
+        val result = helper.annualAmountToPeriod(6240, Periods.Weekly)
+        result shouldBe 120
+      }
+
+      "convert yearly amount to monthly" in {
+        val result = helper.annualAmountToPeriod(6240, Periods.Monthly)
+        result shouldBe 520
+      }
+
+      "convert yearly amount to yearly" in {
+        val result = helper.annualAmountToPeriod(6240, Periods.Yearly)
+        result shouldBe 6240
+      }
+
+      "return 0 if invalid period is given" in {
+        val result = helper.annualAmountToPeriod(6240, Periods.INVALID)
+        result shouldBe 0
       }
     }
   }

@@ -49,8 +49,8 @@ class TFCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
 
     "Return Internal Server Error with error message if an exception is thrown during calculation " in {
 
-      val mockTFCCalculatorController = new TFCCalculatorController(applicationMessagesApi) with TFCCalculator {
-        override val calculator = mock[TFCCalculatorService]
+      val mockTFCCalculatorController = new TFCCalculatorController(applicationMessagesApi) {
+        override val calculator = mock[TFCCalculator]
         override val auditEvent = mock[AuditEvents]
       }
 
@@ -77,8 +77,8 @@ class TFCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
 
     "Valid JSON at /tax-free-childcare/calculate" in {
 
-      val mockTFCCalculatorController = new TFCCalculatorController(applicationMessagesApi) with TFCCalculator {
-        override val calculator = mock[TFCCalculatorService]
+      val mockTFCCalculatorController = new TFCCalculatorController(applicationMessagesApi) {
+        override val calculator = mock[TFCCalculator]
         override val auditEvent = mock[AuditEvents]
       }
 
@@ -93,8 +93,8 @@ class TFCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
 
     "Accept invalid JSON at /tfc/calculate and return a BadRequest with an error (0 TFC Periods)" in {
 
-      val mockTFCCalculatorController = new TFCCalculatorController(applicationMessagesApi) with TFCCalculator {
-        override val calculator = mock[TFCCalculatorService]
+      val mockTFCCalculatorController = new TFCCalculatorController(applicationMessagesApi) {
+        override val calculator = mock[TFCCalculator]
         override val auditEvent = mock[AuditEvents]
       }
 
@@ -131,8 +131,8 @@ class TFCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
 
     "Accept invalid JSON at /tax-free-childcare/calculate and return a BadRequest with an error (negative value in childcare cost)" in {
 
-      val mockTFCCalculatorController = new TFCCalculatorController(applicationMessagesApi) with TFCCalculator {
-        override val calculator = mock[TFCCalculatorService]
+      val mockTFCCalculatorController = new TFCCalculatorController(applicationMessagesApi) {
+        override val calculator = mock[TFCCalculator]
         override val auditEvent = mock[AuditEvents]
       }
 
@@ -169,8 +169,8 @@ class TFCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
 
     "Accept invalid JSON at /tfc/calculate and return a BadRequest with an error (no children)" in {
 
-      val mockTFCCalculatorController = new TFCCalculatorController(applicationMessagesApi) with TFCCalculator {
-        override val calculator = mock[TFCCalculatorService]
+      val mockTFCCalculatorController = new TFCCalculatorController(applicationMessagesApi) {
+        override val calculator = mock[TFCCalculator]
         override val auditEvent = mock[AuditEvents]
       }
 
@@ -207,8 +207,8 @@ class TFCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
 
     "Accept invalid JSON at /tax-free-childcare/calculate and return a BadRequest with an error (date missing)" in {
 
-      val mockTFCCalculatorController = new TFCCalculatorController(applicationMessagesApi) with TFCCalculator {
-        override val calculator = mock[TFCCalculatorService]
+      val mockTFCCalculatorController = new TFCCalculatorController(applicationMessagesApi) {
+        override val calculator = mock[TFCCalculator]
         override val auditEvent = mock[AuditEvents]
       }
 
@@ -245,8 +245,8 @@ class TFCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
 
     "Accept invalid JSON at /tax-free-childcare/calculate and return a BadRequest with an error (Invalid data type)" in {
 
-      val mockTFCCalculatorController = new TFCCalculatorController(applicationMessagesApi) with TFCCalculator {
-        override val calculator = mock[TFCCalculatorService]
+      val mockTFCCalculatorController = new TFCCalculatorController(applicationMessagesApi) {
+        override val calculator = mock[TFCCalculator]
         override val auditEvent = mock[AuditEvents]
       }
 
@@ -281,8 +281,8 @@ class TFCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
 
     "Valid JSON at /tax-free-childcare/calculate(child from and until date is null)" in {
 
-      val mockTFCCalculatorController = new TFCCalculatorController(applicationMessagesApi) with TFCCalculator {
-        override val calculator = mock[TFCCalculatorService]
+      val mockTFCCalculatorController = new TFCCalculatorController(applicationMessagesApi) {
+        override val calculator = mock[TFCCalculator]
         override val auditEvent = mock[AuditEvents]
       }
 
@@ -297,8 +297,8 @@ class TFCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
 
     "Invalid JSON at /tax-free-childcare/calculate(no disability field)" in {
 
-      val mockTFCCalculatorController = new TFCCalculatorController(applicationMessagesApi) with TFCCalculator {
-        override val calculator = mock[TFCCalculatorService]
+      val mockTFCCalculatorController = new TFCCalculatorController(applicationMessagesApi) {
+        override val calculator = mock[TFCCalculator]
         override val auditEvent = mock[AuditEvents]
       }
 
@@ -313,8 +313,8 @@ class TFCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
 
     "Valid JSON at /tax-free-childcare/calculate(TFC Award Calculation Wire up)" in {
 
-      val mockTFCCalculatorController = new TFCCalculatorController(applicationMessagesApi) with TFCCalculator {
-        override val calculator = mock[TFCCalculatorService]
+      val mockTFCCalculatorController = new TFCCalculatorController(applicationMessagesApi) {
+        override val calculator = mock[TFCCalculator]
         override val auditEvent = mock[AuditEvents]
       }
 
@@ -329,8 +329,8 @@ class TFCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
 
     "Accept invalid JSON at /tax-free-childcare/calculate(TFC Award Calculation Wire up - wrong scheme(esc))" in {
 
-      val mockTFCCalculatorController = new TFCCalculatorController(applicationMessagesApi) with TFCCalculator {
-        override val calculator = mock[TFCCalculatorService]
+      val mockTFCCalculatorController = new TFCCalculatorController(applicationMessagesApi) {
+        override val calculator = mock[TFCCalculator]
         override val auditEvent = mock[AuditEvents]
       }
 

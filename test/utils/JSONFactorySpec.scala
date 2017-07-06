@@ -177,7 +177,7 @@ class JSONFactorySpec extends FakeCCCalculatorApplication {
 
       result match {
         case JsSuccess(x, _) =>
-          val setup = await(TCCalculator.calculator.award(x))
+          val setup = await(TCCalculator.award(x))
           Json.toJson(setup) shouldBe outputJson
         case _ => throw new Exception
       }
@@ -272,7 +272,7 @@ class JSONFactorySpec extends FakeCCCalculatorApplication {
 
       result match {
         case JsSuccess(x, _) =>
-          val setup = await(TCCalculator.calculator.incomeAdvice(x))
+          val setup = await(TCCalculator.incomeAdvice(x))
           Json.toJson(setup) shouldBe outputJson
         case _ => throw new Exception
       }

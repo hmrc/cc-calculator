@@ -38,7 +38,7 @@ import play.api.i18n.Messages.Implicits._
 class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with MockitoSugar {
 
   val mockTaxCreditCalculatorController = new TaxCreditCalculatorController(applicationMessagesApi) with TCCalculator {
-    override val calculator =  mock[TCCalculatorService]
+    override val calculator =  mock[TCCalculator]
     override val auditEvent = mock[AuditEvents]
   }
 
@@ -154,7 +154,7 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
       val inputJson = Json.parse(JsonLoader.fromResource("/json/tc/input/2016/scenario_1.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
       val JsonResult = inputJson.validate[TCCalculatorInput]
-      val award = TCCalculator.calculator.award(JsonResult.get)
+      val award = TCCalculator.award(JsonResult.get)
 
       when(controller.calculator.award(mockEq(JsonResult.get))).thenReturn(Future.successful(award))
       val result = await(controller.calculate()(request))
@@ -219,7 +219,7 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
       val inputJson = Json.parse(JsonLoader.fromResource("/json/tc/input/2016/scenario_52.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
       val JsonResult = inputJson.validate[TCCalculatorInput]
-      val award = TCCalculator.calculator.incomeAdvice(JsonResult.get)
+      val award = TCCalculator.incomeAdvice(JsonResult.get)
 
       when(controller.calculator.incomeAdvice(mockEq(JsonResult.get))).thenReturn(Future.successful(award))
       val result = await(controller.incomeAdvice()(request))
@@ -315,7 +315,7 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
 
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
       val JsonResult = inputJson.validate[TCCalculatorInput]
-      val award = TCCalculator.calculator.award(JsonResult.get)
+      val award = TCCalculator.award(JsonResult.get)
 
       when(controller.calculator.award(mockEq(JsonResult.get))).thenReturn(Future.successful(award))
       val result = await(controller.calculate()(request))
@@ -406,7 +406,7 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
 
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
       val JsonResult = inputJson.validate[TCCalculatorInput]
-      val incomeAdvice = TCCalculator.calculator.incomeAdvice(JsonResult.get)
+      val incomeAdvice = TCCalculator.incomeAdvice(JsonResult.get)
 
       when(controller.calculator.incomeAdvice(mockEq(JsonResult.get))).thenReturn(Future.successful(incomeAdvice))
       val result = await(controller.incomeAdvice()(request))
@@ -497,7 +497,7 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
 
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
       val JsonResult = inputJson.validate[TCCalculatorInput]
-      val incomeAdvice = TCCalculator.calculator.incomeAdvice(JsonResult.get)
+      val incomeAdvice = TCCalculator.incomeAdvice(JsonResult.get)
 
       when(controller.calculator.incomeAdvice(mockEq(JsonResult.get))).thenReturn(Future.successful(incomeAdvice))
       val result = await(controller.incomeAdvice()(request))
