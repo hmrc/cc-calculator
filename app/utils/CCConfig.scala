@@ -18,14 +18,12 @@ package utils
 
 import java.text.SimpleDateFormat
 import java.util.Calendar
-
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
-import play.api.{Logger, Play, Configuration}
-import play.api.Play._
+import play.api.Configuration
 import uk.gov.hmrc.play.config.ServicesConfig
 
-trait CCConfig extends CCFormat with ServicesConfig {
+trait CCConfig extends ServicesConfig {
 
   val formatterDatePattern = "dd-MM-yyyy"
 

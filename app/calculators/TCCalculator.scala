@@ -17,11 +17,10 @@
 package calculators
 
 import models.input.tc._
-import models.output.tc.{Element, Elements, TCCalculation, TaxYear}
-import org.joda.time.{Days, LocalDate}
+import models.output.tc.{Element, Elements, TCCalculatorOutput, TaxYear}
+import org.joda.time.LocalDate
 import utils.{TCConfig, Periods}
 import scala.concurrent.Future
-import scala.math.BigDecimal.RoundingMode
 
 trait TCCalculatorElements extends TCCalculatorTapering {
 
@@ -548,11 +547,11 @@ trait TCCalculator extends TCCalculatorElements {
 
   import scala.concurrent.ExecutionContext.Implicits.global
 
-  def award(request: TCCalculatorInput): Future[models.output.tc.TCCalculation] = {
+  def award(request: TCCalculatorInput): Future[models.output.tc.TCCalculatorOutput] = {
     awardPeriod(request, false)
   }
 
-  def incomeAdvice(request: TCCalculatorInput): Future[models.output.tc.TCCalculation] = {
+  def incomeAdvice(request: TCCalculatorInput): Future[models.output.tc.TCCalculatorOutput] = {
     awardPeriod(request, true)
   }
 
@@ -712,7 +711,7 @@ trait TCCalculator extends TCCalculatorElements {
   }
 
   private def createTCCalculation(calculatedTaxYears: List[TaxYear], annualIncome: BigDecimal, incomeAdvice: Boolean = false) = {
-    TCCalculation(
+    TCCalculatorOutput(
       from = calculatedTaxYears.head.from,
       until = {
         if (calculatedTaxYears.length > 1) {

@@ -2029,7 +2029,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       result shouldBe -16643.1728
     }
 
-    "Return advice amount set in the total award model of TCCalculation (Successful)" in {
+    "Return advice amount set in the total award model of TCCalculatorOutput (Successful)" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_1.json")
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
@@ -2049,7 +2049,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       }
     }
 
-    "Return advice amount set in the total award model of TCCalculation (Successful) (Multiple Tax years)" in {
+    "Return advice amount set in the total award model of TCCalculatorOutput (Successful) (Multiple Tax years)" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2017/scenario_3.json")
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]

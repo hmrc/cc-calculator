@@ -18,7 +18,7 @@ package models.output.esc
 
 import org.joda.time.LocalDate
 import play.api.libs.json.{Json, Writes}
-import utils.{CCFormat, Periods}
+import utils.Periods
 
 /**
  * Created by user on 18/06/15.
@@ -30,7 +30,7 @@ case class ESCCalculatorOutput(
                                 taxYears: List[ESCTaxYear]
                            )
 
-object ESCCalculatorOutput extends CCFormat {
+object ESCCalculatorOutput {
   implicit val escCalculationWrites: Writes[ESCCalculatorOutput] = Json.writes[ESCCalculatorOutput]
 }
 
@@ -41,7 +41,7 @@ case class ESCTaxYear(
                        claimants: List[ESCClaimant]
                     )
 
-object ESCTaxYear extends CCFormat {
+object ESCTaxYear {
   implicit val TaxYearWrites: Writes[ESCTaxYear] = Json.writes[ESCTaxYear]
 }
 
@@ -51,7 +51,7 @@ case class ESCSavings(
                     niSaving: BigDecimal = BigDecimal(0.00)
                     )
 
-object ESCSavings extends CCFormat {
+object ESCSavings {
   implicit val SavingsWrites : Writes[ESCSavings] = Json.writes[ESCSavings]
 }
 
@@ -69,7 +69,7 @@ case class ESCClaimant(
                         taxAndNIAfterSacrifice: ESCTaxAndNi
                      )
 
-object ESCClaimant extends CCFormat {
+object ESCClaimant {
   implicit val claimantWrites: Writes[ESCClaimant] = Json.writes[ESCClaimant]
 }
 
@@ -80,7 +80,7 @@ case class ESCIncome(
                    niCategory: String = ""
                    )
 
-object ESCIncome extends CCFormat {
+object ESCIncome {
   implicit val IncomeWrites : Writes[ESCIncome] = Json.writes[ESCIncome]
 }
 
@@ -89,6 +89,6 @@ case class ESCTaxAndNi(
   niPaid: BigDecimal = BigDecimal(0.00)
  )
 
-object ESCTaxAndNi extends CCFormat {
+object ESCTaxAndNi {
   implicit val taxAndNIWrites: Writes[ESCTaxAndNi] = Json.writes[ESCTaxAndNi]
 }

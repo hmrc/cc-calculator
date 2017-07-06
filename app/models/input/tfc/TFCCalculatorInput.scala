@@ -30,8 +30,7 @@ case class TFCCalculatorInput(
                            periods: List[TFCPeriod]
                            )
 
-
-object TFCCalculatorInput extends CCFormat with MessagesObject {
+object TFCCalculatorInput extends MessagesObject {
   implicit val tfcEligibilityFormat: Reads[TFCCalculatorInput] = (
     (JsPath \ "from").read[LocalDate](jodaLocalDateReads(datePattern)) and
       (JsPath \ "until").read[LocalDate](jodaLocalDateReads(datePattern)) and
@@ -49,7 +48,7 @@ case class TFCPeriod(
   def configRule : TFCTaxYearConfig = TFCConfig.getConfig(from)
 }
 
-object TFCPeriod extends CCFormat with MessagesObject {
+object TFCPeriod extends MessagesObject {
 
   implicit val periodFormat : Reads[TFCPeriod] = (
     (JsPath \ "from").read[LocalDate](jodaLocalDateReads(datePattern)) and
@@ -78,7 +77,7 @@ case class TFCChild(
 
 }
 
-object TFCChild extends CCFormat with MessagesObject {
+object TFCChild extends MessagesObject {
 
   def childSpendValidation(cost: BigDecimal) : Boolean = {
     cost >= BigDecimal(0.00)

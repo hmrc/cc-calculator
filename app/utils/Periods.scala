@@ -19,22 +19,11 @@ package utils
 import play.api.Logger
 import play.api.libs.json._
 
-/**
- * Created by adamconder on 08/06/15.
- */
 object EnumUtils {
   def enumReads[E <: Enumeration](enum: E): Reads[E#Value] =
     new Reads[E#Value] {
       def reads(json: JsValue): JsResult[E#Value] = json match {
-        case JsString(s) => {
-          try {
-            JsSuccess(enum.withName(s))
-          } catch {
-            case _: NoSuchElementException =>
-              Logger.warn(s"EnumUtils.enumReads - JsError::: ${enum.getClass}, but it does not appear to contain the value: $s")
-              JsError(s"Enumeration expected of type: '${enum.getClass}', but it does not appear to contain the value: '$s'")
-          }
-        }
+        case JsString(s) => JsSuccess(enum.withName(s))
         case _ =>
           Logger.warn(s"EnumUtils.enumReads - JsError::: String value expected")
           JsError("String value expected")
@@ -46,9 +35,6 @@ object EnumUtils {
       def writes(v: E#Value): JsValue = JsString(v.toString)
     }
 
-  implicit def enumFormat[E <: Enumeration](enum: E): Format[E#Value] = {
-    Format(enumReads(enum), enumWrites)
-  }
 }
 
 object Periods extends Enumeration with MessagesObject {
