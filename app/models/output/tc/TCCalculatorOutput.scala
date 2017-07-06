@@ -19,15 +19,15 @@ package models.output.tc
 import org.joda.time.LocalDate
 import play.api.libs.json._
 
-object TCCalculation {
-  implicit val TCCalculationWrites: Writes[TCCalculation] = Json.writes[TCCalculation]
+object TCCalculatorOutput {
+  implicit val TCCalculationWrites: Writes[TCCalculatorOutput] = Json.writes[TCCalculatorOutput]
 }
 
-case class TCCalculation(from: LocalDate,
-                         until: LocalDate,
-                         totalAwardAmount: BigDecimal = 0.00,
-                         houseHoldAdviceAmount: BigDecimal = 0.00,
-                         taxYears: List[TaxYear]
+case class TCCalculatorOutput(from: LocalDate,
+                              until: LocalDate,
+                              totalAwardAmount: BigDecimal = 0.00,
+                              houseHoldAdviceAmount: BigDecimal = 0.00,
+                              taxYears: List[TaxYear]
                         )
 
 object TaxYear {

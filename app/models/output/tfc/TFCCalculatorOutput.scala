@@ -18,7 +18,6 @@ package models.output.tfc
 
 import org.joda.time.LocalDate
 import play.api.libs.json.{Json, Writes}
-import utils.CCFormat
 
 /**
  * Created by user on 18/06/15.
@@ -29,7 +28,7 @@ case class TFCCalculatorOutput(
                                 periods: List[TFCPeriod]
                            )
 
-object TFCCalculatorOutput extends CCFormat {
+object TFCCalculatorOutput {
   implicit val tfcCalculationWrites : Writes[TFCCalculatorOutput] = Json.writes[TFCCalculatorOutput]
 }
 
@@ -40,7 +39,7 @@ case class TFCPeriod(
                       children: List[TFCOutputChild]
                       )
 
-object TFCPeriod extends CCFormat{
+object TFCPeriod {
   implicit val periodWrites : Writes[TFCPeriod] = Json.writes[TFCPeriod]
 }
 
@@ -49,7 +48,7 @@ case class TFCOutputChild(
                         childContribution : TFCContribution
                         )
 
-object TFCOutputChild extends CCFormat {
+object TFCOutputChild {
   implicit val childWrites : Writes[TFCOutputChild] = Json.writes[TFCOutputChild]
 }
 
