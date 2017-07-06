@@ -30,35 +30,37 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with org.scalatest.PrivateMethodTester {
 
-  "TCCalculator" should {
+  val tcCalculator = new TCCalculator { }
+
+  "tcCalculator" should {
 
     "round up for double numbers if less than 5" in {
       val cost: BigDecimal = 12.241212342
-      val result: BigDecimal = TCCalculator.roundup(cost)
+      val result: BigDecimal = tcCalculator.roundup(cost)
       result shouldBe 12.25
     }
 
     "round up for double numbers if less than 5 (.00001)" in {
       val cost: BigDecimal = 12.00001
-      val result: BigDecimal = TCCalculator.roundup(cost)
+      val result: BigDecimal = tcCalculator.roundup(cost)
       result shouldBe 12.01
     }
 
     "round up for double numbers if more than 5 (.9599)" in {
       val cost: BigDecimal = 12.9599231531231
-      val result: BigDecimal = TCCalculator.roundup(cost)
+      val result: BigDecimal = tcCalculator.roundup(cost)
       result shouldBe 12.96
     }
 
     "round up for double numbers if less than 5 (.4444)" in {
       val cost: BigDecimal = 12.4444000000001
-      val result: BigDecimal = TCCalculator.roundup(cost)
+      val result: BigDecimal = tcCalculator.roundup(cost)
       result shouldBe 12.45
     }
 
     "not round up for double numbers if all digits after decimal point are 0" in {
       val cost: BigDecimal = 12.9800
-      val result: BigDecimal = TCCalculator.roundup(cost)
+      val result: BigDecimal = tcCalculator.roundup(cost)
       result shouldBe 12.98
     }
 
@@ -67,7 +69,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-04-2016", formatter)
       //String representation in order to test the whole value
-      val result = TCCalculator.amountForDateRange(BigDecimal(0.00), Periods.Weekly, fromDate, toDate)
+      val result = tcCalculator.amountForDateRange(BigDecimal(0.00), Periods.Weekly, fromDate, toDate)
       result shouldBe BigDecimal(0.00)
     }
 
@@ -76,7 +78,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val fromDate = LocalDate.parse("2017-05-01", formatter)
       val toDate = LocalDate.parse("2017-05-21", formatter)
       //String representation in order to test the whole value
-      val result: String = TCCalculator.amountForDateRange(cost, Periods.Weekly, fromDate, toDate).toString()
+      val result: String = tcCalculator.amountForDateRange(cost, Periods.Weekly, fromDate, toDate).toString()
       result shouldBe "2849.40"
     }
 
@@ -85,7 +87,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val fromDate = LocalDate.parse("2017-05-01", formatter)
       val toDate = LocalDate.parse("2017-05-21", formatter)
       //String representation in order to test the whole value
-      val result: String = TCCalculator.amountForDateRange(cost, Periods.Monthly, fromDate, toDate).toString()
+      val result: String = tcCalculator.amountForDateRange(cost, Periods.Monthly, fromDate, toDate).toString()
       result shouldBe "66.40"
     }
 
@@ -94,7 +96,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val fromDate = LocalDate.parse("2017-05-01", formatter)
       val toDate = LocalDate.parse("2017-05-21", formatter)
       //String representation in order to test the whole value
-      val result: String = TCCalculator.amountForDateRange(cost, Periods.Yearly, fromDate, toDate).toString()
+      val result: String = tcCalculator.amountForDateRange(cost, Periods.Yearly, fromDate, toDate).toString()
       result shouldBe "547.80"
     }
 
@@ -102,7 +104,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val cost: BigDecimal = 1000.00
       val fromDate = LocalDate.parse("2017-05-01", formatter)
       val toDate = LocalDate.parse("2017-05-21", formatter)
-      val result: BigDecimal = TCCalculator.amountForDateRange(cost, Periods.Weekly, fromDate, toDate)
+      val result: BigDecimal = tcCalculator.amountForDateRange(cost, Periods.Weekly, fromDate, toDate)
       result shouldBe 2849.40
     }
 
@@ -110,7 +112,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val cost: BigDecimal = 100.99
       val fromDate = LocalDate.parse("2017-05-01", formatter)
       val toDate = LocalDate.parse("2017-05-21", formatter)
-      val result: BigDecimal = TCCalculator.amountForDateRange(cost, Periods.Monthly, fromDate, toDate)
+      val result: BigDecimal = tcCalculator.amountForDateRange(cost, Periods.Monthly, fromDate, toDate)
       result shouldBe 66.400
     }
 
@@ -118,7 +120,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val cost: BigDecimal = 9999.01
       val fromDate = LocalDate.parse("2017-05-01", formatter)
       val toDate = LocalDate.parse("2017-05-21", formatter)
-      val result: BigDecimal = TCCalculator.amountForDateRange(cost, Periods.Yearly, fromDate, toDate)
+      val result: BigDecimal = tcCalculator.amountForDateRange(cost, Periods.Yearly, fromDate, toDate)
       result shouldBe 547.80
     }
 
@@ -126,7 +128,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val cost: BigDecimal = 1000.00
       val fromDate = LocalDate.parse("2017-05-01", formatter)
       val toDate = LocalDate.parse("2017-05-21", formatter)
-      val result: BigDecimal = TCCalculator.amountForDateRange(cost, Periods.Weekly, fromDate, toDate)
+      val result: BigDecimal = tcCalculator.amountForDateRange(cost, Periods.Weekly, fromDate, toDate)
       result shouldBe 2849.40
     }
 
@@ -134,7 +136,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val cost: BigDecimal = 100.99
       val fromDate = LocalDate.parse("2017-05-01", formatter)
       val toDate = LocalDate.parse("2017-05-21", formatter)
-      val result: BigDecimal = TCCalculator.amountForDateRange(cost, Periods.Monthly, fromDate, toDate)
+      val result: BigDecimal = tcCalculator.amountForDateRange(cost, Periods.Monthly, fromDate, toDate)
       result shouldBe 66.40
     }
 
@@ -142,7 +144,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val cost: BigDecimal = 9999.01
       val fromDate = LocalDate.parse("2017-05-01", formatter)
       val toDate = LocalDate.parse("2017-05-21", formatter)
-      val result: BigDecimal = TCCalculator.amountForDateRange(cost, Periods.Yearly, fromDate, toDate)
+      val result: BigDecimal = tcCalculator.amountForDateRange(cost, Periods.Yearly, fromDate, toDate)
       result shouldBe 547.80
     }
 
@@ -150,7 +152,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val cost: BigDecimal = 1000.00
       val fromDate = LocalDate.parse("2017-05-01", formatter)
       val toDate = LocalDate.parse("2017-05-21", formatter)
-      val result: BigDecimal = TCCalculator.amountForDateRange(cost, Periods.Weekly, fromDate, toDate)
+      val result: BigDecimal = tcCalculator.amountForDateRange(cost, Periods.Weekly, fromDate, toDate)
       result shouldBe 2849.40
     }
 
@@ -158,7 +160,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val cost: BigDecimal = 100.99
       val fromDate = LocalDate.parse("2017-05-01", formatter)
       val toDate = LocalDate.parse("2017-05-21", formatter)
-      val result: BigDecimal = TCCalculator.amountForDateRange(cost, Periods.Monthly, fromDate, toDate)
+      val result: BigDecimal = tcCalculator.amountForDateRange(cost, Periods.Monthly, fromDate, toDate)
       result shouldBe 66.40
     }
 
@@ -166,7 +168,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val cost: BigDecimal = 9999.01
       val fromDate = LocalDate.parse("2017-05-01", formatter)
       val toDate = LocalDate.parse("2017-05-21", formatter)
-      val result: BigDecimal = TCCalculator.amountForDateRange(cost, Periods.Yearly, fromDate, toDate)
+      val result: BigDecimal = tcCalculator.amountForDateRange(cost, Periods.Yearly, fromDate, toDate)
       result shouldBe 547.80
     }
 
@@ -174,7 +176,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val cost: BigDecimal = 1000.00
       val fromDate = LocalDate.parse("2017-05-01", formatter)
       val toDate = LocalDate.parse("2017-05-21", formatter)
-      val result: BigDecimal = TCCalculator.amountForDateRange(cost, Periods.Monthly, fromDate, toDate)
+      val result: BigDecimal = tcCalculator.amountForDateRange(cost, Periods.Monthly, fromDate, toDate)
       result shouldBe 657.60
     }
 
@@ -182,7 +184,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val cost: BigDecimal = 1000.00
       val fromDate = LocalDate.parse("2017-05-01", formatter)
       val toDate = LocalDate.parse("2017-05-21", formatter)
-      val result: BigDecimal = TCCalculator.amountForDateRange(cost, Periods.Yearly, fromDate, toDate)
+      val result: BigDecimal = tcCalculator.amountForDateRange(cost, Periods.Yearly, fromDate, toDate)
       result shouldBe 54.80
     }
 
@@ -190,7 +192,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val cost: BigDecimal = 1000.00
       val fromDate = LocalDate.parse("2016-12-12", formatter)
       val toDate = LocalDate.parse("2017-04-06", formatter)
-      val result: BigDecimal = TCCalculator.amountForDateRange(cost, Periods.Monthly, fromDate, toDate)
+      val result: BigDecimal = tcCalculator.amountForDateRange(cost, Periods.Monthly, fromDate, toDate)
       result shouldBe 3781.20
     }
 
@@ -199,7 +201,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val fromDate = LocalDate.parse("2016-12-12", formatter)
       val toDate = LocalDate.parse("2017-04-06", formatter)
       //String representation in order to test the whole value
-      val result: String = TCCalculator.amountForDateRange(cost, Periods.Monthly, fromDate, toDate).toString()
+      val result: String = tcCalculator.amountForDateRange(cost, Periods.Monthly, fromDate, toDate).toString()
       result shouldBe "3781.20"
     }
 
@@ -210,33 +212,33 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
 
       val income = BigDecimal(17000)
       val thresholdIncome = BigDecimal(4000)
-      val result = TCCalculator.earningsAmountToTaperForPeriod(income, thresholdIncome, period)
+      val result = tcCalculator.earningsAmountToTaperForPeriod(income, thresholdIncome, period)
       result shouldBe BigDecimal(5330.00)
     }
 
     "Determine net amount per element per period (taper amount is larger than element's max amount)" in {
       val taperAmount = BigDecimal(17000)
       val maximumAmount = BigDecimal(4000)
-      val result = TCCalculator.netAmountPerElementPerPeriod(taperAmount, maximumAmount)
+      val result = tcCalculator.netAmountPerElementPerPeriod(taperAmount, maximumAmount)
       result shouldBe BigDecimal(0.00)
     }
 
     "Determine net amount per element per period (taper amount is lower than element's max amount)" in {
       val taperAmount = BigDecimal(200)
       val maximumAmount = BigDecimal(17000)
-      val result = TCCalculator.netAmountPerElementPerPeriod(taperAmount, maximumAmount)
+      val result = tcCalculator.netAmountPerElementPerPeriod(taperAmount, maximumAmount)
       result shouldBe BigDecimal(16800.00)
     }
 
     "Determine percentage of an amount" in {
       val amount = BigDecimal(10000.00)
       val percentage = 10
-      val result = TCCalculator.getPercentOfAmount(amount, percentage)
+      val result = tcCalculator.getPercentOfAmount(amount, percentage)
       result shouldBe BigDecimal(1000.00)
     }
 
     "Return an instance of TCCalculator" in {
-      val calc = TCCalculator
+      val calc = tcCalculator
       calc.isInstanceOf[TCCalculator] shouldBe true
     }
 
@@ -245,7 +247,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
       val period = result.get.taxYears.head.periods
-      val basicElement = TCCalculator.basicElementForPeriod(period.head)
+      val basicElement = tcCalculator.basicElementForPeriod(period.head)
       basicElement shouldBe BigDecimal(1025.67)
     }
 
@@ -266,7 +268,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
         claimants = List(),
         children = List()
       )
-      val getsBasicElement = TCCalculator.basicElementForPeriod(period)
+      val getsBasicElement = tcCalculator.basicElementForPeriod(period)
       getsBasicElement shouldBe BigDecimal(0.00)
     }
 
@@ -275,7 +277,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
       val period = result.get.taxYears.head.periods
-      val hours30Element = TCCalculator.hours30ElementForPeriod(period.head)
+      val hours30Element = tcCalculator.hours30ElementForPeriod(period.head)
       hours30Element shouldBe BigDecimal(424.02)
     }
 
@@ -285,7 +287,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val result = json.validate[TCCalculatorInput]
       val period = result.get.taxYears.head.periods
       val claimant = period.head.claimants.head
-      val workerDisabiltyElement = TCCalculator.disabledWorkerElementForPeriod(period.head, claimant)
+      val workerDisabiltyElement = tcCalculator.disabledWorkerElementForPeriod(period.head, claimant)
       workerDisabiltyElement shouldBe BigDecimal(1554.74)
     }
 
@@ -295,7 +297,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val result = json.validate[TCCalculatorInput]
       val period = result.get.taxYears.head.periods
       val claimant = period.head.claimants.head
-      val severelyDisabledWorkerElement = TCCalculator.severelyDisabledWorkerElementForPeriod(period.head, claimant)
+      val severelyDisabledWorkerElement = tcCalculator.severelyDisabledWorkerElementForPeriod(period.head, claimant)
       severelyDisabledWorkerElement shouldBe BigDecimal(666.59)
     }
 
@@ -304,7 +306,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
       val period = result.get.taxYears.head.periods
-      val loneParentElement = TCCalculator.loneParentElementForPeriod(period.head)
+      val loneParentElement = tcCalculator.loneParentElementForPeriod(period.head)
       loneParentElement shouldBe BigDecimal(1052.41)
     }
 
@@ -313,7 +315,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
       val period = result.get.taxYears.head.periods
-      val coupleElement = TCCalculator.secondAdultElementForPeriod(period.head)
+      val coupleElement = tcCalculator.secondAdultElementForPeriod(period.head)
       coupleElement shouldBe BigDecimal(1052.41)
     }
 
@@ -322,7 +324,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
       val period = result.get.taxYears.head.periods
-      val familyElement = TCCalculator.maxFamilyElementForPeriod(period.head)
+      val familyElement = tcCalculator.maxFamilyElementForPeriod(period.head)
       familyElement shouldBe BigDecimal(284.59)
     }
 
@@ -331,7 +333,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
       val period = result.get.taxYears.head.periods.tail.head
-      val familyElement = TCCalculator.maxFamilyElementForPeriod(period)
+      val familyElement = tcCalculator.maxFamilyElementForPeriod(period)
       familyElement shouldBe BigDecimal(0.00)
     }
 
@@ -340,7 +342,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
       val period = result.get.taxYears.head.periods
-      val childElement = TCCalculator.childOrYoungAdultBasicElementForPeriod(period.head, period.head.children.head)
+      val childElement = tcCalculator.childOrYoungAdultBasicElementForPeriod(period.head, period.head.children.head)
       childElement shouldBe BigDecimal(1455.42)
     }
 
@@ -349,7 +351,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
       val period = result.get.taxYears.head.periods.tail.head
-      val childElement = TCCalculator.childOrYoungAdultBasicElementForPeriod(period, period.children.head)
+      val childElement = tcCalculator.childOrYoungAdultBasicElementForPeriod(period, period.children.head)
       childElement shouldBe BigDecimal(0.00)
     }
 
@@ -358,7 +360,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
       val period = result.get.taxYears.head.periods
-      val childDisabiltyElement = TCCalculator.childOrYoungAdultDisabilityElementForPeriod(period.head, period.head.children.head)
+      val childDisabiltyElement = tcCalculator.childOrYoungAdultDisabilityElementForPeriod(period.head, period.head.children.head)
       childDisabiltyElement shouldBe BigDecimal(1642.60)
     }
 
@@ -367,7 +369,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
       val period = result.get.taxYears.head.periods
-      val childDisabiltyElement = TCCalculator.childOrYoungAdultDisabilityElementForPeriod(period.head, period.head.children.head)
+      val childDisabiltyElement = tcCalculator.childOrYoungAdultDisabilityElementForPeriod(period.head, period.head.children.head)
       childDisabiltyElement shouldBe BigDecimal(0.00)
     }
 
@@ -376,7 +378,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
       val period = result.get.taxYears.head.periods
-      val childSevereDisabiltyElement = TCCalculator.childOrYoungAdultSevereDisabilityElementForPeriod(period.head, period.head.children.head)
+      val childSevereDisabiltyElement = tcCalculator.childOrYoungAdultSevereDisabilityElementForPeriod(period.head, period.head.children.head)
       childSevereDisabiltyElement shouldBe BigDecimal(666.59)
     }
 
@@ -385,7 +387,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
       val period = result.get.taxYears.head.periods
-      val childSevereDisabiltyElement = TCCalculator.childOrYoungAdultSevereDisabilityElementForPeriod(period.head, period.head.children.head)
+      val childSevereDisabiltyElement = tcCalculator.childOrYoungAdultSevereDisabilityElementForPeriod(period.head, period.head.children.head)
       childSevereDisabiltyElement shouldBe BigDecimal(0.00)
     }
 
@@ -394,7 +396,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
       val period = result.get.taxYears.head.periods
-      val childElement = TCCalculator.maxChildElementForPeriod(period.head)
+      val childElement = tcCalculator.maxChildElementForPeriod(period.head)
       childElement shouldBe BigDecimal(8318.05)
     }
 
@@ -403,11 +405,11 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
       val period = result.get.taxYears.head.periods
-      val period1ChildElement = TCCalculator.maxChildElementForPeriod(period.head)
+      val period1ChildElement = tcCalculator.maxChildElementForPeriod(period.head)
       period1ChildElement shouldBe BigDecimal(1232.72)
 
       // second period
-      val period2ChildElement = TCCalculator.maxChildElementForPeriod(period.tail.head)
+      val period2ChildElement = tcCalculator.maxChildElementForPeriod(period.tail.head)
       period2ChildElement shouldBe BigDecimal(0.00)
     }
 
@@ -416,11 +418,11 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
       val period = result.get.taxYears.head.periods
-      val period1ChildElement = TCCalculator.maxChildElementForPeriod(period.head)
+      val period1ChildElement = tcCalculator.maxChildElementForPeriod(period.head)
       period1ChildElement shouldBe BigDecimal(1158.24)
 
       // second period
-      val period2ChildElement = TCCalculator.maxChildElementForPeriod(period.tail.head)
+      val period2ChildElement = tcCalculator.maxChildElementForPeriod(period.tail.head)
       period2ChildElement shouldBe BigDecimal(876.30)
     }
 
@@ -433,7 +435,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
         children = List())
 
       val decoratedChildCareThreshold = PrivateMethod[BigDecimal]('getChildcareThresholdPerWeek)
-      val result = TCCalculator invokePrivate decoratedChildCareThreshold(inputPeriod)
+      val result = tcCalculator invokePrivate decoratedChildCareThreshold(inputPeriod)
       result shouldBe BigDecimal(0.00)
     }
 
@@ -449,7 +451,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
         children = List(child))
 
       val decoratedChildCareThreshold = PrivateMethod[BigDecimal]('getChildcareThresholdPerWeek)
-      val result = TCCalculator invokePrivate decoratedChildCareThreshold(inputPeriod)
+      val result = tcCalculator invokePrivate decoratedChildCareThreshold(inputPeriod)
       result shouldBe BigDecimal(175.00)
     }
 
@@ -467,7 +469,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
         children = List(child1, child2))
 
       val decoratedChildCareThreshold = PrivateMethod[BigDecimal]('getChildcareThresholdPerWeek)
-      val result = TCCalculator invokePrivate decoratedChildCareThreshold(inputPeriod)
+      val result = tcCalculator invokePrivate decoratedChildCareThreshold(inputPeriod)
       result shouldBe BigDecimal(175.00)
     }
 
@@ -488,7 +490,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
         children = List(child1, child2, child3, child4, child5))
 
       val decoratedChildCareThreshold = PrivateMethod[BigDecimal]('getChildcareThresholdPerWeek)
-      val result = TCCalculator invokePrivate decoratedChildCareThreshold(inputPeriod)
+      val result = tcCalculator invokePrivate decoratedChildCareThreshold(inputPeriod)
       result shouldBe BigDecimal(300.00)
     }
 
@@ -497,10 +499,10 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
       val period = result.get.taxYears.head.periods
-      val period1ChildElement = TCCalculator.maxChildElementForPeriod(period.head)
+      val period1ChildElement = tcCalculator.maxChildElementForPeriod(period.head)
       period1ChildElement shouldBe BigDecimal(1232.72)
       // second period
-      val period2ChildElement = TCCalculator.maxChildElementForPeriod(period.tail.head)
+      val period2ChildElement = tcCalculator.maxChildElementForPeriod(period.tail.head)
       period2ChildElement shouldBe BigDecimal(0.00)
     }
 
@@ -509,7 +511,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
       val period = result.get.taxYears.head.periods
-      val period1ChildElement = TCCalculator.maxChildElementForPeriod(period.head)
+      val period1ChildElement = tcCalculator.maxChildElementForPeriod(period.head)
       period1ChildElement shouldBe BigDecimal(0.00)
     }
 
@@ -518,7 +520,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
       val period = result.get.taxYears.head.periods
-      val workElement = TCCalculator.maxWorkElementForPeriod(period.head)
+      val workElement = tcCalculator.maxWorkElementForPeriod(period.head)
       workElement shouldBe BigDecimal(5187.56)
     }
 
@@ -527,7 +529,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
       val period = result.get.taxYears.head.periods
-      val workElement = TCCalculator.maxWorkElementForPeriod(period.head)
+      val workElement = tcCalculator.maxWorkElementForPeriod(period.head)
       workElement shouldBe BigDecimal(4056.84)
     }
 
@@ -536,7 +538,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
       val period = result.get.taxYears.head.periods
-      val workElement = TCCalculator.maxWorkElementForPeriod(period.head)
+      val workElement = tcCalculator.maxWorkElementForPeriod(period.head)
       workElement shouldBe BigDecimal(6944.76)
     }
 
@@ -545,7 +547,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
       val period = result.get.taxYears.head.periods
-      val workElement = TCCalculator.maxWorkElementForPeriod(period.head)
+      val workElement = tcCalculator.maxWorkElementForPeriod(period.head)
       workElement shouldBe BigDecimal(1025.67)
     }
 
@@ -554,7 +556,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
       val period = result.get.taxYears.head.periods
-      val workElement = TCCalculator.maxWorkElementForPeriod(period.head)
+      val workElement = tcCalculator.maxWorkElementForPeriod(period.head)
       workElement shouldBe BigDecimal(2580.41)
     }
 
@@ -563,7 +565,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
       val period = result.get.taxYears.head.periods
-      val wtcChildcareElement = TCCalculator.maxChildcareElementForPeriod(period.head)
+      val wtcChildcareElement = tcCalculator.maxChildcareElementForPeriod(period.head)
       wtcChildcareElement shouldBe BigDecimal(878.41)
     }
 
@@ -572,7 +574,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
       val period = result.get.taxYears.head.periods
-      val wtcChildcareElement = TCCalculator.maxChildcareElementForPeriod(period.head)
+      val wtcChildcareElement = tcCalculator.maxChildcareElementForPeriod(period.head)
       wtcChildcareElement shouldBe BigDecimal(3333.14)
     }
 
@@ -581,7 +583,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
       val period = result.get.taxYears.head.periods
-      val wtcChildcareElement = TCCalculator.maxChildcareElementForPeriod(period.head)
+      val wtcChildcareElement = tcCalculator.maxChildcareElementForPeriod(period.head)
       wtcChildcareElement shouldBe BigDecimal(5687.60)
     }
 
@@ -590,7 +592,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
       val period = result.get.taxYears.head.periods
-      val wtcChildcareElement = TCCalculator.maxChildcareElementForPeriod(period.head)
+      val wtcChildcareElement = tcCalculator.maxChildcareElementForPeriod(period.head)
       wtcChildcareElement shouldBe BigDecimal(5700.97)
     }
 
@@ -599,7 +601,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
       val period = result.get.taxYears.head.periods
-      val wtcChildcareElement = TCCalculator.maxChildcareElementForPeriod(period.head)
+      val wtcChildcareElement = tcCalculator.maxChildcareElementForPeriod(period.head)
       wtcChildcareElement shouldBe BigDecimal(5714.34)
     }
 
@@ -608,7 +610,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
       val period = result.get.taxYears.head.periods
-      val wtcChildcareElement = TCCalculator.maxChildcareElementForPeriod(period.head)
+      val wtcChildcareElement = tcCalculator.maxChildcareElementForPeriod(period.head)
       wtcChildcareElement shouldBe BigDecimal(2637.90)
     }
 
@@ -617,7 +619,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
       val period = result.get.taxYears.head.periods
-      val wtcChildcareElement = TCCalculator.maxChildcareElementForPeriod(period.head)
+      val wtcChildcareElement = tcCalculator.maxChildcareElementForPeriod(period.head)
       wtcChildcareElement shouldBe BigDecimal(5714.34)
     }
 
@@ -628,7 +630,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val fromDate = LocalDate.parse("2016-09-27", formatter)
       val toDate = LocalDate.parse("2017-04-06", formatter)
-      val award = TCCalculator.award(result.get)
+      val award = tcCalculator.award(result.get)
       award.from shouldBe fromDate
       award.until shouldBe toDate
     }
@@ -640,7 +642,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val fromDate = LocalDate.parse("2016-09-27", formatter)
       val toDate = LocalDate.parse("2017-04-06", formatter)
-      val award = TCCalculator.award(result.get)
+      val award = tcCalculator.award(result.get)
       award.from shouldBe fromDate
       award.until shouldBe toDate
     }
@@ -650,7 +652,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
       val period = result.get.taxYears.head.periods
-      val threshold = TCCalculator.wtcIncomeThresholdForPeriod(period.head)
+      val threshold = tcCalculator.wtcIncomeThresholdForPeriod(period.head)
       threshold shouldBe BigDecimal(3359.69)
     }
 
@@ -659,7 +661,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
       val period = result.get.taxYears.head.periods
-      val threshold = TCCalculator.ctcIncomeThresholdForPeriod(period.head)
+      val threshold = tcCalculator.ctcIncomeThresholdForPeriod(period.head)
       threshold shouldBe BigDecimal(8426.92)
     }
 
@@ -668,7 +670,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
       val period = result.get.taxYears.head.periods
-      val threshold = TCCalculator.wtcIncomeThresholdForPeriod(period.head)
+      val threshold = tcCalculator.wtcIncomeThresholdForPeriod(period.head)
       threshold shouldBe BigDecimal(3359.69)
     }
 
@@ -677,7 +679,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCCalculatorInput]
       val period = result.get.taxYears.head.periods
-      val threshold = TCCalculator.ctcIncomeThresholdForPeriod(period.head)
+      val threshold = tcCalculator.ctcIncomeThresholdForPeriod(period.head)
       threshold shouldBe BigDecimal(8426.92)
     }
 
@@ -687,7 +689,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val result = json.validate[TCCalculatorInput]
       val period = result.get.taxYears.head.periods
       val income = 17000 
-      val threshold = TCCalculator.incomeForPeriod(income, period.head)
+      val threshold = tcCalculator.incomeForPeriod(income, period.head)
       threshold shouldBe BigDecimal(8896.78)
     }
 
@@ -697,7 +699,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val result = json.validate[TCCalculatorInput]
       val period = result.get.taxYears.head.periods
       val income = 34000
-      val threshold = TCCalculator.incomeForPeriod(income, period.head)
+      val threshold = tcCalculator.incomeForPeriod(income, period.head)
       threshold shouldBe BigDecimal(17791.65)
     }
 
@@ -706,7 +708,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val fromDate = LocalDate.parse("01-12-2016", formatter)
       val threshold = TCConfig.getConfig(fromDate).thresholds.wtcIncomeThreshold
       val income = BigDecimal(6420.01)
-      val result = TCCalculator.isTaperingRequiredForElements(income, threshold)
+      val result = tcCalculator.isTaperingRequiredForElements(income, threshold)
       result shouldBe true
     }
 
@@ -715,7 +717,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val fromDate = LocalDate.parse("01-12-2016", formatter)
       val threshold = TCConfig.getConfig(fromDate).thresholds.wtcIncomeThreshold
       val income = BigDecimal(6420.00)
-      val result = TCCalculator.isTaperingRequiredForElements(income, threshold)
+      val result = tcCalculator.isTaperingRequiredForElements(income, threshold)
       result shouldBe false
     }
 
@@ -724,21 +726,21 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val fromDate = LocalDate.parse("01-12-2016", formatter)
       val threshold = TCConfig.getConfig(fromDate).thresholds.wtcIncomeThreshold
       val income = BigDecimal(200.00)
-      val result = TCCalculator.isTaperingRequiredForElements(income, threshold)
+      val result = tcCalculator.isTaperingRequiredForElements(income, threshold)
       result shouldBe false
     }
 
     "Determine which amount is higher (one amount is higher)" in {
       val amount = BigDecimal(100.00)
       val higherAmount = BigDecimal(100.0001)
-      val result = TCCalculator.getHigherAmount(amount, higherAmount)
+      val result = tcCalculator.getHigherAmount(amount, higherAmount)
       result shouldBe higherAmount
     }
 
     "Determine which amount is higher (both amounts are the same)" in {
       val amount = BigDecimal(100.00)
       val higherAmount = BigDecimal(100.00)
-      val result = TCCalculator.getHigherAmount(amount, higherAmount)
+      val result = tcCalculator.getHigherAmount(amount, higherAmount)
       result shouldBe higherAmount
       higherAmount shouldBe amount
     }
@@ -774,7 +776,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
 
       val inputPeriod = models.input.tc.TCPeriod(from = fromDate, until = untilDate, householdElements = TCHouseholdElements(), claimants = List(), children = List())
 
-      val result = TCCalculator.generateRequiredAmountsPerPeriod(period, inputPeriod, income, wtcThreshold, ctcThreshold)
+      val result = tcCalculator.generateRequiredAmountsPerPeriod(period, inputPeriod, income, wtcThreshold, ctcThreshold)
       result.elements.wtcWorkElement.netAmount shouldBe BigDecimal(4737.70)
       result.elements.wtcChildcareElement.netAmount shouldBe BigDecimal(748.80)
       result.elements.ctcIndividualElement.netAmount shouldBe BigDecimal(5504.20)
@@ -812,7 +814,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
 
       val inputPeriod = models.input.tc.TCPeriod(from = fromDate, until = untilDate, householdElements = TCHouseholdElements(), claimants = List(), children = List())
 
-      val result = TCCalculator.generateRequiredAmountsPerPeriod(period, inputPeriod, income, wtcThreshold, ctcThreshold)
+      val result = tcCalculator.generateRequiredAmountsPerPeriod(period, inputPeriod, income, wtcThreshold, ctcThreshold)
       result.elements.wtcWorkElement.netAmount shouldBe BigDecimal(0.00)
       result.elements.wtcChildcareElement.netAmount shouldBe BigDecimal(0.00)
       result.elements.ctcIndividualElement.netAmount shouldBe BigDecimal(0.00)
@@ -852,7 +854,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
 
       val inputPeriod = models.input.tc.TCPeriod(from = fromDate, until = untilDate, householdElements = TCHouseholdElements(), claimants = List(claimantClaimingSocialSecurityBenefit), children = List())
 
-      val result = TCCalculator.generateRequiredAmountsPerPeriod(period, inputPeriod, income, wtcThreshold, ctcThreshold)
+      val result = tcCalculator.generateRequiredAmountsPerPeriod(period, inputPeriod, income, wtcThreshold, ctcThreshold)
       result.elements.wtcWorkElement.netAmount shouldBe BigDecimal(4737.70)
       result.elements.wtcChildcareElement.netAmount shouldBe BigDecimal(748.80)
       result.elements.ctcIndividualElement.netAmount shouldBe BigDecimal(5504.20)
@@ -892,7 +894,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
 
       val inputPeriod = models.input.tc.TCPeriod(from = fromDate, until = untilDate, householdElements = TCHouseholdElements(), claimants = List(claimantClaimingSocialSecurityBenefit), children = List())
 
-      val result = TCCalculator.generateRequiredAmountsPerPeriod(period, inputPeriod, income, wtcThreshold, ctcThreshold)
+      val result = tcCalculator.generateRequiredAmountsPerPeriod(period, inputPeriod, income, wtcThreshold, ctcThreshold)
       result.elements.wtcWorkElement.netAmount shouldBe BigDecimal(0.00)
       result.elements.wtcChildcareElement.netAmount shouldBe BigDecimal(0.00)
       result.elements.ctcIndividualElement.netAmount shouldBe BigDecimal(0.00)
@@ -933,7 +935,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
 
       val inputPeriod = models.input.tc.TCPeriod(from = fromDate, until = untilDate, householdElements = TCHouseholdElements(), claimants = List(claimant, claimantClaimingSocialSecurityBenefit), children = List())
 
-      val result = TCCalculator.generateRequiredAmountsPerPeriod(period, inputPeriod, income, wtcThreshold, ctcThreshold)
+      val result = tcCalculator.generateRequiredAmountsPerPeriod(period, inputPeriod, income, wtcThreshold, ctcThreshold)
       result.elements.wtcWorkElement.netAmount shouldBe BigDecimal(4737.70)
       result.elements.wtcChildcareElement.netAmount shouldBe BigDecimal(748.80)
       result.elements.ctcIndividualElement.netAmount shouldBe BigDecimal(5504.20)
@@ -974,7 +976,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
 
       val inputPeriod = models.input.tc.TCPeriod(from = fromDate, until = untilDate, householdElements = TCHouseholdElements(), claimants = List(claimantClaimingSocialSecurityBenefit1, claimantClaimingSocialSecurityBenefit2), children = List())
 
-      val result = TCCalculator.generateRequiredAmountsPerPeriod(period, inputPeriod, income, wtcThreshold, ctcThreshold)
+      val result = tcCalculator.generateRequiredAmountsPerPeriod(period, inputPeriod, income, wtcThreshold, ctcThreshold)
       result.elements.wtcWorkElement.netAmount shouldBe BigDecimal(4737.70)
       result.elements.wtcChildcareElement.netAmount shouldBe BigDecimal(748.80)
       result.elements.ctcIndividualElement.netAmount shouldBe BigDecimal(5504.20)
@@ -1015,7 +1017,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
 
       val inputPeriod = models.input.tc.TCPeriod(from = fromDate, until = untilDate, householdElements = TCHouseholdElements(), claimants = List(claimant1, claimant2), children = List())
 
-      val result = TCCalculator.generateRequiredAmountsPerPeriod(period, inputPeriod, income, wtcThreshold, ctcThreshold)
+      val result = tcCalculator.generateRequiredAmountsPerPeriod(period, inputPeriod, income, wtcThreshold, ctcThreshold)
       result.elements.wtcWorkElement.netAmount shouldBe BigDecimal(0.00)
       result.elements.wtcChildcareElement.netAmount shouldBe BigDecimal(0.00)
       result.elements.ctcIndividualElement.netAmount shouldBe BigDecimal(0.00)
@@ -1031,7 +1033,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
         case JsSuccess(x, _) =>
           // period 1
           val p = x.taxYears.head.periods.head
-          val setup = TCCalculator.generateMaximumAmountsForPeriod(p)
+          val setup = tcCalculator.generateMaximumAmountsForPeriod(p)
           setup.elements.wtcWorkElement.maximumAmount shouldBe BigDecimal(2078.08)
           setup.elements.wtcChildcareElement.maximumAmount shouldBe BigDecimal(878.41)
           setup.elements.ctcIndividualElement.maximumAmount shouldBe BigDecimal(1455.42)
@@ -1046,7 +1048,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val result = json.validate[TCCalculatorInput]
 
       val p = result.get.taxYears.head.periods.head
-      val setup = TCCalculator.generateMaximumAmountsForPeriod(p)
+      val setup = tcCalculator.generateMaximumAmountsForPeriod(p)
       setup.elements.wtcWorkElement.maximumAmount shouldBe BigDecimal(1025.67)
       setup.elements.wtcChildcareElement.maximumAmount shouldBe BigDecimal(0.00)
       setup.elements.ctcIndividualElement.maximumAmount shouldBe BigDecimal(0.00)
@@ -1059,9 +1061,9 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
       val result = json.validate[TCCalculatorInput]
       val p = result.get.taxYears.head.periods.head
       val income = 17000 //x.taxYears.head.houseHoldIncome
-      val setup = TCCalculator.generateMaximumAmountsForPeriod(p)
-      val i = TCCalculator.incomeForPeriod(income, p)
-      val incomeThreshold = TCCalculator.wtcIncomeThresholdForPeriod(period = p)
+      val setup = tcCalculator.generateMaximumAmountsForPeriod(p)
+      val i = tcCalculator.incomeForPeriod(income, p)
+      val incomeThreshold = tcCalculator.wtcIncomeThresholdForPeriod(period = p)
   
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val fromDate = LocalDate.parse("2016-09-27", formatter)
@@ -1095,7 +1097,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
         )
       )
   
-      val taperedPeriodModel = TCCalculator.taperFirstElement(period = setup, inputPeriod = inputPeriod, income = i, wtcIncomeThreshold = incomeThreshold)
+      val taperedPeriodModel = tcCalculator.taperFirstElement(period = setup, inputPeriod = inputPeriod, income = i, wtcIncomeThreshold = incomeThreshold)
       taperedPeriodModel shouldBe output
     }
 
@@ -1130,7 +1132,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
 
       val inputPeriod = models.input.tc.TCPeriod(from = fromDate, until = untilDate, householdElements = TCHouseholdElements(), claimants = List(), children = List())
 
-      val taperFirstAmount = TCCalculator.taperFirstElement(period, inputPeriod, income, wtcIncomeThreshold)
+      val taperFirstAmount = tcCalculator.taperFirstElement(period, inputPeriod, income, wtcIncomeThreshold)
       taperFirstAmount.elements.wtcWorkElement.netAmount shouldBe BigDecimal(0.00)
       taperFirstAmount.elements.wtcWorkElement.taperAmount shouldBe BigDecimal(4737.70)
     }
@@ -1159,7 +1161,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
         )
       )
       val decoratedOutputModel = PrivateMethod[models.output.tc.Period]('getPeriodAmount)
-      val result = TCCalculator invokePrivate decoratedOutputModel(inputedModel, totalMaximumAmount, true)
+      val result = tcCalculator invokePrivate decoratedOutputModel(inputedModel, totalMaximumAmount, true)
       result.elements.wtcWorkElement.maximumAmount shouldBe BigDecimal(100.00)
       result.elements.wtcChildcareElement.maximumAmount shouldBe BigDecimal(100.00)
       result.elements.ctcIndividualElement.maximumAmount shouldBe BigDecimal(100.00)
@@ -1196,7 +1198,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
 
       val inputPeriod = models.input.tc.TCPeriod(from = fromDate, until = untilDate, householdElements = TCHouseholdElements(), claimants = List(), children = List())
 
-      val taperFirstAmount = TCCalculator.taperFirstElement(period, inputPeriod, income, wtcIncomeThreshold)
+      val taperFirstAmount = tcCalculator.taperFirstElement(period, inputPeriod, income, wtcIncomeThreshold)
       taperFirstAmount.elements.wtcWorkElement.netAmount shouldBe BigDecimal(343.70)
       taperFirstAmount.elements.wtcWorkElement.taperAmount shouldBe BigDecimal(5494.00)
     }
@@ -1233,7 +1235,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
 
       val inputPeriod = models.input.tc.TCPeriod(from = fromDate, until = untilDate, householdElements = TCHouseholdElements(), claimants = List(), children = List())
 
-      val taperSecondAmount = TCCalculator.taperSecondElement(period, inputPeriod, income, wtcIncomeThreshold)
+      val taperSecondAmount = tcCalculator.taperSecondElement(period, inputPeriod, income, wtcIncomeThreshold)
       taperSecondAmount.elements.wtcChildcareElement.netAmount shouldBe BigDecimal(728.80)
       taperSecondAmount.elements.wtcChildcareElement.taperAmount shouldBe BigDecimal(0.00)
     }
@@ -1270,7 +1272,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
 
       val inputPeriod = models.input.tc.TCPeriod(from = fromDate, until = untilDate, householdElements = TCHouseholdElements(), claimants = List(), children = List())
 
-      val taperSecondAmount = TCCalculator.taperSecondElement(period, inputPeriod, income, wtcIncomeThreshold)
+      val taperSecondAmount = tcCalculator.taperSecondElement(period, inputPeriod, income, wtcIncomeThreshold)
       taperSecondAmount.elements.wtcChildcareElement.netAmount shouldBe BigDecimal(0.00)
       taperSecondAmount.elements.wtcChildcareElement.taperAmount shouldBe BigDecimal(728.80)
     }
@@ -1307,7 +1309,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
 
       val inputPeriod = models.input.tc.TCPeriod(from = fromDate, until = untilDate, householdElements = TCHouseholdElements(), claimants = List(), children = List())
 
-      val taperSecondAmount = TCCalculator.taperSecondElement(period, inputPeriod, income, wtcIncomeThreshold)
+      val taperSecondAmount = tcCalculator.taperSecondElement(period, inputPeriod, income, wtcIncomeThreshold)
       taperSecondAmount.elements.wtcChildcareElement.netAmount shouldBe BigDecimal(72.50)
       taperSecondAmount.elements.wtcChildcareElement.taperAmount shouldBe BigDecimal(756.30)
     }
@@ -1347,7 +1349,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
 
       val inputPeriod = models.input.tc.TCPeriod(from = fromDate, until = untilDate, householdElements = TCHouseholdElements(), claimants = List(), children = List())
 
-      val taperThirdAmount = TCCalculator.taperThirdElement(period, inputPeriod, income, wtcIncomeThreshold, ctcIncomeThreshold)
+      val taperThirdAmount = tcCalculator.taperThirdElement(period, inputPeriod, income, wtcIncomeThreshold, ctcIncomeThreshold)
       taperThirdAmount._1.elements.ctcIndividualElement.netAmount shouldBe BigDecimal(5504.20)
       taperThirdAmount._1.elements.ctcIndividualElement.taperAmount shouldBe BigDecimal(0.00)
       taperThirdAmount._2 shouldBe false
@@ -1387,7 +1389,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
 
       val inputPeriod = models.input.tc.TCPeriod(from = fromDate, until = untilDate, householdElements = TCHouseholdElements(), claimants = List(), children = List())
 
-      val taperThirdAmount = TCCalculator.taperThirdElement(period, inputPeriod, income, wtcIncomeThreshold, ctcIncomeThreshold)
+      val taperThirdAmount = tcCalculator.taperThirdElement(period, inputPeriod, income, wtcIncomeThreshold, ctcIncomeThreshold)
       taperThirdAmount._1.elements.ctcIndividualElement.netAmount shouldBe BigDecimal(0.00)
       taperThirdAmount._1.elements.ctcIndividualElement.taperAmount shouldBe BigDecimal(500.20)
       taperThirdAmount._2 shouldBe true
@@ -1428,7 +1430,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
 
       val inputPeriod = models.input.tc.TCPeriod(from = fromDate, until = untilDate, householdElements = TCHouseholdElements(), claimants = List(), children = List())
 
-      val taperThirdAmount = TCCalculator.taperThirdElement(period, inputPeriod, income, wtcIncomeThreshold, ctcIncomeThreshold)
+      val taperThirdAmount = tcCalculator.taperThirdElement(period, inputPeriod, income, wtcIncomeThreshold, ctcIncomeThreshold)
       taperThirdAmount._1.elements.ctcIndividualElement.netAmount shouldBe BigDecimal(0.00)
       taperThirdAmount._1.elements.ctcIndividualElement.taperAmount shouldBe BigDecimal(500.20)
       taperThirdAmount._2 shouldBe true
@@ -1469,7 +1471,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
 
       val inputPeriod = models.input.tc.TCPeriod(from = fromDate, until = untilDate, householdElements = TCHouseholdElements(), claimants = List(), children = List())
 
-      val taperThirdAmount = TCCalculator.taperThirdElement(period, inputPeriod, income, wtcIncomeThreshold, ctcIncomeThreshold)
+      val taperThirdAmount = tcCalculator.taperThirdElement(period, inputPeriod, income, wtcIncomeThreshold, ctcIncomeThreshold)
       taperThirdAmount._1.elements.ctcIndividualElement.netAmount shouldBe BigDecimal(352.7)
       taperThirdAmount._1.elements.ctcIndividualElement.taperAmount shouldBe BigDecimal(847.50)
       taperThirdAmount._2 shouldBe true
@@ -1510,7 +1512,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
 
       val inputPeriod = models.input.tc.TCPeriod(from = fromDate, until = untilDate, householdElements = TCHouseholdElements(), claimants = List(), children = List())
 
-      val taperThirdAmount = TCCalculator.taperThirdElement(period, inputPeriod, income, wtcIncomeThreshold, ctcIncomeThreshold)
+      val taperThirdAmount = tcCalculator.taperThirdElement(period, inputPeriod, income, wtcIncomeThreshold, ctcIncomeThreshold)
       taperThirdAmount._1.elements.ctcIndividualElement.netAmount shouldBe BigDecimal(1885.20)
       taperThirdAmount._1.elements.ctcIndividualElement.taperAmount shouldBe BigDecimal(615.00)
       taperThirdAmount._2 shouldBe true
@@ -1551,7 +1553,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
 
       val inputPeriod = models.input.tc.TCPeriod(from = fromDate, until = untilDate, householdElements = TCHouseholdElements(), claimants = List(), children = List())
 
-      val taperThirdAmount = TCCalculator.taperThirdElement(period, inputPeriod, income, wtcIncomeThreshold, ctcIncomeThreshold)
+      val taperThirdAmount = tcCalculator.taperThirdElement(period, inputPeriod, income, wtcIncomeThreshold, ctcIncomeThreshold)
       taperThirdAmount._1.elements.ctcIndividualElement.netAmount shouldBe BigDecimal(3400.20)
       taperThirdAmount._1.elements.ctcIndividualElement.taperAmount shouldBe BigDecimal(0.00)
       taperThirdAmount._2 shouldBe true
@@ -1592,7 +1594,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
 
       val inputPeriod = models.input.tc.TCPeriod(from = fromDate, until = untilDate, householdElements = TCHouseholdElements(), claimants = List(), children = List())
 
-      val taperFourthAmount = TCCalculator.taperFourthElement(period, inputPeriod, income, wtcIncomeThreshold, ctcIncomeThreshold, false)
+      val taperFourthAmount = tcCalculator.taperFourthElement(period, inputPeriod, income, wtcIncomeThreshold, ctcIncomeThreshold, false)
       taperFourthAmount.elements.ctcFamilyElement.netAmount shouldBe BigDecimal(547.50)
       taperFourthAmount.elements.ctcFamilyElement.taperAmount shouldBe BigDecimal(0.00)
     }
@@ -1633,7 +1635,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
 
       val inputPeriod = models.input.tc.TCPeriod(from = fromDate, until = untilDate, householdElements = TCHouseholdElements(), claimants = List(), children = List())
 
-      val taperFourthAmount = TCCalculator.taperFourthElement(period, inputPeriod, income, wtcIncomeThreshold, ctcIncomeThreshold, true)
+      val taperFourthAmount = tcCalculator.taperFourthElement(period, inputPeriod, income, wtcIncomeThreshold, ctcIncomeThreshold, true)
       taperFourthAmount.elements.ctcFamilyElement.netAmount shouldBe BigDecimal(0.00)
       taperFourthAmount.elements.ctcFamilyElement.taperAmount shouldBe BigDecimal(547.50)
     }
@@ -1674,7 +1676,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
 
       val inputPeriod = models.input.tc.TCPeriod(from = fromDate, until = untilDate, householdElements = TCHouseholdElements(), claimants = List(), children = List())
 
-      val taperFourthAmount = TCCalculator.taperFourthElement(period, inputPeriod, income, wtcIncomeThreshold, ctcIncomeThreshold, true)
+      val taperFourthAmount = tcCalculator.taperFourthElement(period, inputPeriod, income, wtcIncomeThreshold, ctcIncomeThreshold, true)
       taperFourthAmount.elements.ctcFamilyElement.netAmount shouldBe BigDecimal(0.00)
       taperFourthAmount.elements.ctcFamilyElement.taperAmount shouldBe BigDecimal(350.50)
     }
@@ -1715,7 +1717,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
 
       val inputPeriod = models.input.tc.TCPeriod(from = fromDate, until = untilDate, householdElements = TCHouseholdElements(), claimants = List(), children = List())
 
-      val taperFourthAmount = TCCalculator.taperFourthElement(period, inputPeriod, income, wtcIncomeThreshold, ctcIncomeThreshold, true)
+      val taperFourthAmount = tcCalculator.taperFourthElement(period, inputPeriod, income, wtcIncomeThreshold, ctcIncomeThreshold, true)
       taperFourthAmount.elements.ctcFamilyElement.netAmount shouldBe BigDecimal(163.20)
       taperFourthAmount.elements.ctcFamilyElement.taperAmount shouldBe BigDecimal(1137.30)
     }
@@ -1757,7 +1759,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
 
       val inputPeriod = models.input.tc.TCPeriod(from = fromDate, until = untilDate, householdElements = TCHouseholdElements(), claimants = List(), children = List())
 
-      val taperFourthAmount = TCCalculator.taperFourthElement(period, inputPeriod, income, wtcIncomeThreshold, ctcIncomeThreshold, true)
+      val taperFourthAmount = tcCalculator.taperFourthElement(period, inputPeriod, income, wtcIncomeThreshold, ctcIncomeThreshold, true)
       taperFourthAmount.elements.ctcFamilyElement.netAmount shouldBe BigDecimal(40.50)
       taperFourthAmount.elements.ctcFamilyElement.taperAmount shouldBe BigDecimal(410.00)
     }
@@ -1798,7 +1800,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
 
       val inputPeriod = models.input.tc.TCPeriod(from = fromDate, until = untilDate, householdElements = TCHouseholdElements(), claimants = List(), children = List())
 
-      val taperFourthAmount = TCCalculator.taperFourthElement(period, inputPeriod, income, wtcIncomeThreshold, ctcIncomeThreshold, true)
+      val taperFourthAmount = tcCalculator.taperFourthElement(period, inputPeriod, income, wtcIncomeThreshold, ctcIncomeThreshold, true)
       taperFourthAmount.elements.ctcFamilyElement.netAmount shouldBe BigDecimal(1300.50)
       taperFourthAmount.elements.ctcFamilyElement.taperAmount shouldBe BigDecimal(0.00)
     }
@@ -1821,7 +1823,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
 
       val taxYear = tcEligibility.taxYears.head
       val income = 0 //taxYear.houseHoldIncome
-      val setup = TCCalculator.getCalculatedPeriods(taxYear, income)
+      val setup = tcCalculator.getCalculatedPeriods(taxYear, income)
 
       setup shouldBe Nil
     }
@@ -1839,7 +1841,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
           // period 1
           val taxYear = x.taxYears.head
           val income = 17000 // x.taxYears.head.houseHoldIncome
-          val setup = TCCalculator.getCalculatedPeriods(taxYear, income)
+          val setup = tcCalculator.getCalculatedPeriods(taxYear, income)
 
           setup.head should not be Nil
           setup.head.from shouldBe fromDate
@@ -1870,7 +1872,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
           // period 1
           val taxYear = x.taxYears.head
           val income = 17000 //x.taxYears.head.houseHoldIncome
-          val setup = TCCalculator.getCalculatedPeriods(taxYear, income)
+          val setup = tcCalculator.getCalculatedPeriods(taxYear, income)
 
           setup.head should not be Nil
           setup.head.from shouldBe firstPeriodFrom
@@ -1903,7 +1905,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
 
       result match {
         case JsSuccess(x, _) =>
-          val setup = TCCalculator.award(x)
+          val setup = tcCalculator.award(x)
 
           setup should not be Nil
           setup.from shouldBe firstPeriodFrom
@@ -1923,7 +1925,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
 
       result match {
         case JsSuccess(x, _) =>
-          val setup = TCCalculator.award(x)
+          val setup = tcCalculator.award(x)
 
           setup should not be Nil
           setup.from shouldBe firstPeriodFrom
@@ -1943,7 +1945,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
 
       result match {
         case JsSuccess(x, _) =>
-          val setup = TCCalculator.award(x)
+          val setup = tcCalculator.award(x)
           setup should not be Nil
           setup.from shouldBe firstPeriodFrom
           setup.until shouldBe secondPeriodTo
@@ -1962,7 +1964,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
 
       result match {
         case JsSuccess(x, _) =>
-          val setup = TCCalculator.award(x)
+          val setup = tcCalculator.award(x)
           setup should not be Nil
           setup.from shouldBe firstPeriodFrom
           setup.until shouldBe lastPeriodTo
@@ -1981,7 +1983,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
 
       val inputPeriod = models.input.tc.TCPeriod(from = fromDate, until = untilDate, householdElements = TCHouseholdElements(), claimants = List(), children = List())
 
-      val result = TCCalculator.getAdviceCalculationRounded(maxHouseholdAmount, wtcThresholdPerPeriod, inputPeriod)
+      val result = tcCalculator.getAdviceCalculationRounded(maxHouseholdAmount, wtcThresholdPerPeriod, inputPeriod)
       result shouldBe 43020.00
     }
 
@@ -1995,7 +1997,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
 
       val inputPeriod = models.input.tc.TCPeriod(from = fromDate, until = untilDate, householdElements = TCHouseholdElements(), claimants = List(), children = List())
 
-      val result = TCCalculator.getAdviceCalculationRounded(maxHouseholdAmount, wtcThresholdPerPeriod, inputPeriod)
+      val result = tcCalculator.getAdviceCalculationRounded(maxHouseholdAmount, wtcThresholdPerPeriod, inputPeriod)
       result shouldBe 39178.5616
     }
 
@@ -2009,7 +2011,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
 
       val inputPeriod = models.input.tc.TCPeriod(from = fromDate, until = untilDate, householdElements = TCHouseholdElements(), claimants = List(), children = List())
 
-      val result = TCCalculator.getAdviceCalculationRounded(maxHouseholdAmount, wtcThresholdPerPeriod, inputPeriod)
+      val result = tcCalculator.getAdviceCalculationRounded(maxHouseholdAmount, wtcThresholdPerPeriod, inputPeriod)
       result shouldBe 6420
     }
 
@@ -2023,7 +2025,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
 
       val inputPeriod = models.input.tc.TCPeriod(from = fromDate, until = untilDate, householdElements = TCHouseholdElements(), claimants = List(), children = List())
 
-      val result = TCCalculator.getAdviceCalculationRounded(maxHouseholdAmount, wtcThresholdPerPeriod, inputPeriod)
+      val result = tcCalculator.getAdviceCalculationRounded(maxHouseholdAmount, wtcThresholdPerPeriod, inputPeriod)
       result shouldBe -16643.1728
     }
 
@@ -2037,7 +2039,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
 
       result match {
         case JsSuccess(x, _) =>
-          val setup = TCCalculator.incomeAdvice(x)
+          val setup = tcCalculator.incomeAdvice(x)
           setup should not be Nil
           setup.from shouldBe firstPeriodFrom
           setup.until shouldBe secondPeriodTo
@@ -2057,7 +2059,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
 
       result match {
         case JsSuccess(x, _) =>
-          val setup = TCCalculator.incomeAdvice(x)
+          val setup = tcCalculator.incomeAdvice(x)
           setup should not be Nil
           setup.from shouldBe firstPeriodFrom
           setup.until shouldBe lastPeriodTo
@@ -2096,7 +2098,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
             )
           )
         )
-      val totalMaximumAmount = TCCalculator.getTotalMaximumAmountPerPeriod(period)
+      val totalMaximumAmount = tcCalculator.getTotalMaximumAmountPerPeriod(period)
       totalMaximumAmount shouldBe 10167.20
 
     }
@@ -2118,7 +2120,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
           )
         )
       }
-      val totalMaximumAmount = TCCalculator.getTotalMaximumAmountPerPeriod(period)
+      val totalMaximumAmount = tcCalculator.getTotalMaximumAmountPerPeriod(period)
       totalMaximumAmount shouldBe 0.00
     }
 
@@ -2153,7 +2155,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
         )
       }
       val decoratedAdvicePeriod = PrivateMethod[models.output.tc.Period]('getPeriodAmount)
-      val result = TCCalculator invokePrivate decoratedAdvicePeriod(period, adviceAmount, false)
+      val result = tcCalculator invokePrivate decoratedAdvicePeriod(period, adviceAmount, false)
       result should not be Nil
       result.periodNetAmount shouldBe 0.00
       result.periodAdviceAmount shouldBe 10000.00
@@ -2169,7 +2171,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
 
       result match {
         case JsSuccess(x, _) =>
-          val listOfTaxYears = TCCalculator.getCalculatedTaxYears(x)
+          val listOfTaxYears = tcCalculator.getCalculatedTaxYears(x)
           listOfTaxYears should not be Nil
           listOfTaxYears.head.from shouldBe firstPeriodFrom
           listOfTaxYears.head.until shouldBe secondPeriodTo
@@ -2190,7 +2192,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
 
       result match {
         case JsSuccess(x, _) =>
-          val listOfTaxYears = TCCalculator.getCalculatedTaxYears(x)
+          val listOfTaxYears = tcCalculator.getCalculatedTaxYears(x)
           listOfTaxYears should not be Nil
           listOfTaxYears.head.from shouldBe firstPeriodFrom
           listOfTaxYears.tail.head.until shouldBe lastPeriodTo
@@ -2211,7 +2213,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
 
       result match {
         case JsSuccess(x, _) =>
-          val listOfTaxYears = TCCalculator.getCalculatedTaxYears(x, true)
+          val listOfTaxYears = tcCalculator.getCalculatedTaxYears(x, true)
           listOfTaxYears should not be Nil
           listOfTaxYears.head.from shouldBe firstPeriodFrom
           listOfTaxYears.head.until shouldBe secondPeriodTo
@@ -2234,7 +2236,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with or
 
       result match {
         case JsSuccess(x, _) =>
-          val listOfTaxYears = TCCalculator.getCalculatedTaxYears(x, true)
+          val listOfTaxYears = tcCalculator.getCalculatedTaxYears(x, true)
           listOfTaxYears should not be Nil
           listOfTaxYears.head.from shouldBe firstPeriodFrom
           listOfTaxYears.tail.head.until shouldBe lastPeriodTo

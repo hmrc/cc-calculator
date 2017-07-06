@@ -25,7 +25,7 @@ import scala.concurrent.Future
 
 object TFCCalculator extends TFCCalculator
 
-class TFCCalculator extends CCCalculatorHelper with MessagesObject {
+trait TFCCalculator extends CCCalculatorHelper with MessagesObject {
 
   import scala.concurrent.ExecutionContext.Implicits.global
 
