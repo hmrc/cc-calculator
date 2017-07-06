@@ -216,7 +216,7 @@ trait ESCCalculatorHelpers extends ESCConfig with CCCalculatorHelper with Messag
   }
 }
 
-trait ESCCalculatorTax extends ESCConfig with ESCCalculatorHelpers {
+trait ESCCalculatorTax extends ESCCalculatorHelpers {
 
   private def allocateAmountToTaxBandsBasedOnTaxablePay(taxablePay: BigDecimal,  personalAllowancePerPeriod: BigDecimal,
                                                         calcPeriod: Periods.Period, config: ESCTaxYearConfig) : CalculationTaxBands = {
@@ -314,7 +314,7 @@ trait ESCCalculatorTax extends ESCConfig with ESCCalculatorHelpers {
   }
 }
 
-trait ESCCalculatorNi extends ESCConfig with ESCCalculatorHelpers {
+trait ESCCalculatorNi extends ESCCalculatorHelpers {
 
   def allocateAmountToNIBands(grossPay: BigDecimal, period: ESCPeriod, config: ESCTaxYearConfig): CalculationNIBands = {
     val lowerEarningsLimit: BigDecimal = config.niCategory.lelMonthlyUpperLimitForCat

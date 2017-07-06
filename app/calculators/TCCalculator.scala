@@ -23,7 +23,6 @@ import utils.{TCConfig, Periods}
 import scala.concurrent.Future
 import scala.math.BigDecimal.RoundingMode
 
-
 trait TCCalculatorElements extends TCCalculatorTapering {
 
   def generateMaximumAmountsForPeriod(period: TCPeriod): models.output.tc.Period = {
@@ -545,8 +544,7 @@ trait TCCalculatorHelpers extends CCCalculatorHelper {
 
 }
 
-trait TCCalculator extends TCCalculatorElements with TCCalculatorTapering with
-  TCCalculatorHelpers {
+trait TCCalculator extends TCCalculatorElements {
 
   import scala.concurrent.ExecutionContext.Implicits.global
 
