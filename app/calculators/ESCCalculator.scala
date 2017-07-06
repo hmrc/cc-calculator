@@ -408,8 +408,8 @@ trait ESCCalculator extends ESCCalculatorHelpers with ESCCalculatorTax with ESCC
     val (parentESCAmount, partnerESCAmount): (BigDecimal, BigDecimal) = (periodParent, periodPartner) match {
       case (Some(parent), Some(partner)) if parent.qualifying && partner.qualifying => {
         val claimantsByIncome: List[ESCClaimant] = period.claimants.sortBy(_.income.taxablePay)
-        val highestIncomeClaimant: ESCClaimant = claimantsByIncome.head
-        val lowestIncomeClaimant: ESCClaimant = claimantsByIncome.last
+        val highestIncomeClaimant: ESCClaimant = claimantsByIncome.last
+        val lowestIncomeClaimant: ESCClaimant = claimantsByIncome.head
 
         val (personalAllowanceMonthlyHighestIncome, maximumReliefAmountHighestIncome) =
           calcReliefAmount(period, highestIncomeClaimant.income, highestIncomeClaimant.isESCStartDateBefore2011, escAmountForPeriod, location)
