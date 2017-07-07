@@ -1,0 +1,11 @@
+{
+  "taxYears": [
+    {
+      "from": "01/01/2017",
+      "until": "2017-04-06",
+      "previousHouseholdIncome": {},
+      "currentHouseholdIncome": {},
+      "periods": []
+    }
+  ]
+}

@@ -1,9 +1,9 @@
 # microservice specific routes
 
-POST       /tax-credits/calculate/income-advice                 @controllers.tc.TaxCreditCalculatorController.incomeAdvice
-POST       /tax-credits/calculate/total-award                   @controllers.tc.TaxCreditCalculatorController.calculate
-POST       /employer-supported-childcare/calculate               @controllers.esc.ESCCalculatorController.calculate
-POST       /tax-free-childcare/calculate                         @controllers.tfc.TFCCalculatorController.calculate
+POST       /tax-credits/calculate/income-advice               @controllers.tc.TaxCreditCalculatorController.incomeAdvice
+POST       /tax-credits/calculate/total-award                 @controllers.tc.TaxCreditCalculatorController.calculate
+POST       /employer-supported-childcare/calculate            @controllers.esc.ESCCalculatorController.calculate
+POST       /tax-free-childcare/calculate                      @controllers.tfc.TFCCalculatorController.calculate
 
-#POST      /tax-credits/calculate/:period           @controllers.tc.TaxCreditCalculatorController.calculate(period = period)
+#POST      /tax-credits/calculate/:period                     @controllers.tc.TaxCreditCalculatorController.calculate(period = period)
 
