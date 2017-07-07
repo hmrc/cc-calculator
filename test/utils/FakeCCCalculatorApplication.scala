@@ -32,8 +32,7 @@ trait FakeCCCalculatorApplication extends UnitSpec with OneAppPerSuite {
   val config: Map[String, _] = Map(
     "csrf.sign.tokens" -> false,
     "govuk-tax.Test.services.contact-frontend.host" -> "localhost",
-    "govuk-tax.Test.services.contact-frontend.port" -> "9250",
-    "esc.local-tax-enabled" -> true
+    "govuk-tax.Test.services.contact-frontend.port" -> "9250"
   )
 
   val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
