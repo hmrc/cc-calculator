@@ -16,8 +16,6 @@
 
 package utils
 
-import java.util.NoSuchElementException
-
 import play.api.Logger
 import play.api.libs.json._
 
@@ -25,9 +23,7 @@ object EnumUtils {
   def enumReads[E <: Enumeration](enum: E): Reads[E#Value] =
     new Reads[E#Value] {
       def reads(json: JsValue): JsResult[E#Value] = json match {
-        case JsString(s) => {
-            JsSuccess(enum.withName(s))
-        }
+        case JsString(s) => JsSuccess(enum.withName(s))
         case _ =>
           Logger.warn(s"EnumUtils.enumReads - JsError::: String value expected")
           JsError("String value expected")
@@ -38,9 +34,6 @@ object EnumUtils {
     new Writes[E#Value] {
       def writes(v: E#Value): JsValue = JsString(v.toString)
     }
-  implicit def enumFormat[E <: Enumeration](enum: E): Format[E#Value] = {
-    Format(enumReads(enum), enumWrites)
-  }
 }
 
 object Periods extends Enumeration with MessagesObject {

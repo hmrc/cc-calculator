@@ -65,7 +65,7 @@ class PeriodsSpec extends FakeCCCalculatorApplication {
     "return JsError" in {
       class test extends Enumeration
 
-      val utilRes = EnumUtils.enumFormat(new test).reads(Json.obj("periods" -> "0"))
+      val utilRes = EnumUtils.enumReads(new test).reads(Json.obj("periods" -> "0"))
 
       utilRes shouldBe JsError("String value expected")
     }
