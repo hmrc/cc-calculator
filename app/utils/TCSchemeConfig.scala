@@ -70,7 +70,6 @@ trait TCConfig extends ServicesConfig with CCConfig with  LoadConfig {
     val month = taxYearEndMonth
     val day = taxYearEndDay
     val currentTaxYear = getCurrentTaxYear(fromDate)
-
     val taxYearStartDate = LocalDate.parse(s"$day-$month-$currentTaxYear", formatter)
     val taxYearEndDate = LocalDate.parse(s"$day-$month-${currentTaxYear + 1}", formatter)
     (taxYearStartDate, taxYearEndDate)
