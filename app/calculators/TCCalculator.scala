@@ -181,7 +181,6 @@ trait TCCalculatorElements extends TCCalculatorTapering {
 
       val percent = config(period).wtc.eligibleCostCoveredPercent
       val percentOfActualAmountTapered = roundDownToTwoDigits(getPercentOfAmount(amountForPeriod, percent))
-
       val thresholdAmount = getChildcareThresholdPerWeek(period)
       val thresholdIntoAPeriod = amountForDateRange(thresholdAmount, Periods.Weekly, period.from, period.until)
       val percentOfThresholdAmountTapered = roundDownToTwoDigits(getPercentOfAmount(thresholdIntoAPeriod, percent))
@@ -533,8 +532,8 @@ trait TCCalculatorHelpers extends CCCalculatorHelper {
 
 }
 
-trait TCCalculator extends TCCalculatorElements {
-  val tcConfig: TCConfig
+trait TCCalculator extends TCCalculatorElements with TCCalculatorHelpers {
+//  val tcConfig: TCConfig
 
   import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -562,6 +561,7 @@ trait TCCalculator extends TCCalculatorElements {
       val benefits: BigDecimal = income.benefits.getOrElse(List()).foldLeft(BigDecimal(0))(_ + _)
       val statutory: BigDecimal = income.statutory.getOrElse(List()).foldLeft(BigDecimal(0))((acc, stat) => acc + stat.weeks * stat.amount)
       val other: BigDecimal = income.other.getOrElse(List()).foldLeft(BigDecimal(0))(_ + _)
+
       val otherAdjustment: BigDecimal = if (other > tcConf.otherIncomeAdjustment) {
         tcConf.otherIncomeAdjustment
       } else {

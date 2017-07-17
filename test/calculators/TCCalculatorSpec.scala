@@ -43,6 +43,12 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with Mo
   val mockCTC = mock[CTC]
 
   when(
+    tcCalculator.tcConfig.getConfig(any[LocalDate]())
+  ).thenReturn(
+    mockTCTaxYearConfig
+  )
+
+  when(
     mockTCTaxYearConfig.otherIncomeAdjustment
   ).thenReturn(
     300
@@ -1256,6 +1262,46 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with Mo
         val wtcChildcareElement = tcCalculator.maxChildcareElementForPeriod(period)
         wtcChildcareElement shouldBe BigDecimal(878.41)
       }
+
+      "Determine WTC childcare element when there is only one child (exceeding the element limit)" in {
+        val period = basicPeriod.copy(
+          householdElements = basicPeriod.householdElements.copy(
+            basic = true,
+            childcare = true,
+            loneParent = true,
+            family = true
+          ),
+          children = List(
+            TCChild(
+              qualifying = true,
+              childcareCost = 800,
+              childcareCostPeriod = Periods.Monthly,
+              childElements = TCChildElements(
+                child = true,
+                youngAdult = false,
+                disability = false,
+                severeDisability = false,
+                childcare = true
+              )
+            ),
+            TCChild(
+              qualifying = true,
+              childcareCost = 800,
+              childcareCostPeriod = Periods.Monthly,
+              childElements = TCChildElements(
+                child = true,
+                youngAdult = false,
+                disability = false,
+                severeDisability = false,
+                childcare = false
+              )
+            )
+          )
+        )
+        val wtcChildcareElement = tcCalculator.maxChildcareElementForPeriod(period)
+        wtcChildcareElement shouldBe BigDecimal(3333.14)
+      }
+
     }
 
     "Determine award period start and end dates" when {
@@ -2079,25 +2125,25 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with Mo
       result.periodAdviceAmount shouldBe 10000.00
     }
 
-//    "calculateHouseholdIncome" should {
-//      "return previous income" when {
-//        "previous and current incomes are equal" in {
-//          val income = TCIncome(
-//            employment = Some(List(2500, 50000)),
-//            pension = Some(List(100)),
-//            other = Some(List(50, 25)),
-//            benefits = Some(List(200, 300)),
-//            statutory = Some(List(
-//              TCStatutoryIncome(weeks = 5, amount = 20)
-//            ))
-//          )
-//
-//          val decoratedAdvicePeriod = PrivateMethod[BigDecimal]('calculateHouseholdIncome)
-//          val result = tcCalculator invokePrivate decoratedAdvicePeriod(LocalDate.now, income, income)
-//          result shouldBe 57200
-//        }
-//      }
-//    }
+    "calculateHouseholdIncome" should {
+      "return previous income" when {
+        "previous and current incomes are equal" in {
+          val income = TCIncome(
+            employment = Some(List(2500, 50000)),
+            pension = Some(List(100)),
+            other = Some(List(50, 25)),
+            benefits = Some(List(200, 300)),
+            statutory = Some(List(
+              TCStatutoryIncome(weeks = 5, amount = 20)
+            ))
+          )
+
+          val decoratedAdvicePeriod = PrivateMethod[BigDecimal]('calculateHouseholdIncome)
+          val result = tcCalculator invokePrivate decoratedAdvicePeriod(LocalDate.now, income, income)
+          result shouldBe 57200
+        }
+      }
+    }
 
     "return adjusted previous income" when {
 
@@ -2124,47 +2170,49 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with Mo
           result shouldBe 27500
         }
 
-//        "other income is less than it's adjustment limit (£300)" when {
-//          val previousIncome = TCIncome(
-//            employment = Some(List(50000)),
-//            pension = None,
-//            other = Some(List(200)),
-//            benefits = None,
-//            statutory = None
-//          )
-//
-//          val currentIncome = TCIncome(
-//            employment = Some(List(25000)),
-//            pension = None,
-//            other = None,
-//            benefits = None,
-//            statutory = None
-//          )
-//          val decoratedAdvicePeriod = PrivateMethod[BigDecimal]('calculateHouseholdIncome)
-//          val result = tcCalculator invokePrivate decoratedAdvicePeriod(LocalDate.now, previousIncome, currentIncome)
-//          result shouldBe 27500
-//        }
-//
-//        "other income is higher  than it's adjustment limit (£300)" when {
-//          val previousIncome = TCIncome(
-//            employment = Some(List(50000)),
-//            pension = None,
-//            other = Some(List(500)),
-//            benefits = None,
-//            statutory = None
-//          )
-//
-//          val currentIncome = TCIncome(
-//            employment = Some(List(25000)),
-//            pension = None,
-//            other = None,
-//            benefits = None,
-//            statutory = None
-//          )
-//          val decoratedAdvicePeriod = PrivateMethod[BigDecimal]('calculateHouseholdIncome)
-//          val result = tcCalculator invokePrivate decoratedAdvicePeriod(LocalDate.now, previousIncome, currentIncome)
-//          result shouldBe 27700
-//        }
+        "other income is less than it's adjustment limit (£300)" in {
+          val previousIncome = TCIncome(
+            employment = Some(List(50000)),
+            pension = None,
+            other = Some(List(200)),
+            benefits = None,
+            statutory = None
+          )
+
+          val currentIncome = TCIncome(
+            employment = Some(List(25000)),
+            pension = None,
+            other = None,
+            benefits = None,
+            statutory = None
+          )
+
+          val decoratedAdvicePeriod = PrivateMethod[BigDecimal]('calculateHouseholdIncome)
+          val result = tcCalculator invokePrivate decoratedAdvicePeriod(LocalDate.now, previousIncome, currentIncome)
+          result shouldBe 27500
+        }
+
+        "other income is higher  than it's adjustment limit (£300)" in {
+          val previousIncome = TCIncome(
+            employment = Some(List(50000)),
+            pension = None,
+            other = Some(List(500)),
+            benefits = None,
+            statutory = None
+          )
+
+          val currentIncome = TCIncome(
+            employment = Some(List(25000)),
+            pension = None,
+            other = None,
+            benefits = None,
+            statutory = None
+          )
+
+          val decoratedAdvicePeriod = PrivateMethod[BigDecimal]('calculateHouseholdIncome)
+          val result = tcCalculator invokePrivate decoratedAdvicePeriod(LocalDate.now, previousIncome, currentIncome)
+          result shouldBe 27500
+        }
       }
 
       "previous income is less than current one" in {
