@@ -19,7 +19,7 @@ package calculators
 import models.input.tc._
 import models.output.tc.{Element, Elements, TCCalculatorOutput, TaxYear}
 import org.joda.time.LocalDate
-import utils.{TCConfig, Periods}
+import utils.{TCTaxYearConfig, TCConfig, Periods}
 import scala.concurrent.Future
 
 trait TCCalculatorElements extends TCCalculatorTapering {
@@ -51,7 +51,7 @@ trait TCCalculatorElements extends TCCalculatorTapering {
 
   def maxFamilyElementForPeriod(period: TCPeriod): BigDecimal = {
     if (period.householdElements.family) {
-      val familyElementMaximumAmount = period.config.ctc.familyElement
+      val familyElementMaximumAmount = config(period).ctc.familyElement
       (amountForDateRange(familyElementMaximumAmount, Periods.Yearly, period.from, period.until))
     } else {
       BigDecimal(0.00)
@@ -75,10 +75,10 @@ trait TCCalculatorElements extends TCCalculatorTapering {
   def childOrYoungAdultBasicElementForPeriod(period: TCPeriod, child: TCChild): BigDecimal = {
     if (child.isQualifyingCTC) {
       val childElementMaximumAmount = if (child.childElements.youngAdult) {
-        period.config.ctc.youngPersonElement
+        config(period).ctc.youngPersonElement
       }
       else {
-        period.config.ctc.childElement
+        config(period).ctc.childElement
       }
       (amountForDateRange(childElementMaximumAmount, Periods.Yearly, period.from, period.until))
     } else {
@@ -88,7 +88,7 @@ trait TCCalculatorElements extends TCCalculatorTapering {
 
   def childOrYoungAdultDisabilityElementForPeriod(period: TCPeriod, child: TCChild): BigDecimal = {
     if (child.getsDisabilityElement) {
-      val maximumAmount = period.config.ctc.disabledChildElement
+      val maximumAmount = config(period).ctc.disabledChildElement
       (amountForDateRange(maximumAmount, Periods.Yearly, period.from, period.until))
     } else {
       BigDecimal(0.00)
@@ -97,7 +97,7 @@ trait TCCalculatorElements extends TCCalculatorTapering {
 
   def childOrYoungAdultSevereDisabilityElementForPeriod(period: TCPeriod, child: TCChild): BigDecimal = {
     if (child.getsSevereDisabilityElement) {
-      val maximumAmount = period.config.ctc.severeDisabilityChildElement
+      val maximumAmount = config(period).ctc.severeDisabilityChildElement
       (amountForDateRange(maximumAmount, Periods.Yearly, period.from, period.until))
     } else {
       BigDecimal(0.00)
@@ -121,7 +121,7 @@ trait TCCalculatorElements extends TCCalculatorTapering {
 
   def basicElementForPeriod(period: TCPeriod): BigDecimal = {
     if (period.householdElements.basic) {
-      val basicElement = period.config.wtc.basicElement
+      val basicElement = config(period).wtc.basicElement
       (amountForDateRange(basicElement, Periods.Yearly, period.from, period.until))
     } else {
       BigDecimal(0.00)
@@ -130,7 +130,7 @@ trait TCCalculatorElements extends TCCalculatorTapering {
 
   def hours30ElementForPeriod(period: TCPeriod): BigDecimal = {
     if (period.householdElements.hours30) {
-      val hours30Element = period.config.wtc.hours30Element
+      val hours30Element = config(period).wtc.hours30Element
       (amountForDateRange(hours30Element, Periods.Yearly, period.from, period.until))
     } else {
       BigDecimal(0.00)
@@ -139,7 +139,7 @@ trait TCCalculatorElements extends TCCalculatorTapering {
 
   def loneParentElementForPeriod(period: TCPeriod): BigDecimal = {
     if (period.householdElements.loneParent) {
-      val loneParentElementMaximumAmount = period.config.wtc.loneParentElement
+      val loneParentElementMaximumAmount = config(period).wtc.loneParentElement
       (amountForDateRange(loneParentElementMaximumAmount, Periods.Yearly, period.from, period.until))
     } else {
       BigDecimal(0.00)
@@ -148,7 +148,7 @@ trait TCCalculatorElements extends TCCalculatorTapering {
 
   def secondAdultElementForPeriod(period: TCPeriod): BigDecimal = {
     if (period.householdElements.secondParent) {
-      val coupleElementMaximumAmount = period.config.wtc.coupleElement
+      val coupleElementMaximumAmount = config(period).wtc.coupleElement
       (amountForDateRange(coupleElementMaximumAmount, Periods.Yearly, period.from, period.until))
     } else {
       BigDecimal(0.00)
@@ -157,7 +157,7 @@ trait TCCalculatorElements extends TCCalculatorTapering {
 
   def disabledWorkerElementForPeriod(period: TCPeriod, claimant: TCClaimant): BigDecimal = {
     if (claimant.getsDisabilityElement) {
-      val disabledWorkerElement = period.config.wtc.disabledWorkerElement
+      val disabledWorkerElement = config(period).wtc.disabledWorkerElement
       (amountForDateRange(disabledWorkerElement, Periods.Yearly, period.from, period.until))
     } else {
       BigDecimal(0.00)
@@ -166,7 +166,7 @@ trait TCCalculatorElements extends TCCalculatorTapering {
 
   def severelyDisabledWorkerElementForPeriod(period: TCPeriod, claimant: TCClaimant): BigDecimal = {
     if (claimant.getsSevereDisabilityElement) {
-      val severeDisabilityWorkerElement = period.config.wtc.severeDisabilityWorkerElement
+      val severeDisabilityWorkerElement = config(period).wtc.severeDisabilityWorkerElement
       (amountForDateRange(severeDisabilityWorkerElement, Periods.Yearly, period.from, period.until))
     } else {
       BigDecimal(0.00)
@@ -179,7 +179,7 @@ trait TCCalculatorElements extends TCCalculatorTapering {
       // check threshold amounts
       val amountForPeriod = amountForDateRange(totalCostPerWeek, Periods.Weekly, period.from, period.until)
 
-      val percent = period.config.wtc.eligibleCostCoveredPercent
+      val percent = config(period).wtc.eligibleCostCoveredPercent
       val percentOfActualAmountTapered = roundDownToTwoDigits(getPercentOfAmount(amountForPeriod, percent))
 
       val thresholdAmount = getChildcareThresholdPerWeek(period)
@@ -200,9 +200,9 @@ trait TCCalculatorElements extends TCCalculatorTapering {
     //check childcarecost > 0 and childcare element is true
     val childcareCosts = period.children.filter(child => (child.childcareCost > 0 && child.childElements.childcare)).length
     if (childcareCosts > 1) {
-      (period.config.wtc.maxChildcareMoreChildrenElement)
+      (config(period).wtc.maxChildcareMoreChildrenElement)
     } else if (childcareCosts == 1) {
-      (period.config.wtc.maxChildcareOneChildElement)
+      (config(period).wtc.maxChildcareOneChildElement)
     } else {
       BigDecimal(0.00)
     }
@@ -232,20 +232,6 @@ trait TCCalculatorTapering extends TCCalculatorHelpers {
 
   def getPercentOfAmount(amount: BigDecimal, percentage: Int): BigDecimal = {
     (amount / 100) * percentage
-  }
-
-  def wtcIncomeThresholdForPeriod(period: TCPeriod): BigDecimal = {
-    val thresholdConfig = period.config.thresholds.wtcIncomeThreshold
-    amountForDateRange(thresholdConfig, Periods.Yearly, period.from, period.until)
-  }
-
-  def ctcIncomeThresholdForPeriod(period: TCPeriod): BigDecimal = {
-    val thresholdConfig = period.config.thresholds.ctcIncomeThreshold
-    amountForDateRange(thresholdConfig, Periods.Yearly, period.from, period.until)
-  }
-
-  def incomeForPeriod(previousHouseHoldIncome: BigDecimal, period: TCPeriod): BigDecimal = {
-    amountForDateRange(previousHouseHoldIncome, Periods.Yearly, period.from, period.until)
   }
 
   def taperFirstElement(
@@ -376,7 +362,7 @@ trait TCCalculatorTapering extends TCCalculatorHelpers {
                             wtcIncomeThreshold: BigDecimal,
                             ctcIncomeThreshold: BigDecimal
                           ): BigDecimal = {
-    val taperRate = inputPeriod.config.thresholds.taperRatePercent
+    val taperRate = config(inputPeriod).thresholds.taperRatePercent
     val incomeToTaperVal = incomeToTaper / taperRate * 100 + wtcIncomeThreshold
     val roundedIncomeToTaperElementsNil = roundup(roundDownToTwoDigits(incomeToTaperVal))
     getHigherAmount(ctcIncomeThreshold, roundedIncomeToTaperElementsNil)
@@ -435,7 +421,7 @@ trait TCCalculatorTapering extends TCCalculatorHelpers {
 
   //In order to maintain consistency across TC logic the amount is truncated to 3 digits after decimal point and rounded up to the nearest pence
   def earningsAmountToTaperForPeriod(income: BigDecimal, thresholdIncome: BigDecimal, period: TCPeriod): BigDecimal = {
-    val taperRate = period.config.thresholds.taperRatePercent
+    val taperRate = config(period).thresholds.taperRatePercent
     roundDownToTwoDigits((income - thresholdIncome) * (taperRate / BigDecimal(100.00)))
   }
 
@@ -513,6 +499,10 @@ trait TCCalculatorTapering extends TCCalculatorHelpers {
 }
 
 trait TCCalculatorHelpers extends CCCalculatorHelper {
+  val tcConfig: TCConfig
+
+  def config(period: TCPeriod): TCTaxYearConfig = tcConfig.getConfig(period.from)
+
   def amountForDateRange(
                           cost: BigDecimal,
                           period: Periods.Period,
@@ -521,7 +511,7 @@ trait TCCalculatorHelpers extends CCCalculatorHelper {
                         ): BigDecimal = {
     if (fromDate.isBefore(toDate)) {
       //determines if the tax year falls in a leap year and uses 366 days instead of 365 in calculation
-      val taxYearDates = TCConfig.getCurrentTaxYearDateRange(fromDate)
+      val taxYearDates = tcConfig.getCurrentTaxYearDateRange(fromDate)
       val numberOfDaysInTaxYear = daysBetween(taxYearDates._1, taxYearDates._2)
       //daily amount currently is not rounded
       val dailyAmount = amountFromPeriodToDaily(cost, period, numberOfDaysInTaxYear)
@@ -544,6 +534,7 @@ trait TCCalculatorHelpers extends CCCalculatorHelper {
 }
 
 trait TCCalculator extends TCCalculatorElements {
+  val tcConfig: TCConfig
 
   import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -562,24 +553,23 @@ trait TCCalculator extends TCCalculatorElements {
     }
   }
 
-  private def calculateHouseholdIncome(from: LocalDate, previousIncome: TCIncome, currentIncome: TCIncome): BigDecimal = {
+  protected def calculateHouseholdIncome(from: LocalDate, previousIncome: TCIncome, currentIncome: TCIncome): BigDecimal = {
 
-    val tcConfig = TCConfig.getConfig(from)
-
+    val tcConf = tcConfig.getConfig(from)
     def getAmount(income: TCIncome): BigDecimal = {
       val employment: BigDecimal = income.employment.getOrElse(List()).foldLeft(BigDecimal(0))(_ + _)
       val pension: BigDecimal = income.pension.getOrElse(List()).foldLeft(BigDecimal(0))(_ + _)
       val benefits: BigDecimal = income.benefits.getOrElse(List()).foldLeft(BigDecimal(0))(_ + _)
       val statutory: BigDecimal = income.statutory.getOrElse(List()).foldLeft(BigDecimal(0))((acc, stat) => acc + stat.weeks * stat.amount)
       val other: BigDecimal = income.other.getOrElse(List()).foldLeft(BigDecimal(0))(_ + _)
-      val otherAdjustment: BigDecimal = if (other > tcConfig.otherIncomeAdjustment) {
-        tcConfig.otherIncomeAdjustment
+      val otherAdjustment: BigDecimal = if (other > tcConf.otherIncomeAdjustment) {
+        tcConf.otherIncomeAdjustment
       } else {
         other
       }
 
       // benefits and pension are asked monthly so need to multiply it by 12
-      (benefits - pension) * TCConfig.monthsInTaxYear + employment + other - otherAdjustment - statutory
+      (benefits - pension) * tcConfig.monthsInTaxYear + employment + other - otherAdjustment - statutory
     }
 
     val previousAmount: BigDecimal = getAmount(previousIncome)
@@ -587,10 +577,10 @@ trait TCCalculator extends TCCalculatorElements {
 
     val difference: BigDecimal = Math.abs((currentAmount - previousAmount).toDouble)
     (previousAmount, currentAmount) match {
-      case (previous, current) if (previous > current && difference > tcConfig.currentIncomeFallDifferenceAmount) =>
-        previous + tcConfig.currentIncomeFallDifferenceAmount - difference
-      case (previous, current) if (previous < current && difference > tcConfig.currentIncomeRiseDifferenceAmount) =>
-        previous + difference - tcConfig.currentIncomeRiseDifferenceAmount
+      case (previous, current) if (previous > current && difference > tcConf.currentIncomeFallDifferenceAmount) =>
+        previous + tcConf.currentIncomeFallDifferenceAmount - difference
+      case (previous, current) if (previous < current && difference > tcConf.currentIncomeRiseDifferenceAmount) =>
+        previous + difference - tcConf.currentIncomeRiseDifferenceAmount
       case _ => previousAmount
     }
 
@@ -631,10 +621,14 @@ trait TCCalculator extends TCCalculatorElements {
                             fullCalculationRequired: Boolean = true
                           ): List[models.output.tc.Period] = {
     for (period <- taxYear.periods) yield {
+      val periodLength = Periods.Yearly
       // get all the elements for the period (pro-rota to the number of days) for each household composition
-      val income = incomeForPeriod(previousHouseholdIncome, period)
-      val wtcIncomeThreshold = wtcIncomeThresholdForPeriod(period)
-      val ctcIncomeThreshold = ctcIncomeThresholdForPeriod(period)
+      val income = amountForDateRange(previousHouseholdIncome, periodLength, period.from, period.until)
+
+      val wtcThresholdConfig = config(period).thresholds.wtcIncomeThreshold
+      val wtcIncomeThreshold = amountForDateRange(wtcThresholdConfig, periodLength, period.from, period.until)
+      val ctcThresholdConfig = config(period).thresholds.ctcIncomeThreshold
+      val ctcIncomeThreshold = amountForDateRange(ctcThresholdConfig, periodLength, period.from, period.until)
       // return an award period which contains all the elements and their amounts they can claim for that period
       val maximumAmounts = generateMaximumAmountsForPeriod(period)
       //here we get the model updated with net due and taper and advice amounts
@@ -703,7 +697,7 @@ trait TCCalculator extends TCCalculatorElements {
   //reverse taper rate is truncated to 3 decimal places
   //currently using just WTC threshold to calculate advice
   def getAdviceCalculationRounded(totalAmount: BigDecimal, wtcIncomeThreshold: BigDecimal, period: models.input.tc.TCPeriod): BigDecimal = {
-    val taperPercentage = period.config.thresholds.taperRatePercent
+    val taperPercentage = config(period).thresholds.taperRatePercent
     val reverseTaperRate = BigDecimal(100.00) / BigDecimal(taperPercentage)
     val reverseTaperRateRounded = roundDownToTwoDigits(reverseTaperRate)
     val adviceAmount = (reverseTaperRateRounded * totalAmount) + wtcIncomeThreshold
@@ -746,4 +740,6 @@ trait TCCalculator extends TCCalculatorElements {
 
 }
 
-object TCCalculator extends TCCalculator
+object TCCalculator extends TCCalculator {
+  override val tcConfig = TCConfig
+}

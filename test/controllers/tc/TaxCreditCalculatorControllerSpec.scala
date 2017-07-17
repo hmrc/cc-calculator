@@ -17,17 +17,14 @@
 package controllers.tc
 
 import calculators.TCCalculator
-import com.fasterxml.jackson.databind.JsonNode
 import com.github.fge.jackson.JsonLoader
 import models.input.tc.TCCalculatorInput
 import models.output.tc.TCCalculatorOutput
 import org.joda.time.LocalDate
-import org.joda.time.format.DateTimeFormat
-import org.mockito.Matchers.{eq => mockEq, _}
+import org.mockito.Matchers._
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.mock.MockitoSugar
-import play.api.http.Status
 import play.api.libs.json.{JsValue, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
