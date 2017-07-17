@@ -197,7 +197,7 @@ trait TCCalculatorElements extends TCCalculatorTapering {
 
   protected def getChildcareThresholdPerWeek(period: models.input.tc.TCPeriod): BigDecimal = {
     //check childcarecost > 0 and childcare element is true
-    val childcareCosts = period.children.filter(child => (child.childcareCost > 0 && child.childElements.childcare)).length
+    val childcareCosts = period.children.filter(child => (child.childcareCost > 0 && child.isQualifyingWTC)).length
     if (childcareCosts > 1) {
       (config(period).wtc.maxChildcareMoreChildrenElement)
     } else if (childcareCosts == 1) {

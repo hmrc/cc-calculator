@@ -1256,7 +1256,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with Mo
         wtcChildcareElement shouldBe BigDecimal(878.41)
       }
 
-      "Determine WTC childcare element when there is only one child (exceeding the element limit)" in {
+      "Determine WTC childcare element when there is only one child and for second one childcare element is false (exceeding the element limit)" in {
         val period = basicPeriod.copy(
           householdElements = basicPeriod.householdElements.copy(
             basic = true,
@@ -1287,6 +1287,45 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with Mo
                 disability = false,
                 severeDisability = false,
                 childcare = false
+              )
+            )
+          )
+        )
+        val wtcChildcareElement = tcCalculator.maxChildcareElementForPeriod(period)
+        wtcChildcareElement shouldBe BigDecimal(3333.14)
+      }
+
+      "Determine WTC childcare element when there is only one child and second is not qualifying (exceeding the element limit)" in {
+        val period = basicPeriod.copy(
+          householdElements = basicPeriod.householdElements.copy(
+            basic = true,
+            childcare = true,
+            loneParent = true,
+            family = true
+          ),
+          children = List(
+            TCChild(
+              qualifying = true,
+              childcareCost = 800,
+              childcareCostPeriod = Periods.Monthly,
+              childElements = TCChildElements(
+                child = true,
+                youngAdult = false,
+                disability = false,
+                severeDisability = false,
+                childcare = true
+              )
+            ),
+            TCChild(
+              qualifying = false,
+              childcareCost = 800,
+              childcareCostPeriod = Periods.Monthly,
+              childElements = TCChildElements(
+                child = true,
+                youngAdult = false,
+                disability = false,
+                severeDisability = false,
+                childcare = true
               )
             )
           )
