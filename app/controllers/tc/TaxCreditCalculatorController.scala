@@ -35,26 +35,6 @@ class TaxCreditCalculatorController @Inject()(val messagesApi: MessagesApi) exte
   val auditEvent: AuditEvents = AuditEvents
   val calculator: TCCalculator = TCCalculator
 
-  def incomeAdvice: Action[JsValue] = Action.async(parse.json) {
-    implicit request =>
-      request.body.validate[TCCalculatorInput].fold(
-        error => {
-          Logger.warn("TC Calculator Validation JsError in TaxCreditCalculatorController.incomeAdvice")
-          Future.successful(BadRequest(JSONFactory.generateErrorJSON(BAD_REQUEST, Left(error))))
-        },
-        result => {
-          calculator.incomeAdvice(result).map {
-            response =>
-              Ok(Json.toJson(response))
-          } recover {
-            case e: Exception =>
-              Logger.warn(s"Tax Credits Calculator Exception in TaxCreditCalculatorController.incomeAdvice: ${e.getMessage}")
-              InternalServerError(JSONFactory.generateErrorJSON(INTERNAL_SERVER_ERROR, Right(e)))
-          }
-        }
-      )
-  }
-
   def calculate: Action[JsValue] = Action.async(parse.json) {
     implicit request =>
       request.body.validate[TCCalculatorInput].fold(

@@ -460,8 +460,9 @@ trait TCCalculatorTapering extends TCCalculatorHelpers {
     buildTCPeriod(period, elements)
   }
 
-  protected def getPeriodAmount(period: models.output.tc.Period, amount: BigDecimal = 0.00, fullCalculationRequired: Boolean): models.output.tc.Period = {
-    models.output.tc.Period(
+    protected def getPeriodAmount(period: models.output.tc.Period, amount: BigDecimal = 0.00): models.output.tc.Period = {
+
+      models.output.tc.Period(
       from = period.from,
       until = period.until,
       elements = Elements(
@@ -486,14 +487,9 @@ trait TCCalculatorTapering extends TCCalculatorHelpers {
           taperAmount = BigDecimal(0.00)
         )
       ),
-      periodNetAmount = {
-        if (fullCalculationRequired) amount else BigDecimal(0.00)
-      },
-      periodAdviceAmount = {
-        if (fullCalculationRequired) BigDecimal(0.00) else amount
-      }
+        periodNetAmount = amount,
+        periodAdviceAmount = BigDecimal(0.00)
     )
-
   }
 }
 
@@ -533,24 +529,16 @@ trait TCCalculatorHelpers extends CCCalculatorHelper {
 }
 
 trait TCCalculator extends TCCalculatorElements with TCCalculatorHelpers {
-//  val tcConfig: TCConfig
 
   import scala.concurrent.ExecutionContext.Implicits.global
 
   def award(request: TCCalculatorInput): Future[models.output.tc.TCCalculatorOutput] = {
-    awardPeriod(request, false)
-  }
-
-  def incomeAdvice(request: TCCalculatorInput): Future[models.output.tc.TCCalculatorOutput] = {
-    awardPeriod(request, true)
-  }
-
-  private def awardPeriod(request: TCCalculatorInput, incomeAdvice: Boolean = false) = {
     Future {
-      val calculatedTaxYears = getCalculatedTaxYears(request, incomeAdvice)
-      createTCCalculation(calculatedTaxYears, annualIncome(calculatedTaxYears, incomeAdvice), incomeAdvice)
+      val calculatedTaxYears = getCalculatedTaxYears(request)
+      createTCCalculation(calculatedTaxYears, annualIncome(calculatedTaxYears))
     }
   }
+
 
   protected def calculateHouseholdIncome(from: LocalDate, previousIncome: TCIncome, currentIncome: TCIncome): BigDecimal = {
 
@@ -586,23 +574,11 @@ trait TCCalculator extends TCCalculatorElements with TCCalculatorHelpers {
 
   }
 
-  def getCalculatedTaxYears(inputTCEligibility: TCCalculatorInput, incomeAdviceCalculation: Boolean = false): List[TaxYear] = {
-    for (taxYear <- inputTCEligibility.taxYears) yield {
-      val householdIncome = calculateHouseholdIncome(taxYear.from, taxYear.previousHouseholdIncome, taxYear.currentHouseholdIncome)
-      if (incomeAdviceCalculation) {
-        //calculating the income advice
-        val calculatedPeriods = getCalculatedPeriods(taxYear, householdIncome, fullCalculationRequired = false)
-        val adviceAmount = calculatedPeriods.foldLeft(BigDecimal(0.00))((acc, period) => acc + period.periodAdviceAmount)
+    def getCalculatedTaxYears(inputTCEligibility: TCCalculatorInput): List[TaxYear] = {
 
-        models.output.tc.TaxYear(
-          from = taxYear.from,
-          until = taxYear.until,
-          taxYearAdviceAmount = adviceAmount,
-          periods = calculatedPeriods
-        )
-      } else {
-        // full calculation including tapering
-        val calculatedPeriods = getCalculatedPeriods(taxYear, householdIncome, fullCalculationRequired = true)
+      for (taxYear <- inputTCEligibility.taxYears) yield {
+      val householdIncome = calculateHouseholdIncome(taxYear.from, taxYear.previousHouseholdIncome, taxYear.currentHouseholdIncome)
+        val calculatedPeriods = getCalculatedPeriods(taxYear, householdIncome)
         val annualAward = calculatedPeriods.foldLeft(BigDecimal(0.00))((acc, period) => acc + period.periodNetAmount)
 
         models.output.tc.TaxYear(
@@ -612,13 +588,11 @@ trait TCCalculator extends TCCalculatorElements with TCCalculatorHelpers {
           periods = calculatedPeriods
         )
       }
-    }
   }
 
   def getCalculatedPeriods(
                             taxYear: models.input.tc.TCTaxYear,
-                            previousHouseholdIncome: BigDecimal,
-                            fullCalculationRequired: Boolean = true
+                            previousHouseholdIncome: BigDecimal
                           ): List[models.output.tc.Period] = {
     for (period <- taxYear.periods) yield {
       val periodLength = Periods.Yearly
@@ -637,21 +611,18 @@ trait TCCalculator extends TCCalculatorElements with TCCalculatorHelpers {
         period,
         income,
         wtcIncomeThreshold,
-        ctcIncomeThreshold,
-        fullCalculationRequired
+        ctcIncomeThreshold
       )
     }
   }
 
-  def generateRequiredAmountsPerPeriod(
-                                        period: models.output.tc.Period,
-                                        inputPeriod: models.input.tc.TCPeriod,
-                                        income: BigDecimal,
-                                        wtcIncomeThreshold: BigDecimal,
-                                        ctcIncomeThreshold: BigDecimal,
-                                        fullCalculationRequired: Boolean = true): models.output.tc.Period = {
+def generateRequiredAmountsPerPeriod(
+                                      period: models.output.tc.Period,
+                                      inputPeriod: models.input.tc.TCPeriod,
+                                      income: BigDecimal,
+                                      wtcIncomeThreshold: BigDecimal,
+                                      ctcIncomeThreshold: BigDecimal): models.output.tc.Period = {
     val totalMaximumAmount = getTotalMaximumAmountPerPeriod(period)
-    if (fullCalculationRequired) {
       if (isTaperingRequiredForElements(income, wtcIncomeThreshold) && !inputPeriod.atLeastOneClaimantIsClaimingSocialSecurityBenefit) {
         //call taper 1, taper 2, taper 3, taper 4
         val taperedFirstElement = taperFirstElement(period, inputPeriod, income, wtcIncomeThreshold)
@@ -682,30 +653,13 @@ trait TCCalculator extends TCCalculatorElements with TCCalculatorHelpers {
           }
         )
       } else {
-        //When no tapering is required
-        getPeriodAmount(period, totalMaximumAmount, fullCalculationRequired)
+        getPeriodAmount(period, totalMaximumAmount)
       }
-    }
-    else {
-      // if calculating household advice
-      val adviceAmount = getAdviceCalculationRounded(totalMaximumAmount, wtcIncomeThreshold, inputPeriod)
-      getPeriodAmount(period, adviceAmount, fullCalculationRequired)
-    }
-
   }
 
-  //reverse taper rate is truncated to 3 decimal places
-  //currently using just WTC threshold to calculate advice
-  def getAdviceCalculationRounded(totalAmount: BigDecimal, wtcIncomeThreshold: BigDecimal, period: models.input.tc.TCPeriod): BigDecimal = {
-    val taperPercentage = config(period).thresholds.taperRatePercent
-    val reverseTaperRate = BigDecimal(100.00) / BigDecimal(taperPercentage)
-    val reverseTaperRateRounded = roundDownToTwoDigits(reverseTaperRate)
-    val adviceAmount = (reverseTaperRateRounded * totalAmount) + wtcIncomeThreshold
-    adviceAmount
-  }
+  private def createTCCalculation(calculatedTaxYears: List[TaxYear], annualIncome: BigDecimal) = {
 
-  private def createTCCalculation(calculatedTaxYears: List[TaxYear], annualIncome: BigDecimal, incomeAdvice: Boolean = false) = {
-    TCCalculatorOutput(
+      TCCalculatorOutput(
       from = calculatedTaxYears.head.from,
       until = {
         if (calculatedTaxYears.length > 1) {
@@ -714,27 +668,15 @@ trait TCCalculator extends TCCalculatorElements with TCCalculatorHelpers {
           calculatedTaxYears.head.until
         }
       },
-      houseHoldAdviceAmount = if (incomeAdvice) {
-        annualIncome
-      } else {
-        BigDecimal(0.00)
-      },
-      totalAwardAmount = if (incomeAdvice) {
-        BigDecimal(0.00)
-      } else {
-        annualIncome
-      },
-      taxYears = calculatedTaxYears
+        houseHoldAdviceAmount = BigDecimal(0.00),
+        totalAwardAmount = annualIncome,
+        taxYears = calculatedTaxYears
     )
   }
 
-  private def annualIncome(taxYears: List[TaxYear], incomeAdvice: Boolean = false): BigDecimal = {
+  private def annualIncome(taxYears: List[TaxYear]): BigDecimal = {
     taxYears.foldLeft(BigDecimal(0.00))((acc, taxYear) => {
-      if (incomeAdvice) {
-        acc + taxYear.taxYearAdviceAmount
-      } else {
         acc + taxYear.taxYearAwardAmount
-      }
     })
   }
 

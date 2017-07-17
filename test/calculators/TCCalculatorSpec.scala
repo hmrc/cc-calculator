@@ -693,13 +693,6 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with Mo
       children = List()
     )
 
-//    "Determine earnings amount per period" in {
-//      val income = 17000
-//      val thresholdIncome = 4000
-//      val result = tcCalculator.earningsAmountToTaperForPeriod(income, thresholdIncome, inputPeriod)
-//      result shouldBe BigDecimal(5330.00)
-//    }
-
     "Determine net amount per element per period (taper amount is larger than element's max amount)" in {
       val taperAmount = BigDecimal(17000)
       val maximumAmount = BigDecimal(4000)
@@ -1307,7 +1300,45 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with Mo
     "Determine award period start and end dates" when {
       val fromDate = parseDate("2016-09-27")
       val toDate = parseDate("2017-04-06")
-
+      "there is only one period in each of two taxyears" in {
+        val input = TCCalculatorInput(
+          taxYears = List(
+            TCTaxYear(
+              from = parseDate("2016-09-27"),
+              until = parseDate("2017-04-06"),
+              previousHouseholdIncome = TCIncome(None, None, None, None, None),
+              currentHouseholdIncome = TCIncome(None, None, None, None, None),
+              periods = List(
+                TCPeriod(
+                  from = fromDate,
+                  until = toDate,
+                  householdElements = TCHouseholdElements(),
+                  claimants = List.empty,
+                  children = List.empty
+                )
+              )
+            ),
+            TCTaxYear(
+              from = parseDate("2017-09-27"),
+              until = parseDate("2018-04-06"),
+              previousHouseholdIncome = TCIncome(None, None, None, None, None),
+              currentHouseholdIncome = TCIncome(None, None, None, None, None),
+              periods = List(
+                TCPeriod(
+                  from = fromDate,
+                  until = toDate,
+                  householdElements = TCHouseholdElements(),
+                  claimants = List.empty,
+                  children = List.empty
+                )
+              )
+            )
+          )
+        )
+        val award = await(tcCalculator.award(input))
+        award.from shouldBe parseDate("2016-09-27")
+        award.until shouldBe parseDate("2018-04-06")
+      }
       "there is only one period" in {
         val input = TCCalculatorInput(
           taxYears = List(
@@ -1729,40 +1760,6 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with Mo
       setup.elements.ctcFamilyElement.maximumAmount shouldBe BigDecimal(0.00)
     }
 
-
-    "Populate the output model's net amounts to be maximum amounts when no tapering is required" in {
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
-      val fromDate = LocalDate.parse("01-05-2016", formatter)
-      val toDate = LocalDate.parse("21-05-2017", formatter)
-      val totalMaximumAmount = BigDecimal(400.00)
-      val inputedModel = models.output.tc.Period(
-        from = fromDate,
-        until = toDate,
-        elements = Elements(
-          wtcWorkElement = Element(
-            maximumAmount = BigDecimal(100.00)
-          ),
-          wtcChildcareElement = Element(
-            maximumAmount = BigDecimal(100.00)
-          ),
-          ctcIndividualElement = Element(
-            maximumAmount = BigDecimal(100.00)
-          ),
-          ctcFamilyElement = Element(
-            maximumAmount = BigDecimal(100.00)
-          )
-        )
-      )
-      val decoratedOutputModel = PrivateMethod[models.output.tc.Period]('getPeriodAmount)
-      val result = tcCalculator invokePrivate decoratedOutputModel(inputedModel, totalMaximumAmount, true)
-      result.elements.wtcWorkElement.maximumAmount shouldBe BigDecimal(100.00)
-      result.elements.wtcChildcareElement.maximumAmount shouldBe BigDecimal(100.00)
-      result.elements.ctcIndividualElement.maximumAmount shouldBe BigDecimal(100.00)
-      result.elements.ctcFamilyElement.maximumAmount shouldBe BigDecimal(100.00)
-    }
-
-
-
     "determine if tapering fourth element (CTC family element)is required" in {
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val fromDate = LocalDate.parse("2016-05-01", formatter)
@@ -1973,6 +1970,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with Mo
       val fromDate = LocalDate.parse("2016-05-01", formatter)
       val untilDate = LocalDate.parse("2016-05-21", formatter)
 
+
       val income = 25000
       val wtcIncomeThreshold = 5600
       val ctcIncomeThreshold = 11000
@@ -2030,99 +2028,6 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with Mo
       val setup = tcCalculator.getCalculatedPeriods(taxYear, income)
 
       setup shouldBe Nil
-    }
-
-    "Determine advice amount (including just the WTC threshold)" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
-      val fromDate = LocalDate.parse("2016-05-01", formatter)
-      val untilDate = LocalDate.parse("2016-05-21", formatter)
-
-      val maxHouseholdAmount = 15000.00
-      val wtcThresholdPerPeriod = 6420
-
-      val inputPeriod = models.input.tc.TCPeriod(from = fromDate, until = untilDate, householdElements = TCHouseholdElements(), claimants = List(), children = List())
-
-      val result = tcCalculator.getAdviceCalculationRounded(maxHouseholdAmount, wtcThresholdPerPeriod, inputPeriod)
-      result shouldBe 43020.00
-    }
-
-    "Determine advice amount (including just the WTC threshold with decimal values)" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
-      val fromDate = LocalDate.parse("2016-05-01", formatter)
-      val untilDate = LocalDate.parse("2016-05-21", formatter)
-
-      val maxHouseholdAmount = 13425.64
-      val wtcThresholdPerPeriod = 6420
-
-      val inputPeriod = models.input.tc.TCPeriod(from = fromDate, until = untilDate, householdElements = TCHouseholdElements(), claimants = List(), children = List())
-
-      val result = tcCalculator.getAdviceCalculationRounded(maxHouseholdAmount, wtcThresholdPerPeriod, inputPeriod)
-      result shouldBe 39178.5616
-    }
-
-    "Determine advice amount (including just the WTC threshold value as 0)" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
-      val fromDate = LocalDate.parse("2016-05-01", formatter)
-      val untilDate = LocalDate.parse("2016-05-21", formatter)
-
-      val maxHouseholdAmount = 0.00
-      val wtcThresholdPerPeriod = 6420
-
-      val inputPeriod = models.input.tc.TCPeriod(from = fromDate, until = untilDate, householdElements = TCHouseholdElements(), claimants = List(), children = List())
-
-      val result = tcCalculator.getAdviceCalculationRounded(maxHouseholdAmount, wtcThresholdPerPeriod, inputPeriod)
-      result shouldBe 6420
-    }
-
-    "Determine advice amount (including just the WTC threshold having negative value)" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
-      val fromDate = LocalDate.parse("2016-05-01", formatter)
-      val untilDate = LocalDate.parse("2016-05-21", formatter)
-
-      val maxHouseholdAmount = -9452.12
-      val wtcThresholdPerPeriod = 6420
-
-      val inputPeriod = models.input.tc.TCPeriod(from = fromDate, until = untilDate, householdElements = TCHouseholdElements(), claimants = List(), children = List())
-
-      val result = tcCalculator.getAdviceCalculationRounded(maxHouseholdAmount, wtcThresholdPerPeriod, inputPeriod)
-      result shouldBe -16643.1728
-    }
-
-    "Populate Period model when calculating household advice" in {
-      val adviceAmount = BigDecimal(10000.00)
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
-      val firstPeriodFrom = LocalDate.parse("2016-09-27", formatter)
-      val secondPeriodTo = LocalDate.parse("2017-04-06", formatter)
-      val period = {
-        models.output.tc.Period(
-          from = firstPeriodFrom,
-          until = secondPeriodTo,
-          elements = Elements(
-            wtcWorkElement = Element(
-              maximumAmount = 4737.70,
-              netAmount = 0.00,
-              taperAmount = 4737.70
-            ),
-            wtcChildcareElement = Element(
-              maximumAmount = 728.80,
-              netAmount = 0.00,
-              taperAmount = 728.80
-            ),
-            ctcIndividualElement = Element(
-              maximumAmount = 3400.20,
-              netAmount = 0.00
-            ),
-            ctcFamilyElement = Element(
-              maximumAmount = 1300.50
-            )
-          )
-        )
-      }
-      val decoratedAdvicePeriod = PrivateMethod[models.output.tc.Period]('getPeriodAmount)
-      val result = tcCalculator invokePrivate decoratedAdvicePeriod(period, adviceAmount, false)
-      result should not be Nil
-      result.periodNetAmount shouldBe 0.00
-      result.periodAdviceAmount shouldBe 10000.00
     }
 
     "calculateHouseholdIncome" should {

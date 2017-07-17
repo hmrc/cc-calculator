@@ -49,95 +49,6 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
     ("invalid_date", "/taxYears(0)/from", "error.expected.jodadate.format", "\"\""),
     ("negative_childcare_cost", "/taxYears(0)/periods(0)/children(0)/childcareCost", "Childcare Spend cost should not be less than 0.00", "")
   )
-
-  "when incomeAdvice is called" should {
-
-    "not return NOT_FOUND for this endpoint" in {
-      val result = route(app, FakeRequest(POST, "/cc-calculator/tax-credits/calculate/income-advice"))
-      result.isDefined shouldBe true
-      status(result.get) should not be NOT_FOUND
-    }
-
-    "return status OK and the response of calculator.incomeAdvice if valid request is given" in {
-      val SUT = new TaxCreditCalculatorController(applicationMessagesApi) {
-        override val calculator =  mock[TCCalculator]
-        override val auditEvent = mock[AuditEvents]
-      }
-      when(
-        SUT.calculator.incomeAdvice(any[TCCalculatorInput]())
-      ).thenReturn(
-        Future.successful(validTCOutput)
-      )
-      val result = await(SUT.incomeAdvice()(validRequest))
-      status(result) shouldBe OK
-      jsonBodyOf(result) shouldBe Json.toJson(validTCOutput)
-    }
-
-    "return INTERNAL_SERVER_ERROR and error message if calculator.incomeAdvice throws exception" in {
-      val SUT = new TaxCreditCalculatorController(applicationMessagesApi) {
-        override val calculator =  mock[TCCalculator]
-        override val auditEvent = mock[AuditEvents]
-      }
-      when(
-        SUT.calculator.incomeAdvice(any[TCCalculatorInput]())
-      ).thenReturn(
-        Future.failed(new Exception("Something bad happened"))
-      )
-      val result = await(SUT.incomeAdvice()(validRequest))
-      status(result) shouldBe INTERNAL_SERVER_ERROR
-      jsonBodyOf(result) shouldBe Json.parse(
-        """
-          |{
-          |    "status": 500,
-          |    "error": "Something bad happened"
-          |}
-        """.stripMargin)
-    }
-
-    "return BAD_REQUEST" when {
-
-      forAll(invalidData) { case (invalidJson, path, error, args) =>
-
-        s"${invalidJson} is given and return error: '${error}' for path: '${path}'" in {
-          val SUT = new TaxCreditCalculatorController(applicationMessagesApi) {
-            override val calculator =  mock[TCCalculator]
-            override val auditEvent = mock[AuditEvents]
-          }
-          val json = Json.parse(JsonLoader.fromResource(s"/json/tc/input/${invalidJson}.json").toString)
-          val invalidRequest: FakeRequest[JsValue] = request.withBody(json)
-
-          when(
-            SUT.calculator.incomeAdvice(any[TCCalculatorInput]())
-          ).thenReturn(
-            Future.successful(validTCOutput)
-          )
-          val result = await(SUT.incomeAdvice()(invalidRequest))
-          status(result) shouldBe BAD_REQUEST
-          jsonBodyOf(result) shouldBe Json.parse(
-            s"""
-              |{
-              |    "status": 400,
-              |    "errors": [
-              |    {
-              |       "path": "${path}",
-              |       "validationErrors": [
-              |       {
-              |         "message": "${error}",
-              |         "args": [${args}]
-              |       }
-              |       ]
-              |    }
-              |    ]
-              |}
-            """.stripMargin)
-
-        }
-
-      }
-    }
-
-  }
-
   "when calculate is called" should {
 
     "not return NOT_FOUND for this endpoint" in {
@@ -218,9 +129,7 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
                |    ]
                |}
             """.stripMargin)
-
         }
-
       }
     }
 
