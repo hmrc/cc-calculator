@@ -37,17 +37,6 @@ import org.scalatest.prop.Tables.Table
 
 class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with MockitoSugar with BeforeAndAfterEach {
 
-  val SUT = new TaxCreditCalculatorController(applicationMessagesApi) {
-    override val calculator =  mock[TCCalculator]
-    override val auditEvent = mock[AuditEvents]
-  }
-
-  override protected def afterEach(): Unit = {
-    super.afterEach()
-    reset(SUT.calculator)
-    reset(SUT.auditEvent)
-  }
-
   val validInput: JsValue  = Json.parse(JsonLoader.fromResource("/json/tc/input/valid_json.json").toString)
   val validTCOutput: TCCalculatorOutput = TCCalculatorOutput(LocalDate.now(), LocalDate.now(), 0, 0, Nil)
 
@@ -70,6 +59,10 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
     }
 
     "return status OK and the response of calculator.incomeAdvice if valid request is given" in {
+      val SUT = new TaxCreditCalculatorController(applicationMessagesApi) {
+        override val calculator =  mock[TCCalculator]
+        override val auditEvent = mock[AuditEvents]
+      }
       when(
         SUT.calculator.incomeAdvice(any[TCCalculatorInput]())
       ).thenReturn(
@@ -81,6 +74,10 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
     }
 
     "return INTERNAL_SERVER_ERROR and error message if calculator.incomeAdvice throws exception" in {
+      val SUT = new TaxCreditCalculatorController(applicationMessagesApi) {
+        override val calculator =  mock[TCCalculator]
+        override val auditEvent = mock[AuditEvents]
+      }
       when(
         SUT.calculator.incomeAdvice(any[TCCalculatorInput]())
       ).thenReturn(
@@ -102,6 +99,10 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
       forAll(invalidData) { case (invalidJson, path, error, args) =>
 
         s"${invalidJson} is given and return error: '${error}' for path: '${path}'" in {
+          val SUT = new TaxCreditCalculatorController(applicationMessagesApi) {
+            override val calculator =  mock[TCCalculator]
+            override val auditEvent = mock[AuditEvents]
+          }
           val json = Json.parse(JsonLoader.fromResource(s"/json/tc/input/${invalidJson}.json").toString)
           val invalidRequest: FakeRequest[JsValue] = request.withBody(json)
 
@@ -146,6 +147,10 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
     }
 
     "return status OK and the response of calculator.incomeAdvice if valid request is given" in {
+      val SUT = new TaxCreditCalculatorController(applicationMessagesApi) {
+        override val calculator =  mock[TCCalculator]
+        override val auditEvent = mock[AuditEvents]
+      }
       when(
         SUT.calculator.award(any[TCCalculatorInput]())
       ).thenReturn(
@@ -157,6 +162,10 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
     }
 
     "return INTERNAL_SERVER_ERROR and error message if calculator.incomeAdvice throws exception" in {
+      val SUT = new TaxCreditCalculatorController(applicationMessagesApi) {
+        override val calculator =  mock[TCCalculator]
+        override val auditEvent = mock[AuditEvents]
+      }
       when(
         SUT.calculator.award(any[TCCalculatorInput]())
       ).thenReturn(
@@ -178,6 +187,10 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
       forAll(invalidData) { case (invalidJson, path, error, args) =>
 
         s"${invalidJson} is given and return error: '${error}' for path: '${path}'" in {
+          val SUT = new TaxCreditCalculatorController(applicationMessagesApi) {
+            override val calculator =  mock[TCCalculator]
+            override val auditEvent = mock[AuditEvents]
+          }
           val json = Json.parse(JsonLoader.fromResource(s"/json/tc/input/${invalidJson}.json").toString)
           val invalidRequest: FakeRequest[JsValue] = request.withBody(json)
 
