@@ -33,28 +33,7 @@ trait FakeCCCalculatorApplication extends UnitSpec with OneAppPerSuite {
   val config: Map[String, _] = Map(
     "csrf.sign.tokens" -> false,
     "govuk-tax.Test.services.contact-frontend.host" -> "localhost",
-    "govuk-tax.Test.services.contact-frontend.port" -> "9250" //,
-//    "tc.rule-change.0.rule-date" -> "default",
-//    "tc.rule-change.0.other-adjustment" -> 300,
-//    "tc.rule-change.0.current-income-fall-difference-amount" -> 2500,
-//    "tc.rule-change.0.current-income-rise-difference-amount" -> 2500,
-//    "tc.rule-change.0.input-elements.wtc.basic-element" -> 1960,
-//    "tc.rule-change.0.input-elements.wtc.second-adult-element" -> 2010,
-//    "tc.rule-change.0.input-elements.wtc.lone-parent-element" -> 2010,
-//    "tc.rule-change.0.input-elements.wtc.30-hour-element" -> 810,
-//    "tc.rule-change.0.input-elements.wtc.disabled-worker-element" -> 3000,
-//    "tc.rule-change.0.input-elements.wtc.severe-disabled-worker-element" -> 1290,
-//    "tc.rule-change.0.input-elements.wtc.max-childcare-element-one-child" -> 175,
-//    "tc.rule-change.0.input-elements.wtc.max-childcare-element-more-children" -> 300,
-//    "tc.rule-change.0.input-elements.wtc.percent-of-eligible-cost-covered" -> 70,
-//    "tc.rule-change.0.input-elements.ctc.child-element" -> 2780,
-//    "tc.rule-change.0.input-elements.ctc.young-person-element" -> 2780,
-//    "tc.rule-change.0.input-elements.ctc.disabled-child-element" -> 3175,
-//    "tc.rule-change.0.input-elements.ctc.severe-disabled-child-element" -> 1290,
-//    "tc.rule-change.0.input-elements.ctc.family-element" -> 545,
-//    "tc.rule-change.0.thresholds.wtc-income-threshold" -> 6420,
-//    "tc.rule-change.0.thresholds.ctc-income-threshold" -> 16105,
-//    "tc.rule-change.0.thresholds.percent-of-taper-rate" -> 41
+    "govuk-tax.Test.services.contact-frontend.port" -> "9250"
   )
 
   val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")

@@ -144,6 +144,11 @@ class TCSchemeConfigSpec extends FakeCCCalculatorApplication {
 
   "TC SchemeConfig" should {
 
+    "return 12 for months in tax year" in {
+      val tcConfig = new TCConfig {}
+      tcConfig.monthsInTaxYear shouldBe 12
+    }
+
     "Tax year end month from config file" in {
       val tcConfig = new TCConfig {}
       tcConfig.taxYearEndMonth shouldBe 4
