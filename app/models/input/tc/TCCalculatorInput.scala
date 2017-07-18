@@ -75,9 +75,7 @@ case class TCPeriod(from: LocalDate,
     householdElements.childcare
   }
 
-//  def config: TCTaxYearConfig = TCConfig.getConfig(from)
-
-  def atLeastOneClaimantIsClaimingSocialSecurityBenefit: Boolean = {
+ def atLeastOneClaimantIsClaimingSocialSecurityBenefit: Boolean = {
     val count = claimants.foldLeft(0)((acc, claimant) => if (claimant.doesNotTaper) acc + 1 else acc)
     count > 0
   }
