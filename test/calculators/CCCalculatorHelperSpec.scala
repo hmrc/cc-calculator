@@ -126,6 +126,11 @@ class CCCalculatorHelperSpec extends UnitSpec with FakeCCCalculatorApplication {
         val result = helper.amountFromPeriodToDaily(6240, Periods.INVALID, 365)
         result shouldBe 0
       }
+
+      "return daily amount if monthly one is given" in {
+        val result = helper.amountFromPeriodToDaily(365, Periods.Monthly, 365)
+        result shouldBe 12
+      }
     }
 
     "amountToWeeklyAmount" should {

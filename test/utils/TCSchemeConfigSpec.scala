@@ -20,8 +20,9 @@ import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import org.scalatest.prop.TableDrivenPropertyChecks.forAll
 import org.scalatest.prop.Tables.Table
+import play.api.libs.json.Json
 
-class TCSchemeConfigSpec extends FakeCCCalculatorApplication with TCConfig {
+class TCSchemeConfigSpec extends FakeCCCalculatorApplication {
 
   override val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
 
@@ -143,12 +144,19 @@ class TCSchemeConfigSpec extends FakeCCCalculatorApplication with TCConfig {
 
   "TC SchemeConfig" should {
 
+    "return 12 for months in tax year" in {
+      val tcConfig = new TCConfig {}
+      tcConfig.monthsInTaxYear shouldBe 12
+    }
+
     "Tax year end month from config file" in {
-      TCConfig.taxYearEndMonth shouldBe 4
+      val tcConfig = new TCConfig {}
+      tcConfig.taxYearEndMonth shouldBe 4
     }
 
     "Tax year end date from config file" in {
-      TCConfig.taxYearEndDay shouldBe 6
+      val tcConfig = new TCConfig {}
+      tcConfig.taxYearEndDay shouldBe 6
     }
 
     val configTestCases = Table(
@@ -169,7 +177,8 @@ class TCSchemeConfigSpec extends FakeCCCalculatorApplication with TCConfig {
 
       s"return ${taxYear} TC taxYear Config for a date ${date}" in {
         val fromDate = LocalDate.parse(date, formatter)
-        val config = TCConfig.getConfig(fromDate)
+        val tcConfig = new TCConfig {}
+        val config = tcConfig.getConfig(fromDate)
         config shouldBe taxYearConfig
       }
 
@@ -188,7 +197,8 @@ class TCSchemeConfigSpec extends FakeCCCalculatorApplication with TCConfig {
         val today = LocalDate.parse(testDate, formatter)
         val taxYearStartDate = LocalDate.parse(startDate, formatter)
         val taxYearEndDate = LocalDate.parse(endDate, formatter)
-        val resultTuple = TCConfig.getCurrentTaxYearDateRange(today)
+        val tcConfig = new TCConfig {}
+        val resultTuple = tcConfig.getCurrentTaxYearDateRange(today)
         resultTuple._1 shouldBe taxYearStartDate
         resultTuple._2 shouldBe taxYearEndDate
       }

@@ -4,10 +4,19 @@
       "from": "2016-09-27",
       "until": "2017-04-06",
       "previousHouseholdIncome": {
-        "employment": [34000.00]
+        "employment": [34000.00, 11000],
+        "pension": [100],
+        "other": [3000, 2500]
       },
       "currentHouseholdIncome": {
-        "employment": [34000.00]
+        "employment": [31500.00, 15000],
+        "benefits": [1500],
+        "statutory": [
+          {
+            "weeks": 10,
+            "amount": 99.50
+          }
+        ]
       },
       "periods": [
         {
@@ -26,7 +35,7 @@
               "qualifying": true,
               "isPartner": false,
               "claimantElements": {
-                "disability": true,
+                "disability": false,
                 "severeDisability": false
               }
             },
@@ -34,21 +43,21 @@
               "qualifying": true,
               "isPartner": true,
               "claimantElements": {
-                "disability": true,
+                "disability": false,
                 "severeDisability": false
               }
             }
           ],
           "children": [
             {
-              "childcareCost": 200.00,
-              "childcareCostPeriod": "Month",
               "qualifying": true,
+              "childcareCost": 200.00,
+              "childcareCostPeriod": "Week",
               "childElements": {
                 "child": true,
                 "youngAdult": false,
-                "disability": true,
-                "severeDisability": true,
+                "disability": false,
+                "severeDisability": false,
                 "childcare": true
               }
             }

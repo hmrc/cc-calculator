@@ -18,20 +18,9 @@ package utils
 
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
-import play.api.Play._
-import play.api.{Configuration, Play}
+import play.api.Configuration
 import uk.gov.hmrc.play.config.ServicesConfig
 
-/**
- * Created by user on 27/01/16.
- */
-
-trait TCConfig extends ServicesConfig {
-  val defaultMaxNameLength: Int = 25
-  lazy val monthsInTaxYear: Int = 12
-  lazy val taxYearEndMonth = getInt(s"tc.end-of-tax-year-date.month")
-  lazy val taxYearEndDay = getInt(s"tc.end-of-tax-year-date.day")
-}
 case class WTC(
                 basicElement : Int,
                 coupleElement : Int,
@@ -66,15 +55,21 @@ case class TCTaxYearConfig(
                             ctc: CTC,
                             thresholds: Thresholds
                             )
-object TCConfig extends CCConfig with TCConfig with ServicesConfig with LoadConfig {
+
+object TCConfig extends TCConfig
+
+trait TCConfig extends ServicesConfig with CCConfig with  LoadConfig {
+  val defaultMaxNameLength: Int = 25
+  lazy val monthsInTaxYear: Int = 12
+  lazy val taxYearEndMonth = getInt(s"tc.end-of-tax-year-date.month")
+  lazy val taxYearEndDay = getInt(s"tc.end-of-tax-year-date.day")
 
   def getCurrentTaxYearDateRange(fromDate : LocalDate) : (LocalDate, LocalDate) = {
     val pattern = "dd-MM-yyyy"
     val formatter = DateTimeFormat.forPattern(pattern)
-    val month = TCConfig.taxYearEndMonth
-    val day = TCConfig.taxYearEndDay
+    val month = taxYearEndMonth
+    val day = taxYearEndDay
     val currentTaxYear = getCurrentTaxYear(fromDate)
-
     val taxYearStartDate = LocalDate.parse(s"$day-$month-$currentTaxYear", formatter)
     val taxYearEndDate = LocalDate.parse(s"$day-$month-${currentTaxYear + 1}", formatter)
     (taxYearStartDate, taxYearEndDate)

@@ -17,6 +17,7 @@
 package utils
 
 import akka.stream.Materializer
+import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import org.scalatest.Suite
 import org.scalatestplus.play.OneAppPerSuite
@@ -36,6 +37,8 @@ trait FakeCCCalculatorApplication extends UnitSpec with OneAppPerSuite {
   )
 
   val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+  def parseDate(date: String): LocalDate = LocalDate.parse(date, formatter)
+
   implicit override lazy val app: Application = new GuiceApplicationBuilder()
     .configure(config)
     .build()

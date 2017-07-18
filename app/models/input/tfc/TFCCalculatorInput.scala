@@ -70,11 +70,6 @@ case class TFCChild(
   def getChildDisability: Boolean = {
     disability.disabled || disability.severelyDisabled
   }
-
-  def getChildSevereDisability: Boolean = {
-    disability.severelyDisabled
-  }
-
 }
 
 object TFCChild extends MessagesObject {

@@ -1,41 +1,28 @@
 {
   "taxYears": [
     {
-      "from": "2016-09-27",
+      "from": "2017-01-01",
       "until": "2017-04-06",
-      "previousHouseholdIncome": {
-        "employment": [17000.00]
-      },
-      "currentHouseholdIncome": {
-        "employment": [17000.00]
-      },
+      "previousHouseholdIncome": {},
+      "currentHouseholdIncome": {},
       "periods": [
         {
-          "from": "2016-09-27",
+          "from": "2017-01-01",
           "until": "2017-04-06",
           "householdElements": {
             "basic": true,
             "hours30": false,
             "childcare": true,
-            "loneParent": true,
-            "secondParent": false,
+            "loneParent": false,
+            "secondParent": true,
             "family": true
           },
-          "claimants": [
-            {
-              "qualifying": true,
-              "isPartner": false,
-              "claimantElements": {
-                "disability": true,
-                "severeDisability": true
-              }
-            }
-          ],
+          "claimants": [],
           "children": [
             {
-              "childcareCost": 200.00,
-              "childcareCostPeriod": "Month",
               "qualifying": true,
+              "childcareCost": -100,
+              "childcareCostPeriod": "Week",
               "childElements": {
                 "child": true,
                 "youngAdult": false,

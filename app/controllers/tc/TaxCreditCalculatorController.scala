@@ -17,7 +17,6 @@
 package controllers.tc
 
 import javax.inject.{Inject, Singleton}
-
 import calculators.TCCalculator
 import models.input.tc.TCCalculatorInput
 import play.api.Logger
@@ -28,6 +27,7 @@ import service.AuditEvents
 import uk.gov.hmrc.play.microservice.controller.BaseController
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import utils.JSONFactory
 
 @Singleton
 class TaxCreditCalculatorController @Inject()(val messagesApi: MessagesApi) extends BaseController with I18nSupport {
@@ -35,33 +35,12 @@ class TaxCreditCalculatorController @Inject()(val messagesApi: MessagesApi) exte
   val auditEvent: AuditEvents = AuditEvents
   val calculator: TCCalculator = TCCalculator
 
-  def incomeAdvice: Action[JsValue] = Action.async(parse.json) {
-    implicit request =>
-      request.body.validate[TCCalculatorInput].fold(
-        error => {
-          Logger.warn("TC Calculator Validation JsError in TaxCreditCalculatorController.incomeAdvice")
-          Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(play.api.http.Status.BAD_REQUEST, Left(error))))
-        },
-        result => {
-          calculator.incomeAdvice(result).map {
-            response =>
-              Ok(Json.toJson(response))
-          } recover {
-            case e: Exception =>
-              Logger.warn(s"Tax Credits Calculator Exception in TaxCreditCalculatorController.incomeAdvice: ${e.getMessage}")
-              InternalServerError(utils.JSONFactory.generateErrorJSON(play.api.http.Status.INTERNAL_SERVER_ERROR, Right(e)))
-          }
-
-        }
-      )
-  }
-
   def calculate: Action[JsValue] = Action.async(parse.json) {
     implicit request =>
       request.body.validate[TCCalculatorInput].fold(
         error => {
           Logger.warn(s"TC Calculator Validation JsError in TaxCreditCalculatorController.calculate")
-          Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(play.api.http.Status.BAD_REQUEST, Left(error))))
+          Future.successful(BadRequest(JSONFactory.generateErrorJSON(BAD_REQUEST, Left(error))))
         },
         result => {
           auditEvent.auditTCRequest(result.toString)
@@ -72,7 +51,7 @@ class TaxCreditCalculatorController @Inject()(val messagesApi: MessagesApi) exte
           } recover {
             case e: Exception =>
               Logger.warn(s"Tax Credits Calculator Exception in TaxCreditCalculatorController.calculate: ${e.getMessage}")
-              InternalServerError(utils.JSONFactory.generateErrorJSON(play.api.http.Status.INTERNAL_SERVER_ERROR, Right(e)))
+              InternalServerError(JSONFactory.generateErrorJSON(INTERNAL_SERVER_ERROR, Right(e)))
           }
         }
       )
