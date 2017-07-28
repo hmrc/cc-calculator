@@ -394,18 +394,78 @@ trait ESCCalculatorNi extends ESCCalculatorHelpers {
 }
 
 trait ESCCalculator extends ESCCalculatorHelpers with ESCCalculatorTax with ESCCalculatorNi {
+
   import scala.concurrent.ExecutionContext.Implicits.global
+
+  def calculatedNIAdditionalAllowance(amountLeftAfterTaxAssignments: BigDecimal,
+                                      maxPossibleAllocationAtLowestBand: BigDecimal,
+                                      allocatedReliefAmountHighestIncome: BigDecimal,
+                                      allocatedReliefAmountLowestIncome: BigDecimal): (BigDecimal, BigDecimal) = {
+
+    val amountAvailableToHighestIncome = maxPossibleAllocationAtLowestBand - allocatedReliefAmountHighestIncome
+    val amountAvailableToLowestIncome = maxPossibleAllocationAtLowestBand - allocatedReliefAmountLowestIncome
+
+      if (allocatedReliefAmountHighestIncome >= maxPossibleAllocationAtLowestBand && allocatedReliefAmountLowestIncome >= maxPossibleAllocationAtLowestBand) {
+        //both earners are at the max so can't allocate anywhere
+        (BigDecimal(0.00), BigDecimal(0.00))
+      }
+      else {
+        if (amountAvailableToHighestIncome > BigDecimal(0.00)) {
+          //highest earner has room to take more
+          val remainingAfterGivingToHighEarner = amountLeftAfterTaxAssignments - amountAvailableToHighestIncome
+          if (remainingAfterGivingToHighEarner < BigDecimal(0.00)) {
+            //so allocate it all to highest earner with none to pass on to lower earner
+            (amountLeftAfterTaxAssignments, BigDecimal(0.00))
+          }
+          else {
+            //allocate as much as possible then see if lower can take some but some still remaining
+            if (amountAvailableToLowestIncome > BigDecimal(0.00)) {
+              //lowest earner has room to take more
+              val remainingAfterGivingToLowerEarner = remainingAfterGivingToHighEarner - amountAvailableToLowestIncome
+              if (remainingAfterGivingToLowerEarner < BigDecimal(0.00)) {
+                //so allocate as much as possible - its all gone
+                (amountAvailableToHighestIncome, remainingAfterGivingToHighEarner)
+              }
+              else {
+                //allocate as much as possible then rest goes to waste
+                (amountAvailableToHighestIncome, amountAvailableToLowestIncome)
+              }
+            }
+            else {
+              (amountAvailableToHighestIncome, amountAvailableToLowestIncome)
+            }
+          }
+        }
+        else {
+          if (amountAvailableToLowestIncome > BigDecimal(0.00)) {
+            //no room for highest but lowest earner has room to take more
+            val remainingAfterGivingToLowerEarner = amountLeftAfterTaxAssignments - amountAvailableToLowestIncome
+            if (remainingAfterGivingToLowerEarner < BigDecimal(0.00)) {
+              //so allocate as much as possible - its all gone
+              (BigDecimal(0.00), amountLeftAfterTaxAssignments)
+            }
+            else {
+              //allocate as much as possible then rest goes to waste
+              (BigDecimal(0.00), amountAvailableToLowestIncome)
+            }
+          }
+          else {
+            (BigDecimal(0.00), amountAvailableToLowestIncome)
+          }
+        }
+      }
+  }
 
   def determineSavingsPerClaimant(period: ESCPeriod, location: String): List[models.output.esc.ESCClaimant] = {
 
-    val escAmountForPeriod = period.children.filter(_.qualifying).foldLeft(BigDecimal(0))((acc, child) => {
+    val escAmountForPeriod = period.children.filter(_.qualifying).foldLeft(BigDecimal(0.00))((acc, child) => {
       acc + amountToMonthlyAmount(child.childCareCost, child.childCareCostPeriod)
     })
 
     val periodParent: Option[ESCClaimant] = period.claimants.find(_.isPartner == false)
     val periodPartner: Option[ESCClaimant] = period.claimants.find(_.isPartner == true)
 
-    val (parentESCAmount, partnerESCAmount): (BigDecimal, BigDecimal) = (periodParent, periodPartner) match {
+    val (parentESCTaxAmount, partnerESCTaxAmount, parentESCNIAmount, partnerESCNIAmount): (BigDecimal, BigDecimal, BigDecimal, BigDecimal) = (periodParent, periodPartner) match {
       case (Some(parent), Some(partner)) if parent.qualifying && partner.qualifying => {
         val claimantsByIncome: List[ESCClaimant] = period.claimants.sortBy(_.income.taxablePay)
         val highestIncomeClaimant: ESCClaimant = claimantsByIncome.last
@@ -414,10 +474,11 @@ trait ESCCalculator extends ESCCalculatorHelpers with ESCCalculatorTax with ESCC
         val (personalAllowanceMonthlyHighestIncome, maximumReliefAmountHighestIncome) =
           calcReliefAmount(period, highestIncomeClaimant.income, highestIncomeClaimant.isESCStartDateBefore2011, escAmountForPeriod, location)
 
+
         val differenceBetweenIncomeAndPAMonthly: BigDecimal =
           annualAmountToPeriod(highestIncomeClaimant.income.taxablePay, Periods.Monthly) - personalAllowanceMonthlyHighestIncome
 
-        val highestAmountForHighestIncomeClaimant: BigDecimal = if(differenceBetweenIncomeAndPAMonthly > 0) {
+        val highestAmountForHighestIncomeClaimant: BigDecimal = if(differenceBetweenIncomeAndPAMonthly > BigDecimal(0.00)) {
           if(maximumReliefAmountHighestIncome > differenceBetweenIncomeAndPAMonthly) {
             differenceBetweenIncomeAndPAMonthly
           }
@@ -426,37 +487,65 @@ trait ESCCalculator extends ESCCalculatorHelpers with ESCCalculatorTax with ESCC
           }
         }
         else {
-          0
+          BigDecimal(0.00)
         }
 
         val differenceToAssign: BigDecimal = escAmountForPeriod - highestAmountForHighestIncomeClaimant
-        val (_, maximumReliefAmountLowestIncome) = if(differenceToAssign > 0) {
-          calcReliefAmount(period, lowestIncomeClaimant.income, lowestIncomeClaimant.isESCStartDateBefore2011, differenceToAssign, location)
+
+        val (personalAllowanceMonthlyLowestIncome, maximumReliefAmountLowestIncome) = if(differenceToAssign > BigDecimal(0.00)) {
+          val (personalAllowanceMonthlyLowestIncome1, maximumReliefAmountLowestIncome1) =
+            calcReliefAmount(period, lowestIncomeClaimant.income, lowestIncomeClaimant.isESCStartDateBefore2011, differenceToAssign, location)
+
+          val differenceBetweenIncomeAndPAMonthly1: BigDecimal =
+            annualAmountToPeriod(lowestIncomeClaimant.income.taxablePay, Periods.Monthly) - personalAllowanceMonthlyLowestIncome1
+
+          val lowestAmountForHighestIncomeClaimant: BigDecimal = if(differenceBetweenIncomeAndPAMonthly1 > BigDecimal(0.00)) {
+            if(maximumReliefAmountLowestIncome1 > differenceBetweenIncomeAndPAMonthly1) {
+              differenceBetweenIncomeAndPAMonthly1
+            }
+            else {
+              maximumReliefAmountLowestIncome1
+            }
+          }
+          else {
+            BigDecimal(0.00)
+          }
+          (personalAllowanceMonthlyLowestIncome1, lowestAmountForHighestIncomeClaimant)
         }
         else {
-          (0, BigDecimal(0))
+          (BigDecimal(0.00), BigDecimal(0.00))
         }
+
+        val amountLeftAfterTaxAssignments = differenceToAssign - maximumReliefAmountLowestIncome
+
+        val maxPossibleAllocationAtLowestBand = ESCConfig.getMaxBottomBandAllowance(period.from)
+
+        val (parentESCNIAmount, partnerESCNIAmount): (BigDecimal, BigDecimal) =
+          calculatedNIAdditionalAllowance(amountLeftAfterTaxAssignments,
+            maxPossibleAllocationAtLowestBand,
+            maximumReliefAmountHighestIncome,
+            maximumReliefAmountLowestIncome)
 
         if(highestIncomeClaimant.isPartner == false) {
-          (maximumReliefAmountHighestIncome, maximumReliefAmountLowestIncome)
+          (maximumReliefAmountHighestIncome, maximumReliefAmountLowestIncome, parentESCNIAmount, partnerESCNIAmount)
         }
         else {
-          (maximumReliefAmountLowestIncome, maximumReliefAmountHighestIncome)
+          (maximumReliefAmountLowestIncome, maximumReliefAmountHighestIncome ,parentESCNIAmount, partnerESCNIAmount)
         }
-
       }
+
       case (Some(parent), _) if parent.qualifying => {
         val (_, maximumReliefAmount) =
           calcReliefAmount(period, parent.income, parent.isESCStartDateBefore2011, escAmountForPeriod, location)
-        (maximumReliefAmount, 0)
+        (maximumReliefAmount, BigDecimal(0.00), BigDecimal(0.00), BigDecimal(0.00))
       }
       case (_, Some(partner)) if partner.qualifying => {
         val (_, maximumReliefAmount) =
           calcReliefAmount(period, partner.income, partner.isESCStartDateBefore2011, escAmountForPeriod, location)
-        (0, maximumReliefAmount)
+        (0, maximumReliefAmount, BigDecimal(0.00), BigDecimal(0.00))
       }
       case (_, _) =>
-        (0, 0)
+        (BigDecimal(0.00), BigDecimal(0.00), BigDecimal(0.00), BigDecimal(0.00))
     }
 
 
@@ -467,22 +556,29 @@ trait ESCCalculator extends ESCCalculatorHelpers with ESCCalculatorTax with ESCC
       val taxCode = getTaxCode(period, claimant.income, config)
       val personalAllowanceAmount: BigDecimal = getPersonalAllowance(period, claimant.income, config)
 
-      val actualReliefAmount: BigDecimal = if(claimant.isPartner == false) {
-        parentESCAmount
+      val actualTaxReliefAmount: BigDecimal = if(claimant.isPartner == false) {
+        parentESCTaxAmount
       }
       else {
-        partnerESCAmount
+        partnerESCTaxAmount
+      }
+
+      val actualNIReliefAmount: BigDecimal = if(claimant.isPartner == false) {
+        parentESCTaxAmount + parentESCNIAmount
+      }
+      else {
+        partnerESCTaxAmount + partnerESCNIAmount
       }
 
       val taxablePayMonthly: BigDecimal = roundToPound(annualAmountToPeriod(claimant.income.taxablePay, calcPeriod))
       val grossPayMonthly: BigDecimal = roundToPound(annualAmountToPeriod(claimant.income.gross, calcPeriod))
       val personalAllowanceMonthly: BigDecimal = roundToPound(annualAmountToPeriod(personalAllowanceAmount, calcPeriod))
       val taxSavingAmounts: (BigDecimal, BigDecimal, BigDecimal) =
-        calculateTaxSavings(period, taxablePayMonthly, personalAllowanceMonthly, actualReliefAmount, calcPeriod, taxCode, config)
-      val niSavingAmounts: (BigDecimal, BigDecimal, BigDecimal) =
-        calculateNISavings(period, grossPayMonthly, actualReliefAmount, config, calcPeriod)
+        calculateTaxSavings(period, taxablePayMonthly, personalAllowanceMonthly, actualTaxReliefAmount, calcPeriod, taxCode, config)
+      val niSavingAmounts: (BigDecimal, BigDecimal, BigDecimal) = {
+        calculateNISavings(period, grossPayMonthly, actualNIReliefAmount, config, calcPeriod)
+      }
       val totalSaving  = taxSavingAmounts._1 + niSavingAmounts._1
-
       populateClaimantModel(
         claimant.qualifying,
         eligibleMonths = claimant.eligibleMonthsInPeriod,
@@ -492,7 +588,7 @@ trait ESCCalculator extends ESCCalculatorHelpers with ESCCalculatorTax with ESCC
         taxCode = claimant.income.taxCode,
         niCategory = config.niCategory.niCategoryCode,
         vouchers = claimant.vouchers,
-        escAmount = actualReliefAmount,
+        escAmount = actualTaxReliefAmount,
         escAmountPeriod = calcPeriod,
         escStartDate = claimant.escStartDate,
         totalSaving = totalSaving,
@@ -512,6 +608,20 @@ trait ESCCalculator extends ESCCalculatorHelpers with ESCCalculatorTax with ESCC
       determineSavingsPerClaimant(period, location)
     }
     listOfPairs.flatten
+  }
+
+  protected def getMaxReliefAmount(period: ESCPeriod, income: ESCTotalIncome, isESCStartDateBefore2011: Boolean, location: String) :BigDecimal = {
+    val config = ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location)
+    val taxCode = getTaxCode(period, income, config)
+    val relevantEarningsAmount: BigDecimal = getAnnualRelevantEarnings(income, period, config)
+    determineMaximumIncomeRelief(
+      period,
+      isESCStartDateBefore2011,
+      relevantEarningsAmount,
+      Periods.Monthly,
+      taxCode,
+      config
+    )
   }
 
   protected def calcReliefAmount(period: ESCPeriod, income: ESCTotalIncome, isESCStartDateBefore2011: Boolean, escAmount: BigDecimal, location: String) = {

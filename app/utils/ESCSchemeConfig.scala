@@ -43,6 +43,17 @@ trait ESCConfig extends CCConfig with ServicesConfig with MessagesObject with Lo
     getTaxYear(niCategoryCode, result, location)
   }
 
+  def getMaxBottomBandAllowance(currentDate: LocalDate): Double = {
+    val configs: Seq[play.api.Configuration] = conf.getConfigSeq("esc.rule-change").get
+    // get the default config and keep
+    val defaultConfig = configs.filter(x => {
+      x.getString("rule-date").equals(Some("default"))
+    }).head
+    // fetch the config if it matches the particular year
+    val result = getConfigForTaxYear(currentDate, configs).getOrElse(defaultConfig)
+    result.getDouble("post-2011-maximum-exemption.basic.monthly").get
+  }
+
   def getTaxYear(niCategoryCode: String, config: Configuration, location: String): ESCTaxYearConfig = {
     // get the ni Category
     val niCat = getNiCategory(niCategoryCode, config)

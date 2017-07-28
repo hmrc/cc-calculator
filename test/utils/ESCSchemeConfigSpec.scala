@@ -51,7 +51,13 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication {
       pre2011MaxExemptionMonthly shouldBe 243
     }
 
+    "Return 243 for post-2011-maximum-exemption" in {
+      val pattern = "dd-MM-yyyy"
+      val formatter = DateTimeFormat.forPattern(pattern)
+      val fromDate = LocalDate.parse("23-05-2016", formatter)
+      ESCConfig.getMaxBottomBandAllowance(fromDate) shouldBe 243
 
+    }
     "Return error for invalid niCategoryCode" in {
       val pattern = "dd-MM-yyyy"
       val formatter = DateTimeFormat.forPattern(pattern)
@@ -358,7 +364,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication {
       val escTaxYearConfig = ESCConfig.getConfig(fromDate,"A", location)
       escTaxYearConfig.taxBasicBandCapacity shouldBe 32000.00
     }
-    
+
 
   }
 }

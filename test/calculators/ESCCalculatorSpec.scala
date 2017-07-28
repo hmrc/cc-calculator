@@ -1030,6 +1030,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
     }
 
 
+
     "calculate savings per claimant (single claimant, pre 2011, gross > additional rate limit, voucher amount > max relief) (Monthly)" in {
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       val escStartDate = LocalDate.parse("01-05-2009", formatter)
@@ -1869,6 +1870,85 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       }
     }
 
+  "calculatedNIAdditionalAllowance" should {
+    val maxPossibleAllocationAtLowestBand = 243
 
+    "nothing after tax allowance allowance" in {
+      val result = ESCCalculator.calculatedNIAdditionalAllowance(
+        amountLeftAfterTaxAssignments = 0,
+        maxPossibleAllocationAtLowestBand = maxPossibleAllocationAtLowestBand,
+        allocatedReliefAmountHighestIncome = 100,
+        allocatedReliefAmountLowestIncome = 0)
+
+      result shouldBe ((0, 0))
+    }
+    "neither has spare max allowance" in {
+      val result = ESCCalculator.calculatedNIAdditionalAllowance(
+        amountLeftAfterTaxAssignments = 100,
+        maxPossibleAllocationAtLowestBand = maxPossibleAllocationAtLowestBand,
+        allocatedReliefAmountHighestIncome = maxPossibleAllocationAtLowestBand,
+        allocatedReliefAmountLowestIncome = maxPossibleAllocationAtLowestBand)
+
+      result shouldBe ((0, 0))
+    }
+
+    "higher earner has spare max allowance" in {
+      val result = ESCCalculator.calculatedNIAdditionalAllowance(
+        amountLeftAfterTaxAssignments = 100,
+        maxPossibleAllocationAtLowestBand = maxPossibleAllocationAtLowestBand,
+        allocatedReliefAmountHighestIncome = 100,
+        allocatedReliefAmountLowestIncome = maxPossibleAllocationAtLowestBand)
+
+      result shouldBe ((100, 0))
+    }
+    "lower earner has spare max allowance" in {
+      val result = ESCCalculator.calculatedNIAdditionalAllowance(
+        amountLeftAfterTaxAssignments = 100,
+        maxPossibleAllocationAtLowestBand = maxPossibleAllocationAtLowestBand,
+        allocatedReliefAmountHighestIncome = maxPossibleAllocationAtLowestBand,
+        allocatedReliefAmountLowestIncome = 0)
+
+      result shouldBe ((0, 100))
+    }
+    "both has spare max allowance" in {
+      val result = ESCCalculator.calculatedNIAdditionalAllowance(
+        amountLeftAfterTaxAssignments = 100,
+        maxPossibleAllocationAtLowestBand = maxPossibleAllocationAtLowestBand,
+        allocatedReliefAmountHighestIncome = 200,
+        allocatedReliefAmountLowestIncome = 100)
+
+      result shouldBe ((43, 57))
+    }
+
+    "lower earner has spare max allowance for Ni" in {
+      val result = ESCCalculator.calculatedNIAdditionalAllowance(
+        amountLeftAfterTaxAssignments = 107,
+        maxPossibleAllocationAtLowestBand = maxPossibleAllocationAtLowestBand,
+        allocatedReliefAmountHighestIncome = maxPossibleAllocationAtLowestBand,
+        allocatedReliefAmountLowestIncome = 0)
+
+      result shouldBe ((0, 107))
+    }
+
+    "Scenario not possible with current usage but increases coverage" in {
+      val result = ESCCalculator.calculatedNIAdditionalAllowance(
+        amountLeftAfterTaxAssignments = 1000,
+        maxPossibleAllocationAtLowestBand = maxPossibleAllocationAtLowestBand,
+        allocatedReliefAmountHighestIncome = 100,
+        allocatedReliefAmountLowestIncome = 0)
+
+      result shouldBe ((143, 243))
+    }
+
+    "Scenario not possible with current usage but increases coverage 2" in {
+      val result = ESCCalculator.calculatedNIAdditionalAllowance(
+        amountLeftAfterTaxAssignments = 1000,
+        maxPossibleAllocationAtLowestBand = maxPossibleAllocationAtLowestBand,
+        allocatedReliefAmountHighestIncome = maxPossibleAllocationAtLowestBand,
+        allocatedReliefAmountLowestIncome = 0)
+
+      result shouldBe ((0, 243))
+    }
+  }
   }
 }
