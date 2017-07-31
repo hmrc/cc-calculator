@@ -1,8 +1,8 @@
 {
-  "escTaxYears": [
+  "taxYears": [
     {
-      "startDate": "2015-08-2",
-      "endDate": "2016-08-2",
+      "from": "2015-08-2",
+      "until": "2016-08-2",
       "periods": [
         {
           "from": "2015-08-2",

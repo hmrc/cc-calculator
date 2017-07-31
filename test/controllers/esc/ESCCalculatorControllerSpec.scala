@@ -88,7 +88,7 @@ class ESCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
           |   "status":400,
           |   "errors":[
           |      {
-          |         "path":"/escTaxYears",
+          |         "path":"/taxYears",
           |         "validationErrors":[
           |            {
           |               "message":"Please provide at least 1 Tax Year",
@@ -124,7 +124,7 @@ class ESCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
           |   "status":400,
           |   "errors":[
           |      {
-          |         "path":"/escTaxYears(0)/periods(0)/claimants(0)/eligibleMonthsInPeriod",
+          |         "path":"/taxYears(0)/periods(0)/claimants(0)/eligibleMonthsInPeriod",
           |         "validationErrors":[
           |            {
           |               "message":"Number of months should not be less than 0 and not more than 99",
@@ -162,7 +162,7 @@ class ESCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
           |   "status":400,
           |   "errors":[
           |      {
-          |         "path":"/escTaxYears(0)/periods(0)/claimants(0)/eligibleMonthsInPeriod",
+          |         "path":"/taxYears(0)/periods(0)/claimants(0)/eligibleMonthsInPeriod",
           |         "validationErrors":[
           |            {
           |               "message":"Number of months should not be less than 0 and not more than 99",
@@ -198,7 +198,7 @@ class ESCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
           |   "status":400,
           |   "errors":[
           |      {
-          |         "path":"/escTaxYears(0)/periods",
+          |         "path":"/taxYears(0)/periods",
           |         "validationErrors":[
           |            {
           |               "message":"Please provide at least 1 Period",
@@ -234,7 +234,7 @@ class ESCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
           |   "status":400,
           |   "errors":[
           |      {
-          |         "path":"/escTaxYears(0)/periods(0)/claimants",
+          |         "path":"/taxYears(0)/periods(0)/claimants",
           |         "validationErrors":[
           |            {
           |               "message":"Please provide at least 1 claimant",
@@ -307,7 +307,7 @@ class ESCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
           |   "status":400,
           |   "errors":[
           |      {
-          |         "path":"/escTaxYears(0)/periods(0)/until",
+          |         "path":"/taxYears(0)/periods(0)/until",
           |         "validationErrors":[
           |            {
           |               "message":"error.path.missing",
@@ -343,7 +343,7 @@ class ESCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
           |   "status":400,
           |   "errors":[
           |      {
-          |         "path":"/escTaxYears(0)/periods(0)/claimants(0)/eligibleMonthsInPeriod",
+          |         "path":"/taxYears(0)/periods(0)/claimants(0)/eligibleMonthsInPeriod",
           |         "validationErrors":[
           |            {
           |               "message":"error.expected.jsnumber",
