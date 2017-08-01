@@ -4,5 +4,7 @@ POST       /tax-credits/calculate/total-award                 @controllers.tc.Ta
 POST       /employer-supported-childcare/calculate            @controllers.esc.ESCCalculatorController.calculate
 POST       /tax-free-childcare/calculate                      @controllers.tfc.TFCCalculatorController.calculate
 
+POST       /calculate                                         @controllers.CalculatorController.calculate
+
 #POST      /tax-credits/calculate/:period                     @controllers.tc.TaxCreditCalculatorController.calculate(period = period)
 
