@@ -123,6 +123,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication {
         taxHigherBandUpperLimit = 150000.00,
         taxAdditionalRate = 45.00,
         taxAdditionalBandLowerLimit= 150000.01,
+        niLimit = 8164,
         niCategory = niCat
       )
       config shouldBe taxYear
@@ -159,6 +160,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication {
         taxHigherBandUpperLimit = 150000.00,
         taxAdditionalRate = 45.00,
         taxAdditionalBandLowerLimit= 150000.01,
+        niLimit = 8112,
         niCategory = niCat
       )
       config shouldBe taxYear
@@ -196,6 +198,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication {
         taxHigherBandUpperLimit = 150000.00,
         taxAdditionalRate = 45.00,
         taxAdditionalBandLowerLimit= 150000.01,
+        niLimit = 8112,
         niCategory = niCat
       )
       config shouldBe taxYear
@@ -233,6 +236,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication {
         taxHigherBandUpperLimit = 150000.00,
         taxAdditionalRate = 45.00,
         taxAdditionalBandLowerLimit= 150000.01,
+        niLimit = 8164,
         niCategory = niCat
       )
       config shouldBe taxYear
@@ -270,6 +274,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication {
         taxHigherBandUpperLimit = 150000.00,
         taxAdditionalRate = 45.00,
         taxAdditionalBandLowerLimit= 150000.01,
+        niLimit = 8164,
         niCategory = niCat
       )
       config shouldBe taxYear
@@ -307,6 +312,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication {
         taxHigherBandUpperLimit = 150000.00,
         taxAdditionalRate = 45.00,
         taxAdditionalBandLowerLimit= 150000.01,
+        niLimit = 8164,
         niCategory = niCat
       )
       config shouldBe taxYear
@@ -344,6 +350,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication {
         taxHigherBandUpperLimit = 150000.00,
         taxAdditionalRate = 45.00,
         taxAdditionalBandLowerLimit= 150000.01,
+        niLimit = 8164,
         niCategory = niCat
       )
       config shouldBe taxYear
