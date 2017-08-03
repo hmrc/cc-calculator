@@ -32,6 +32,10 @@ trait AuditEvents {
 
   def auditService : AuditService
 
+  def auditRequest(data: String)(implicit request: Request[_], hc: HeaderCarrier): Unit = {
+    auditEvent("Request", data)
+  }
+
   def auditTFCRequest(data : String) (implicit request: Request[_], hc: HeaderCarrier): Unit = {
     auditEvent("TFCRequest", data)
   }

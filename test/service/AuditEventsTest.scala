@@ -67,6 +67,20 @@ class AuditEventsTest extends UnitSpec with FakeCCCalculatorApplication with Moc
 
   "Audit Events" should {
 
+    "audit request received - success " in {
+
+      val observableAuditConnector = createObservableAuditConnector
+      val auditor = createAuditor(observableAuditConnector)
+
+      auditor.auditRequest("Data")
+
+      val event =  observableAuditConnector.events.head
+
+      event.auditType should equal("Request")
+      event.detail("data") should startWith("Data")
+
+    }
+
     "audit request received for TFC - success " in {
 
       val observableAuditConnector = createObservableAuditConnector

@@ -27,28 +27,28 @@ import play.api.libs.json.Reads._
 import utils._
 
 case class ESCCalculatorInput(
-                               escTaxYears: List[ESCTaxYear],
+                               taxYears: List[ESCTaxYear],
                                location: String
                               )
 
 object ESCCalculatorInput extends ESCConfig with MessagesObject {
   implicit val escEligibilityReads : Reads[ESCCalculatorInput] = (
-      (JsPath \ "escTaxYears").read[List[ESCTaxYear]].filter(ValidationError(messages("cc.calc.invalid.number.of.ty")))
+      (JsPath \ "taxYears").read[List[ESCTaxYear]].filter(ValidationError(messages("cc.calc.invalid.number.of.ty")))
         (taxYears => taxYears.length >= lowerTaxYearsLimitValidation) and
         (JsPath \ "location").read[String]
     )(ESCCalculatorInput.apply _)
 }
 
 case class ESCTaxYear(
-                    startDate: LocalDate,
-                    endDate: LocalDate,
+                    from: LocalDate,
+                    until: LocalDate,
                     periods: List[ESCPeriod]
                     )
 
 object ESCTaxYear extends ESCConfig with MessagesObject {
   implicit val taxYearReads: Reads[ESCTaxYear] = (
-    (JsPath \ "startDate").read[LocalDate](jodaLocalDateReads(datePattern)) and
-      (JsPath \ "endDate").read[LocalDate](jodaLocalDateReads(datePattern)) and
+    (JsPath \ "from").read[LocalDate](jodaLocalDateReads(datePattern)) and
+      (JsPath \ "until").read[LocalDate](jodaLocalDateReads(datePattern)) and
         (JsPath \ "periods").read[List[ESCPeriod]].filter(
           ValidationError(messages("cc.calc.invalid.number.of.periods"))
         )(periods => periods.length >= lowerPeriodsLimitValidation)
