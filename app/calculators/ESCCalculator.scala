@@ -85,11 +85,11 @@ trait ESCCalculatorHelpers extends ESCConfig with CCCalculatorHelper with Messag
       case gross if gross <= niLimit =>
         (BigDecimal(0.00), BigDecimal(0.00))
       case gross if gross <= personalAllowance =>
-        (BigDecimal(0.00), gross - niLimit)
+        (BigDecimal(0.00), income.taxablePay - niLimit)
       case gross if gross <= higherRateCeiling =>
         (income.taxablePay - personalAllowance, personalAllowance - niLimit)
       case gross if gross > higherRateCeiling =>
-        (income.taxablePay, personalAllowance - niLimit)
+        (income.taxablePay, BigDecimal(0.00))
     }
   }
 
@@ -395,6 +395,14 @@ trait ESCCalculator extends ESCCalculatorHelpers with ESCCalculatorTax with ESCC
 
   import scala.concurrent.ExecutionContext.Implicits.global
 
+  /**
+   *
+   * @param maximumReliefAmount maximum amount of vouchers user can buy
+   * @param relevantEarnings earnings from which user can buy vouchers
+   * @param escAmountForPeriod real amount that we want to assign to user
+   * @return actual amount of vouchers that user can buy
+   */
+
   def getActualRelief(maximumReliefAmount: BigDecimal, relevantEarnings: BigDecimal, escAmountForPeriod: BigDecimal) = {
     val maxLimit = if(maximumReliefAmount <= relevantEarnings) {
       maximumReliefAmount
@@ -426,10 +434,10 @@ trait ESCCalculator extends ESCCalculatorHelpers with ESCCalculatorTax with ESCC
         val lowestIncomeClaimant: ESCClaimant = claimantsByIncome.head
 
         val (maximumReliefAmountHE, relevantEarningsForTaxHE, relevantEarningsForNIHE) =
-          calcReliefAmount(period, highestIncomeClaimant.income, highestIncomeClaimant.isESCStartDateBefore2011, location)
+          getRelevantEarnings(period, highestIncomeClaimant.income, highestIncomeClaimant.isESCStartDateBefore2011, location)
 
         val (maximumReliefAmountLE, relevantEarningsForTaxLE, relevantEarningsForNILE) =
-          calcReliefAmount(period, lowestIncomeClaimant.income, lowestIncomeClaimant.isESCStartDateBefore2011, location)
+          getRelevantEarnings(period, lowestIncomeClaimant.income, lowestIncomeClaimant.isESCStartDateBefore2011, location)
 
         val reliefFromTaxHE = getActualRelief(maximumReliefAmountHE, relevantEarningsForTaxHE, escAmountForPeriod)
 
@@ -446,10 +454,9 @@ trait ESCCalculator extends ESCCalculatorHelpers with ESCCalculatorTax with ESCC
           (reliefFromTaxLE, reliefFromTaxHE, reliefFromNILE, reliefFromNIHE)
         }
       }
-
       case (Some(parent), _) if parent.qualifying => {
         val (maximumReliefAmount, relevantEarningsForTax, relevantEarningsForNI) =
-          calcReliefAmount(period, parent.income, parent.isESCStartDateBefore2011, location)
+          getRelevantEarnings(period, parent.income, parent.isESCStartDateBefore2011, location)
 
         val reliefFromTax = getActualRelief(maximumReliefAmount, relevantEarningsForTax, escAmountForPeriod)
         val reliefFromNI = getActualRelief(maximumReliefAmount - reliefFromTax, relevantEarningsForNI, escAmountForPeriod - reliefFromTax)
@@ -458,7 +465,7 @@ trait ESCCalculator extends ESCCalculatorHelpers with ESCCalculatorTax with ESCC
       }
       case (_, Some(partner)) if partner.qualifying => {
         val (maximumReliefAmount, relevantEarningsForTax, relevantEarningsForNI) =
-          calcReliefAmount(period, partner.income, partner.isESCStartDateBefore2011, location)
+          getRelevantEarnings(period, partner.income, partner.isESCStartDateBefore2011, location)
 
         val reliefFromTax = getActualRelief(maximumReliefAmount, relevantEarningsForTax, escAmountForPeriod)
         val reliefFromNI = getActualRelief(maximumReliefAmount - reliefFromTax, relevantEarningsForNI, escAmountForPeriod - reliefFromTax)
@@ -524,7 +531,13 @@ trait ESCCalculator extends ESCCalculatorHelpers with ESCCalculatorTax with ESCC
     listOfPairs.flatten
   }
 
-  protected def calcReliefAmount(period: ESCPeriod, income: ESCTotalIncome, isESCStartDateBefore2011: Boolean, location: String) = {
+  /**
+   * @return Returns tuple of:
+   *         - maximum amount of vouchers user can buy
+   *         - relevant earnings between salary and personal allowance
+   *         - relevant earnings between salary or personal allowance (whichever is less) and NI limit
+   */
+  protected def getRelevantEarnings(period: ESCPeriod, income: ESCTotalIncome, isESCStartDateBefore2011: Boolean, location: String) = {
     val config = ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location)
     val taxCode = getTaxCode(period, income, config)
     // personal allowance per month
