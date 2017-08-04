@@ -501,10 +501,18 @@ println("------------- escAmountForPeriod: " + escAmountForPeriod)
         val (maximumReliefAmountLE, relevantEarningsForTaxLE, relevantEarningsForNILE) =
           calcReliefAmount(period, lowestIncomeClaimant.income, lowestIncomeClaimant.isESCStartDateBefore2011, escAmountForPeriod, location)
 
+        println("---------------- reliefFromTaxHE")
         val reliefFromTaxHE = getActualRelief(maximumReliefAmountHE, relevantEarningsForTaxHE, escAmountForPeriod)
-        val reliefFromTaxLE = getActualRelief(maximumReliefAmountLE, relevantEarningsForTaxHE, escAmountForPeriod - reliefFromTaxHE)
 
+        println("---------------- reliefFromTaxLE")
+        val reliefFromTaxLE = getActualRelief(maximumReliefAmountLE, relevantEarningsForTaxLE, escAmountForPeriod - reliefFromTaxHE)
+
+        println("---------------- reliefFromNIHE")
         val reliefFromNIHE = getActualRelief(maximumReliefAmountHE - reliefFromTaxHE, relevantEarningsForNIHE, escAmountForPeriod - reliefFromTaxHE - reliefFromTaxLE)
+
+        println("---------------- reliefFromNILE")
+        println("---------------- maximumReliefAmountLE: " + maximumReliefAmountLE)
+        println("---------------- reliefFromTaxLE: " + reliefFromTaxLE)
         val reliefFromNILE = getActualRelief(maximumReliefAmountLE - reliefFromTaxLE, relevantEarningsForNILE, escAmountForPeriod - reliefFromTaxHE - reliefFromTaxLE - reliefFromNIHE)
 
 
