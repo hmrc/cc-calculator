@@ -447,7 +447,7 @@ trait ESCCalculator extends ESCCalculatorHelpers with ESCCalculatorTax with ESCC
 
         val reliefFromNILE = getActualRelief(maximumReliefAmountLE - reliefFromTaxLE, relevantEarningsForNILE, escAmountForPeriod - reliefFromTaxHE - reliefFromTaxLE - reliefFromNIHE)
 
-        if(highestIncomeClaimant.isPartner == false) {
+        if(!highestIncomeClaimant.isPartner) {
           (reliefFromTaxHE, reliefFromTaxLE, reliefFromNIHE, reliefFromNILE)
         }
         else {
@@ -484,7 +484,7 @@ trait ESCCalculator extends ESCCalculatorHelpers with ESCCalculatorTax with ESCC
       val taxCode = getTaxCode(period, claimant.income, config)
       val personalAllowanceAmount: BigDecimal = getPersonalAllowance(period, claimant.income, config)
 
-      val (actualTaxReliefAmount, actualNIReliefAmount): (BigDecimal, BigDecimal) = if(claimant.isPartner == false) {
+      val (actualTaxReliefAmount, actualNIReliefAmount): (BigDecimal, BigDecimal) = if(!claimant.isPartner) {
         (parentESCTaxAmount, parentESCTaxAmount + parentESCNIAmount)
       }
       else {
