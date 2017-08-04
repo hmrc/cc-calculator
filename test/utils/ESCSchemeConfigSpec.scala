@@ -51,6 +51,21 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication {
       pre2011MaxExemptionMonthly shouldBe 243
     }
 
+    "Return 243 for post-2011-maximum-exemption" in {
+      val pattern = "dd-MM-yyyy"
+      val formatter = DateTimeFormat.forPattern(pattern)
+      val fromDate = LocalDate.parse("23-05-2016", formatter)
+      ESCConfig.getMaxBottomBandAllowance(fromDate) shouldBe 243
+
+    }
+
+    "Return 8112 for NI limit for 2016/2017" in {
+      val pattern = "dd-MM-yyyy"
+      val formatter = DateTimeFormat.forPattern(pattern)
+      val fromDate = LocalDate.parse("23-05-2016", formatter)
+      ESCConfig.getNILimit(fromDate) shouldBe 8112
+
+    }
 
     "Return error for invalid niCategoryCode" in {
       val pattern = "dd-MM-yyyy"
@@ -117,6 +132,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication {
         taxHigherBandUpperLimit = 150000.00,
         taxAdditionalRate = 45.00,
         taxAdditionalBandLowerLimit= 150000.01,
+        niLimit = 8164,
         niCategory = niCat
       )
       config shouldBe taxYear
@@ -153,6 +169,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication {
         taxHigherBandUpperLimit = 150000.00,
         taxAdditionalRate = 45.00,
         taxAdditionalBandLowerLimit= 150000.01,
+        niLimit = 8112,
         niCategory = niCat
       )
       config shouldBe taxYear
@@ -190,6 +207,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication {
         taxHigherBandUpperLimit = 150000.00,
         taxAdditionalRate = 45.00,
         taxAdditionalBandLowerLimit= 150000.01,
+        niLimit = 8112,
         niCategory = niCat
       )
       config shouldBe taxYear
@@ -227,6 +245,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication {
         taxHigherBandUpperLimit = 150000.00,
         taxAdditionalRate = 45.00,
         taxAdditionalBandLowerLimit= 150000.01,
+        niLimit = 8164,
         niCategory = niCat
       )
       config shouldBe taxYear
@@ -264,6 +283,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication {
         taxHigherBandUpperLimit = 150000.00,
         taxAdditionalRate = 45.00,
         taxAdditionalBandLowerLimit= 150000.01,
+        niLimit = 8164,
         niCategory = niCat
       )
       config shouldBe taxYear
@@ -301,6 +321,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication {
         taxHigherBandUpperLimit = 150000.00,
         taxAdditionalRate = 45.00,
         taxAdditionalBandLowerLimit= 150000.01,
+        niLimit = 8112,
         niCategory = niCat
       )
       config shouldBe taxYear
@@ -338,6 +359,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication {
         taxHigherBandUpperLimit = 150000.00,
         taxAdditionalRate = 45.00,
         taxAdditionalBandLowerLimit= 150000.01,
+        niLimit = 8164,
         niCategory = niCat
       )
       config shouldBe taxYear
@@ -358,7 +380,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication {
       val escTaxYearConfig = ESCConfig.getConfig(fromDate,"A", location)
       escTaxYearConfig.taxBasicBandCapacity shouldBe 32000.00
     }
-    
+
 
   }
 }

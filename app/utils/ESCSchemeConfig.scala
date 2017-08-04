@@ -43,6 +43,26 @@ trait ESCConfig extends CCConfig with ServicesConfig with MessagesObject with Lo
     getTaxYear(niCategoryCode, result, location)
   }
 
+  def getLatestConfig(currentDate: LocalDate): Configuration = {
+    val configs: Seq[play.api.Configuration] = conf.getConfigSeq("esc.rule-change").get
+    // get the default config and keep
+    val defaultConfig = configs.filter(x => {
+      x.getString("rule-date").equals(Some("default"))
+    }).head
+    // fetch the config if it matches the particular year
+    getConfigForTaxYear(currentDate, configs).getOrElse(defaultConfig)
+  }
+
+  def getNILimit(currentDate: LocalDate): Double = {
+    val result = getLatestConfig(currentDate)
+    result.getDouble("ni-limit").get
+  }
+
+  def getMaxBottomBandAllowance(currentDate: LocalDate): Double = {
+    val result = getLatestConfig(currentDate)
+    result.getDouble("post-2011-maximum-exemption.basic.monthly").get
+  }
+
   def getTaxYear(niCategoryCode: String, config: Configuration, location: String): ESCTaxYearConfig = {
     // get the ni Category
     val niCat = getNiCategory(niCategoryCode, config)
@@ -61,7 +81,8 @@ trait ESCConfig extends CCConfig with ServicesConfig with MessagesObject with Lo
       taxHigherRate = localConfig.getDouble("higher.rate").get,
       taxHigherBandUpperLimit = localConfig.getDouble("higher.band-annual-upper-limit").get,
       taxAdditionalRate = localConfig.getDouble("additional.rate").get,
-      taxAdditionalBandLowerLimit= localConfig.getDouble("additional.band-annual-lower-limit").get,
+      taxAdditionalBandLowerLimit = localConfig.getDouble("additional.band-annual-lower-limit").get,
+      niLimit = config.getDouble("ni-limit").get,
       niCategory = niCat
     )
   }
@@ -136,6 +157,7 @@ case class ESCTaxYearConfig (
                              taxHigherBandUpperLimit: Double,
                              taxAdditionalRate: Double,
                              taxAdditionalBandLowerLimit: Double,
+                             niLimit: Double,
                              niCategory: NiCategory
                              )
 
