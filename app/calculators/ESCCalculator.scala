@@ -460,12 +460,23 @@ trait ESCCalculator extends ESCCalculatorHelpers with ESCCalculatorTax with ESCC
     else {
       relevantEarnings
     }
-
+println("------------- escAmountForPeriod: " + escAmountForPeriod)
+    println("------------- maxLimit: " + maxLimit)
     if(escAmountForPeriod <= maxLimit) {
-      escAmountForPeriod
+      if(escAmountForPeriod < 0) {
+        BigDecimal(0)
+      }
+      else {
+        escAmountForPeriod
+      }
     }
     else {
-      maxLimit
+      if(maxLimit < 0) {
+        BigDecimal(0)
+      }
+      else {
+        maxLimit
+      }
     }
   }
 
@@ -491,10 +502,18 @@ trait ESCCalculator extends ESCCalculatorHelpers with ESCCalculatorTax with ESCC
           calcReliefAmount(period, lowestIncomeClaimant.income, lowestIncomeClaimant.isESCStartDateBefore2011, escAmountForPeriod, location)
 
         val reliefFromTaxHE = getActualRelief(maximumReliefAmountHE, relevantEarningsForTaxHE, escAmountForPeriod)
-        val reliefFromTaxLE = getActualRelief(maximumReliefAmountLE - reliefFromTaxHE, relevantEarningsForTaxHE, escAmountForPeriod - reliefFromTaxHE)
+        val reliefFromTaxLE = getActualRelief(maximumReliefAmountLE, relevantEarningsForTaxHE, escAmountForPeriod - reliefFromTaxHE)
 
-        val reliefFromNIHE = getActualRelief(maximumReliefAmountHE - reliefFromTaxHE - reliefFromTaxLE, relevantEarningsForNIHE, escAmountForPeriod - reliefFromTaxHE - reliefFromTaxLE)
-        val reliefFromNILE = getActualRelief(maximumReliefAmountLE - reliefFromTaxHE - reliefFromTaxLE - reliefFromNIHE, relevantEarningsForNILE, escAmountForPeriod - reliefFromTaxHE - reliefFromTaxLE - reliefFromNIHE)
+        val reliefFromNIHE = getActualRelief(maximumReliefAmountHE - reliefFromTaxHE, relevantEarningsForNIHE, escAmountForPeriod - reliefFromTaxHE - reliefFromTaxLE)
+        val reliefFromNILE = getActualRelief(maximumReliefAmountLE - reliefFromTaxLE, relevantEarningsForNILE, escAmountForPeriod - reliefFromTaxHE - reliefFromTaxLE - reliefFromNIHE)
+
+
+        println("----------- reliefFromTaxHE: " + reliefFromTaxHE)
+        println("----------- reliefFromTaxLE: " + reliefFromTaxLE)
+        println("----------- reliefFromNIHE: " + reliefFromNIHE)
+        println("----------- reliefFromNILE: " + reliefFromNILE)
+
+
 
 //        val (personalAllowanceMonthlyHighestIncome, maximumReliefAmountHighestIncome, _) =
 //          calcReliefAmount(period, highestIncomeClaimant.income, highestIncomeClaimant.isESCStartDateBefore2011, escAmountForPeriod, location)

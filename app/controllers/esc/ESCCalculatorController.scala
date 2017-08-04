@@ -39,7 +39,6 @@ class ESCCalculatorController @Inject()(val messagesApi: MessagesApi) extends Ba
     implicit request =>
       request.body.validate[ESCCalculatorInput].fold(
         error => {
-          println("---------------- " + error)
           Logger.warn("ESC Calculator Validation JsError in ESCCalculatorController.calculate")
           Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(play.api.http.Status.BAD_REQUEST, Left(error))))
         },
