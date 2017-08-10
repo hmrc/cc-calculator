@@ -34,7 +34,7 @@
             {
               "qualifying": true,
               "isPartner": false,
-              "claimantElements": {
+              "claimantDisability": {
                 "disability": false,
                 "severeDisability": false
               }
@@ -42,7 +42,7 @@
             {
               "qualifying": true,
               "isPartner": true,
-              "claimantElements": {
+              "claimantDisability": {
                 "disability": false,
                 "severeDisability": false
               }
