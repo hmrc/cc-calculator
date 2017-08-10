@@ -754,7 +754,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with Mo
             TCClaimant(
               qualifying = true,
               isPartner = false,
-              claimantElements = TCDisability(disability = true, severeDisability = false),
+              claimantDisability = TCDisability(disability = true, severeDisability = false),
               doesNotTaper = false
             )
           )
@@ -769,7 +769,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with Mo
             TCClaimant(
               qualifying = true,
               isPartner = false,
-              claimantElements = TCDisability(disability = false, severeDisability = true),
+              claimantDisability = TCDisability(disability = false, severeDisability = true),
               doesNotTaper = false
             )
           )
@@ -1208,7 +1208,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with Mo
             TCClaimant(
               qualifying = true,
               isPartner = false,
-              claimantElements = TCDisability(
+              claimantDisability = TCDisability(
                 disability = true,
                 severeDisability = false
               ),
@@ -1217,7 +1217,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with Mo
             TCClaimant(
               qualifying = true,
               isPartner = true,
-              claimantElements = TCDisability(
+              claimantDisability = TCDisability(
                 disability = true,
                 severeDisability = false
               ),
@@ -1548,7 +1548,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with Mo
         )
       }
 
-      val claimantClaimingSocialSecurityBenefit = models.input.tc.TCClaimant(qualifying = true, doesNotTaper = true, isPartner = false, claimantElements = TCDisability())
+      val claimantClaimingSocialSecurityBenefit = models.input.tc.TCClaimant(qualifying = true, doesNotTaper = true, isPartner = false, claimantDisability = TCDisability())
 
       val inputPeriod = models.input.tc.TCPeriod(from = fromDate, until = untilDate, householdElements = TCHouseholdElements(), claimants = List(claimantClaimingSocialSecurityBenefit), children = List())
 
@@ -1588,7 +1588,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with Mo
         )
       }
 
-      val claimantClaimingSocialSecurityBenefit = models.input.tc.TCClaimant(qualifying = true, doesNotTaper = false, isPartner = false, claimantElements = TCDisability())
+      val claimantClaimingSocialSecurityBenefit = models.input.tc.TCClaimant(qualifying = true, doesNotTaper = false, isPartner = false, claimantDisability = TCDisability())
 
       val inputPeriod = models.input.tc.TCPeriod(from = fromDate, until = untilDate, householdElements = TCHouseholdElements(), claimants = List(claimantClaimingSocialSecurityBenefit), children = List())
 
@@ -1628,8 +1628,8 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with Mo
         )
       }
 
-      val claimant = models.input.tc.TCClaimant(qualifying = true, isPartner = false, claimantElements = TCDisability())
-      val claimantClaimingSocialSecurityBenefit = models.input.tc.TCClaimant(qualifying = true, doesNotTaper = true, isPartner = true, claimantElements = TCDisability())
+      val claimant = models.input.tc.TCClaimant(qualifying = true, isPartner = false, claimantDisability = TCDisability())
+      val claimantClaimingSocialSecurityBenefit = models.input.tc.TCClaimant(qualifying = true, doesNotTaper = true, isPartner = true, claimantDisability = TCDisability())
 
       val inputPeriod = models.input.tc.TCPeriod(from = fromDate, until = untilDate, householdElements = TCHouseholdElements(), claimants = List(claimant, claimantClaimingSocialSecurityBenefit), children = List())
 
@@ -1669,8 +1669,8 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with Mo
         )
       }
 
-      val claimantClaimingSocialSecurityBenefit1 = models.input.tc.TCClaimant(qualifying = true, doesNotTaper = true, isPartner = false, claimantElements = TCDisability())
-      val claimantClaimingSocialSecurityBenefit2 = models.input.tc.TCClaimant(qualifying = true, doesNotTaper = true, isPartner = true, claimantElements = TCDisability())
+      val claimantClaimingSocialSecurityBenefit1 = models.input.tc.TCClaimant(qualifying = true, doesNotTaper = true, isPartner = false, claimantDisability = TCDisability())
+      val claimantClaimingSocialSecurityBenefit2 = models.input.tc.TCClaimant(qualifying = true, doesNotTaper = true, isPartner = true, claimantDisability = TCDisability())
 
       val inputPeriod = models.input.tc.TCPeriod(from = fromDate, until = untilDate, householdElements = TCHouseholdElements(), claimants = List(claimantClaimingSocialSecurityBenefit1, claimantClaimingSocialSecurityBenefit2), children = List())
 
@@ -1710,8 +1710,8 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with Mo
         )
       }
 
-      val claimant1 = models.input.tc.TCClaimant(qualifying = true, isPartner = false, claimantElements = TCDisability())
-      val claimant2 = models.input.tc.TCClaimant(qualifying = true, isPartner = true, claimantElements = TCDisability())
+      val claimant1 = models.input.tc.TCClaimant(qualifying = true, isPartner = false, claimantDisability = TCDisability())
+      val claimant2 = models.input.tc.TCClaimant(qualifying = true, isPartner = true, claimantDisability = TCDisability())
 
       val inputPeriod = models.input.tc.TCPeriod(from = fromDate, until = untilDate, householdElements = TCHouseholdElements(), claimants = List(claimant1, claimant2), children = List())
 
@@ -1738,7 +1738,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with Mo
           TCClaimant(
             qualifying = true,
             isPartner = false,
-            claimantElements = TCDisability(
+            claimantDisability = TCDisability(
               disability = false,
               severeDisability = false
             ),
@@ -1783,7 +1783,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with Mo
           TCClaimant(
             qualifying = true,
             isPartner = false,
-            claimantElements = TCDisability(
+            claimantDisability = TCDisability(
               disability = false,
               severeDisability = false
             ),

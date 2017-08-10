@@ -146,15 +146,15 @@ object TCDisability {
 
 case class TCClaimant(qualifying: Boolean,
                       isPartner: Boolean,
-                      claimantElements: TCDisability,
+                      claimantDisability: TCDisability,
                       doesNotTaper : Boolean = false) {
 
   def getsDisabilityElement: Boolean = {
-    qualifying && claimantElements.disability
+    qualifying && claimantDisability.disability
   }
 
   def getsSevereDisabilityElement: Boolean = {
-    qualifying && claimantElements.severeDisability
+    qualifying && claimantDisability.severeDisability
   }
 
 }
@@ -164,7 +164,7 @@ object TCClaimant {
   implicit val claimantFormat: Reads[TCClaimant] = (
     (JsPath \ "qualifying").read[Boolean] and
       (JsPath \ "isPartner").read[Boolean] and
-        (JsPath \ "claimantElements").read[TCDisability] and
+        (JsPath \ "claimantDisability").read[TCDisability] and
           ((JsPath \ "doesNotTaper").read[Boolean] or Reads.pure(false))
     )(TCClaimant.apply _)
 }
