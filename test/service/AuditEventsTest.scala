@@ -20,13 +20,13 @@ import org.scalatest.mock.MockitoSugar
 import play.api.test.FakeRequest
 import uk.gov.hmrc.play.audit.http.config.AuditingConfig
 import uk.gov.hmrc.play.audit.http.connector.{AuditConnector, AuditResult}
-import uk.gov.hmrc.play.audit.model.{AuditEvent, DataEvent}
-import uk.gov.hmrc.play.http.HeaderCarrier
+import uk.gov.hmrc.play.audit.model.DataEvent
 import uk.gov.hmrc.play.test.UnitSpec
 import utils.FakeCCCalculatorApplication
 
 import scala.collection.mutable.ListBuffer
 import scala.concurrent.{ExecutionContext, Future}
+import uk.gov.hmrc.http.HeaderCarrier
 
 /**
  * Created by user on 25/04/16.
@@ -45,7 +45,7 @@ class AuditEventsTest extends UnitSpec with FakeCCCalculatorApplication with Moc
     }
 
     override def auditingConfig: AuditingConfig = ???
-    override def sendEvent(event: AuditEvent)(implicit hc: HeaderCarrier = HeaderCarrier(), ec : ExecutionContext): Future[AuditResult] = {
+    override def sendEvent(event: DataEvent)(implicit hc: HeaderCarrier = HeaderCarrier(), ec : ExecutionContext): Future[AuditResult] = {
       addEvent(event.asInstanceOf[DataEvent])
       Future.successful(AuditResult.Success)
     }
