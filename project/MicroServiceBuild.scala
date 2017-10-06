@@ -12,11 +12,7 @@ private object AppDependencies {
   import play.sbt.PlayImport._
   import play.core.PlayVersion
 
-  private val microServiceBootstrapVersion = "5.15.0"
-  private val playConfigVersion = "4.3.0"
-  private val logbackJsonLoggerVersion = "3.1.0"
-  private val playUrlBindersVersion = "2.1.0"
-  private val playHealthVersion = "2.1.0"
+  private val microServiceBootstrapVersion = "6.9.0"
   private val scalaTestVersion = "2.2.6"
   private val pegDownVersion = "1.6.0"
   private val hmrcTestVersion = "2.3.0"
@@ -28,10 +24,6 @@ private object AppDependencies {
   val compile = Seq(
     ws,
     "uk.gov.hmrc" %% "microservice-bootstrap" % microServiceBootstrapVersion,
-    "uk.gov.hmrc" %% "play-url-binders" % playUrlBindersVersion,
-    "uk.gov.hmrc" %% "play-config" % playConfigVersion,
-    "uk.gov.hmrc" %% "logback-json-logger" % logbackJsonLoggerVersion,
-    "uk.gov.hmrc" %% "play-health" % playHealthVersion,
     "com.github.fge" % "json-schema-validator" % jsonSchemaValidator,
     "org.json4s" %% "json4s-jackson" % json4s
   )

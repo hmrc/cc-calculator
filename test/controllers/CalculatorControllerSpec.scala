@@ -36,7 +36,6 @@ import play.api.mvc.Request
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import service.AuditEvents
-import uk.gov.hmrc.play.http.HeaderCarrier
 import utils.FakeCCCalculatorApplication
 
 import scala.concurrent.Future
