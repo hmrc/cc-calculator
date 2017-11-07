@@ -63,9 +63,9 @@ case class TFCChild(
                      qualifying: Boolean,
                      from: Option[LocalDate],
                      until: Option[LocalDate],
-                     childcareCost : BigDecimal,
-                     childcareCostPeriod : Periods.Period = Periods.Monthly,
-                     disability :TFCDisability
+                     childcareCost: BigDecimal,
+                     childcareCostPeriod: Periods.Period = Periods.Monthly,
+                     disability: TFCDisability
                    ) {
   def getChildDisability: Boolean = {
     disability.disabled || disability.severelyDisabled

@@ -97,7 +97,7 @@ object TCChildElements {
 
 case class TCChild(qualifying: Boolean = false,
                    childcareCost : BigDecimal,
-                   childcareCostPeriod: Periods.Period,
+                   childcareCostPeriod: Periods.Period = Periods.Monthly,
                    childElements: TCChildElements) {
 
   def isQualifyingWTC: Boolean = {

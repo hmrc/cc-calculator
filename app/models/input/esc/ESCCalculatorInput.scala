@@ -75,7 +75,7 @@ object ESCPeriod extends ESCConfig with MessagesObject {
 case class Child(
                   qualifying: Boolean = false,
                   childCareCost: BigDecimal,
-                  childCareCostPeriod: Periods.Period
+                  childCareCostPeriod: Periods.Period = Periods.Monthly
                 )
 
 object Child extends MessagesObject {
