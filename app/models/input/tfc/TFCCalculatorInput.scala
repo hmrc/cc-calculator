@@ -64,6 +64,7 @@ case class TFCChild(
                      from: Option[LocalDate],
                      until: Option[LocalDate],
                      childcareCost : BigDecimal,
+                     childcareCostPeriod : Periods.Period = Periods.Monthly,
                      disability :TFCDisability
                    ) {
   def getChildDisability: Boolean = {
@@ -81,7 +82,8 @@ object TFCChild extends MessagesObject {
       ((JsPath \ "from").readNullable[LocalDate](jodaLocalDateReads(datePattern)) or Reads.optionWithNull(jodaLocalDateReads(datePattern))) and
         ((JsPath \ "until").readNullable[LocalDate](jodaLocalDateReads(datePattern)) or Reads.optionWithNull(jodaLocalDateReads(datePattern))) and
           (JsPath \ "childcareCost").read[BigDecimal].filter(ValidationError(messages("cc.calc.childcare.spend.too.low")))(x => childSpendValidation(x)) and
-            (JsPath \ "disability").read[TFCDisability]
+            (JsPath \ "childcareCostPeriod").read[Periods.Period] and
+              (JsPath \ "disability").read[TFCDisability]
     )(TFCChild.apply _)
 }
 

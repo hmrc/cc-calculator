@@ -16,12 +16,13 @@
 
 package calculators
 
-import models.input.tfc.{TFCChild, TFCDisability, TFCCalculatorInput}
+import models.input.tfc.{TFCCalculatorInput, TFCChild, TFCDisability}
 import models.output.tfc.{TFCCalculatorOutput, TFCContribution, TFCOutputChild, TFCPeriod}
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import uk.gov.hmrc.play.test.UnitSpec
-import utils.FakeCCCalculatorApplication
+import utils.{FakeCCCalculatorApplication, Periods}
+
 import scala.concurrent.Future
 
 class TFCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
@@ -263,9 +264,9 @@ class TFCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
       val fromDate = LocalDate.parse("2016-07-01T18:46:17", formatter)
       val untilDate = LocalDate.parse("2016-10-01T18:46:17", formatter)
-      val child = TFCChild(childcareCost = BigDecimal(500.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = TFCDisability(disabled = false, severelyDisabled = false))
+      val child = TFCChild(childcareCost = BigDecimal(115.38), childcareCostPeriod=Periods.Weekly, qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = TFCDisability(disabled = false, severelyDisabled = false))
       val result = tfcCalculator.getChildCareCostForPeriod(child)
-      result shouldBe BigDecimal(1500.00)
+      result shouldBe BigDecimal(1499.94)
     }
 
     "return childcare cost for a period for 0 spend" in {

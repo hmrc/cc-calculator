@@ -968,14 +968,14 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val toDate = LocalDate.parse("21-05-2017", formatter)
 
       val inputClaimant = ESCClaimant(qualifying = true, isPartner = false, eligibleMonthsInPeriod = 1, previousIncome = Some(ESCIncome(Some(50000.00))), currentIncome = None, vouchers = true, escStartDate = fromDate)
-      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant), children = List(buildChild(childCareCost = 90)))
+      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant), children = List(buildChild(childCareCost = 20.77, childCareCostPeriod = Periods.Weekly)))
 
       val result = ESCCalculator.determineSavingsPerClaimant(period, location = location)
 
       val outputClaimant = models.output.esc.ESCClaimant(qualifying = true,
         eligibleMonthsInTaxYear = 1, isPartner = false,
         income = models.output.esc.ESCIncome(taxablePay = 50000.00, gross = 50000.00, taxCode = "", niCategory = "A"),
-        vouchers = true, escAmount = 90.0, escAmountPeriod = Periods.Monthly, escStartDate = fromDate,
+        vouchers = true, escAmount = 90, escAmountPeriod = Periods.Monthly, escStartDate = fromDate,
         savings = ESCSavings(37.80, 36.00, 1.80),
         ESCTaxAndNi(766.60, 361.00), ESCTaxAndNi(730.60, 359.20))
 
@@ -989,7 +989,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
 
       val inputClaimant = ESCClaimant(qualifying = true, isPartner = false, eligibleMonthsInPeriod = 1, previousIncome = None,
         currentIncome = Some(ESCIncome(Some(150001))), vouchers = true, escStartDate = fromDate)
-      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant), children = List(buildChild(childCareCost = 500)))
+      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant), children = List(buildChild(childCareCost = 115.38, childCareCostPeriod = Periods.Weekly)))
 
       val result = ESCCalculator.determineSavingsPerClaimant(period, location = location)
 

@@ -127,10 +127,10 @@ trait TFCCalculator extends CCCalculatorHelper with MessagesObject {
     }
   }
 
-   def getChildCareCostForPeriod(child: TFCChild): BigDecimal = amountToQuarterlyAmount(child.childcareCost, Periods.Monthly)
+   def getChildCareCostForPeriod(child: TFCChild): BigDecimal = amountToQuarterlyAmount(child.childcareCost, child.childcareCostPeriod)
 
    def getTopUpPercentForChildCareCost(child: TFCChild, tfcTaxYearConfig: TFCTaxYearConfig): BigDecimal =
-     ((tfcTaxYearConfig.topUpPercent * getChildCareCostForPeriod(child)) / 100)
+     (tfcTaxYearConfig.topUpPercent * getChildCareCostForPeriod(child)) / 100
 
   def award(request: TFCCalculatorInput): Future[TFCCalculatorOutput] = {
     if(request.householdEligibility) {

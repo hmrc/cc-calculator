@@ -47,7 +47,7 @@ class TFCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
       status(result.get) should not be NOT_FOUND
     }
 
-    "Return Internal Server Error with error message if an exception is thrown during calculation " in {
+    "return Internal Server Error with error message if an exception is thrown during calculation " in {
 
       val mockTFCCalculatorController = new TFCCalculatorController(applicationMessagesApi) {
         override val calculator = mock[TFCCalculator]
