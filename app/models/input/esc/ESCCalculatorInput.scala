@@ -66,8 +66,7 @@ object ESCPeriod extends ESCConfig with MessagesObject {
   implicit val periodReads : Reads[ESCPeriod] = (
     (JsPath \ "from").read[LocalDate](jodaLocalDateReads(datePattern)) and
       (JsPath \ "until").read[LocalDate](jodaLocalDateReads(datePattern)) and
-        (JsPath \ "claimants").read[List[ESCClaimant]].filter(
-          ValidationError(messages("cc.calc.invalid.number.of.claimants"))
+        (JsPath \ "claimants").read[List[ESCClaimant]].filter(ValidationError(messages("cc.calc.invalid.number.of.claimants"))
         )(claimants => claimants.length >= lowerClaimantsLimitValidation) and
           (JsPath \ "children").read[List[Child]]
     )(ESCPeriod.apply _)
@@ -87,8 +86,7 @@ object Child extends MessagesObject {
 
   implicit val childReads : Reads[Child] = (
     (JsPath \ "qualifying").read[Boolean] and
-      (JsPath \ "childCareCost").read[BigDecimal].filter(
-        ValidationError(messages("cc.calc.childcare.spend.too.low"))
+      (JsPath \ "childCareCost").read[BigDecimal].filter(ValidationError(messages("cc.calc.childcare.spend.too.low"))
       )(x => childSpendValidation(x)) and
         (JsPath \ "childCareCostPeriod").read[Periods.Period]
     )(Child.apply _)

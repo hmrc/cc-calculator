@@ -25,13 +25,11 @@ trait CCCalculatorHelper {
    * Unformatted:   5.465068
    * Formatted:      .46
    */
-  def round(value: BigDecimal): BigDecimal = {
-    value.setScale(2, RoundingMode.HALF_UP)
-  }
+  def round(value: BigDecimal): BigDecimal = value.setScale(2, RoundingMode.HALF_UP)
 
   def roundToPound(value: BigDecimal): BigDecimal = value.setScale(0, RoundingMode.HALF_UP)
 
-  def roundup (value: BigDecimal): BigDecimal = value.setScale(2, RoundingMode.UP)
+  def roundup(value: BigDecimal): BigDecimal = value.setScale(2, RoundingMode.UP)
 
   def roundDownToThreeDigits(value: BigDecimal): BigDecimal = value.setScale(3, RoundingMode.DOWN)
 
@@ -75,6 +73,7 @@ trait CCCalculatorHelper {
   }
 
   def amountToMonthlyAmount(cost: BigDecimal, fromPeriod: Periods.Period): BigDecimal = {
+
     fromPeriod match {
       case Periods.Weekly => cost * 52 / 12
       case Periods.Monthly => cost

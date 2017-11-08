@@ -39,7 +39,7 @@ class TFCCalculatorController @Inject()(val messagesApi: MessagesApi) extends Ba
     implicit request =>
       request.body.validate[TFCCalculatorInput].fold(
         error => {
-          Logger.warn(s"TFC Calculator Validation JsError in TFCCalculatorController.calculate")
+          Logger.warn(s"TFC Calculator Validation JsError in TFCCalculatorController.calculate>>>$error")
           Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(play.api.http.Status.BAD_REQUEST, Left(error))))
         },
         result => {

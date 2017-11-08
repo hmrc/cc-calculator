@@ -819,7 +819,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with Mo
             TCChild(
               qualifying = true,
               childcareCost = 200,
-              childcareCostPeriod = Periods.Monthly,
+              childcareCostPeriod = Periods.Weekly,
               childElements = TCChildElements(
                 child = true,
                 youngAdult = false,
@@ -1240,8 +1240,8 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with Mo
           children = List(
             TCChild(
               qualifying = true,
-              childcareCost = 200,
-              childcareCostPeriod = Periods.Monthly,
+              childcareCost = 46.15,
+              childcareCostPeriod = Periods.Weekly,
               childElements = TCChildElements(
                 child = true,
                 youngAdult = false,

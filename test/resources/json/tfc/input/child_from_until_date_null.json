@@ -13,6 +13,7 @@
           "from" : null,
           "until" : null,
           "childcareCost" : 100.00,
+          "childcareCostPeriod" : "Month",
           "disability": {
             "disabled": false,
             "severelyDisabled": false
