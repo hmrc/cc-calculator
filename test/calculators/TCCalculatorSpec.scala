@@ -2181,5 +2181,32 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with Mo
         result shouldBe 47500
       }
     }
+
+    "calculate statutory pay" when {
+      "there is more than one period" in {
+        val input = TCCalculatorInput(
+          taxYears = List(
+            TCTaxYear(
+              from = parseDate("2016-09-27"),
+              until = parseDate("2017-04-06"),
+              previousHouseholdIncome = TCIncome(Some(List(34000, 11000)), Some(List(100)), Some(List(3000, 2500)), None, None),
+              currentHouseholdIncome = TCIncome(Some(List(31500, 15000)), None, None, Some(List(1500)), Some(List(TCStatutoryIncome(1, 99.50)))),
+              periods = List(
+                TCPeriod(
+                  from = parseDate("2016-09-27"),
+                  until = parseDate("2017-04-06"),
+                  householdElements = TCHouseholdElements(true,false,true,false,true,true),
+                  claimants = List(TCClaimant(true,false, TCDisability(false,false)), TCClaimant(true,true, TCDisability(false,false))),
+                  children = List(TCChild(true,200, Periods.Weekly, TCChildElements(true,false,false,false,true)))
+                )
+              )
+            )
+          )
+        )
+        val award = await(tcCalculator.award(input))
+        award.totalAwardAmount shouldBe BigDecimal(0)
+      }
+
+    }
   }
 }
