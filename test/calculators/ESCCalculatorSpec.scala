@@ -165,8 +165,113 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       result shouldBe BigDecimal(11500.00)
     }
 
+    "(TY2018) get personal allowance when emergency tax code W1 is provided" in {
+      val periodStart = LocalDate.parse("2018-05-06", formatter)
+      val periodEnd = LocalDate.parse("2019-04-06", formatter)
+
+      val period = ESCPeriod(from = periodStart, until = periodEnd, List(), List())
+      val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "1150w1", niCategory = "")
+      val result = ESCCalculator.getPersonalAllowance(period, income, ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location))
+      result shouldBe BigDecimal(11500.00)
+    }
+
+    "(TY2018) get personal allowance when emergency tax code M1 is provided" in {
+      val periodStart = LocalDate.parse("2018-05-06", formatter)
+      val periodEnd = LocalDate.parse("2019-04-06", formatter)
+
+      val period = ESCPeriod(from = periodStart, until = periodEnd, List(), List())
+      val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "1170m1", niCategory = "")
+      val result = ESCCalculator.getPersonalAllowance(period, income, ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location))
+      result shouldBe BigDecimal(11500.00)
+    }
+
+    "(TY2018) get personal allowance when emergency tax code X is provided" in {
+      val periodStart = LocalDate.parse("2018-05-06", formatter)
+      val periodEnd = LocalDate.parse("2019-04-06", formatter)
+
+      val period = ESCPeriod(from = periodStart, until = periodEnd, List(), List())
+      val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "1150x", niCategory = "")
+      val result = ESCCalculator.getPersonalAllowance(period, income, ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location))
+      result shouldBe BigDecimal(11500.00)
+    }
+
+    "(TY2018) get personal allowance when tax code 0T is provided" in {
+      val periodStart = LocalDate.parse("2018-05-06", formatter)
+      val periodEnd = LocalDate.parse("2019-04-06", formatter)
+
+      val period = ESCPeriod(from = periodStart, until = periodEnd, List(), List())
+      val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "0t", niCategory = "")
+      val result = ESCCalculator.getPersonalAllowance(period, income, ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location))
+      result shouldBe BigDecimal(0.00)
+    }
+
+    "(TY2018) get personal allowance when tax code K is provided" in {
+      val periodStart = LocalDate.parse("2018-05-06", formatter)
+      val periodEnd = LocalDate.parse("2019-04-06", formatter)
+
+      val period = ESCPeriod(from = periodStart, until = periodEnd, List(), List())
+      val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "k475", niCategory = "")
+      val result = ESCCalculator.getPersonalAllowance(period, income, ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location))
+      result shouldBe BigDecimal(0.00)
+    }
+
+    "(TY2018) throw exception when invalid tax code not starting with K is provided" in {
+      val periodStart = LocalDate.parse("2018-05-06", formatter)
+      val periodEnd = LocalDate.parse("2019-04-06", formatter)
+
+      val period = ESCPeriod(from = periodStart, until = periodEnd, List(), List())
+      val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "590K", niCategory = "")
+      try {
+        val result = ESCCalculator.getPersonalAllowance(period, income, ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location))
+        result shouldBe a[NoSuchElementException]
+      } catch {
+        case e: Exception =>
+          e shouldBe a[NoSuchElementException]
+      }
+    }
+
+    "(TY2018) throw exception when invalid emergency tax code is provided" in {
+      val periodStart = LocalDate.parse("2018-05-06", formatter)
+      val periodEnd = LocalDate.parse("2019-04-06", formatter)
+
+      val period = ESCPeriod(from = periodStart, until = periodEnd, List(), List())
+      val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "12W100", niCategory = "")
+      try {
+        val result = ESCCalculator.getPersonalAllowance(period, income, ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location))
+        result shouldBe a[NoSuchElementException]
+      } catch {
+        case e: Exception =>
+          e shouldBe a[NoSuchElementException]
+      }
+    }
+
+    "(TY2018) throw exception when invalid tax code not ending with S is provided" in {
+      val periodStart = LocalDate.parse("2018-05-06", formatter)
+      val periodEnd = LocalDate.parse("2019-04-06", formatter)
+
+      val period = ESCPeriod(from = periodStart, until = periodEnd, List(), List())
+      val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "S120", niCategory = "")
+      try {
+        val result = ESCCalculator.getPersonalAllowance(period, income, ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location))
+        result shouldBe a[NoSuchElementException]
+      } catch {
+        case e: Exception =>
+          e shouldBe a[NoSuchElementException]
+      }
+    }
+
+    "(TY2018) get personal allowance when scottish tax code S is provided" in {
+      val periodStart = LocalDate.parse("2018-05-06", formatter)
+      val periodEnd = LocalDate.parse("2019-04-06", formatter)
+
+      val period = ESCPeriod(from = periodStart, until = periodEnd, List(), List())
+      val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "1200s", niCategory = "")
+      val result = ESCCalculator.getPersonalAllowance(period, income, ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location))
+      result shouldBe BigDecimal(12000.00)
+    }
+
     "allocate tax earnings to 20% rate band if tax code is BR" in {
-      val taxableEarnings = BigDecimal(10000)
+      val taxableEarnings = BigDecimal(10000.00)
       val PA = BigDecimal(0.00)
       val taxCode = "BR"
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
@@ -418,11 +523,13 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
-      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, isPartner = false, previousIncome = None, currentIncome = None, vouchers = true, escStartDate = escStartDate)
+      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, previousIncome = None, currentIncome = None,
+        vouchers = true, escStartDate = escStartDate)
       val pre2011 = claimant.isESCStartDateBefore2011
       val calcPeriod = Periods.Monthly
 
-      val result = ESCCalculator.determineMaximumIncomeRelief(period, pre2011, relevantEarnings, calcPeriod, taxCode, ESCConfig.getConfig(period.from, "", location))
+      val result = ESCCalculator.determineMaximumIncomeRelief(pre2011, relevantEarnings, calcPeriod, taxCode,
+        ESCConfig.getConfig(period.from, "", location))
 
       result shouldBe 0.00
 
@@ -436,10 +543,12 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
-      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, isPartner = false, previousIncome = None, currentIncome = None, vouchers = true, escStartDate = escStartDate)
+      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, previousIncome = None, currentIncome = None,
+        vouchers = true, escStartDate = escStartDate)
       val pre2011 = claimant.isESCStartDateBefore2011
 
-      val result = ESCCalculator.determineMaximumIncomeRelief(period, pre2011, relevantEarnings, Periods.Monthly, taxCode, ESCConfig.getConfig(period.from, "", location))
+      val result = ESCCalculator.determineMaximumIncomeRelief(pre2011, relevantEarnings, Periods.Monthly, taxCode,
+        ESCConfig.getConfig(period.from, "", location))
       result shouldBe BigDecimal(0.00)
     }
 
@@ -451,11 +560,13 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
-      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, isPartner = false, previousIncome = None, currentIncome = None, vouchers = true, escStartDate = escStartDate)
+      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, previousIncome = None, currentIncome = None,
+        vouchers = true, escStartDate = escStartDate)
       val pre2011 = claimant.isESCStartDateBefore2011
       val calcPeriod = Periods.Yearly
 
-      val result = ESCCalculator.determineMaximumIncomeRelief(period, pre2011, relevantEarnings, calcPeriod, taxCode, ESCConfig.getConfig(period.from, "", location))
+      val result = ESCCalculator.determineMaximumIncomeRelief(pre2011, relevantEarnings, calcPeriod, taxCode,
+        ESCConfig.getConfig(period.from, "", location))
       result shouldBe BigDecimal(0.00)
     }
 
@@ -467,11 +578,13 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
-      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, isPartner = false, previousIncome = None, currentIncome = None, vouchers = true, escStartDate = escStartDate)
+      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, previousIncome = None, currentIncome = None,
+        vouchers = true, escStartDate = escStartDate)
       val pre2011 = claimant.isESCStartDateBefore2011
 
-      val result = ESCCalculator.determineMaximumIncomeRelief(period, pre2011, relevantEarnings, Periods.Monthly, taxCode, ESCConfig.getConfig(period.from, "", location))
-      result shouldBe BigDecimal(243)
+      val result = ESCCalculator.determineMaximumIncomeRelief(pre2011, relevantEarnings, Periods.Monthly, taxCode,
+        ESCConfig.getConfig(period.from, "", location))
+      result shouldBe BigDecimal(243.0)
     }
 
     "determine exemption amount for the 40% tax band Pre 2011 for earnings < higher rate ceiling for TY2016" in {
@@ -482,12 +595,14 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
-      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, isPartner = false, previousIncome = None, currentIncome = None, vouchers = true, escStartDate = escStartDate)
+      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, previousIncome = None, currentIncome = None,
+        vouchers = true, escStartDate = escStartDate)
       val pre2011 = claimant.isESCStartDateBefore2011
       val calcPeriod = Periods.Yearly
 
-      val result = ESCCalculator.determineMaximumIncomeRelief(period, pre2011, relevantEarnings, calcPeriod, taxCode, ESCConfig.getConfig(period.from, "", location))
-      result shouldBe BigDecimal(2916)
+      val result = ESCCalculator.determineMaximumIncomeRelief(pre2011, relevantEarnings, calcPeriod, taxCode,
+        ESCConfig.getConfig(period.from, "", location))
+      result shouldBe BigDecimal(2916.0)
     }
 
     "determine exemption amount for the 45% tax band Pre 2011 for earnings > higher rate ceiling for TY2016" in {
@@ -498,12 +613,14 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
-      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, isPartner = false, previousIncome = None, currentIncome = None, vouchers = true, escStartDate = escStartDate)
+      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, previousIncome = None, currentIncome = None,
+        vouchers = true, escStartDate = escStartDate)
       val pre2011 = claimant.isESCStartDateBefore2011
       val calcPeriod = Periods.Monthly
 
-      val result = ESCCalculator.determineMaximumIncomeRelief(period, pre2011, relevantEarnings, calcPeriod, taxCode, ESCConfig.getConfig(period.from, "", location))
-      result shouldBe BigDecimal(243)
+      val result = ESCCalculator.determineMaximumIncomeRelief(pre2011, relevantEarnings, calcPeriod, taxCode,
+        ESCConfig.getConfig(period.from, "", location))
+      result shouldBe BigDecimal(243.0)
     }
 
     "determine exemption amount for the 0% tax band Post 2011 earnings < 0 for TY2016" in {
@@ -514,12 +631,14 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
-      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, isPartner = false, previousIncome = None, currentIncome = None, vouchers = true, escStartDate = escStartDate)
+      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, previousIncome = None, currentIncome = None,
+        vouchers = true, escStartDate = escStartDate)
       val pre2011 = claimant.isESCStartDateBefore2011
       val calcPeriod = Periods.Yearly
 
-      val result = ESCCalculator.determineMaximumIncomeRelief(period, pre2011, relevantEarnings, calcPeriod, taxCode, ESCConfig.getConfig(period.from, "", location))
-      result shouldBe BigDecimal(2916)
+      val result = ESCCalculator.determineMaximumIncomeRelief(pre2011, relevantEarnings, calcPeriod, taxCode,
+        ESCConfig.getConfig(period.from, "", location))
+      result shouldBe BigDecimal(2916.00)
     }
 
     "determine exemption amount for the 0% tax band Post 2011 earnings < 0 for TY2017" in {
@@ -530,11 +649,13 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2017", formatter)
       val toDate = LocalDate.parse("21-05-2018", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
-      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, isPartner = false, previousIncome = None, currentIncome = None, vouchers = true, escStartDate = escStartDate)
+      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, previousIncome = None, currentIncome = None,
+        vouchers = true, escStartDate = escStartDate)
       val pre2011 = claimant.isESCStartDateBefore2011
 
-      val result = ESCCalculator.determineMaximumIncomeRelief(period, pre2011, relevantEarnings, Periods.Monthly, taxCode, ESCConfig.getConfig(period.from, "", location))
-      result shouldBe BigDecimal(243)
+      val result = ESCCalculator.determineMaximumIncomeRelief(pre2011, relevantEarnings, Periods.Monthly, taxCode,
+        ESCConfig.getConfig(period.from, "", location))
+      result shouldBe BigDecimal(243.0)
     }
 
     "determine exemption amount for the 0% tax band Post 2011 earnings = PA for TY2016" in {
@@ -545,11 +666,13 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
-      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, isPartner = false, previousIncome = None, currentIncome = None, vouchers = true, escStartDate = escStartDate)
+      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, previousIncome = None, currentIncome = None,
+        vouchers = true, escStartDate = escStartDate)
       val pre2011 = claimant.isESCStartDateBefore2011
 
-      val result = ESCCalculator.determineMaximumIncomeRelief(period, pre2011, relevantEarnings, Periods.Monthly, taxCode, ESCConfig.getConfig(period.from, "", location))
-      result shouldBe BigDecimal(243)
+      val result = ESCCalculator.determineMaximumIncomeRelief(pre2011, relevantEarnings, Periods.Monthly, taxCode,
+        ESCConfig.getConfig(period.from, "", location))
+      result shouldBe BigDecimal(243.0)
     }
 
     "determine exemption amount for the 20% tax band Post 2011 earnings < Basic rate limit for TY2016" in {
@@ -560,12 +683,14 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
-      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, isPartner = false, previousIncome = None, currentIncome = None, vouchers = true, escStartDate = escStartDate)
+      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, previousIncome = None, currentIncome = None,
+        vouchers = true, escStartDate = escStartDate)
       val pre2011 = claimant.isESCStartDateBefore2011
       val calcPeriod = Periods.Monthly
 
-      val result = ESCCalculator.determineMaximumIncomeRelief(period, pre2011, relevantEarnings, calcPeriod, taxCode, ESCConfig.getConfig(period.from, "", location))
-      result shouldBe BigDecimal(243)
+      val result = ESCCalculator.determineMaximumIncomeRelief(pre2011, relevantEarnings, calcPeriod, taxCode,
+        ESCConfig.getConfig(period.from, "", location))
+      result shouldBe BigDecimal(243.0)
     }
 
     "determine exemption amount for the 20% tax band Post 2011 earnings = basic rate ceiling for TY2016" in {
@@ -576,10 +701,12 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
-      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, isPartner = false, previousIncome = None, currentIncome = None, vouchers = true, escStartDate = escStartDate)
+      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, previousIncome = None, currentIncome = None,
+        vouchers = true, escStartDate = escStartDate)
       val pre2011 = claimant.isESCStartDateBefore2011
 
-      val result = ESCCalculator.determineMaximumIncomeRelief(period, pre2011, relevantEarnings, Periods.Monthly, taxCode, ESCConfig.getConfig(period.from, "", location))
+      val result = ESCCalculator.determineMaximumIncomeRelief(pre2011, relevantEarnings, Periods.Monthly, taxCode,
+        ESCConfig.getConfig(period.from, "", location))
       result shouldBe BigDecimal(124.00)
     }
 
@@ -592,12 +719,14 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
-      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, isPartner = false, previousIncome = None, currentIncome = None, vouchers = true, escStartDate = escStartDate)
+      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, previousIncome = None, currentIncome = None,
+        vouchers = true, escStartDate = escStartDate)
       val pre2011 = claimant.isESCStartDateBefore2011
       val calcPeriod = Periods.Yearly
 
-      val result = ESCCalculator.determineMaximumIncomeRelief(period, pre2011, relevantEarnings, calcPeriod, taxCode, ESCConfig.getConfig(period.from, "", location))
-      result shouldBe BigDecimal(1488)
+      val result = ESCCalculator.determineMaximumIncomeRelief(pre2011, relevantEarnings, calcPeriod, taxCode,
+        ESCConfig.getConfig(period.from, "", location))
+      result shouldBe BigDecimal(1488.0)
     }
 
     "determine exemption amount for the 40% tax band Post 2011 earnings < higher rate ceiling for TY2017" in {
@@ -608,11 +737,13 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("02-05-2017", formatter)
       val toDate = LocalDate.parse("01-05-2018", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
-      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, isPartner = false, previousIncome = None, currentIncome = None, vouchers = true, escStartDate = escStartDate)
+      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, previousIncome = None, currentIncome = None,
+        vouchers = true, escStartDate = escStartDate)
       val pre2011 = claimant.isESCStartDateBefore2011
 
-      val result = ESCCalculator.determineMaximumIncomeRelief(period, pre2011, relevantEarnings, Periods.Yearly, taxCode, ESCConfig.getConfig(period.from, "", location))
-      result shouldBe BigDecimal(1488)
+      val result = ESCCalculator.determineMaximumIncomeRelief(pre2011, relevantEarnings, Periods.Yearly, taxCode,
+        ESCConfig.getConfig(period.from, "", location))
+      result shouldBe BigDecimal(1488.0)
     }
 
     "determine exemption amount for the 40% tax band on edge Post 2011 earnings = higher rate ceiling for TY2016" in {
@@ -623,11 +754,31 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
-      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, isPartner = false, previousIncome = None, currentIncome = None, vouchers = true, escStartDate = escStartDate)
+      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, previousIncome = None, currentIncome = None,
+        vouchers = true, escStartDate = escStartDate)
       val pre2011 = claimant.isESCStartDateBefore2011
       val calcPeriod = Periods.Monthly
 
-      val result = ESCCalculator.determineMaximumIncomeRelief(period, pre2011, relevantEarnings, calcPeriod, taxCode, ESCConfig.getConfig(period.from, "", location))
+      val result = ESCCalculator.determineMaximumIncomeRelief(pre2011, relevantEarnings, calcPeriod, taxCode,
+        ESCConfig.getConfig(period.from, "", location))
+      result shouldBe BigDecimal(124.00)
+    }
+
+    "determine exemption amount for the 40% tax band for scottish tax code on edge post 2011 earnings = higher rate ceiling for TY2017" in {
+      val relevantEarnings = BigDecimal(47000.00)
+      val taxCode = "1150S"
+      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val escStartDate = LocalDate.parse("06-04-2011", formatter)
+      val fromDate = LocalDate.parse("01-05-2017", formatter)
+      val toDate = LocalDate.parse("21-03-2018", formatter)
+      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
+      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, previousIncome = None, currentIncome = None,
+        vouchers = true, escStartDate = escStartDate)
+      val pre2011 = claimant.isESCStartDateBefore2011
+      val calcPeriod = Periods.Monthly
+
+      val result = ESCCalculator.determineMaximumIncomeRelief(pre2011, relevantEarnings, calcPeriod, taxCode,
+        ESCConfig.getConfig(period.from, "", location))
       result shouldBe BigDecimal(124.00)
     }
 
@@ -639,12 +790,14 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2017", formatter)
       val toDate = LocalDate.parse("21-05-2018", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
-      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, isPartner = false, previousIncome = None, currentIncome = None, vouchers = true, escStartDate = escStartDate)
+      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, previousIncome = None, currentIncome = None,
+        vouchers = true, escStartDate = escStartDate)
       val pre2011 = claimant.isESCStartDateBefore2011
       val calcPeriod = Periods.Yearly
 
-      val result = ESCCalculator.determineMaximumIncomeRelief(period, pre2011, relevantEarnings, calcPeriod, taxCode, ESCConfig.getConfig(period.from, "", location))
-      result shouldBe BigDecimal(1320)
+      val result = ESCCalculator.determineMaximumIncomeRelief(pre2011, relevantEarnings, calcPeriod, taxCode,
+        ESCConfig.getConfig(period.from, "", location))
+      result shouldBe BigDecimal(1320.0)
     }
 
     "determine exemption amount for the 45% tax band Post 2011 earnings < additional rate ceiling for TY2016" in {
@@ -655,135 +808,169 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
-      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, isPartner = false, previousIncome = None, currentIncome = None, vouchers = true, escStartDate = escStartDate)
+      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, previousIncome = None, currentIncome = None,
+        vouchers = true, escStartDate = escStartDate)
       val pre2011 = claimant.isESCStartDateBefore2011
       val calcPeriod = Periods.Yearly
 
-      val result = ESCCalculator.determineMaximumIncomeRelief(period, pre2011, relevantEarnings, calcPeriod, taxCode, ESCConfig.getConfig(period.from, "", location))
-      result shouldBe BigDecimal(1320)
+      val result = ESCCalculator.determineMaximumIncomeRelief(pre2011, relevantEarnings, calcPeriod, taxCode,
+        ESCConfig.getConfig(period.from, "", location))
+      result shouldBe BigDecimal(1320.0)
     }
 
     "determine exemption amount for the BR tax code Post 2011 earnings" in {
       val relevantEarnings = BigDecimal(155000.00)
       val taxCode = "BR"
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
-      val escStartDate = LocalDate.parse("01-06-2016", formatter)
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
       val pre2011 = false
       val calcPeriod = Periods.Yearly
 
-      val result = ESCCalculator.determineMaximumIncomeRelief(period, pre2011, relevantEarnings, calcPeriod, taxCode, ESCConfig.getConfig(period.from, "", location))
-      result shouldBe BigDecimal(2916)
+      val result = ESCCalculator.determineMaximumIncomeRelief(pre2011, relevantEarnings, calcPeriod, taxCode,
+        ESCConfig.getConfig(period.from, "", location))
+      result shouldBe BigDecimal(2916.0)
     }
 
     "determine exemption amount for the BR tax code pre 2011 earnings" in {
       val relevantEarnings = BigDecimal(79000.00)
       val taxCode = "BR"
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
-      val escStartDate = LocalDate.parse("01-06-2010", formatter)
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
       val pre2011 = true
       val calcPeriod = Periods.Yearly
 
-      val result = ESCCalculator.determineMaximumIncomeRelief(period, pre2011, relevantEarnings, calcPeriod, taxCode, ESCConfig.getConfig(period.from, "", location))
-      result shouldBe BigDecimal(2916)
+      val result = ESCCalculator.determineMaximumIncomeRelief(pre2011, relevantEarnings, calcPeriod, taxCode,
+        ESCConfig.getConfig(period.from, "", location))
+      result shouldBe BigDecimal(2916.0)
     }
 
     "determine exemption amount for the D0 tax code pre 2011 earnings" in {
       val relevantEarnings = BigDecimal(79000.00)
       val taxCode = "D0"
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
-      val escStartDate = LocalDate.parse("01-06-2010", formatter)
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
       val pre2011 = true
       val calcPeriod = Periods.Yearly
 
-      val result = ESCCalculator.determineMaximumIncomeRelief(period, pre2011, relevantEarnings, calcPeriod, taxCode, ESCConfig.getConfig(period.from, "", location))
-      result shouldBe BigDecimal(2916)
+      val result = ESCCalculator.determineMaximumIncomeRelief(pre2011, relevantEarnings, calcPeriod, taxCode,
+        ESCConfig.getConfig(period.from, "", location))
+      result shouldBe BigDecimal(2916.0)
     }
 
-    "determine exemption amount for the D0 tax code Post 2011 earnings" in {
+    "determine exemption amount for the D0 tax code post 2011 earnings" in {
       val relevantEarnings = BigDecimal(30000.00)
       val taxCode = "D0"
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
-      val escStartDate = LocalDate.parse("01-06-2016", formatter)
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
       val pre2011 = false
       val calcPeriod = Periods.Yearly
 
-      val result = ESCCalculator.determineMaximumIncomeRelief(period, pre2011, relevantEarnings, calcPeriod, taxCode, ESCConfig.getConfig(period.from, "", location))
+      val result = ESCCalculator.determineMaximumIncomeRelief(pre2011, relevantEarnings, calcPeriod, taxCode,
+        ESCConfig.getConfig(period.from, "", location))
 
-      result shouldBe BigDecimal(1488)
+      result shouldBe BigDecimal(1488.0)
     }
 
     "determine exemption amount for the D1 tax code pre 2011 earnings" in {
       val relevantEarnings = BigDecimal(79000.00)
       val taxCode = "D1"
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
-      val escStartDate = LocalDate.parse("01-06-2010", formatter)
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
       val pre2011 = true
       val calcPeriod = Periods.Yearly
 
-      val result = ESCCalculator.determineMaximumIncomeRelief(period, pre2011, relevantEarnings, calcPeriod, taxCode, ESCConfig.getConfig(period.from, "", location))
+      val result = ESCCalculator.determineMaximumIncomeRelief(pre2011, relevantEarnings, calcPeriod, taxCode,
+        ESCConfig.getConfig(period.from, "", location))
 
-      result shouldBe BigDecimal(2916)
+      result shouldBe BigDecimal(2916.0)
     }
 
-    "determine exemption amount for the D1 tax code Post 2011 earnings" in {
+    "determine exemption amount for the D1 tax code post 2011 earnings" in {
       val relevantEarnings = BigDecimal(79000.00)
       val taxCode = "D1"
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
-      val escStartDate = LocalDate.parse("01-06-2016", formatter)
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
       val pre2011 = false
       val calcPeriod = Periods.Yearly
 
-      val result = ESCCalculator.determineMaximumIncomeRelief(period, pre2011, relevantEarnings, calcPeriod, taxCode, ESCConfig.getConfig(period.from, "", location))
+      val result = ESCCalculator.determineMaximumIncomeRelief(pre2011, relevantEarnings, calcPeriod, taxCode,
+        ESCConfig.getConfig(period.from, "", location))
 
-      result shouldBe BigDecimal(1320)
+      result shouldBe BigDecimal(1320.0)
+    }
+
+    "determine exemption amount for the 0T tax code pre 2011 earnings" in {
+      val relevantEarnings = BigDecimal(79000.00)
+      val taxCode = "0T"
+      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val fromDate = LocalDate.parse("01-05-2017", formatter)
+      val toDate = LocalDate.parse("21-05-2018", formatter)
+      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
+      val pre2011 = true
+      val calcPeriod = Periods.Yearly
+
+      val result = ESCCalculator.determineMaximumIncomeRelief(pre2011, relevantEarnings, calcPeriod, taxCode,
+        ESCConfig.getConfig(period.from, "", location))
+
+      result shouldBe BigDecimal(0)
+    }
+
+    "determine exemption amount for the K tax code post 2011 earnings" in {
+      val relevantEarnings = BigDecimal(12000.00)
+      val taxCode = "K345"
+      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val fromDate = LocalDate.parse("01-05-2017", formatter)
+      val toDate = LocalDate.parse("21-05-2018", formatter)
+      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
+      val pre2011 = false
+      val calcPeriod = Periods.Yearly
+
+      val result = ESCCalculator.determineMaximumIncomeRelief(pre2011, relevantEarnings, calcPeriod, taxCode,
+        ESCConfig.getConfig(period.from, "", location))
+
+      result shouldBe BigDecimal(0)
     }
 
     "determine exemption amount for the NT tax code pre 2011 earnings" in {
       val relevantEarnings = BigDecimal(79000.00)
       val taxCode = "NT"
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
-      val escStartDate = LocalDate.parse("01-06-2010", formatter)
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
       val pre2011 = true
       val calcPeriod = Periods.Yearly
 
-      val result = ESCCalculator.determineMaximumIncomeRelief(period, pre2011, relevantEarnings, calcPeriod, taxCode, ESCConfig.getConfig(period.from, "", location))
+      val result = ESCCalculator.determineMaximumIncomeRelief(pre2011, relevantEarnings, calcPeriod, taxCode,
+        ESCConfig.getConfig(period.from, "", location))
 
       result shouldBe BigDecimal(0)
     }
 
-    "determine exemption amount for the NT tax code Post 2011 earnings" in {
+    "determine exemption amount for the NT tax code post 2011 earnings" in {
       val relevantEarnings = BigDecimal(79000.00)
       val taxCode = "NT"
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
-      val escStartDate = LocalDate.parse("01-06-2016", formatter)
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
       val pre2011 = false
       val calcPeriod = Periods.Yearly
 
-      val result = ESCCalculator.determineMaximumIncomeRelief(period, pre2011, relevantEarnings, calcPeriod, taxCode, ESCConfig.getConfig(period.from, "", location))
+      val result = ESCCalculator.determineMaximumIncomeRelief(pre2011, relevantEarnings, calcPeriod, taxCode,
+        ESCConfig.getConfig(period.from, "", location))
 
       result shouldBe BigDecimal(0)
     }

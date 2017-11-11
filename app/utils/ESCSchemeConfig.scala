@@ -30,7 +30,6 @@ trait ESCConfig extends CCConfig with ServicesConfig with MessagesObject with Lo
   lazy val lowerClaimantsLimitValidation = getInt(s"esc.claimants-lower-limit")
   lazy val pre2011MaxExemptionMonthly = conf.getDouble(s"esc.pre-2011-maximum-exemption.basic-higher-additional.monthly").getOrElse(0.00)
 
-
   def getConfig(currentDate: LocalDate, niCategoryCode: String, location: String): ESCTaxYearConfig = {
     val configs: Seq[play.api.Configuration] = conf.getConfigSeq("esc.rule-change").get
 

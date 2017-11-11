@@ -579,9 +579,6 @@ trait TCCalculator extends TCCalculatorElements with TCCalculatorHelpers {
       val householdIncome = calculateHouseholdIncome(taxYear.from, taxYear.previousHouseholdIncome, taxYear.currentHouseholdIncome)
       val calculatedPeriods = getCalculatedPeriods(taxYear, householdIncome)
       val annualAward = calculatedPeriods.foldLeft(BigDecimal(0.00))((acc, period) => acc + period.periodNetAmount)
-      println(s"***********************calculatedPeriods>>>>>>$calculatedPeriods")
-      println(s"***********************householdIncome>>>>>>$householdIncome")
-      println(s"***********************annualAward>>>>>>$annualAward")
 
       models.output.tc.TaxYear(
         from = taxYear.from,
