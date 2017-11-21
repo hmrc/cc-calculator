@@ -115,7 +115,8 @@ case class ESCTotalIncome(
 
 case class ESCIncome(
                    employmentIncome : Option[BigDecimal] = None,
-                   pension : Option[BigDecimal] = None
+                   pension : Option[BigDecimal] = None,
+                   taxCode: Option[String] = None
                  )
 
 object ESCIncome {
@@ -140,26 +141,24 @@ case class ESCClaimant(
   }
 
   val income: ESCTotalIncome = {
-    val (empIncome, pension) = getTotalIncome(previousIncome, currentIncome)
+    val (empIncome, pension, inputTaxCode) = getTotalIncome(previousIncome, currentIncome)
     ESCTotalIncome(
-      taxablePay = (empIncome.getOrElse(defaultAmount) - (pension.getOrElse(defaultAmount) * noOfMonths)),
+      taxablePay = empIncome.getOrElse(defaultAmount) - (pension.getOrElse(defaultAmount) * noOfMonths),
       gross = empIncome.getOrElse(defaultAmount),
-      taxCode = "",
-      niCategory = ""
+      taxCode = inputTaxCode.getOrElse("")
     )
   }
 
-  private def determineIncomeElems(income: Option[ESCIncome]) = income  match {
-    case Some(x) => (x.employmentIncome, x.pension)
-    case _ => (None, None)
+  private def determineIncomeElems(income: Option[ESCIncome]) = income match {
+    case Some(x) => (x.employmentIncome, x.pension, x.taxCode)
+    case _ => (None, None, None)
   }
 
   private def getTotalIncome(previousIncome : Option[ESCIncome], currentIncome: Option[ESCIncome]) = {
-    val (empPrevious, pensionPrevious) = determineIncomeElems(previousIncome)
-    val (emp, pension) = determineIncomeElems(currentIncome)
+    val (empPrevious, pensionPrevious, taxCodePrevious) = determineIncomeElems(previousIncome)
+    val (emp, pension, taxCode) = determineIncomeElems(currentIncome)
 
-    (if(emp.isDefined) emp else empPrevious,
-      if(pension.isDefined) pension else pensionPrevious)
+    (if(emp.isDefined) emp else empPrevious, if(pension.isDefined) pension else pensionPrevious, if(taxCode.isDefined) taxCode else taxCodePrevious)
   }
 }
 

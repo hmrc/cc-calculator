@@ -366,7 +366,7 @@ trait ESCCalculatorNi extends ESCCalculatorHelpers {
   }
 }
 
-trait ESCCalculator extends ESCCalculatorHelpers with ESCCalculatorTax with ESCCalculatorNi {
+trait ESCCalculator extends ESCCalculatorTax with ESCCalculatorNi {
 
   import scala.concurrent.ExecutionContext.Implicits.global
 
