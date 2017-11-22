@@ -19,7 +19,8 @@ package calculators
 import models.input.tc._
 import models.output.tc.{Element, Elements, TCCalculatorOutput, TaxYear}
 import org.joda.time.LocalDate
-import utils.{TCTaxYearConfig, TCConfig, Periods}
+import utils.{Periods, TCConfig, TCTaxYearConfig}
+
 import scala.concurrent.Future
 
 trait TCCalculatorElements extends TCCalculatorTapering {
@@ -458,9 +459,9 @@ trait TCCalculatorTapering extends TCCalculatorHelpers {
     buildTCPeriod(period, elements)
   }
 
-    protected def getPeriodAmount(period: models.output.tc.Period, amount: BigDecimal = 0.00): models.output.tc.Period = {
+  protected def getPeriodAmount(period: models.output.tc.Period, amount: BigDecimal = 0.00): models.output.tc.Period = {
 
-      models.output.tc.Period(
+    models.output.tc.Period(
       from = period.from,
       until = period.until,
       elements = Elements(
@@ -485,8 +486,8 @@ trait TCCalculatorTapering extends TCCalculatorHelpers {
           taperAmount = BigDecimal(0.00)
         )
       ),
-        periodNetAmount = amount,
-        periodAdviceAmount = BigDecimal(0.00)
+      periodNetAmount = amount,
+      periodAdviceAmount = BigDecimal(0.00)
     )
   }
 }
@@ -572,20 +573,20 @@ trait TCCalculator extends TCCalculatorElements with TCCalculatorHelpers {
 
   }
 
-    def getCalculatedTaxYears(inputTCEligibility: TCCalculatorInput): List[TaxYear] = {
+  def getCalculatedTaxYears(inputTCEligibility: TCCalculatorInput): List[TaxYear] = {
 
-      for (taxYear <- inputTCEligibility.taxYears) yield {
+    for (taxYear <- inputTCEligibility.taxYears) yield {
       val householdIncome = calculateHouseholdIncome(taxYear.from, taxYear.previousHouseholdIncome, taxYear.currentHouseholdIncome)
-        val calculatedPeriods = getCalculatedPeriods(taxYear, householdIncome)
-        val annualAward = calculatedPeriods.foldLeft(BigDecimal(0.00))((acc, period) => acc + period.periodNetAmount)
+      val calculatedPeriods = getCalculatedPeriods(taxYear, householdIncome)
+      val annualAward = calculatedPeriods.foldLeft(BigDecimal(0.00))((acc, period) => acc + period.periodNetAmount)
 
-        models.output.tc.TaxYear(
-          from = taxYear.from,
-          until = taxYear.until,
-          taxYearAwardAmount = annualAward,
-          periods = calculatedPeriods
-        )
-      }
+      models.output.tc.TaxYear(
+        from = taxYear.from,
+        until = taxYear.until,
+        taxYearAwardAmount = annualAward,
+        periods = calculatedPeriods
+      )
+    }
   }
 
   def getCalculatedPeriods(
@@ -614,50 +615,50 @@ trait TCCalculator extends TCCalculatorElements with TCCalculatorHelpers {
     }
   }
 
-def generateRequiredAmountsPerPeriod(
-                                      period: models.output.tc.Period,
-                                      inputPeriod: models.input.tc.TCPeriod,
-                                      income: BigDecimal,
-                                      wtcIncomeThreshold: BigDecimal,
-                                      ctcIncomeThreshold: BigDecimal): models.output.tc.Period = {
+  def generateRequiredAmountsPerPeriod(
+                                        period: models.output.tc.Period,
+                                        inputPeriod: models.input.tc.TCPeriod,
+                                        income: BigDecimal,
+                                        wtcIncomeThreshold: BigDecimal,
+                                        ctcIncomeThreshold: BigDecimal): models.output.tc.Period = {
     val totalMaximumAmount = getTotalMaximumAmountPerPeriod(period)
-      if (isTaperingRequiredForElements(income, wtcIncomeThreshold) && !inputPeriod.atLeastOneClaimantIsClaimingSocialSecurityBenefit) {
-        //call taper 1, taper 2, taper 3, taper 4
-        val taperedFirstElement = taperFirstElement(period, inputPeriod, income, wtcIncomeThreshold)
-        val taperedSecondElement = taperSecondElement(taperedFirstElement, inputPeriod, income, wtcIncomeThreshold)
-        val taperedThirdElement = taperThirdElement(taperedSecondElement, inputPeriod, income, wtcIncomeThreshold, ctcIncomeThreshold)
-        val taperedFourthElement = taperFourthElement(
-          taperedThirdElement._1, inputPeriod,
-          income,
-          wtcIncomeThreshold,
-          ctcIncomeThreshold,
-          taperedThirdElement._2
-        )
+    if (isTaperingRequiredForElements(income, wtcIncomeThreshold) && !inputPeriod.atLeastOneClaimantIsClaimingSocialSecurityBenefit) {
+      //call taper 1, taper 2, taper 3, taper 4
+      val taperedFirstElement = taperFirstElement(period, inputPeriod, income, wtcIncomeThreshold)
+      val taperedSecondElement = taperSecondElement(taperedFirstElement, inputPeriod, income, wtcIncomeThreshold)
+      val taperedThirdElement = taperThirdElement(taperedSecondElement, inputPeriod, income, wtcIncomeThreshold, ctcIncomeThreshold)
+      val taperedFourthElement = taperFourthElement(
+        taperedThirdElement._1, inputPeriod,
+        income,
+        wtcIncomeThreshold,
+        ctcIncomeThreshold,
+        taperedThirdElement._2
+      )
 
-        models.output.tc.Period(
-          from = period.from,
-          until = period.until,
-          elements = Elements(
-            wtcWorkElement = taperedFourthElement.elements.wtcWorkElement,
-            wtcChildcareElement = taperedFourthElement.elements.wtcChildcareElement,
-            ctcIndividualElement = taperedFourthElement.elements.ctcIndividualElement,
-            ctcFamilyElement = taperedFourthElement.elements.ctcFamilyElement
-          ),
-          periodNetAmount = {
-            taperedFourthElement.elements.wtcWorkElement.netAmount +
-              taperedFourthElement.elements.wtcChildcareElement.netAmount +
-              taperedFourthElement.elements.ctcIndividualElement.netAmount +
-              taperedFourthElement.elements.ctcFamilyElement.netAmount
-          }
-        )
-      } else {
-        getPeriodAmount(period, totalMaximumAmount)
-      }
+      models.output.tc.Period(
+        from = period.from,
+        until = period.until,
+        elements = Elements(
+          wtcWorkElement = taperedFourthElement.elements.wtcWorkElement,
+          wtcChildcareElement = taperedFourthElement.elements.wtcChildcareElement,
+          ctcIndividualElement = taperedFourthElement.elements.ctcIndividualElement,
+          ctcFamilyElement = taperedFourthElement.elements.ctcFamilyElement
+        ),
+        periodNetAmount = {
+          taperedFourthElement.elements.wtcWorkElement.netAmount +
+            taperedFourthElement.elements.wtcChildcareElement.netAmount +
+            taperedFourthElement.elements.ctcIndividualElement.netAmount +
+            taperedFourthElement.elements.ctcFamilyElement.netAmount
+        }
+      )
+    } else {
+      getPeriodAmount(period, totalMaximumAmount)
+    }
   }
 
   private def createTCCalculation(calculatedTaxYears: List[TaxYear], annualIncome: BigDecimal) = {
 
-      TCCalculatorOutput(
+    TCCalculatorOutput(
       from = calculatedTaxYears.head.from,
       until = {
         if (calculatedTaxYears.length > 1) {
@@ -666,15 +667,15 @@ def generateRequiredAmountsPerPeriod(
           calculatedTaxYears.head.until
         }
       },
-        houseHoldAdviceAmount = BigDecimal(0.00),
-        totalAwardAmount = annualIncome,
-        taxYears = calculatedTaxYears
+      houseHoldAdviceAmount = BigDecimal(0.00),
+      totalAwardAmount = annualIncome,
+      taxYears = calculatedTaxYears
     )
   }
 
   private def annualIncome(taxYears: List[TaxYear]): BigDecimal = {
     taxYears.foldLeft(BigDecimal(0.00))((acc, taxYear) => {
-        acc + taxYear.taxYearAwardAmount
+      acc + taxYear.taxYearAwardAmount
     })
   }
 
