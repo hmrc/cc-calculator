@@ -31,6 +31,7 @@ import org.scalatest.mock.MockitoSugar
 
 class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with MockitoSugar with org.scalatest.PrivateMethodTester {
   val location = "england"
+  val locationScotland = "scotland"
 
   def buildChild(childCareCost: BigDecimal, childCareCostPeriod: Periods.Period = Periods.Monthly, qualifying: Boolean = true): Child = Child(
     qualifying = qualifying,
@@ -455,6 +456,21 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       result shouldBe outputModel
     }
 
+    "allocate earnings to 0, basic, higher and additional rate bands (earnings > higher rate ceiling, in scotland)" in {
+      val taxableEarnings = BigDecimal(150000.01)
+      val PA = BigDecimal(11500)
+      val taxCode = "1150L"
+      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val fromDate = LocalDate.parse("01-05-2017", formatter)
+      val toDate = LocalDate.parse("21-05-2018", formatter)
+      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
+
+      val outputModel = CalculationTaxBands(zeroRateBand = 11500, basicRateBand = 31500, higherRateBand = 107000, additionalRateBand = 0.01)
+      val result = ESCCalculator.allocateAmountToTaxBands(taxableEarnings, PA, period, Periods.Yearly, taxCode, ESCConfig.getConfig(period.from, "", locationScotland))
+
+      result shouldBe outputModel
+    }
+
     "allocate relevant earnings to 0, basic higher rate bands (earnings < Personal Allowance, TY2016)" in {
       val taxableEarnings = BigDecimal(9000.00)
       val PA = BigDecimal(10600)
@@ -485,7 +501,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       result shouldBe outputModel
     }
 
-    "allocate relevant earnings to 0, basic higher rate bands (earnings > higher limit, TY2017)" in {
+    "allocate relevant earnings to 0, basic higher rate bands (earnings > higher limit, TY2017 in england)" in {
       val taxableEarnings = BigDecimal(50000.00)
       val PA = BigDecimal(11500)
       val taxCode = "1150L"
@@ -496,6 +512,21 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
 
       val outputModel = CalculationTaxBands(zeroRateBand = 11500, basicRateBand = 33500, higherRateBand = 5000, additionalRateBand = 0.00)
       val result = ESCCalculator.allocateAmountToTaxBands(taxableEarnings, PA, period, Periods.Yearly, taxCode, ESCConfig.getConfig(period.from, "", location))
+
+      result shouldBe outputModel
+    }
+
+    "allocate relevant earnings to 0, basic higher rate bands (earnings > higher limit, TY2017 in scotland)" in {
+      val taxableEarnings = BigDecimal(50000.00)
+      val PA = BigDecimal(11500)
+      val taxCode = "1150L"
+      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val fromDate = LocalDate.parse("01-05-2017", formatter)
+      val toDate = LocalDate.parse("21-05-2018", formatter)
+      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
+
+      val outputModel = CalculationTaxBands(zeroRateBand = 11500, basicRateBand = 31500, higherRateBand = 7000, additionalRateBand = 0.00)
+      val result = ESCCalculator.allocateAmountToTaxBands(taxableEarnings, PA, period, Periods.Yearly, taxCode, ESCConfig.getConfig(period.from, "", locationScotland))
 
       result shouldBe outputModel
     }
