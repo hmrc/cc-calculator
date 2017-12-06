@@ -22,8 +22,180 @@ import org.joda.time.format.DateTimeFormat
 import play.api.Configuration
 import utils.ESCConfig._
 
-class ESCSchemeConfigSpec extends FakeCCCalculatorApplication {
-  val location = "england"
+class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers {
+
+  object NICatADefault extends TestHelper {
+    val description = "Default ESC SchemeConfig - NI cat A"
+    val date = "23-05-2015"
+    val location = locationEngland
+    val defaultTaxCode = "1100L"
+    val defaultPersonalAllowance = 11000
+    val niCategoryCode = "A"
+    val taxBasicBandCapacity = 32000.00
+    val niLimit = 8164
+    val ptUelRateForCat = 12.00
+    val NICategory = buildNiCategory(niCategoryCode, ptUelRateForCat)
+  }
+
+  object NICatAScotlandDefault extends TestHelper {
+    val description = "Default ESC SchemeConfig - NI cat A, location scotland"
+    val date = "23-05-2015"
+    val location = locationScotland
+    val defaultTaxCode = "1100L"
+    val defaultPersonalAllowance = 11000
+    val niCategoryCode = "A"
+    val taxBasicBandCapacity = 32000.00
+    val niLimit = 8164
+    val ptUelRateForCat = 12.00
+    val NICategory = buildNiCategory(niCategoryCode, ptUelRateForCat)
+  }
+
+  object NICatA2016 extends TestHelper {
+    val description = "(2016) ESC SchemeConfig - NI cat A"
+    val date = "23-05-2016"
+    val location = locationEngland
+    val defaultTaxCode = "1100L"
+    val defaultPersonalAllowance = 11000
+    val niCategoryCode = "A"
+    val taxBasicBandCapacity = 32000.00
+    val niLimit = 8112
+    val ptUelRateForCat = 12.00
+    val NICategory = buildNiCategory(niCategoryCode, ptUelRateForCat)
+  }
+
+  object NICatA2016Scotland extends TestHelper {
+    val description = "(2016) ESC SchemeConfig - NI cat A, location scotland"
+    val date = "23-05-2016"
+    val location = locationScotland
+    val defaultTaxCode = "1100L"
+    val defaultPersonalAllowance = 11000
+    val niCategoryCode = "A"
+    val taxBasicBandCapacity = 32000.00
+    val niLimit = 8112
+    val ptUelRateForCat = 12.00
+    val NICategory = buildNiCategory(niCategoryCode, ptUelRateForCat)
+  }
+
+  object NICatB2016 extends TestHelper {
+    val description = "(2016) ESC SchemeConfig - NI cat B"
+    val date = "23-05-2016"
+    val location = locationEngland
+    val defaultTaxCode = "1100L"
+    val defaultPersonalAllowance = 11000
+    val niCategoryCode = "B"
+    val taxBasicBandCapacity = 32000.00
+    val niLimit = 8112
+    val ptUelRateForCat = 5.85
+    val NICategory = buildNiCategory(niCategoryCode, ptUelRateForCat)
+  }
+
+  object NICatC2017 extends TestHelper {
+    val description = "(2017) ESC SchemeConfig - NI cat C"
+    val date = "23-07-2017"
+    val location = locationEngland
+    val defaultTaxCode = "1150L"
+    val defaultPersonalAllowance = 11500
+    val niCategoryCode = "C"
+    val taxBasicBandCapacity = 33500.00
+    val niLimit = 8164
+    val ptUelRateForCat = 0.00
+    val NICategory = buildNiCategoryC(ptUelRateForCat)
+  }
+
+  object NICatC2017Scotland extends TestHelper {
+    val description = "(2017) ESC SchemeConfig - NI cat C, location scotland"
+    val date = "23-07-2017"
+    val location = locationScotland
+    val defaultTaxCode = "1150L"
+    val defaultPersonalAllowance = 11500
+    val niCategoryCode = "C"
+    val taxBasicBandCapacity = 31500.00
+    val niLimit = 8164
+    val ptUelRateForCat = 0.00
+    val NICategory = buildNiCategoryC(ptUelRateForCat)
+  }
+
+  object NICatA2017 extends TestHelper {
+    val description = "(2017) ESC SchemeConfig - NI cat A"
+    val date = "23-07-2017"
+    val location = locationEngland
+    val defaultTaxCode = "1150L"
+    val defaultPersonalAllowance = 11500
+    val niCategoryCode = "A"
+    val taxBasicBandCapacity = 33500.00
+    val niLimit = 8164
+    val ptUelRateForCat = 2.00
+    val NICategory = buildNiCategoryA(2.00)
+  }
+
+  object NICatA2016Default extends TestHelper {
+    val description = "(2016) ESC SchemeConfig - Default NI cat"
+    val date = "05-04-2017"
+    val location = locationEngland
+    val defaultTaxCode = "1100L"
+    val defaultPersonalAllowance = 11000
+    val niCategoryCode = "A"
+    val taxBasicBandCapacity = 32000.00
+    val niLimit = 8112
+    val ptUelRateForCat = 12.00
+    val NICategory = buildNiCategory("A", ptUelRateForCat)
+  }
+
+  object NICatA2018 extends TestHelper {
+    val description = "ESC SchemeConfig - 2018 Tax Year"
+    val date = "06-04-2018"
+    val location = locationEngland
+    val defaultTaxCode = "1150L"
+    val defaultPersonalAllowance = 11500
+    val niCategoryCode = "B"
+    val taxBasicBandCapacity = 33500.00
+    val niLimit = 8164
+    val ptUelRateForCat = 0.00
+    val NICategory = buildNiCategoryB
+  }
+
+  object NICatA2018Scotland extends TestHelper {
+    val description = "ESC SchemeConfig - 2018 Tax Year, location scotland"
+    val date = "06-04-2018"
+    val location = locationScotland
+    val defaultTaxCode = "1150L"
+    val defaultPersonalAllowance = 11500
+    val niCategoryCode = "B"
+    val taxBasicBandCapacity = 31500.00
+    val niLimit = 8164
+    val ptUelRateForCat = 0.00
+    val NICategory = buildNiCategoryB
+  }
+
+
+  object NICatA2019Scotland extends TestHelper {
+    val description = "ESC SchemeConfig - 2019 Tax Year, location scotland"
+    val date = "06-04-2019"
+    val location = locationScotland
+    val defaultTaxCode = "1150L"
+    val defaultPersonalAllowance = 11500
+    val niCategoryCode = "B"
+    val taxBasicBandCapacity = 31500.00
+    val niLimit = 8164
+    val ptUelRateForCat = 0.00
+    val NICategory = buildNiCategoryB
+  }
+
+  private val bandAndYearTests: List[TestHelper] = {
+    List(
+      NICatADefault,
+      NICatAScotlandDefault,
+      NICatA2016,
+      NICatA2016Scotland,
+      NICatB2016,
+      NICatC2017,
+      NICatC2017Scotland,
+      NICatA2017,
+      NICatA2016Default,
+      NICatA2018,
+      NICatA2018Scotland,
+      NICatA2019Scotland)
+  }
 
   "ESC SchemeConfig" should {
 
@@ -72,7 +244,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication {
       val formatter = DateTimeFormat.forPattern(pattern)
       val fromDate = LocalDate.parse("23-05-2016", formatter)
       try {
-        val result = ESCConfig.getConfig(fromDate,"Z", location)
+        val result = ESCConfig.getConfig(fromDate, "Z", locationEngland)
         result shouldBe a[NoSuchElementException]
       } catch {
         case e: Exception =>
@@ -100,276 +272,40 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication {
           e shouldBe a[NoSuchElementException]
       }
     }
-    "Default ESC SchemeConfig - NI cat A" in {
-      val pattern = "dd-MM-yyyy"
-      val formatter = DateTimeFormat.forPattern(pattern)
-      val now = LocalDate.parse("23-05-2015", formatter)
-      val config = ESCConfig.getConfig(now,"A", location)
-      val niCat = NiCategory(
-        niCategoryCode = "A",
-        lelMonthlyLowerLimitForCat = 0.00,
-        lelMonthlyUpperLimitForCat = 485.00,
-        lelRateForCat = 0.00,
-        lelPtMonthlyLowerLimitForCat = 486.00,
-        lelPtMonthlyUpperLimitForCat = 672.00,
-        lelPtRateForCat = 0.00,
-        ptUelMonthlyLowerLimitForCat = 673.00,
-        ptUelMonthlyUpperLimitForCat = 3583.00,
-        ptUelRateForCat = 12.00,
-        aboveUelMonthlyLowerLimitForCat = 3584.00,
-        aboveUelRateForCat = 2.00
-      )
-      val taxYear = ESCTaxYearConfig(
-        post2011MaxExemptionMonthlyBasic = 243.00,
-        post2011MaxExemptionMonthlyHigher = 124.00,
-        post2011MaxExemptionMonthlyAdditional = 110.00,
-        defaultTaxCode = "1100L",
-        personalAllowanceRate =0.00,
-        defaultPersonalAllowance = 11000,
-        taxBasicRate = 20.00,
-        taxBasicBandCapacity = 32000.00,
-        taxHigherRate = 40.00,
-        taxHigherBandUpperLimit = 150000.00,
-        taxAdditionalRate = 45.00,
-        taxAdditionalBandLowerLimit= 150000.01,
-        niLimit = 8164,
-        niCategory = niCat
-      )
-      config shouldBe taxYear
-    }
-    "(2016) ESC SchemeConfig - NI cat A" in {
-      val pattern = "dd-MM-yyyy"
-      val formatter = DateTimeFormat.forPattern(pattern)
-      val now = LocalDate.parse("23-05-2016", formatter)
-      val config = ESCConfig.getConfig(now,"A", location)
-      val niCat = NiCategory(
-        niCategoryCode = "A",
-        lelMonthlyLowerLimitForCat = 0.00,
-        lelMonthlyUpperLimitForCat = 485.00,
-        lelRateForCat = 0.00,
-        lelPtMonthlyLowerLimitForCat = 486.00,
-        lelPtMonthlyUpperLimitForCat = 672.00,
-        lelPtRateForCat = 0.00,
-        ptUelMonthlyLowerLimitForCat = 673.00,
-        ptUelMonthlyUpperLimitForCat = 3583.00,
-        ptUelRateForCat = 12.00,
-        aboveUelMonthlyLowerLimitForCat = 3584.00,
-        aboveUelRateForCat = 2.00
-      )
-      val taxYear = ESCTaxYearConfig(
-        post2011MaxExemptionMonthlyBasic = 243.00,
-        post2011MaxExemptionMonthlyHigher = 124.00,
-        post2011MaxExemptionMonthlyAdditional = 110.00,
-        defaultTaxCode = "1100L",
-        personalAllowanceRate =0.00,
-        defaultPersonalAllowance = 11000,
-        taxBasicRate = 20.00,
-        taxBasicBandCapacity = 32000.00,
-        taxHigherRate = 40.00,
-        taxHigherBandUpperLimit = 150000.00,
-        taxAdditionalRate = 45.00,
-        taxAdditionalBandLowerLimit= 150000.01,
-        niLimit = 8112,
-        niCategory = niCat
-      )
-      config shouldBe taxYear
-    }
 
-    "(2016) ESC SchemeConfig - NI cat B" in {
-      val pattern = "dd-MM-yyyy"
-      val formatter = DateTimeFormat.forPattern(pattern)
-      val now = LocalDate.parse("23-05-2016", formatter)
-      val config = ESCConfig.getConfig(now,"B", location)
-      val niCat = NiCategory(
-        niCategoryCode = "B",
-        lelMonthlyLowerLimitForCat = 0.00,
-        lelMonthlyUpperLimitForCat = 485.00,
-        lelRateForCat = 0.00,
-        lelPtMonthlyLowerLimitForCat = 486.00,
-        lelPtMonthlyUpperLimitForCat = 672.00,
-        lelPtRateForCat = 0.00,
-        ptUelMonthlyLowerLimitForCat = 673.00,
-        ptUelMonthlyUpperLimitForCat = 3583.00,
-        ptUelRateForCat = 5.85,
-        aboveUelMonthlyLowerLimitForCat = 3584.00,
-        aboveUelRateForCat = 2.00
-      )
-      val taxYear = ESCTaxYearConfig(
-        post2011MaxExemptionMonthlyBasic = 243.00,
-        post2011MaxExemptionMonthlyHigher = 124.00,
-        post2011MaxExemptionMonthlyAdditional = 110.00,
-        defaultTaxCode = "1100L",
-        personalAllowanceRate =0.00,
-        defaultPersonalAllowance = 11000,
-        taxBasicRate = 20.00,
-        taxBasicBandCapacity = 32000.00,
-        taxHigherRate = 40.00,
-        taxHigherBandUpperLimit = 150000.00,
-        taxAdditionalRate = 45.00,
-        taxAdditionalBandLowerLimit= 150000.01,
-        niLimit = 8112,
-        niCategory = niCat
-      )
-      config shouldBe taxYear
-    }
+    bandAndYearTests.foreach(
+      x =>
+        s"${x.description}" in {
+          val pattern = "dd-MM-yyyy"
+          val formatter = DateTimeFormat.forPattern(pattern)
+          val now = LocalDate.parse(x.date, formatter)
+          val config = ESCConfig.getConfig(now, x.niCategoryCode, x.location)
 
-    "(2017) ESC SchemeConfig - NI cat C" in {
-      val pattern = "dd-MM-yyyy"
-      val formatter = DateTimeFormat.forPattern(pattern)
-      val now = LocalDate.parse("23-07-2017", formatter)
-      val config = ESCConfig.getConfig(now,"C", location)
-      val niCat = NiCategory(
-        niCategoryCode = "C",
-        lelMonthlyLowerLimitForCat = 0.00,
-        lelMonthlyUpperLimitForCat = 490.00,
-        lelRateForCat = 0.00,
-        lelPtMonthlyLowerLimitForCat = 491.00,
-        lelPtMonthlyUpperLimitForCat = 680.00,
-        lelPtRateForCat = 0.00,
-        ptUelMonthlyLowerLimitForCat = 681.00,
-        ptUelMonthlyUpperLimitForCat = 3753.00,
-        ptUelRateForCat = 0.00,
-        aboveUelMonthlyLowerLimitForCat = 3754.00,
-        aboveUelRateForCat = 0.00
-      )
-      val taxYear = ESCTaxYearConfig(
-        post2011MaxExemptionMonthlyBasic = 243.00,
-        post2011MaxExemptionMonthlyHigher = 124.00,
-        post2011MaxExemptionMonthlyAdditional = 110.00,
-        defaultTaxCode = "1150L",
-        personalAllowanceRate =0.00,
-        defaultPersonalAllowance = 11500,
-        taxBasicRate = 20.00,
-        taxBasicBandCapacity = 33500.00,
-        taxHigherRate = 40.00,
-        taxHigherBandUpperLimit = 150000.00,
-        taxAdditionalRate = 45.00,
-        taxAdditionalBandLowerLimit= 150000.01,
-        niLimit = 8164,
-        niCategory = niCat
-      )
-      config shouldBe taxYear
-    }
-
-    "(2017) ESC SchemeConfig - NI cat A" in {
-      val pattern = "dd-MM-yyyy"
-      val formatter = DateTimeFormat.forPattern(pattern)
-      val now = LocalDate.parse("23-07-2017", formatter)
-      val config = ESCConfig.getConfig(now,"A", location)
-      val niCat = NiCategory(
-        niCategoryCode = "A",
-        lelMonthlyLowerLimitForCat = 0.00,
-        lelMonthlyUpperLimitForCat = 490.00,
-        lelRateForCat = 0.00,
-        lelPtMonthlyLowerLimitForCat = 491.00,
-        lelPtMonthlyUpperLimitForCat = 680.00,
-        lelPtRateForCat = 0.00,
-        ptUelMonthlyLowerLimitForCat = 681.00,
-        ptUelMonthlyUpperLimitForCat = 3753.00,
-        ptUelRateForCat = 12.00,
-        aboveUelMonthlyLowerLimitForCat = 3754.00,
-        aboveUelRateForCat = 2.00
-      )
-      val taxYear = ESCTaxYearConfig(
-        post2011MaxExemptionMonthlyBasic = 243.00,
-        post2011MaxExemptionMonthlyHigher = 124.00,
-        post2011MaxExemptionMonthlyAdditional = 110.00,
-        defaultTaxCode = "1150L",
-        personalAllowanceRate =0.00,
-        defaultPersonalAllowance = 11500,
-        taxBasicRate = 20.00,
-        taxBasicBandCapacity = 33500.00,
-        taxHigherRate = 40.00,
-        taxHigherBandUpperLimit = 150000.00,
-        taxAdditionalRate = 45.00,
-        taxAdditionalBandLowerLimit= 150000.01,
-        niLimit = 8164,
-        niCategory = niCat
-      )
-      config shouldBe taxYear
-    }
-
-    "(2016) ESC SchemeConfig - Default NI cat " in {
-      val pattern = "dd-MM-yyyy"
-      val formatter = DateTimeFormat.forPattern(pattern)
-      val now = LocalDate.parse("05-04-2017", formatter)
-      val config = ESCConfig.getConfig(now, "", location)
-      val niCat = NiCategory(
-        niCategoryCode = "A",
-        lelMonthlyLowerLimitForCat = 0.00,
-        lelMonthlyUpperLimitForCat = 485.00,
-        lelRateForCat = 0.00,
-        lelPtMonthlyLowerLimitForCat = 486.00,
-        lelPtMonthlyUpperLimitForCat = 672.00,
-        lelPtRateForCat = 0.00,
-        ptUelMonthlyLowerLimitForCat = 673.00,
-        ptUelMonthlyUpperLimitForCat = 3583.00,
-        ptUelRateForCat = 12.00,
-        aboveUelMonthlyLowerLimitForCat = 3584.00,
-        aboveUelRateForCat = 2.00
-      )
-      val taxYear = ESCTaxYearConfig(
-        post2011MaxExemptionMonthlyBasic = 243.00,
-        post2011MaxExemptionMonthlyHigher = 124.00,
-        post2011MaxExemptionMonthlyAdditional = 110.00,
-        defaultTaxCode = "1100L",
-        personalAllowanceRate =0.00,
-        defaultPersonalAllowance = 11000,
-        taxBasicRate = 20.00,
-        taxBasicBandCapacity = 32000.00,
-        taxHigherRate = 40.00,
-        taxHigherBandUpperLimit = 150000.00,
-        taxAdditionalRate = 45.00,
-        taxAdditionalBandLowerLimit= 150000.01,
-        niLimit = 8112,
-        niCategory = niCat
-      )
-      config shouldBe taxYear
-    }
-
-    "ESC SchemeConfig - 2018 Tax Year" in {
-      val pattern = "dd-MM-yyyy"
-      val formatter = DateTimeFormat.forPattern(pattern)
-      val now = LocalDate.parse("06-04-2018", formatter)
-      val config = ESCConfig.getConfig(now,"B", location)
-      val niCat = NiCategory(
-        niCategoryCode = "B",
-        lelMonthlyLowerLimitForCat = 0.00,
-        lelMonthlyUpperLimitForCat = 490.00,
-        lelRateForCat = 0.00,
-        lelPtMonthlyLowerLimitForCat = 491.00,
-        lelPtMonthlyUpperLimitForCat = 680.00,
-        lelPtRateForCat = 0.00,
-        ptUelMonthlyLowerLimitForCat = 681.00,
-        ptUelMonthlyUpperLimitForCat = 3753.00,
-        ptUelRateForCat = 5.85,
-        aboveUelMonthlyLowerLimitForCat = 3754.00,
-        aboveUelRateForCat = 2.00
-      )
-      val taxYear = ESCTaxYearConfig(
-        post2011MaxExemptionMonthlyBasic = 243.00,
-        post2011MaxExemptionMonthlyHigher = 124.00,
-        post2011MaxExemptionMonthlyAdditional = 110.00,
-        defaultTaxCode = "1150L",
-        personalAllowanceRate =0.00,
-        defaultPersonalAllowance = 11500,
-        taxBasicRate = 20.00,
-        taxBasicBandCapacity = 33500.00,
-        taxHigherRate = 40.00,
-        taxHigherBandUpperLimit = 150000.00,
-        taxAdditionalRate = 45.00,
-        taxAdditionalBandLowerLimit= 150000.01,
-        niLimit = 8164,
-        niCategory = niCat
-      )
-      config shouldBe taxYear
-    }
+          val taxYear = ESCTaxYearConfig(
+            post2011MaxExemptionMonthlyBasic = 243.00,
+            post2011MaxExemptionMonthlyHigher = 124.00,
+            post2011MaxExemptionMonthlyAdditional = 110.00,
+            defaultTaxCode = x.defaultTaxCode,
+            personalAllowanceRate = 0.00,
+            defaultPersonalAllowance = x.defaultPersonalAllowance,
+            taxBasicRate = 20.00,
+            taxBasicBandCapacity = x.taxBasicBandCapacity,
+            taxHigherRate = 40.00,
+            taxHigherBandUpperLimit = 150000.00,
+            taxAdditionalRate = 45.00,
+            taxAdditionalBandLowerLimit = 150000.01,
+            niLimit = x.niLimit,
+            niCategory = x.NICategory
+          )
+          config shouldBe taxYear
+        }
+    )
 
     "accessing 2017-2018 ptUelMonthlyUpperLimitForCat" in {
       val pattern = "dd-MM-yyyy"
       val formatter = DateTimeFormat.forPattern(pattern)
       val fromDate = LocalDate.parse("06-09-2017", formatter)
-      val escTaxYearConfig = ESCConfig.getConfig(fromDate,"A", location)
+      val escTaxYearConfig = ESCConfig.getConfig(fromDate, "A", locationEngland)
       escTaxYearConfig.niCategory.ptUelMonthlyUpperLimitForCat shouldBe 3753.00
     }
 
@@ -377,10 +313,96 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication {
       val pattern = "dd-MM-yyyy"
       val formatter = DateTimeFormat.forPattern(pattern)
       val fromDate = LocalDate.parse("06-12-2016", formatter)
-      val escTaxYearConfig = ESCConfig.getConfig(fromDate,"A", location)
+      val escTaxYearConfig = ESCConfig.getConfig(fromDate, "A", locationEngland)
       escTaxYearConfig.taxBasicBandCapacity shouldBe 32000.00
     }
 
+  }
 
+}
+
+sealed trait Helpers {
+  val locationEngland = "england"
+  val locationScotland = "scotland"
+
+  def buildNiCategory(code: String, ptUelRateForCat: Double, aboveUelRateForCat: Double = 2.00): NiCategory = {
+    NiCategory(
+      niCategoryCode = code,
+      lelMonthlyLowerLimitForCat = 0.00,
+      lelMonthlyUpperLimitForCat = 485.00,
+      lelRateForCat = 0.00,
+      lelPtMonthlyLowerLimitForCat = 486.00,
+      lelPtMonthlyUpperLimitForCat = 672.00,
+      lelPtRateForCat = 0.00,
+      ptUelMonthlyLowerLimitForCat = 673.00,
+      ptUelMonthlyUpperLimitForCat = 3583.00,
+      ptUelRateForCat = ptUelRateForCat,
+      aboveUelMonthlyLowerLimitForCat = 3584.00,
+      aboveUelRateForCat = aboveUelRateForCat
+    )
+  }
+
+  def buildNiCategoryC(ptUelRateForCat: Double): NiCategory = {
+    NiCategory(
+      niCategoryCode = "C",
+      lelMonthlyLowerLimitForCat = 0.00,
+      lelMonthlyUpperLimitForCat = 490.00,
+      lelRateForCat = 0.00,
+      lelPtMonthlyLowerLimitForCat = 491.00,
+      lelPtMonthlyUpperLimitForCat = 680.00,
+      lelPtRateForCat = 0.00,
+      ptUelMonthlyLowerLimitForCat = 681.00,
+      ptUelMonthlyUpperLimitForCat = 3753.00,
+      ptUelRateForCat = ptUelRateForCat,
+      aboveUelMonthlyLowerLimitForCat = 3754.00,
+      aboveUelRateForCat = 0.00
+    )
+  }
+
+  def buildNiCategoryA(aboveUelRateForCat: Double): NiCategory = {
+    NiCategory(
+      niCategoryCode = "A",
+      lelMonthlyLowerLimitForCat = 0.00,
+      lelMonthlyUpperLimitForCat = 490.00,
+      lelRateForCat = 0.00,
+      lelPtMonthlyLowerLimitForCat = 491.00,
+      lelPtMonthlyUpperLimitForCat = 680.00,
+      lelPtRateForCat = 0.00,
+      ptUelMonthlyLowerLimitForCat = 681.00,
+      ptUelMonthlyUpperLimitForCat = 3753.00,
+      ptUelRateForCat = 12.00,
+      aboveUelMonthlyLowerLimitForCat = 3754.00,
+      aboveUelRateForCat = aboveUelRateForCat
+    )
+  }
+
+  def buildNiCategoryB: NiCategory = {
+    NiCategory(
+      niCategoryCode = "B",
+      lelMonthlyLowerLimitForCat = 0.00,
+      lelMonthlyUpperLimitForCat = 490.00,
+      lelRateForCat = 0.00,
+      lelPtMonthlyLowerLimitForCat = 491.00,
+      lelPtMonthlyUpperLimitForCat = 680.00,
+      lelPtRateForCat = 0.00,
+      ptUelMonthlyLowerLimitForCat = 681.00,
+      ptUelMonthlyUpperLimitForCat = 3753.00,
+      ptUelRateForCat = 5.85,
+      aboveUelMonthlyLowerLimitForCat = 3754.00,
+      aboveUelRateForCat = 2.00
+    )
+  }
+
+  trait TestHelper {
+    val description: String
+    val date: String
+    val location: String
+    val defaultTaxCode: String
+    val defaultPersonalAllowance: Int
+    val niCategoryCode: String
+    val taxBasicBandCapacity: Double
+    val niLimit: Int
+    val ptUelRateForCat: Double
+    val NICategory: NiCategory
   }
 }

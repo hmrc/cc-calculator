@@ -62,11 +62,11 @@ trait ESCConfig extends CCConfig with ServicesConfig with MessagesObject with Lo
     result.getDouble("post-2011-maximum-exemption.basic.monthly").get
   }
 
-  def getTaxYear(niCategoryCode: String, config: Configuration, location: String): ESCTaxYearConfig = {
+  private def getTaxYear(niCategoryCode: String, config: Configuration, location: String): ESCTaxYearConfig = {
     // get the ni Category
     val niCat = getNiCategory(niCategoryCode, config)
 
-    val localConfig = config.getConfig(s"tax.${location}").getOrElse(config.getConfig("tax.default").get)
+    val localConfig = config.getConfig(s"tax.${location.toLowerCase}").getOrElse(config.getConfig("tax.default").get)
 
     ESCTaxYearConfig(
       post2011MaxExemptionMonthlyBasic = config.getDouble("post-2011-maximum-exemption.basic.monthly").get,
