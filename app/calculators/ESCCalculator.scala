@@ -42,6 +42,22 @@ trait ESCCalculatorHelpers extends ESCConfig with CCCalculatorHelper with Messag
     code.endsWith("T") || code.endsWith("Y") || code.endsWith("S")
   def validateEmergencyCode(code: String): Boolean = code.endsWith("W1") || code.endsWith("M1") || code.endsWith("X")
 
+  private def extractEmergencyCode(code: String): (BigDecimal, String) = {
+    val extractNumber = if(code.endsWith("1")) {
+      toInt(code.substring(0, code.length - 2))
+    } else {
+      toInt(code.substring(0, code.length - 1))
+    }
+
+    extractNumber match {
+      case Some(number) => (number * 10, code)
+      case None =>
+        Logger.warn(s"ESCCalculator.ESCCalculatorHelpers.extractEmergencyCode - Exception case None")
+        throw new NoSuchElementException(messages("cc.scheme.config.invalid.tax.code"))
+    }
+  }
+
+
   def validateTaxCode(period: ESCPeriod, income: ESCTotalIncome): (BigDecimal, String) = {
     income.taxCode.toUpperCase.trim match {
       case code if validateCode(code) => (BigDecimal(0.00), code)
@@ -52,6 +68,8 @@ trait ESCCalculatorHelpers extends ESCConfig with CCCalculatorHelper with Messag
             Logger.warn(s"ESCCalculator.ESCCalculatorHelpers.validateTaxCode - Exception case None")
             throw new NoSuchElementException(messages("cc.scheme.config.invalid.tax.code"))
         }
+      case code if validateEmergencyCode(code) =>
+        extractEmergencyCode(code.toUpperCase.trim)
       case _ =>
         Logger.warn(s"ESCCalculator.ESCCalculatorHelpers.validateTaxCode - Exception case others")
         throw new NoSuchElementException(messages("cc.scheme.config.invalid.tax.code"))
@@ -60,7 +78,7 @@ trait ESCCalculatorHelpers extends ESCConfig with CCCalculatorHelper with Messag
 
   def getPersonalAllowance(period: ESCPeriod, income: ESCTotalIncome, config: ESCTaxYearConfig) : BigDecimal =  {
     income.taxCode.trim match {
-      case code if code.isEmpty || validateEmergencyCode(code.toUpperCase) => income.adjustPersonalAllowance(config.defaultPersonalAllowance)
+      case code if code.isEmpty => income.adjustPersonalAllowance(config.defaultPersonalAllowance)
       case _ => validateTaxCode(period, income)._1
     }
   }
