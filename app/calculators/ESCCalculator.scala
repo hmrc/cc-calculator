@@ -16,6 +16,8 @@
 
 package calculators
 
+import javax.annotation.RegEx
+
 import models.input.esc._
 import models.output.esc.{ESCCalculatorOutput, ESCSavings}
 import models.utility.{CalculationNIBands, CalculationTaxBands}
@@ -24,6 +26,7 @@ import play.api.Logger
 import utils.{ESCConfig, ESCTaxYearConfig, MessagesObject, Periods}
 
 import scala.concurrent.Future
+import scala.util.matching.Regex
 
 trait ESCCalculatorHelpers extends ESCConfig with CCCalculatorHelper with MessagesObject {
 
@@ -42,6 +45,29 @@ trait ESCCalculatorHelpers extends ESCConfig with CCCalculatorHelper with Messag
     code.endsWith("T") || code.endsWith("Y") || code.endsWith("S")
   def validateEmergencyCode(code: String): Boolean = code.endsWith("W1") || code.endsWith("M1") || code.endsWith("X")
 
+  private def extractTaxCode(code: String): (BigDecimal, String) = {
+
+    val taxCodePattern = "^(\\d*)(\\D+\\w*)$".r
+
+    val (number, character) = code match  {
+      case taxCodePattern(n, c) => (n, c)
+      case _ => Logger.warn(s"ESCCalculator.ESCCalculatorHelpers.extractTaxCode - Didn't match pattern")
+        throw new NoSuchElementException(messages("cc.scheme.config.invalid.tax.code"))
+    }
+
+    val taxNumber = toInt(number)
+
+    taxNumber.fold(BigDecimal(0), character){
+      number => (number * 10, character)
+    }
+
+  }
+
+//  private def extractTaxCode2(code: String): (BigDecimal, String) = {
+//
+//  }
+
+
   def validateTaxCode(period: ESCPeriod, income: ESCTotalIncome): (BigDecimal, String) = {
     income.taxCode.toUpperCase.trim match {
       case code if validateCode(code) => (BigDecimal(0.00), code)
@@ -52,6 +78,8 @@ trait ESCCalculatorHelpers extends ESCConfig with CCCalculatorHelper with Messag
             Logger.warn(s"ESCCalculator.ESCCalculatorHelpers.validateTaxCode - Exception case None")
             throw new NoSuchElementException(messages("cc.scheme.config.invalid.tax.code"))
         }
+      case code if validateEmergencyCode(code) =>
+        extractTaxCode(code)
       case _ =>
         Logger.warn(s"ESCCalculator.ESCCalculatorHelpers.validateTaxCode - Exception case others")
         throw new NoSuchElementException(messages("cc.scheme.config.invalid.tax.code"))

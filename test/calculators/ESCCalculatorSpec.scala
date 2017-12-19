@@ -2064,6 +2064,24 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       ESCCalculator.getTaxCode(period, income, ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location)) shouldBe "D1"
     }
 
+    "Validate tax code and return X" in {
+      val periodStart = LocalDate.parse("2016-05-06", formatter)
+      val periodEnd = LocalDate.parse("2017-04-06", formatter)
+
+      val period = ESCPeriod(from = periodStart, until = periodEnd, List(), children = List())
+      val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "X", niCategory = "")
+      ESCCalculator.getTaxCode(period, income, ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location)) shouldBe "X"
+    }
+
+    "Validate tax code and return W1" in {
+      val periodStart = LocalDate.parse("2016-05-06", formatter)
+      val periodEnd = LocalDate.parse("2017-04-06", formatter)
+
+      val period = ESCPeriod(from = periodStart, until = periodEnd, List(), children = List())
+      val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "W1", niCategory = "")
+      ESCCalculator.getTaxCode(period, income, ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location)) shouldBe "W1"
+    }
+
     "Return error for invalid tax code (Y)" in {
       val periodStart = LocalDate.parse("2016-05-06", formatter)
       val periodEnd = LocalDate.parse("2017-04-06", formatter)
@@ -2095,4 +2113,5 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
     }
 
   }
+
 }
