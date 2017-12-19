@@ -78,7 +78,7 @@ trait ESCCalculatorHelpers extends ESCConfig with CCCalculatorHelper with Messag
 
   def getPersonalAllowance(period: ESCPeriod, income: ESCTotalIncome, config: ESCTaxYearConfig) : BigDecimal =  {
     income.taxCode.trim match {
-      case code if code.isEmpty || validateEmergencyCode(code.toUpperCase) => income.adjustPersonalAllowance(config.defaultPersonalAllowance)
+      case code if code.isEmpty => income.adjustPersonalAllowance(config.defaultPersonalAllowance)
       case _ => validateTaxCode(period, income)._1
     }
   }
