@@ -202,7 +202,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val periodEnd = LocalDate.parse("2019-04-06", formatter)
 
       val period = ESCPeriod(from = periodStart, until = periodEnd, List(), List())
-      val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "0t", niCategory = "")
+      val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "0t")
       val result = ESCCalculator.getPersonalAllowance(period, income, ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location))
       result shouldBe BigDecimal(0.00)
     }
@@ -212,7 +212,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val periodEnd = LocalDate.parse("2019-04-06", formatter)
 
       val period = ESCPeriod(from = periodStart, until = periodEnd, List(), List())
-      val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "k475", niCategory = "")
+      val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "k475")
       val result = ESCCalculator.getPersonalAllowance(period, income, ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location))
       result shouldBe BigDecimal(0.00)
     }
@@ -222,7 +222,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val periodEnd = LocalDate.parse("2019-04-06", formatter)
 
       val period = ESCPeriod(from = periodStart, until = periodEnd, List(), List())
-      val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "590K", niCategory = "")
+      val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "590K")
       try {
         val result = ESCCalculator.getPersonalAllowance(period, income, ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location))
         result shouldBe a[NoSuchElementException]
@@ -237,7 +237,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val periodEnd = LocalDate.parse("2019-04-06", formatter)
 
       val period = ESCPeriod(from = periodStart, until = periodEnd, List(), List())
-      val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "12W100", niCategory = "")
+      val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "12W100")
       try {
         val result = ESCCalculator.getPersonalAllowance(period, income, ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location))
         result shouldBe a[NoSuchElementException]
@@ -252,7 +252,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val periodEnd = LocalDate.parse("2019-04-06", formatter)
 
       val period = ESCPeriod(from = periodStart, until = periodEnd, List(), List())
-      val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "S120", niCategory = "")
+      val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "S120")
       try {
         val result = ESCCalculator.getPersonalAllowance(period, income, ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location))
         result shouldBe a[NoSuchElementException]
@@ -267,7 +267,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val periodEnd = LocalDate.parse("2019-04-06", formatter)
 
       val period = ESCPeriod(from = periodStart, until = periodEnd, List(), List())
-      val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "1200s", niCategory = "")
+      val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "1200s")
       val result = ESCCalculator.getPersonalAllowance(period, income, ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location))
       result shouldBe BigDecimal(12000.00)
     }
