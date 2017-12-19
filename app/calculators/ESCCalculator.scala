@@ -16,8 +16,6 @@
 
 package calculators
 
-import javax.annotation.RegEx
-
 import models.input.esc._
 import models.output.esc.{ESCCalculatorOutput, ESCSavings}
 import models.utility.{CalculationNIBands, CalculationTaxBands}
@@ -26,7 +24,6 @@ import play.api.Logger
 import utils.{ESCConfig, ESCTaxYearConfig, MessagesObject, Periods}
 
 import scala.concurrent.Future
-import scala.util.matching.Regex
 
 trait ESCCalculatorHelpers extends ESCConfig with CCCalculatorHelper with MessagesObject {
 

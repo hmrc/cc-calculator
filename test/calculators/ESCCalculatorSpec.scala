@@ -23,11 +23,12 @@ import models.output.esc.{ESCCalculatorOutput, ESCSavings, ESCTaxAndNi}
 import models.utility.{CalculationNIBands, CalculationTaxBands}
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
+import org.scalatest.mock.MockitoSugar
 import play.api.libs.json.{JsSuccess, JsValue, Json}
 import uk.gov.hmrc.play.test.UnitSpec
 import utils.{ESCConfig, FakeCCCalculatorApplication, Periods}
+
 import scala.concurrent.Future
-import org.scalatest.mock.MockitoSugar
 
 class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with MockitoSugar with org.scalatest.PrivateMethodTester {
   val location = "england"
