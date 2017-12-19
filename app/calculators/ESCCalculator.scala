@@ -45,27 +45,20 @@ trait ESCCalculatorHelpers extends ESCConfig with CCCalculatorHelper with Messag
     code.endsWith("T") || code.endsWith("Y") || code.endsWith("S")
   def validateEmergencyCode(code: String): Boolean = code.endsWith("W1") || code.endsWith("M1") || code.endsWith("X")
 
-  private def extractTaxCode(code: String): (BigDecimal, String) = {
+  private def extractEmergencyCode(code: String): (BigDecimal, String) = {
+    val extractNumber = if(code.endsWith("1")) {
+      toInt(code.substring(0, code.length - 2))
+    } else {
+      toInt(code.substring(0, code.length - 1))
+    }
 
-    val taxCodePattern = "^(\\d*)(\\D+\\w*)$".r
-
-    val (number, character) = code match  {
-      case taxCodePattern(n, c) => (n, c)
-      case _ => Logger.warn(s"ESCCalculator.ESCCalculatorHelpers.extractTaxCode - Didn't match pattern")
+    extractNumber match {
+      case Some(number) => (number * 10, code)
+      case None =>
+        Logger.warn(s"ESCCalculator.ESCCalculatorHelpers.extractEmergencyCode - Exception case None")
         throw new NoSuchElementException(messages("cc.scheme.config.invalid.tax.code"))
     }
-
-    val taxNumber = toInt(number)
-
-    taxNumber.fold(BigDecimal(0), character){
-      number => (number * 10, character)
-    }
-
   }
-
-//  private def extractTaxCode2(code: String): (BigDecimal, String) = {
-//
-//  }
 
 
   def validateTaxCode(period: ESCPeriod, income: ESCTotalIncome): (BigDecimal, String) = {
@@ -79,7 +72,7 @@ trait ESCCalculatorHelpers extends ESCConfig with CCCalculatorHelper with Messag
             throw new NoSuchElementException(messages("cc.scheme.config.invalid.tax.code"))
         }
       case code if validateEmergencyCode(code) =>
-        extractTaxCode(code)
+        extractEmergencyCode(code.toUpperCase.trim)
       case _ =>
         Logger.warn(s"ESCCalculator.ESCCalculatorHelpers.validateTaxCode - Exception case others")
         throw new NoSuchElementException(messages("cc.scheme.config.invalid.tax.code"))

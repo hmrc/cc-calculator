@@ -2033,7 +2033,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val periodEnd = LocalDate.parse("2017-04-06", formatter)
 
       val period = ESCPeriod(from = periodStart, until = periodEnd, List(), children = List())
-      val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "1100L", niCategory = "")
+      val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "1100L")
       ESCCalculator.getPersonalAllowance(period, income, ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location)) shouldBe 11000
     }
 
@@ -2042,7 +2042,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val periodEnd = LocalDate.parse("2017-04-06", formatter)
 
       val period = ESCPeriod(from = periodStart, until = periodEnd, List(), children = List())
-      val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "9999M", niCategory = "")
+      val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "9999M")
       ESCCalculator.getPersonalAllowance(period, income, ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location)) shouldBe 99990
     }
 
@@ -2051,7 +2051,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val periodEnd = LocalDate.parse("2017-04-06", formatter)
 
       val period = ESCPeriod(from = periodStart, until = periodEnd, List(), children = List())
-      val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "9Y", niCategory = "")
+      val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "9Y")
       ESCCalculator.getPersonalAllowance(period, income, ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location)) shouldBe 90
     }
 
@@ -2060,7 +2060,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val periodEnd = LocalDate.parse("2017-04-06", formatter)
 
       val period = ESCPeriod(from = periodStart, until = periodEnd, List(), children = List())
-      val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "d1", niCategory = "")
+      val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "d1")
       ESCCalculator.getTaxCode(period, income, ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location)) shouldBe "D1"
     }
 
@@ -2069,8 +2069,8 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val periodEnd = LocalDate.parse("2017-04-06", formatter)
 
       val period = ESCPeriod(from = periodStart, until = periodEnd, List(), children = List())
-      val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "X", niCategory = "")
-      ESCCalculator.getTaxCode(period, income, ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location)) shouldBe "X"
+      val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "1200X")
+      ESCCalculator.getTaxCode(period, income, ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location)) shouldBe "1200X"
     }
 
     "Validate tax code and return W1" in {
@@ -2078,8 +2078,8 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val periodEnd = LocalDate.parse("2017-04-06", formatter)
 
       val period = ESCPeriod(from = periodStart, until = periodEnd, List(), children = List())
-      val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "W1", niCategory = "")
-      ESCCalculator.getTaxCode(period, income, ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location)) shouldBe "W1"
+      val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "1150W1")
+      ESCCalculator.getTaxCode(period, income, ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location)) shouldBe "1150W1"
     }
 
     "Return error for invalid tax code (Y)" in {
@@ -2087,7 +2087,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val periodEnd = LocalDate.parse("2017-04-06", formatter)
 
       val period = ESCPeriod(from = periodStart, until = periodEnd, List(), children = List())
-      val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "Y", niCategory = "")
+      val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "Y")
       try {
         val result = ESCCalculator.getTaxCode(period, income, ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location))
         result shouldBe a[NoSuchElementException]
@@ -2102,7 +2102,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       val periodEnd = LocalDate.parse("2017-04-06", formatter)
 
       val period = ESCPeriod(from = periodStart, until = periodEnd, List(), children = List())
-      val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "D11", niCategory = "")
+      val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "D11")
       try {
         val result = ESCCalculator.getTaxCode(period, income, ESCConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location))
         result shouldBe a[NoSuchElementException]
