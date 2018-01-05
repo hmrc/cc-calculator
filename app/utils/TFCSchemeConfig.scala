@@ -17,8 +17,7 @@
 package utils
 
 import org.joda.time.LocalDate
-import play.api.Play._
-import play.api.{Environment, Configuration, Play}
+import play.api.Configuration
 import uk.gov.hmrc.play.config.ServicesConfig
 
 /**

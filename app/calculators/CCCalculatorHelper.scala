@@ -18,6 +18,7 @@ package calculators
 
 import org.joda.time.{Days, LocalDate}
 import utils.Periods
+
 import scala.math.BigDecimal.RoundingMode
 
 trait CCCalculatorHelper {

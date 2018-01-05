@@ -16,16 +16,18 @@
 
 package controllers.esc
 
+import javax.inject.{Inject, Singleton}
+
 import calculators.ESCCalculator
 import models.input.esc.ESCCalculatorInput
 import models.output.esc.ESCCalculatorOutput
 import play.api.Logger
-import play.api.libs.json.{Json, JsValue}
+import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Action
 import service.AuditEvents
-import play.api.i18n.{I18nSupport, MessagesApi}
-import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.play.microservice.controller.BaseController
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 

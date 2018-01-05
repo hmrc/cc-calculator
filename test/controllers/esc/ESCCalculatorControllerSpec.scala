@@ -20,22 +20,23 @@ import calculators.ESCCalculator
 import com.fasterxml.jackson.databind.JsonNode
 import com.github.fge.jackson.JsonLoader
 import models.input.esc.ESCCalculatorInput
-import models.output.esc.{ESCSavings, ESCCalculatorOutput}
+import models.output.esc.{ESCCalculatorOutput, ESCSavings}
+import org.joda.time.LocalDate
 import org.mockito.Matchers.{eq => mockEq, _}
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.mock.MockitoSugar
+import org.scalatest.prop.TableDrivenPropertyChecks._
+import org.scalatest.prop.Tables.Table
 import play.api.http.Status
+import play.api.i18n.Messages.Implicits._
 import play.api.libs.json.{JsValue, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import service.AuditEvents
 import utils.FakeCCCalculatorApplication
+
 import scala.concurrent.Future
-import play.api.i18n.Messages.Implicits._
-import org.scalatest.prop.TableDrivenPropertyChecks._
-import org.scalatest.prop.Tables.Table
-import org.joda.time.LocalDate
 
 class ESCCalculatorControllerSpec extends FakeCCCalculatorApplication with MockitoSugar with BeforeAndAfterEach {
 

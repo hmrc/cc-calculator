@@ -17,9 +17,7 @@
 package utils
 
 import org.joda.time.LocalDate
-import play.api.Play._
-import play.api.Play.current
-import play.api.{Configuration, Play}
+import play.api.Configuration
 import uk.gov.hmrc.play.config.ServicesConfig
 
 trait ESCConfig extends CCConfig with ServicesConfig with MessagesObject with LoadConfig {

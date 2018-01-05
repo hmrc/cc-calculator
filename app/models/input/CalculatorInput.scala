@@ -19,7 +19,7 @@ package models.input
 import models.input.esc.ESCCalculatorInput
 import models.input.tc.TCCalculatorInput
 import models.input.tfc.TFCCalculatorInput
-import play.api.libs.json.{Reads, Json}
+import play.api.libs.json.{Json, Reads}
 
 case class CalculatorInput(tc: Option[TCCalculatorInput], tfc: Option[TFCCalculatorInput], esc: Option[ESCCalculatorInput])
 

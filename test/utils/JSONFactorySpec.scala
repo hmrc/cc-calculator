@@ -16,12 +16,6 @@
 
 package utils
 
-import calculators.TCCalculator
-import com.fasterxml.jackson.databind.JsonNode
-import com.github.fge.jackson.JsonLoader
-import models.input.tc.TCCalculatorInput
-import org.joda.time.LocalDate
-import org.joda.time.format.DateTimeFormat
 import play.api.data.validation.ValidationError
 import play.api.libs.json._
 

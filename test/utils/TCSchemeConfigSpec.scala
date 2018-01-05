@@ -20,7 +20,6 @@ import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import org.scalatest.prop.TableDrivenPropertyChecks.forAll
 import org.scalatest.prop.Tables.Table
-import play.api.libs.json.Json
 
 class TCSchemeConfigSpec extends FakeCCCalculatorApplication {
 

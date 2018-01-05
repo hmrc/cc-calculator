@@ -16,11 +16,12 @@
 
 package calculators
 
-import models.input.tfc.{TFCChild, TFCCalculatorInput}
+import models.input.tfc.{TFCCalculatorInput, TFCChild}
 import models.output.tfc._
 import org.joda.time.LocalDate
 import play.api.Logger
-import utils.{MessagesObject, Periods, TFCTaxYearConfig}
+import utils.{MessagesObject, TFCTaxYearConfig}
+
 import scala.concurrent.Future
 
 object TFCCalculator extends TFCCalculator
