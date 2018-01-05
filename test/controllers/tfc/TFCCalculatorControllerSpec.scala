@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 HM Revenue & Customs
+ * Copyright 2018 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,18 +20,19 @@ import calculators.TFCCalculator
 import com.fasterxml.jackson.databind.JsonNode
 import com.github.fge.jackson.JsonLoader
 import models.input.tfc.TFCCalculatorInput
-import models.output.tfc.{TFCContribution, TFCCalculatorOutput}
+import models.output.tfc.{TFCCalculatorOutput, TFCContribution}
 import org.mockito.Matchers.{eq => mockEq, _}
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
 import play.api.http.Status
+import play.api.i18n.Messages.Implicits._
 import play.api.libs.json.{JsValue, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import service.AuditEvents
 import utils.FakeCCCalculatorApplication
+
 import scala.concurrent.Future
-import play.api.i18n.Messages.Implicits._
 
 class TFCCalculatorControllerSpec extends FakeCCCalculatorApplication with MockitoSugar {
 

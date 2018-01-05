@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 HM Revenue & Customs
+ * Copyright 2018 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,11 +18,12 @@ package service
 
 import config.MicroserviceAuditConnector
 import play.api.mvc.Request
-import uk.gov.hmrc.play.audit.http.connector.{AuditResult, AuditConnector}
-import uk.gov.hmrc.play.audit.model.{DataEvent}
-import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.audit.http.connector.{AuditConnector, AuditResult}
+import uk.gov.hmrc.play.audit.model.DataEvent
+
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 
 object AuditService extends AuditService {
@@ -35,8 +36,6 @@ trait AuditService {
   def auditSource : String
 
   def auditConnector: AuditConnector
-
-  import uk.gov.hmrc.play.http.logging.MdcLoggingExecutionContext._
 
   def sendEvent(auditType:String, details: Map[String, String], sessionId: Option[String] = None)
                (implicit request: Request[_], hc: HeaderCarrier): Future[AuditResult] = {

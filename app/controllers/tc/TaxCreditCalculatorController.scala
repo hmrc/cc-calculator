@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 HM Revenue & Customs
+ * Copyright 2018 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package controllers.tc
 
 import javax.inject.{Inject, Singleton}
+
 import calculators.TCCalculator
 import models.input.tc.TCCalculatorInput
 import play.api.Logger
@@ -25,9 +26,10 @@ import play.api.libs.json._
 import play.api.mvc.Action
 import service.AuditEvents
 import uk.gov.hmrc.play.microservice.controller.BaseController
+import utils.JSONFactory
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import utils.JSONFactory
 
 @Singleton
 class TaxCreditCalculatorController @Inject()(val messagesApi: MessagesApi) extends BaseController with I18nSupport {

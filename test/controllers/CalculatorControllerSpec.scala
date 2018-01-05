@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 HM Revenue & Customs
+ * Copyright 2018 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,23 +16,22 @@
 
 package controllers
 
-import calculators.{ESCCalculator, TFCCalculator, TCCalculator}
+import calculators.{ESCCalculator, TCCalculator, TFCCalculator}
 import com.github.fge.jackson.JsonLoader
 import models.input.esc.ESCCalculatorInput
 import models.input.tc.TCCalculatorInput
 import models.input.tfc.TFCCalculatorInput
 import models.output.CalculatorOutput
-import models.output.esc.{ESCSavings, ESCCalculatorOutput}
+import models.output.esc.{ESCCalculatorOutput, ESCSavings}
 import models.output.tc.TCCalculatorOutput
-import models.output.tfc.{TFCContribution, TFCCalculatorOutput}
+import models.output.tfc.{TFCCalculatorOutput, TFCContribution}
 import org.joda.time.LocalDate
-import org.scalatest.BeforeAndAfterEach
 import org.mockito.Matchers._
 import org.mockito.Mockito._
+import org.scalatest.BeforeAndAfterEach
 import org.scalatest.mock.MockitoSugar
 import play.api.i18n.Messages.Implicits._
-import play.api.libs.json.{Json, JsValue}
-import play.api.mvc.Request
+import play.api.libs.json.{JsValue, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import service.AuditEvents

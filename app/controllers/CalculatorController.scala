@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 HM Revenue & Customs
+ * Copyright 2018 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,9 @@
 
 package controllers
 
-import javax.inject.{Singleton, Inject}
-import calculators.{ESCCalculator, TFCCalculator, TCCalculator}
+import javax.inject.{Inject, Singleton}
+
+import calculators.{ESCCalculator, TCCalculator, TFCCalculator}
 import models.input.CalculatorInput
 import models.input.esc.ESCCalculatorInput
 import models.input.tc.TCCalculatorInput
@@ -25,10 +26,11 @@ import models.input.tfc.TFCCalculatorInput
 import models.output.CalculatorOutput
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.libs.json.{Json, JsValue}
+import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Action
 import service.AuditEvents
 import uk.gov.hmrc.play.microservice.controller.BaseController
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 

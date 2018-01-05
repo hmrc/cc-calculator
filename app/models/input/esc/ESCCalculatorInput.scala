@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 HM Revenue & Customs
+ * Copyright 2018 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,14 +17,13 @@
 package models.input.esc
 
 import config.ConfigConstants._
+import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import play.api.data.validation.ValidationError
-import play.api.libs.json.{JsPath, Json, Reads}
-import utils.Periods
-import org.joda.time.LocalDate
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Reads._
-import utils._
+import play.api.libs.json.{JsPath, Json, Reads}
+import utils.{Periods, _}
 
 case class ESCCalculatorInput(
                                taxYears: List[ESCTaxYear],

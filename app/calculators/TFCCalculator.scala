@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 HM Revenue & Customs
+ * Copyright 2018 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,12 @@
 
 package calculators
 
-import models.input.tfc.{TFCChild, TFCCalculatorInput}
+import models.input.tfc.{TFCCalculatorInput, TFCChild}
 import models.output.tfc._
 import org.joda.time.LocalDate
 import play.api.Logger
-import utils.{MessagesObject, Periods, TFCTaxYearConfig}
+import utils.{MessagesObject, TFCTaxYearConfig}
+
 import scala.concurrent.Future
 
 object TFCCalculator extends TFCCalculator

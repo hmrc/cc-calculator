@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 HM Revenue & Customs
+ * Copyright 2018 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,21 +16,18 @@
 
 package calculators
 
-import com.fasterxml.jackson.databind.JsonNode
-import com.github.fge.jackson.JsonLoader
 import models.input.tc._
-import models.output.tc.{Period, Element, Elements}
+import models.output.tc.{Element, Elements, Period}
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
-import org.scalatest.mock.MockitoSugar
-import play.api.libs.json.{JsError, JsSuccess, JsValue, Json}
-import uk.gov.hmrc.play.test.UnitSpec
-import utils._
-import scala.collection.immutable.Nil
-import scala.concurrent.ExecutionContext.Implicits.global
 import org.mockito.Matchers._
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
+import org.scalatest.mock.MockitoSugar
+import uk.gov.hmrc.play.test.UnitSpec
+import utils._
+
+import scala.collection.immutable.Nil
 
 class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with MockitoSugar with BeforeAndAfterEach with org.scalatest.PrivateMethodTester {
 
