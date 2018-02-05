@@ -159,9 +159,9 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers {
     val date = "06-04-2018"
     val location = locationScotland
     val defaultTaxCode = "1150L"
-    val defaultPersonalAllowance = 11500
+    val defaultPersonalAllowance = 11849
     val niCategoryCode = "B"
-    val taxBasicBandCapacity = 31500.00
+    val taxBasicBandCapacity = 24000.00
     val niLimit = 8164
     val ptUelRateForCat = 0.00
     val NICategory = buildNiCategoryB
@@ -173,9 +173,9 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers {
     val date = "06-04-2019"
     val location = locationScotland
     val defaultTaxCode = "1150L"
-    val defaultPersonalAllowance = 11500
+    val defaultPersonalAllowance = 11849
     val niCategoryCode = "B"
-    val taxBasicBandCapacity = 31500.00
+    val taxBasicBandCapacity = 24000.00
     val niLimit = 8164
     val ptUelRateForCat = 0.00
     val NICategory = buildNiCategoryB
