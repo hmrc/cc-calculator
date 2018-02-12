@@ -154,6 +154,32 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers {
     val NICategory = buildNiCategoryB
   }
 
+  object NICatA2019 extends TestHelper {
+    val description = "ESC SchemeConfig - 2019 Tax Year"
+    val date = "06-04-2019"
+    val location = locationEngland
+    val defaultTaxCode = "1185L"
+    val defaultPersonalAllowance = 11850
+    val niCategoryCode = "B"
+    val taxBasicBandCapacity = 34500.00
+    val niLimit = 8164
+    val ptUelRateForCat = 0.00
+    val NICategory = buildNiCategoryB
+  }
+
+  object NICatA2020 extends TestHelper {
+    val description = "ESC SchemeConfig - 2020 Tax Year"
+    val date = "06-04-2020"
+    val location = locationEngland
+    val defaultTaxCode = "1185L"
+    val defaultPersonalAllowance = 11850
+    val niCategoryCode = "B"
+    val taxBasicBandCapacity = 34500.00
+    val niLimit = 8164
+    val ptUelRateForCat = 0.00
+    val NICategory = buildNiCategoryB
+  }
+
   object NICatA2018Scotland extends TestHelper {
     val description = "ESC SchemeConfig - 2018 Tax Year, location scotland"
     val date = "06-04-2018"
@@ -181,6 +207,19 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers {
     val NICategory = buildNiCategoryB
   }
 
+  object NICatA2020Scotland extends TestHelper {
+    val description = "ESC SchemeConfig - 2020 Tax Year, location scotland"
+    val date = "06-04-2020"
+    val location = locationScotland
+    val defaultTaxCode = "1185L"
+    val defaultPersonalAllowance = 11850
+    val niCategoryCode = "B"
+    val taxBasicBandCapacity = 24000.00
+    val niLimit = 8164
+    val ptUelRateForCat = 0.00
+    val NICategory = buildNiCategoryB
+  }
+
   private val bandAndYearTests: List[TestHelper] = {
     List(
       NICatADefault,
@@ -194,7 +233,10 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers {
       NICatA2016Default,
       NICatA2018,
       NICatA2018Scotland,
-      NICatA2019Scotland)
+      NICatA2019,
+      NICatA2019Scotland,
+      NICatA2020,
+      NICatA2020Scotland)
   }
 
   "ESC SchemeConfig" should {
