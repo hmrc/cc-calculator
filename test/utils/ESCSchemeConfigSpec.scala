@@ -288,19 +288,20 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers {
             defaultTaxCode = x.defaultTaxCode,
             personalAllowanceRate = 0.00,
             defaultPersonalAllowance = x.defaultPersonalAllowance,
-            taxStarterRate = if(x.location.equals(locationScotland)) 19.00 else 0,
-            taxStarterBandCapacity = if(x.location.equals(locationScotland)) 13850.00 else 0,
+            taxStarterRate = if(x.location.equals(locationScotland) && now.isAfter(new LocalDate(2018,4,5))) 19.00 else 0,
+            taxStarterBandCapacity = if(x.location.equals(locationScotland) && now.isAfter(new LocalDate(2018,4,5))) 13850.00 else 0,
             taxBasicRate = 20.00,
             taxBasicBandCapacity = x.taxBasicBandCapacity,
-            taxIntermediateRate = if(x.location.equals(locationScotland)) 21.00 else 0,
-            taxIntermediateBandCapacity = if(x.location.equals(locationScotland)) 43430.00 else 0,
-            taxHigherRate = 40.00,
+            taxIntermediateRate = if(x.location.equals(locationScotland) && now.isAfter(new LocalDate(2018,4,5))) 21.00 else 0,
+            taxIntermediateBandCapacity = if(x.location.equals(locationScotland) && now.isAfter(new LocalDate(2018,4,5))) 43430.00 else 0,
+            taxHigherRate = if(x.location.equals(locationScotland) && now.isAfter(new LocalDate(2018,4,5))) 41.00 else 40.00,
             taxHigherBandUpperLimit = 150000.00,
-            taxAdditionalRate = 45.00,
+            taxAdditionalRate = if(x.location.equals(locationScotland) && now.isAfter(new LocalDate(2018,4,5))) 46.00 else 45.00,
             taxAdditionalBandLowerLimit = 150000.01,
             niLimit = x.niLimit,
             niCategory = x.NICategory
           )
+
           config shouldBe taxYear
         }
     )
