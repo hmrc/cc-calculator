@@ -121,8 +121,8 @@ class TCSchemeConfigSpec extends FakeCCCalculatorApplication {
       coupleElement = 2010,
       loneParentElement = 2010,
       hours30Element = 810,
-      disabledWorkerElement = 3000,
-      severeDisabilityWorkerElement = 1290,
+      disabledWorkerElement = 3090,
+      severeDisabilityWorkerElement = 1330,
       maxChildcareOneChildElement = 175,
       maxChildcareMoreChildrenElement = 300,
       eligibleCostCoveredPercent = 70
@@ -130,8 +130,8 @@ class TCSchemeConfigSpec extends FakeCCCalculatorApplication {
     ctc = CTC(
       youngPersonElement = 2780,
       childElement = 2780,
-      disabledChildElement = 3175,
-      severeDisabilityChildElement = 1290,
+      disabledChildElement = 3275,
+      severeDisabilityChildElement = 1325,
       familyElement = 545
     ),
     thresholds = Thresholds(
