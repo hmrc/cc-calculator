@@ -427,15 +427,15 @@ sealed trait Helpers {
     NiCategory(
       niCategoryCode = "B",
       lelMonthlyLowerLimitForCat = 0.00,
-      lelMonthlyUpperLimitForCat = 490.00,
+      lelMonthlyUpperLimitForCat = 503.00,
       lelRateForCat = 0.00,
-      lelPtMonthlyLowerLimitForCat = 491.00,
-      lelPtMonthlyUpperLimitForCat = 680.00,
+      lelPtMonthlyLowerLimitForCat = 504.00,
+      lelPtMonthlyUpperLimitForCat = 698.00,
       lelPtRateForCat = 0.00,
-      ptUelMonthlyLowerLimitForCat = 681.00,
-      ptUelMonthlyUpperLimitForCat = 3753.00,
+      ptUelMonthlyLowerLimitForCat = 699.00,
+      ptUelMonthlyUpperLimitForCat = 3861.00,
       ptUelRateForCat = 5.85,
-      aboveUelMonthlyLowerLimitForCat = 3754.00,
+      aboveUelMonthlyLowerLimitForCat = 3862.00,
       aboveUelRateForCat = 2.00
     )
   }
