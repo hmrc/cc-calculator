@@ -222,9 +222,13 @@ trait ESCCalculatorTax extends ESCCalculatorHelpers {
 
     if (taxablePay <= personalAllowancePerPeriod) {
       CalculationTaxBands(zeroRateBand = taxablePay)
+
     } else if (taxablePay > personalAllowancePerPeriod && taxablePay <= basicRateCeiling){
+
       CalculationTaxBands(zeroRateBand = personalAllowancePerPeriod, basicRateBand = taxablePay - personalAllowancePerPeriod)
+
     } else if (taxablePay > basicRateCeiling && taxablePay <= higherRateCeilingPerPeriod) {
+
       CalculationTaxBands(
         zeroRateBand = personalAllowancePerPeriod,
         basicRateBand = basicRateCeiling - personalAllowancePerPeriod,
@@ -292,13 +296,18 @@ trait ESCCalculatorTax extends ESCCalculatorHelpers {
                                      taxCode: String,
                                      config: ESCTaxYearConfig
                                    ): (BigDecimal, BigDecimal, BigDecimal) = {
+
     val taxPerBandBeforeSacrifice: CalculationTaxBands =
       calculateTaxPerBand(allocateAmountToTaxBands(taxablePay, personalAllowance, period, calcPeriod, taxCode, config), period, config)
+
     val totalTaxDueBeforeSacrifice: BigDecimal = totalTaxDue(taxPerBandBeforeSacrifice, Periods.Yearly)
     val postSalarySacrificeEarnings: BigDecimal =  subtractActualReliefFromIncome(taxablePay, reliefAmount, Periods.Yearly)
+
     val taxPerBandAfterSacrifice: CalculationTaxBands =
       calculateTaxPerBand(allocateAmountToTaxBands(postSalarySacrificeEarnings, personalAllowance, period, calcPeriod, taxCode, config), period, config)
+
     val totalTaxDueAfterSacrifice: BigDecimal = totalTaxDue(taxPerBandAfterSacrifice, Periods.Yearly)
+
     //Total tax savings per one month
     val taxSavingAmountPerMonth = determineTotalSavings(totalTaxDueBeforeSacrifice, totalTaxDueAfterSacrifice)
     (taxSavingAmountPerMonth, totalTaxDueBeforeSacrifice, totalTaxDueAfterSacrifice)
@@ -417,6 +426,7 @@ trait ESCCalculator extends ESCCalculatorTax with ESCCalculatorNi {
 
     val periodParent: Option[ESCClaimant] = period.claimants.find(_.isPartner == false)
     val periodPartner: Option[ESCClaimant] = period.claimants.find(_.isPartner == true)
+
     val (parentESCTaxAmount, partnerESCTaxAmount, parentESCNIAmount, partnerESCNIAmount): (BigDecimal, BigDecimal, BigDecimal, BigDecimal) =
       (periodParent, periodPartner) match {
 
@@ -466,8 +476,10 @@ trait ESCCalculator extends ESCCalculatorTax with ESCCalculatorNi {
       val taxablePayMonthly: BigDecimal = roundToPound(annualAmountToPeriod(claimant.income.taxablePay, calcPeriod))
       val grossPayMonthly: BigDecimal = roundToPound(annualAmountToPeriod(claimant.income.gross, calcPeriod))
       val personalAllowanceMonthly: BigDecimal = roundToPound(annualAmountToPeriod(personalAllowanceAmount, calcPeriod))
+
       val taxSavingAmounts: (BigDecimal, BigDecimal, BigDecimal) =
         calculateTaxSavings(period, taxablePayMonthly, personalAllowanceMonthly, actualTaxReliefAmount, calcPeriod, taxCode, config)
+
       val niSavingAmounts: (BigDecimal, BigDecimal, BigDecimal) = calculateNISavings(period, grossPayMonthly, actualNIReliefAmount, config, calcPeriod)
 
       populateClaimantModel(
@@ -506,6 +518,7 @@ trait ESCCalculator extends ESCCalculatorTax with ESCCalculatorNi {
       //if one of the claimant income falls below the personal allowance then assign the entire childcare spend to the other claimant.
       determineSavingsPerClaimant(period, location)
     }
+
     listOfPairs.flatten
   }
 
@@ -544,14 +557,18 @@ trait ESCCalculator extends ESCCalculatorTax with ESCCalculatorNi {
     val eligibleMonths: Int = claimantList.foldLeft(0)((acc, c) => acc + c.eligibleMonthsInTaxYear)
     val qualification: Boolean = claimantList.exists(_.qualifying)
     val voucherFlag: Boolean = claimantList.exists(_.vouchers)
+
     val taxSavings: BigDecimal = claimantList.foldLeft(BigDecimal(0))((acc, c) => {
       acc + accumulateAmount(c.qualifying, c.eligibleMonthsInTaxYear, c.savings.taxSaving)
     })
+
     val NISavings: BigDecimal = claimantList.foldLeft(BigDecimal(0))((acc, c) => {
       acc + accumulateAmount(c.qualifying, c.eligibleMonthsInTaxYear, c.savings.niSaving)
     })
+
     val allTotalSavings: BigDecimal = taxSavings + NISavings
     val claimant = claimantList.head
+
     populateClaimantModel(
       qualification,
       eligibleMonths = eligibleMonths,
@@ -585,6 +602,7 @@ trait ESCCalculator extends ESCCalculatorTax with ESCCalculatorNi {
   private def determineClaimantsForTaxYear(listOfClaimants : List[models.output.esc.ESCClaimant]): List[models.output.esc.ESCClaimant] = {
     val overallParent = populateClaimant(listOfClaimants.filterNot(_.isPartner))
     val partnerExists: Boolean = listOfClaimants.exists(partner => partner.isPartner)
+
     partnerExists match {
       case false => List(overallParent)
       case true => List(overallParent, populateClaimant(listOfClaimants.filter(_.isPartner)))
@@ -593,6 +611,7 @@ trait ESCCalculator extends ESCCalculatorTax with ESCCalculatorNi {
 
   def getCalculatedTaxYears(escEligibility: ESCCalculatorInput): List[models.output.esc.ESCTaxYear] = {
     val taxYears = escEligibility.taxYears
+
     for(taxYear <- taxYears) yield {
       val claimantListForTY = determineCalculatedListOfClaimantsPairs(taxYear.periods, escEligibility.location)
       val resultClaimantList = determineClaimantsForTaxYear(claimantListForTY)
