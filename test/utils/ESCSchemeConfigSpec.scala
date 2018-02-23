@@ -145,10 +145,36 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers {
     val description = "ESC SchemeConfig - 2018 Tax Year"
     val date = "06-04-2018"
     val location = locationEngland
-    val defaultTaxCode = "1150L"
-    val defaultPersonalAllowance = 11500
+    val defaultTaxCode = "1185L"
+    val defaultPersonalAllowance = 11850
     val niCategoryCode = "B"
-    val taxBasicBandCapacity = 33500.00
+    val taxBasicBandCapacity = 34500.00
+    val niLimit = 8164
+    val ptUelRateForCat = 0.00
+    val NICategory = buildNiCategoryB
+  }
+
+  object NICatA2019 extends TestHelper {
+    val description = "ESC SchemeConfig - 2019 Tax Year"
+    val date = "06-04-2019"
+    val location = locationEngland
+    val defaultTaxCode = "1185L"
+    val defaultPersonalAllowance = 11850
+    val niCategoryCode = "B"
+    val taxBasicBandCapacity = 34500.00
+    val niLimit = 8164
+    val ptUelRateForCat = 0.00
+    val NICategory = buildNiCategoryB
+  }
+
+  object NICatA2020 extends TestHelper {
+    val description = "ESC SchemeConfig - 2020 Tax Year"
+    val date = "06-04-2020"
+    val location = locationEngland
+    val defaultTaxCode = "1185L"
+    val defaultPersonalAllowance = 11850
+    val niCategoryCode = "B"
+    val taxBasicBandCapacity = 34500.00
     val niLimit = 8164
     val ptUelRateForCat = 0.00
     val NICategory = buildNiCategoryB
@@ -158,10 +184,10 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers {
     val description = "ESC SchemeConfig - 2018 Tax Year, location scotland"
     val date = "06-04-2018"
     val location = locationScotland
-    val defaultTaxCode = "1150L"
-    val defaultPersonalAllowance = 11500
+    val defaultTaxCode = "1185L"
+    val defaultPersonalAllowance = 11850
     val niCategoryCode = "B"
-    val taxBasicBandCapacity = 31500.00
+    val taxBasicBandCapacity = 24000.00
     val niLimit = 8164
     val ptUelRateForCat = 0.00
     val NICategory = buildNiCategoryB
@@ -172,10 +198,23 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers {
     val description = "ESC SchemeConfig - 2019 Tax Year, location scotland"
     val date = "06-04-2019"
     val location = locationScotland
-    val defaultTaxCode = "1150L"
-    val defaultPersonalAllowance = 11500
+    val defaultTaxCode = "1185L"
+    val defaultPersonalAllowance = 11850
     val niCategoryCode = "B"
-    val taxBasicBandCapacity = 31500.00
+    val taxBasicBandCapacity = 24000.00
+    val niLimit = 8164
+    val ptUelRateForCat = 0.00
+    val NICategory = buildNiCategoryB
+  }
+
+  object NICatA2020Scotland extends TestHelper {
+    val description = "ESC SchemeConfig - 2020 Tax Year, location scotland"
+    val date = "06-04-2020"
+    val location = locationScotland
+    val defaultTaxCode = "1185L"
+    val defaultPersonalAllowance = 11850
+    val niCategoryCode = "B"
+    val taxBasicBandCapacity = 24000.00
     val niLimit = 8164
     val ptUelRateForCat = 0.00
     val NICategory = buildNiCategoryB
@@ -194,7 +233,10 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers {
       NICatA2016Default,
       NICatA2018,
       NICatA2018Scotland,
-      NICatA2019Scotland)
+      NICatA2019,
+      NICatA2019Scotland,
+      NICatA2020,
+      NICatA2020Scotland)
   }
 
   "ESC SchemeConfig" should {
@@ -288,15 +330,20 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers {
             defaultTaxCode = x.defaultTaxCode,
             personalAllowanceRate = 0.00,
             defaultPersonalAllowance = x.defaultPersonalAllowance,
+            taxStarterRate = if(x.location.equals(locationScotland) && now.isAfter(new LocalDate(2018,4,5))) 19.00 else 0,
+            taxStarterBandCapacity = if(x.location.equals(locationScotland) && now.isAfter(new LocalDate(2018,4,5))) 13850.00 else 0,
             taxBasicRate = 20.00,
             taxBasicBandCapacity = x.taxBasicBandCapacity,
-            taxHigherRate = 40.00,
+            taxIntermediateRate = if(x.location.equals(locationScotland) && now.isAfter(new LocalDate(2018,4,5))) 21.00 else 0,
+            taxIntermediateBandCapacity = if(x.location.equals(locationScotland) && now.isAfter(new LocalDate(2018,4,5))) 43430.00 else 0,
+            taxHigherRate = if(x.location.equals(locationScotland) && now.isAfter(new LocalDate(2018,4,5))) 41.00 else 40.00,
             taxHigherBandUpperLimit = 150000.00,
-            taxAdditionalRate = 45.00,
+            taxAdditionalRate = if(x.location.equals(locationScotland) && now.isAfter(new LocalDate(2018,4,5))) 46.00 else 45.00,
             taxAdditionalBandLowerLimit = 150000.01,
             niLimit = x.niLimit,
             niCategory = x.NICategory
           )
+
           config shouldBe taxYear
         }
     )
@@ -380,15 +427,15 @@ sealed trait Helpers {
     NiCategory(
       niCategoryCode = "B",
       lelMonthlyLowerLimitForCat = 0.00,
-      lelMonthlyUpperLimitForCat = 490.00,
+      lelMonthlyUpperLimitForCat = 503.00,
       lelRateForCat = 0.00,
-      lelPtMonthlyLowerLimitForCat = 491.00,
-      lelPtMonthlyUpperLimitForCat = 680.00,
+      lelPtMonthlyLowerLimitForCat = 504.00,
+      lelPtMonthlyUpperLimitForCat = 698.00,
       lelPtRateForCat = 0.00,
-      ptUelMonthlyLowerLimitForCat = 681.00,
-      ptUelMonthlyUpperLimitForCat = 3753.00,
+      ptUelMonthlyLowerLimitForCat = 699.00,
+      ptUelMonthlyUpperLimitForCat = 3861.00,
       ptUelRateForCat = 5.85,
-      aboveUelMonthlyLowerLimitForCat = 3754.00,
+      aboveUelMonthlyLowerLimitForCat = 3862.00,
       aboveUelRateForCat = 2.00
     )
   }

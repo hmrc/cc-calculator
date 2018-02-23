@@ -121,8 +121,8 @@ class TCSchemeConfigSpec extends FakeCCCalculatorApplication {
       coupleElement = 2010,
       loneParentElement = 2010,
       hours30Element = 810,
-      disabledWorkerElement = 3000,
-      severeDisabilityWorkerElement = 1290,
+      disabledWorkerElement = 3090,
+      severeDisabilityWorkerElement = 1330,
       maxChildcareOneChildElement = 175,
       maxChildcareMoreChildrenElement = 300,
       eligibleCostCoveredPercent = 70
@@ -130,8 +130,8 @@ class TCSchemeConfigSpec extends FakeCCCalculatorApplication {
     ctc = CTC(
       youngPersonElement = 2780,
       childElement = 2780,
-      disabledChildElement = 3175,
-      severeDisabilityChildElement = 1290,
+      disabledChildElement = 3275,
+      severeDisabilityChildElement = 1325,
       familyElement = 545
     ),
     thresholds = Thresholds(
@@ -140,6 +140,36 @@ class TCSchemeConfigSpec extends FakeCCCalculatorApplication {
       taperRatePercent = 41
     )
   )
+
+  val taxYearConfig2019 = TCTaxYearConfig(
+    otherIncomeAdjustment = 300,
+    currentIncomeFallDifferenceAmount = 2500,
+    currentIncomeRiseDifferenceAmount = 2500,
+    wtc = WTC(
+      basicElement = 1960,
+      coupleElement = 2010,
+      loneParentElement = 2010,
+      hours30Element = 810,
+      disabledWorkerElement = 3090,
+      severeDisabilityWorkerElement = 1330,
+      maxChildcareOneChildElement = 175,
+      maxChildcareMoreChildrenElement = 300,
+      eligibleCostCoveredPercent = 70
+    ),
+    ctc = CTC(
+      youngPersonElement = 2780,
+      childElement = 2780,
+      disabledChildElement = 3275,
+      severeDisabilityChildElement = 1325,
+      familyElement = 545
+    ),
+    thresholds = Thresholds(
+      wtcIncomeThreshold = 6420,
+      ctcIncomeThreshold = 16105,
+      taperRatePercent = 41
+    )
+  )
+
 
   "TC SchemeConfig" should {
 
@@ -169,7 +199,8 @@ class TCSchemeConfigSpec extends FakeCCCalculatorApplication {
       ("2017", "06-01-2018", taxYearConfig2017),
       ("2017", "05-04-2018", taxYearConfig2017),
       ("2018", "06-04-2018", taxYearConfig2018),
-      ("2018", "23-07-2018", taxYearConfig2018)
+      ("2018", "23-07-2018", taxYearConfig2018),
+      ("2019", "23-07-2019", taxYearConfig2019)
     )
 
     forAll(configTestCases) { case (taxYear, date, taxYearConfig) =>
