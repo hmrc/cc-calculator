@@ -157,7 +157,11 @@ case class ESCClaimant(
     val (empPrevious, pensionPrevious, taxCodePrevious) = determineIncomeElems(previousIncome)
     val (emp, pension, taxCode) = determineIncomeElems(currentIncome)
 
-    (if(emp.isDefined) emp else empPrevious, if(pension.isDefined) pension else pensionPrevious, if(taxCode.isDefined) taxCode else taxCodePrevious)
+    (
+      if(emp.isDefined) emp else empPrevious,
+      if(pension.isDefined) pension else pensionPrevious,
+      if(taxCode.isDefined) taxCode else taxCodePrevious
+    )
   }
 }
 
