@@ -208,8 +208,22 @@ trait ESCCalculatorHelpers extends ESCConfig with CCCalculatorHelper with Messag
 
 trait ESCCalculatorTax extends ESCCalculatorHelpers {
 
-  private def allocateAmountToTaxBandsBasedOnTaxablePay(taxablePay: BigDecimal,  personalAllowancePerPeriod: BigDecimal,
-                                                        calcPeriod: Periods.Period, config: ESCTaxYearConfig) : CalculationTaxBands = {
+  private def allocateAmountToTaxBandsBasedOnTaxablePay(taxablePay: BigDecimal,
+                                                        personalAllowancePerPeriod: BigDecimal,
+                                                        calcPeriod: Periods.Period,
+                                                        config: ESCTaxYearConfig): CalculationTaxBands =
+
+    // Check for the Scottish ESCTaxYearConfig
+    if (config.taxStarterRate > 0) {
+      allocateAmountToTaxBandsForScotland(taxablePay, personalAllowancePerPeriod, calcPeriod, config)
+    } else {
+      allocateAmountToTaxBandsForAllButScotland(taxablePay, personalAllowancePerPeriod, calcPeriod, config)
+    }
+
+  private def allocateAmountToTaxBandsForAllButScotland(taxablePay: BigDecimal,
+                                                        personalAllowancePerPeriod: BigDecimal,
+                                                        calcPeriod: Periods.Period,
+                                                        config: ESCTaxYearConfig) = {
 
     val higherRateCeilingPerPeriod : BigDecimal = roundToPound(annualAmountToPeriod(config.taxHigherBandUpperLimit, calcPeriod))
     val basicRateCapacityPerPeriod : BigDecimal = roundToPound(annualAmountToPeriod(config.taxBasicBandCapacity, calcPeriod))
@@ -234,6 +248,67 @@ trait ESCCalculatorTax extends ESCCalculatorHelpers {
         zeroRateBand = personalAllowancePerPeriod,
         basicRateBand = basicRateCeiling - personalAllowancePerPeriod,
         higherRateBand = higherRateCeilingPerPeriod - basicRateCeiling,
+        additionalRateBand = taxablePay - higherRateCeilingPerPeriod
+      )
+    }
+  }
+
+  private def allocateAmountToTaxBandsForScotland(taxablePay: BigDecimal,
+                                                  personalAllowancePerPeriod: BigDecimal,
+                                                  calcPeriod: Periods.Period,
+                                                  config: ESCTaxYearConfig) = {
+
+
+    val starterRateCapacityPerPeriod : BigDecimal = roundToPound(annualAmountToPeriod(config.taxStarterBandCapacity, calcPeriod))
+    val starterRateCeiling : BigDecimal = starterRateCapacityPerPeriod + personalAllowancePerPeriod
+
+    val basicRateCapacityPerPeriod : BigDecimal = roundToPound(annualAmountToPeriod(config.taxBasicBandCapacity, calcPeriod))
+    val basicRateCeiling : BigDecimal = basicRateCapacityPerPeriod + starterRateCeiling
+
+    val intermediateCapacityPerPeriod : BigDecimal = roundToPound(annualAmountToPeriod(config.taxIntermediateBandCapacity, calcPeriod))
+    val intermediateRateCeiling : BigDecimal = intermediateCapacityPerPeriod + basicRateCeiling
+
+    val higherRateCeilingPerPeriod : BigDecimal = roundToPound(annualAmountToPeriod(config.taxHigherBandUpperLimit, calcPeriod))
+
+
+    if (taxablePay <= personalAllowancePerPeriod) {
+      CalculationTaxBands(zeroRateBand = taxablePay)
+
+    } else if (taxablePay > personalAllowancePerPeriod && taxablePay <= starterRateCeiling) {
+      CalculationTaxBands(zeroRateBand = personalAllowancePerPeriod, starterRateBand = taxablePay - personalAllowancePerPeriod)
+
+    } else if (taxablePay > starterRateCeiling && taxablePay <= basicRateCeiling){
+
+      CalculationTaxBands(
+        zeroRateBand = personalAllowancePerPeriod,
+        starterRateBand = taxablePay - personalAllowancePerPeriod,
+        basicRateBand = taxablePay - starterRateCeiling)
+
+    } else if (taxablePay > basicRateCeiling && taxablePay <= intermediateRateCeiling) {
+
+      CalculationTaxBands(
+        zeroRateBand = personalAllowancePerPeriod,
+        starterRateBand = taxablePay - personalAllowancePerPeriod,
+        basicRateBand = taxablePay - starterRateCeiling,
+        intermediateRateBand = taxablePay - basicRateCeiling
+      )
+    } else if (taxablePay > intermediateRateCeiling && taxablePay <= higherRateCeilingPerPeriod) {
+
+      CalculationTaxBands(
+        zeroRateBand = personalAllowancePerPeriod,
+        starterRateBand = taxablePay - personalAllowancePerPeriod,
+        basicRateBand = taxablePay - starterRateCeiling,
+        intermediateRateBand = taxablePay - basicRateCeiling,
+        higherRateBand = taxablePay - intermediateRateCeiling
+      )
+
+    } else {
+      CalculationTaxBands(
+        zeroRateBand = personalAllowancePerPeriod,
+        starterRateBand = taxablePay - personalAllowancePerPeriod,
+        basicRateBand = taxablePay - starterRateCeiling,
+        intermediateRateBand = taxablePay - basicRateCeiling,
+        higherRateBand = taxablePay - intermediateRateCeiling,
         additionalRateBand = taxablePay - higherRateCeilingPerPeriod
       )
     }

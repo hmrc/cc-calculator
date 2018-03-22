@@ -187,7 +187,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers {
     val defaultTaxCode = "1185L"
     val defaultPersonalAllowance = 11850
     val niCategoryCode = "B"
-    val taxBasicBandCapacity = 24000.00
+    val taxBasicBandCapacity = 10150.00
     val niLimit = 8164
     val ptUelRateForCat = 0.00
     val NICategory = buildNiCategoryB
@@ -201,7 +201,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers {
     val defaultTaxCode = "1185L"
     val defaultPersonalAllowance = 11850
     val niCategoryCode = "B"
-    val taxBasicBandCapacity = 24000.00
+    val taxBasicBandCapacity = 10150.00
     val niLimit = 8164
     val ptUelRateForCat = 0.00
     val NICategory = buildNiCategoryB
@@ -214,7 +214,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers {
     val defaultTaxCode = "1185L"
     val defaultPersonalAllowance = 11850
     val niCategoryCode = "B"
-    val taxBasicBandCapacity = 24000.00
+    val taxBasicBandCapacity = 10150.00
     val niLimit = 8164
     val ptUelRateForCat = 0.00
     val NICategory = buildNiCategoryB
@@ -331,11 +331,11 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers {
             personalAllowanceRate = 0.00,
             defaultPersonalAllowance = x.defaultPersonalAllowance,
             taxStarterRate = if(x.location.equals(locationScotland) && now.isAfter(new LocalDate(2018,4,5))) 19.00 else 0,
-            taxStarterBandCapacity = if(x.location.equals(locationScotland) && now.isAfter(new LocalDate(2018,4,5))) 13850.00 else 0,
+            taxStarterBandCapacity = if(x.location.equals(locationScotland) && now.isAfter(new LocalDate(2018,4,5))) 2000.00 else 0,
             taxBasicRate = 20.00,
             taxBasicBandCapacity = x.taxBasicBandCapacity,
             taxIntermediateRate = if(x.location.equals(locationScotland) && now.isAfter(new LocalDate(2018,4,5))) 21.00 else 0,
-            taxIntermediateBandCapacity = if(x.location.equals(locationScotland) && now.isAfter(new LocalDate(2018,4,5))) 43430.00 else 0,
+            taxIntermediateBandCapacity = if(x.location.equals(locationScotland) && now.isAfter(new LocalDate(2018,4,5))) 19430.00 else 0,
             taxHigherRate = if(x.location.equals(locationScotland) && now.isAfter(new LocalDate(2018,4,5))) 41.00 else 40.00,
             taxHigherBandUpperLimit = 150000.00,
             taxAdditionalRate = if(x.location.equals(locationScotland) && now.isAfter(new LocalDate(2018,4,5))) 46.00 else 45.00,
