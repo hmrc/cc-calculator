@@ -84,7 +84,8 @@ trait ESCConfig extends CCConfig with ServicesConfig with MessagesObject with Lo
       taxAdditionalRate = localConfig.getDouble("additional.rate").get,
       taxAdditionalBandLowerLimit = localConfig.getDouble("additional.band-annual-lower-limit").get,
       niLimit = config.getDouble("ni-limit").get,
-      niCategory = niCat
+      niCategory = niCat,
+      basicNiThresholdUk = config.getDouble("basic-ni-threshold-uk").getOrElse(0)
     )
   }
 
@@ -101,6 +102,7 @@ trait ESCConfig extends CCConfig with ServicesConfig with MessagesObject with Lo
     }
   }
 
+  //Scottish tax changes
   def getNiCategoryHelper(code: String, niCategories: Seq[Configuration], acc: Option[NiCategory]): Option[NiCategory] = {
     niCategories match {
       case Nil =>  acc
@@ -163,5 +165,6 @@ case class ESCTaxYearConfig (
                              taxAdditionalRate: Double,
                              taxAdditionalBandLowerLimit: Double,
                              niLimit: Double,
-                             niCategory: NiCategory
+                             niCategory: NiCategory,
+                             basicNiThresholdUk: Double
                              )

@@ -341,7 +341,8 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers {
             taxAdditionalRate = if(x.location.equals(locationScotland) && now.isAfter(new LocalDate(2018,4,5))) 46.00 else 45.00,
             taxAdditionalBandLowerLimit = 150000.01,
             niLimit = x.niLimit,
-            niCategory = x.NICategory
+            niCategory = x.NICategory,
+            basicNiThresholdUk = x.basicNiThresholdUk
           )
 
           config shouldBe taxYear

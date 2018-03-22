@@ -97,21 +97,42 @@ trait ESCCalculatorHelpers extends ESCConfig with CCCalculatorHelper with Messag
     }
   }
 
+  //Scottish tax changes
   private def determineMaximumIncomeReliefPost2011BasedOnRelevantEarnings(relevantEarnings: BigDecimal,
-                                                                          calcPeriod: Periods.Period = Periods.Monthly, config: ESCTaxYearConfig) = {
+                                                                          calcPeriod: Periods.Period = Periods.Monthly,
+                                                                          config: ESCTaxYearConfig) = {
     val higherRateCeiling : BigDecimal = config.taxHigherBandUpperLimit
     val basicRateCeiling : BigDecimal = config.taxBasicBandCapacity
-    relevantEarnings match {
-      case amount if amount <= basicRateCeiling => //20% band, if you earn less than PA, you could still buy only that amount of vouchers
-        monthlyAmountToPeriod (config.post2011MaxExemptionMonthlyBasic, calcPeriod)
-      case amount if amount > basicRateCeiling && amount <= higherRateCeiling => //40% band
-        monthlyAmountToPeriod (config.post2011MaxExemptionMonthlyHigher, calcPeriod)
-      case amount if amount > higherRateCeiling => //45% band
-        monthlyAmountToPeriod (config.post2011MaxExemptionMonthlyAdditional, calcPeriod)
+
+    val isScottishESCTaxYearConfig = config.taxStarterRate > 0
+    val niThreshold = config.basicNiThresholdUk
+
+    //Need refactoring
+    if(isScottishESCTaxYearConfig){
+        relevantEarnings match {
+          case amount if amount <= niThreshold => //20% band, if you earn less than PA, you could still buy only that amount of vouchers
+            monthlyAmountToPeriod(config.post2011MaxExemptionMonthlyBasic, calcPeriod)
+          case amount if amount > niThreshold && amount <= higherRateCeiling => //40% band
+            monthlyAmountToPeriod (config.post2011MaxExemptionMonthlyHigher, calcPeriod)
+          case amount if amount > higherRateCeiling => //45% band
+            monthlyAmountToPeriod (config.post2011MaxExemptionMonthlyAdditional, calcPeriod)
+        }
+    } else {
+        relevantEarnings match {
+          case amount if amount <= basicRateCeiling => //20% band, if you earn less than PA, you could still buy only that amount of vouchers
+            monthlyAmountToPeriod (config.post2011MaxExemptionMonthlyBasic, calcPeriod)
+          case amount if amount > basicRateCeiling && amount <= higherRateCeiling => //40% band
+            monthlyAmountToPeriod (config.post2011MaxExemptionMonthlyHigher, calcPeriod)
+          case amount if amount > higherRateCeiling => //45% band
+            monthlyAmountToPeriod (config.post2011MaxExemptionMonthlyAdditional, calcPeriod)
+        }
     }
+
   }
 
-  private def determineMaximumIncomeReliefPre2011(relevantEarnings: BigDecimal, calcPeriod: Periods.Period = Periods.Monthly, taxCode: String) = {
+  private def determineMaximumIncomeReliefPre2011(relevantEarnings: BigDecimal,
+                                                  calcPeriod: Periods.Period = Periods.Monthly,
+                                                  taxCode: String) = {
     relevantEarnings match {
       case amount if amount <= 0 => BigDecimal(0.00)
       case amount if amount > 0 =>
@@ -206,6 +227,7 @@ trait ESCCalculatorHelpers extends ESCConfig with CCCalculatorHelper with Messag
   }
 }
 
+//Scottish tax changes
 trait ESCCalculatorTax extends ESCCalculatorHelpers {
 
   private def allocateAmountToTaxBandsBasedOnTaxablePay(taxablePay: BigDecimal,
