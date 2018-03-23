@@ -35,6 +35,8 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers {
     val niLimit = 8164
     val ptUelRateForCat = 12.00
     val NICategory = buildNiCategory(niCategoryCode, ptUelRateForCat)
+    val basicNiThresholdUkValue = 0.0
+
   }
 
   object NICatAScotlandDefault extends TestHelper {
@@ -48,6 +50,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers {
     val niLimit = 8164
     val ptUelRateForCat = 12.00
     val NICategory = buildNiCategory(niCategoryCode, ptUelRateForCat)
+    val basicNiThresholdUkValue = 0.0
   }
 
   object NICatA2016 extends TestHelper {
@@ -61,6 +64,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers {
     val niLimit = 8112
     val ptUelRateForCat = 12.00
     val NICategory = buildNiCategory(niCategoryCode, ptUelRateForCat)
+    val basicNiThresholdUkValue = 0.00
   }
 
   object NICatA2016Scotland extends TestHelper {
@@ -74,6 +78,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers {
     val niLimit = 8112
     val ptUelRateForCat = 12.00
     val NICategory = buildNiCategory(niCategoryCode, ptUelRateForCat)
+    val basicNiThresholdUkValue = 0.00
   }
 
   object NICatB2016 extends TestHelper {
@@ -87,6 +92,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers {
     val niLimit = 8112
     val ptUelRateForCat = 5.85
     val NICategory = buildNiCategory(niCategoryCode, ptUelRateForCat)
+    val basicNiThresholdUkValue = 0.00
   }
 
   object NICatC2017 extends TestHelper {
@@ -100,6 +106,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers {
     val niLimit = 8164
     val ptUelRateForCat = 0.00
     val NICategory = buildNiCategoryC(ptUelRateForCat)
+    val basicNiThresholdUkValue = 0.00
   }
 
   object NICatC2017Scotland extends TestHelper {
@@ -113,6 +120,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers {
     val niLimit = 8164
     val ptUelRateForCat = 0.00
     val NICategory = buildNiCategoryC(ptUelRateForCat)
+    val basicNiThresholdUkValue = 0.00
   }
 
   object NICatA2017 extends TestHelper {
@@ -126,6 +134,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers {
     val niLimit = 8164
     val ptUelRateForCat = 2.00
     val NICategory = buildNiCategoryA(2.00)
+    val basicNiThresholdUkValue = 0.00
   }
 
   object NICatA2016Default extends TestHelper {
@@ -139,6 +148,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers {
     val niLimit = 8112
     val ptUelRateForCat = 12.00
     val NICategory = buildNiCategory("A", ptUelRateForCat)
+    val basicNiThresholdUkValue = 0.00
   }
 
   object NICatA2018 extends TestHelper {
@@ -152,6 +162,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers {
     val niLimit = 8164
     val ptUelRateForCat = 0.00
     val NICategory = buildNiCategoryB
+    val basicNiThresholdUkValue = 0.00
   }
 
   object NICatA2019 extends TestHelper {
@@ -165,6 +176,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers {
     val niLimit = 8164
     val ptUelRateForCat = 0.00
     val NICategory = buildNiCategoryB
+    val basicNiThresholdUkValue = 0.00
   }
 
   object NICatA2020 extends TestHelper {
@@ -178,6 +190,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers {
     val niLimit = 8164
     val ptUelRateForCat = 0.00
     val NICategory = buildNiCategoryB
+    val basicNiThresholdUkValue = 0.00
   }
 
   object NICatA2018Scotland extends TestHelper {
@@ -191,6 +204,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers {
     val niLimit = 8164
     val ptUelRateForCat = 0.00
     val NICategory = buildNiCategoryB
+    val basicNiThresholdUkValue = 46350.00
   }
 
 
@@ -205,6 +219,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers {
     val niLimit = 8164
     val ptUelRateForCat = 0.00
     val NICategory = buildNiCategoryB
+    val basicNiThresholdUkValue = 46350.00
   }
 
   object NICatA2020Scotland extends TestHelper {
@@ -218,6 +233,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers {
     val niLimit = 8164
     val ptUelRateForCat = 0.00
     val NICategory = buildNiCategoryB
+    val basicNiThresholdUkValue = 46350.00
   }
 
   private val bandAndYearTests: List[TestHelper] = {
@@ -342,7 +358,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers {
             taxAdditionalBandLowerLimit = 150000.01,
             niLimit = x.niLimit,
             niCategory = x.NICategory,
-            basicNiThresholdUk = x.basicNiThresholdUk
+            basicNiThresholdUk = x.basicNiThresholdUkValue
           )
 
           config shouldBe taxYear
@@ -452,5 +468,6 @@ sealed trait Helpers {
     val niLimit: Int
     val ptUelRateForCat: Double
     val NICategory: NiCategory
+    val basicNiThresholdUkValue: Double
   }
 }

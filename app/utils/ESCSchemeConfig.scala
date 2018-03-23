@@ -85,7 +85,7 @@ trait ESCConfig extends CCConfig with ServicesConfig with MessagesObject with Lo
       taxAdditionalBandLowerLimit = localConfig.getDouble("additional.band-annual-lower-limit").get,
       niLimit = config.getDouble("ni-limit").get,
       niCategory = niCat,
-      basicNiThresholdUk = config.getDouble("basic-ni-threshold-uk").getOrElse(0)
+      basicNiThresholdUk = localConfig.getDouble("basic-ni-threshold-uk").getOrElse(0)
     )
   }
 
