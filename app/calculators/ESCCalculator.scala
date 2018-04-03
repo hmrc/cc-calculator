@@ -300,17 +300,16 @@ trait ESCCalculatorTax extends ESCCalculatorHelpers {
       CalculationTaxBands(zeroRateBand = personalAllowancePerPeriod, starterRateBand = taxablePay - personalAllowancePerPeriod)
 
     } else if (taxablePay > starterRateCeiling && taxablePay <= basicRateCeiling){
-
       CalculationTaxBands(
         zeroRateBand = personalAllowancePerPeriod,
-        starterRateBand = taxablePay - personalAllowancePerPeriod,
+        starterRateBand = starterRateCeiling - personalAllowancePerPeriod,
         basicRateBand = taxablePay - starterRateCeiling)
 
     } else if (taxablePay > basicRateCeiling && taxablePay <= intermediateRateCeiling) {
 
       CalculationTaxBands(
         zeroRateBand = personalAllowancePerPeriod,
-        starterRateBand = taxablePay - personalAllowancePerPeriod,
+        starterRateBand = starterRateCeiling - personalAllowancePerPeriod,
         basicRateBand = taxablePay - starterRateCeiling,
         intermediateRateBand = taxablePay - basicRateCeiling
       )
@@ -318,7 +317,7 @@ trait ESCCalculatorTax extends ESCCalculatorHelpers {
 
       CalculationTaxBands(
         zeroRateBand = personalAllowancePerPeriod,
-        starterRateBand = taxablePay - personalAllowancePerPeriod,
+        starterRateBand = starterRateCeiling - personalAllowancePerPeriod,
         basicRateBand = taxablePay - starterRateCeiling,
         intermediateRateBand = taxablePay - basicRateCeiling,
         higherRateBand = taxablePay - intermediateRateCeiling
@@ -327,7 +326,7 @@ trait ESCCalculatorTax extends ESCCalculatorHelpers {
     } else {
       CalculationTaxBands(
         zeroRateBand = personalAllowancePerPeriod,
-        starterRateBand = taxablePay - personalAllowancePerPeriod,
+        starterRateBand = starterRateCeiling - personalAllowancePerPeriod,
         basicRateBand = taxablePay - starterRateCeiling,
         intermediateRateBand = taxablePay - basicRateCeiling,
         higherRateBand = taxablePay - intermediateRateCeiling,
@@ -338,8 +337,13 @@ trait ESCCalculatorTax extends ESCCalculatorHelpers {
 
 
   def totalTaxDue(taxAmountPerBand: CalculationTaxBands, calcPeriod: Periods.Period): BigDecimal = {
-    val annualTaxAmount = taxAmountPerBand.zeroRateBand + taxAmountPerBand.basicRateBand + taxAmountPerBand.higherRateBand +
+    val annualTaxAmount = taxAmountPerBand.zeroRateBand +
+      taxAmountPerBand.starterRateBand +
+      taxAmountPerBand.basicRateBand +
+      taxAmountPerBand.intermediateRateBand +
+      taxAmountPerBand.higherRateBand +
       taxAmountPerBand.additionalRateBand
+
     round(annualAmountToPeriod(annualTaxAmount, calcPeriod))
   }
 

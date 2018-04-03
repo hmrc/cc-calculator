@@ -30,7 +30,7 @@ import utils.{ESCConfig, FakeCCCalculatorApplication, Periods}
 
 import scala.concurrent.Future
 
-class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with MockitoSugar with org.scalatest.PrivateMethodTester {
+class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with MockitoSugar with org.scalatest.PrivateMethodTester with CCCalculatorHelper {
   val location = "england"
   val locationScotland = "scotland"
 
@@ -1179,6 +1179,34 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
         taxAndNIBeforeSacrifice = models.output.esc.ESCTaxAndNi(taxPaid = 500.00, niPaid = 345.36), taxAndNIAfterSacrifice = models.output.esc.ESCTaxAndNi(taxPaid = 451.40, niPaid = 316.20))
 
       result shouldBe List(outputClaimant)
+    }
+
+    "Have correct total ESC Tax Savings for Scotland" in {
+      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val fromDate = LocalDate.parse("06-04-2018", formatter)
+      val toDate = LocalDate.parse("06-04-2019", formatter)
+
+      val inputClaimant = ESCClaimant(qualifying = true, isPartner = false,
+        eligibleMonthsInPeriod = 12, previousIncome = Some(ESCIncome(Some(15000))), currentIncome = Some(ESCIncome(Some(15000))), vouchers = true, escStartDate = fromDate)
+      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant), children = List(buildChild(childCareCost = 200)))
+
+      val result = ESCCalculator.determineSavingsPerClaimant(period, location = locationScotland)
+
+      (result(0).savings.taxSaving * 12).intValue() shouldBe  BigDecimal(467.50).intValue()
+    }
+
+    "Have correct total ESC Tax Savings for England" in {
+      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val fromDate = LocalDate.parse("06-04-2018", formatter)
+      val toDate = LocalDate.parse("06-04-2019", formatter)
+
+      val inputClaimant = ESCClaimant(qualifying = true, isPartner = false,
+        eligibleMonthsInPeriod = 12, previousIncome = Some(ESCIncome(Some(15000))), currentIncome = Some(ESCIncome(Some(15000))), vouchers = true, escStartDate = fromDate)
+      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant), children = List(buildChild(childCareCost = 200)))
+
+      val result = ESCCalculator.determineSavingsPerClaimant(period, location = location)
+
+      result(0).savings.taxSaving * 12 shouldBe 480
     }
 
     "calculate savings per claimant (single claimant, post 2011, gross < additional rate limit, voucher amount < max relief) (Monthly)" in {
