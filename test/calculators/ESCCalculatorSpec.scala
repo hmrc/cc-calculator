@@ -1195,6 +1195,20 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       (result(0).savings.taxSaving * 12).intValue() shouldBe  BigDecimal(467.50).intValue()
     }
 
+    "Have correct Tax Savings for Scotland with amount over to higher rate" in {
+      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val fromDate = LocalDate.parse("06-04-2018", formatter)
+      val toDate = LocalDate.parse("06-04-2019", formatter)
+
+      val inputClaimant = ESCClaimant(qualifying = true, isPartner = false,
+        eligibleMonthsInPeriod = 12, previousIncome = Some(ESCIncome(Some(49000))), currentIncome = Some(ESCIncome(Some(49000))), vouchers = true, escStartDate = fromDate)
+      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant), children = List(buildChild(childCareCost = 300)))
+
+      val result = ESCCalculator.determineSavingsPerClaimant(period, location = locationScotland)
+
+      (result(0).savings.taxSaving * 12).intValue() shouldBe  BigDecimal(610).intValue()
+    }
+
     "Have correct total ESC Tax Savings for England" in {
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("06-04-2018", formatter)
