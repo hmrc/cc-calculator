@@ -280,8 +280,10 @@ trait ESCCalculatorTax extends ESCCalculatorHelpers {
     val intermediateCapacityPerPeriod: BigDecimal = roundToPound(annualAmountToPeriod(config.taxIntermediateBandCapacity, calcPeriod))
     val intermediateRateCeiling: BigDecimal = intermediateCapacityPerPeriod + basicRateCeiling
 
+    val higherRateCapacityPerPeriod: BigDecimal = roundToPound(annualAmountToPeriod(config.taxHigherRateBandCapacity, calcPeriod))
+    val higherRateCeiling : BigDecimal = higherRateCapacityPerPeriod + intermediateRateCeiling
+
     val higherRateCeilingPerPeriod: BigDecimal = roundToPound(annualAmountToPeriod(config.taxHigherBandUpperLimit, calcPeriod))
-    val higherRateCeiling : BigDecimal = higherRateCeilingPerPeriod + intermediateRateCeiling
 
 
     if (taxablePay <= personalAllowancePerPeriod) {
@@ -305,7 +307,6 @@ trait ESCCalculatorTax extends ESCCalculatorHelpers {
         intermediateRateBand = taxablePay - basicRateCeiling
       )
     } else if (taxablePay > intermediateRateCeiling && taxablePay <= higherRateCeilingPerPeriod) {
-
       CalculationTaxBands(
         zeroRateBand = personalAllowancePerPeriod,
         starterRateBand = starterRateCeiling - personalAllowancePerPeriod,
@@ -321,7 +322,7 @@ trait ESCCalculatorTax extends ESCCalculatorHelpers {
         basicRateBand = basicRateCeiling - starterRateCeiling,
         intermediateRateBand = intermediateRateCeiling - basicRateCeiling,
         higherRateBand = higherRateCeiling - intermediateRateCeiling,
-        additionalRateBand = taxablePay - higherRateCeiling
+        additionalRateBand = taxablePay - higherRateCeilingPerPeriod
       )
     }
   }
