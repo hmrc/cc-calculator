@@ -106,10 +106,6 @@ trait ESCCalculatorHelpers extends ESCConfig with CCCalculatorHelper with Messag
     val niThreshold = config.basicNiThresholdUk
     val higherRateCeiling: BigDecimal = config.taxHigherBandUpperLimit
     val basicRateCeiling: BigDecimal = if (isScottishESCTaxYearConfig) niThreshold else  config.taxBasicBandCapacity
-   //val basicRateCeiling: BigDecimal = config.taxBasicBandCapacity
-
-
-
 
     relevantEarnings match {
       case amount if amount <= basicRateCeiling => //20% band, if you earn less than PA, you could still buy only that amount of vouchers
@@ -119,29 +115,6 @@ trait ESCCalculatorHelpers extends ESCConfig with CCCalculatorHelper with Messag
       case amount if amount > higherRateCeiling => //45% band
         monthlyAmountToPeriod(config.post2011MaxExemptionMonthlyAdditional, calcPeriod)
     }
-
-
-    /*if (isScottishESCTaxYearConfig) {
-      relevantEarnings match {
-        case amount if amount <= niThreshold => //20% band, if you earn less than PA, you could still buy only that amount of vouchers
-          monthlyAmountToPeriod(config.post2011MaxExemptionMonthlyBasic, calcPeriod)
-        case amount if amount > niThreshold && amount <= higherRateCeiling => //40% band
-          monthlyAmountToPeriod(config.post2011MaxExemptionMonthlyHigher, calcPeriod)
-        case amount if amount > higherRateCeiling => //45% band
-          monthlyAmountToPeriod(config.post2011MaxExemptionMonthlyAdditional, calcPeriod)
-      }
-    } else {
-      relevantEarnings match {
-        case amount if amount <= basicRateCeiling => //20% band, if you earn less than PA, you could still buy only that amount of vouchers
-          monthlyAmountToPeriod(config.post2011MaxExemptionMonthlyBasic, calcPeriod)
-        case amount if amount > basicRateCeiling && amount <= higherRateCeiling => //40% band
-          monthlyAmountToPeriod(config.post2011MaxExemptionMonthlyHigher, calcPeriod)
-        case amount if amount > higherRateCeiling => //45% band
-          monthlyAmountToPeriod(config.post2011MaxExemptionMonthlyAdditional, calcPeriod)
-      }
-    }*/
-
-
   }
 
   private def determineMaximumIncomeReliefPre2011(relevantEarnings: BigDecimal,
