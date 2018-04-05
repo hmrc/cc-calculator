@@ -1290,7 +1290,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
 
       val result = ESCCalculator.determineSavingsPerClaimant(period, location = locationScotland)
 
-      result(0).savings.niSaving * 12 shouldBe 111.36
+      result(0).savings.niSaving * 12 shouldBe 29.76
     }
 
     "Have the correct total NI Savings for England when paid over 46k threshold" in {
