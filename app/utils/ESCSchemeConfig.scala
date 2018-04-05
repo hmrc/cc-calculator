@@ -81,7 +81,7 @@ trait ESCConfig extends CCConfig with ServicesConfig with MessagesObject with Lo
       taxIntermediateBandCapacity = localConfig.getDouble("intermediate.band-capacity-annual-amount").getOrElse(0),
       taxHigherRateBandCapacity = localConfig.getDouble("higher.band-capacity-annual-amount").getOrElse(0),
       taxHigherRate = localConfig.getDouble("higher.rate").get,
-      taxHigherBandUpperLimit = localConfig.getDouble("higher.band-annual-upper-limit").get,
+      taxHigherBandUpperLimit = localConfig.getDouble("higher.band-annual-upper-limit").getOrElse(0),
       taxAdditionalRate = localConfig.getDouble("additional.rate").get,
       taxAdditionalBandLowerLimit = localConfig.getDouble("additional.band-annual-lower-limit").get,
       niLimit = config.getDouble("ni-limit").get,
