@@ -1279,6 +1279,20 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
       result(0).savings.niSaving * 12 shouldBe 111.36
     }
 
+    "Have the correct total NI Savings for England when paid over 46k threshold" in {
+      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val fromDate = LocalDate.parse("06-04-2018", formatter)
+      val toDate = LocalDate.parse("06-04-2019", formatter)
+
+      val inputClaimant = ESCClaimant(qualifying = true, isPartner = false,
+        eligibleMonthsInPeriod = 12, previousIncome = Some(ESCIncome(Some(47000))), currentIncome = Some(ESCIncome(Some(47000))), vouchers = true, escStartDate = fromDate)
+      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant), children = List(buildChild(childCareCost = 200)))
+
+      val result = ESCCalculator.determineSavingsPerClaimant(period, location = location)
+
+      result(0).savings.niSaving * 12 shouldBe 111.36
+    }
+
     "Have the correct NI exemption for Scotland when paid 45k" in {
       val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("06-04-2018", formatter)
