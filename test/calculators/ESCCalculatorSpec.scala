@@ -1220,7 +1220,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
 
       val result = ESCCalculator.determineSavingsPerClaimant(period, location = locationScotland)
 
-      (result(0).savings.taxSaving * 12).intValue() shouldBe  BigDecimal(540).intValue()
+      (result(0).savings.taxSaving * 12).intValue() shouldBe  BigDecimal(1134).intValue()
     }
 
     "Have correct total ESC Tax Savings for England" in {

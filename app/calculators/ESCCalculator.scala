@@ -322,7 +322,7 @@ trait ESCCalculatorTax extends ESCCalculatorHelpers {
         basicRateBand = basicRateCeiling - starterRateCeiling,
         intermediateRateBand = intermediateRateCeiling - basicRateCeiling,
         higherRateBand = higherRateCeiling - intermediateRateCeiling,
-        additionalRateBand = taxablePay - higherRateCeilingPerPeriod
+        additionalRateBand = taxablePay - higherRateCeiling
       )
     }
   }
