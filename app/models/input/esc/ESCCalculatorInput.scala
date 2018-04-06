@@ -98,10 +98,11 @@ case class ESCTotalIncome(
                    taxCode: String = "",
                    niCategory: String = ""
                    ) {
+
   def adjustPersonalAllowance(defaultPersonalAllowance :BigDecimal) : BigDecimal = {
     gross match {
       case amount if amount > BigDecimal(100000.00) =>
-        val revisedPersonalAllowance = defaultPersonalAllowance - (amount - BigDecimal(100000.00)) / 2
+        val revisedPersonalAllowance = reducePersonalAllowanceBy1PoundForEvery2PoundsYouGetOver100000(defaultPersonalAllowance, amount)
         if(revisedPersonalAllowance < 0) {
           BigDecimal(0.00)
         } else {
@@ -109,6 +110,10 @@ case class ESCTotalIncome(
         }
       case _ =>  defaultPersonalAllowance
     }
+  }
+
+  private def reducePersonalAllowanceBy1PoundForEvery2PoundsYouGetOver100000(defaultPersonalAllowance: BigDecimal, amount: BigDecimal) = {
+    defaultPersonalAllowance - (amount - BigDecimal(100000.00)) / 2
   }
 }
 
@@ -157,7 +162,11 @@ case class ESCClaimant(
     val (empPrevious, pensionPrevious, taxCodePrevious) = determineIncomeElems(previousIncome)
     val (emp, pension, taxCode) = determineIncomeElems(currentIncome)
 
-    (if(emp.isDefined) emp else empPrevious, if(pension.isDefined) pension else pensionPrevious, if(taxCode.isDefined) taxCode else taxCodePrevious)
+    (
+      if(emp.isDefined) emp else empPrevious,
+      if(pension.isDefined) pension else pensionPrevious,
+      if(taxCode.isDefined) taxCode else taxCodePrevious
+    )
   }
 }
 

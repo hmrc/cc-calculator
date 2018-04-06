@@ -28,6 +28,8 @@ case class CalculationTaxBands(
                                 additionalRateBand : BigDecimal = BigDecimal(0.00),
                                 higherRateBand : BigDecimal = BigDecimal(0.00),
                                 basicRateBand : BigDecimal = BigDecimal(0.00),
+                                intermediateRateBand: BigDecimal = BigDecimal(0.00),
+                                starterRateBand: BigDecimal = BigDecimal(0.00),
                                 zeroRateBand : BigDecimal = BigDecimal(0.00)
                                 )
 object CalculationTaxBands {

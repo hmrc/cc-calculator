@@ -30,7 +30,7 @@ import utils.{ESCConfig, FakeCCCalculatorApplication, Periods}
 
 import scala.concurrent.Future
 
-class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with MockitoSugar with org.scalatest.PrivateMethodTester {
+class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with MockitoSugar with org.scalatest.PrivateMethodTester with CCCalculatorHelper {
   val location = "england"
   val locationScotland = "scotland"
 
@@ -1179,6 +1179,178 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
         taxAndNIBeforeSacrifice = models.output.esc.ESCTaxAndNi(taxPaid = 500.00, niPaid = 345.36), taxAndNIAfterSacrifice = models.output.esc.ESCTaxAndNi(taxPaid = 451.40, niPaid = 316.20))
 
       result shouldBe List(outputClaimant)
+    }
+
+    "Have correct total ESC Tax Savings for Scotland" in {
+      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val fromDate = LocalDate.parse("06-04-2018", formatter)
+      val toDate = LocalDate.parse("06-04-2019", formatter)
+
+      val inputClaimant = ESCClaimant(qualifying = true, isPartner = false,
+        eligibleMonthsInPeriod = 12, previousIncome = Some(ESCIncome(Some(15000))), currentIncome = Some(ESCIncome(Some(15000))), vouchers = true, escStartDate = fromDate)
+      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant), children = List(buildChild(childCareCost = 200)))
+
+      val result = ESCCalculator.determineSavingsPerClaimant(period, location = locationScotland)
+
+      (result(0).savings.taxSaving * 12).intValue() shouldBe  BigDecimal(467.50).intValue()
+    }
+
+    "Have correct Tax Savings for Scotland with amount over to higher rate" in {
+      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val fromDate = LocalDate.parse("06-04-2018", formatter)
+      val toDate = LocalDate.parse("06-04-2019", formatter)
+
+      val inputClaimant = ESCClaimant(qualifying = true, isPartner = false,
+        eligibleMonthsInPeriod = 12, previousIncome = Some(ESCIncome(Some(49000))), currentIncome = Some(ESCIncome(Some(49000))), vouchers = true, escStartDate = fromDate)
+      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant), children = List(buildChild(childCareCost = 300)))
+
+      val result = ESCCalculator.determineSavingsPerClaimant(period, location = locationScotland)
+
+      (result(0).savings.taxSaving * 12).intValue() shouldBe  BigDecimal(610).intValue()
+    }
+
+    "Have correct Tax Savings for Scotland with amount over to additional rate" in {
+      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val fromDate = LocalDate.parse("06-04-2018", formatter)
+      val toDate = LocalDate.parse("06-04-2019", formatter)
+
+      val inputClaimant = ESCClaimant(qualifying = true, isPartner = false,
+        eligibleMonthsInPeriod = 12, previousIncome = Some(ESCIncome(Some(150012))), currentIncome = Some(ESCIncome(Some(150012))), vouchers = true, escStartDate = fromDate)
+      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant), children = List(buildChild(childCareCost = 300)))
+
+      val result = ESCCalculator.determineSavingsPerClaimant(period, location = locationScotland)
+
+      (result(0).savings.taxSaving * 12).intValue() shouldBe  BigDecimal(1134).intValue()
+    }
+
+    "Have correct total ESC Tax Savings for England" in {
+      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val fromDate = LocalDate.parse("06-04-2018", formatter)
+      val toDate = LocalDate.parse("06-04-2019", formatter)
+
+      val inputClaimant = ESCClaimant(qualifying = true, isPartner = false,
+        eligibleMonthsInPeriod = 12, previousIncome = Some(ESCIncome(Some(15000))), currentIncome = Some(ESCIncome(Some(15000))), vouchers = true, escStartDate = fromDate)
+      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant), children = List(buildChild(childCareCost = 200)))
+
+      val result = ESCCalculator.determineSavingsPerClaimant(period, location = location)
+
+      result(0).savings.taxSaving * 12 shouldBe 480
+    }
+
+    "Have the correct total NI Savings for England" in {
+      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val fromDate = LocalDate.parse("06-04-2018", formatter)
+      val toDate = LocalDate.parse("06-04-2019", formatter)
+
+      val inputClaimant = ESCClaimant(qualifying = true, isPartner = false,
+        eligibleMonthsInPeriod = 12, previousIncome = Some(ESCIncome(Some(15000))), currentIncome = Some(ESCIncome(Some(15000))), vouchers = true, escStartDate = fromDate)
+      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant), children = List(buildChild(childCareCost = 200)))
+
+      val result = ESCCalculator.determineSavingsPerClaimant(period, location = location)
+
+      result(0).savings.niSaving * 12 shouldBe 288
+    }
+
+    "Have the correct total NI Savings for Scotland when paid under 46k threshold" in {
+      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val fromDate = LocalDate.parse("06-04-2018", formatter)
+      val toDate = LocalDate.parse("06-04-2019", formatter)
+
+      val inputClaimant = ESCClaimant(qualifying = true, isPartner = false,
+        eligibleMonthsInPeriod = 12, previousIncome = Some(ESCIncome(Some(15000))), currentIncome = Some(ESCIncome(Some(15000))), vouchers = true, escStartDate = fromDate)
+      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant), children = List(buildChild(childCareCost = 200)))
+
+      val result = ESCCalculator.determineSavingsPerClaimant(period, location = locationScotland)
+
+      result(0).savings.niSaving * 12 shouldBe 288
+    }
+
+    "Have the correct total NI Savings for Scotland when paid over 46k threshold" when {
+      "200 childcare costs" in {
+        val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+        val fromDate = LocalDate.parse("06-04-2018", formatter)
+        val toDate = LocalDate.parse("06-04-2019", formatter)
+
+        val inputClaimant = ESCClaimant(qualifying = true, isPartner = false,
+          eligibleMonthsInPeriod = 12, previousIncome = Some(ESCIncome(Some(47000))), currentIncome = Some(ESCIncome(Some(47000))), vouchers = true, escStartDate = fromDate)
+        val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant), children = List(buildChild(childCareCost = 200)))
+
+        val result = ESCCalculator.determineSavingsPerClaimant(period, location = locationScotland)
+
+        result(0).savings.niSaving * 12 shouldBe 111.36
+      }
+
+      "100 childcare costs" in {
+        val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+        val fromDate = LocalDate.parse("06-04-2018", formatter)
+        val toDate = LocalDate.parse("06-04-2019", formatter)
+
+        val inputClaimant = ESCClaimant(qualifying = true, isPartner = false,
+          eligibleMonthsInPeriod = 12, previousIncome = Some(ESCIncome(Some(47000))), currentIncome = Some(ESCIncome(Some(47000))), vouchers = true, escStartDate = fromDate)
+        val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant), children = List(buildChild(childCareCost = 100)))
+
+        val result = ESCCalculator.determineSavingsPerClaimant(period, location = locationScotland)
+
+        result(0).savings.niSaving * 12 shouldBe 76.80
+      }
+    }
+
+    "Have the correct total NI Savings for Scotland when paid over 100000k" when {
+      "with 300 childcare costs" in {
+        val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+        val fromDate = LocalDate.parse("06-04-2018", formatter)
+        val toDate = LocalDate.parse("06-04-2019", formatter)
+
+        val inputClaimant = ESCClaimant(qualifying = true, isPartner = false,
+          eligibleMonthsInPeriod = 12, previousIncome = Some(ESCIncome(Some(110000))), currentIncome = Some(ESCIncome(Some(110000))), vouchers = true, escStartDate = fromDate)
+        val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant), children = List(buildChild(childCareCost = 300)))
+
+        val result = ESCCalculator.determineSavingsPerClaimant(period, location = locationScotland)
+
+        result(0).savings.niSaving * 12 shouldBe 29.76
+      }
+
+      "with 100 childcare costs" in {
+        val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+        val fromDate = LocalDate.parse("06-04-2018", formatter)
+        val toDate = LocalDate.parse("06-04-2019", formatter)
+
+        val inputClaimant = ESCClaimant(qualifying = true, isPartner = false,
+          eligibleMonthsInPeriod = 12, previousIncome = Some(ESCIncome(Some(110000))), currentIncome = Some(ESCIncome(Some(110000))), vouchers = true, escStartDate = fromDate)
+        val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant), children = List(buildChild(childCareCost = 100)))
+
+        val result = ESCCalculator.determineSavingsPerClaimant(period, location = locationScotland)
+
+        result(0).savings.niSaving * 12 shouldBe 24.00
+      }
+    }
+
+    "Have the correct total NI Savings for England when paid over 46k threshold" in {
+      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val fromDate = LocalDate.parse("06-04-2018", formatter)
+      val toDate = LocalDate.parse("06-04-2019", formatter)
+
+      val inputClaimant = ESCClaimant(qualifying = true, isPartner = false,
+        eligibleMonthsInPeriod = 12, previousIncome = Some(ESCIncome(Some(47000))), currentIncome = Some(ESCIncome(Some(47000))), vouchers = true, escStartDate = fromDate)
+      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant), children = List(buildChild(childCareCost = 200)))
+
+      val result = ESCCalculator.determineSavingsPerClaimant(period, location = location)
+
+      result(0).savings.niSaving * 12 shouldBe 111.36
+    }
+
+    "Have the correct NI exemption for Scotland when paid 45k" in {
+      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val fromDate = LocalDate.parse("06-04-2018", formatter)
+      val toDate = LocalDate.parse("06-04-2019", formatter)
+
+      val inputClaimant = ESCClaimant(qualifying = true, isPartner = false,
+        eligibleMonthsInPeriod = 12, previousIncome = Some(ESCIncome(Some(45000))), currentIncome = Some(ESCIncome(Some(45000))), vouchers = true, escStartDate = fromDate)
+      val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant), children = List(buildChild(childCareCost = 300)))
+
+      val result = ESCCalculator.determineSavingsPerClaimant(period, location = locationScotland)
+
+      result(0).savings.niSaving * 12 shouldBe 349.92
     }
 
     "calculate savings per claimant (single claimant, post 2011, gross < additional rate limit, voucher amount < max relief) (Monthly)" in {

@@ -35,6 +35,9 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers {
     val niLimit = 8164
     val ptUelRateForCat = 12.00
     val NICategory = buildNiCategory(niCategoryCode, ptUelRateForCat)
+    val basicNiThresholdUkValue = 0.0
+    val taxHigherRateBandCapacity = 0.0
+
   }
 
   object NICatAScotlandDefault extends TestHelper {
@@ -48,6 +51,8 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers {
     val niLimit = 8164
     val ptUelRateForCat = 12.00
     val NICategory = buildNiCategory(niCategoryCode, ptUelRateForCat)
+    val basicNiThresholdUkValue = 0.0
+    val taxHigherRateBandCapacity = 0.0
   }
 
   object NICatA2016 extends TestHelper {
@@ -61,6 +66,8 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers {
     val niLimit = 8112
     val ptUelRateForCat = 12.00
     val NICategory = buildNiCategory(niCategoryCode, ptUelRateForCat)
+    val basicNiThresholdUkValue = 0.00
+    val taxHigherRateBandCapacity = 0.0
   }
 
   object NICatA2016Scotland extends TestHelper {
@@ -74,6 +81,8 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers {
     val niLimit = 8112
     val ptUelRateForCat = 12.00
     val NICategory = buildNiCategory(niCategoryCode, ptUelRateForCat)
+    val basicNiThresholdUkValue = 0.00
+    val taxHigherRateBandCapacity = 0.0
   }
 
   object NICatB2016 extends TestHelper {
@@ -87,6 +96,8 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers {
     val niLimit = 8112
     val ptUelRateForCat = 5.85
     val NICategory = buildNiCategory(niCategoryCode, ptUelRateForCat)
+    val basicNiThresholdUkValue = 0.00
+    val taxHigherRateBandCapacity = 0.0
   }
 
   object NICatC2017 extends TestHelper {
@@ -100,6 +111,8 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers {
     val niLimit = 8164
     val ptUelRateForCat = 0.00
     val NICategory = buildNiCategoryC(ptUelRateForCat)
+    val basicNiThresholdUkValue = 0.00
+    val taxHigherRateBandCapacity = 0.0
   }
 
   object NICatC2017Scotland extends TestHelper {
@@ -113,6 +126,8 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers {
     val niLimit = 8164
     val ptUelRateForCat = 0.00
     val NICategory = buildNiCategoryC(ptUelRateForCat)
+    val basicNiThresholdUkValue = 0.00
+    val taxHigherRateBandCapacity = 0.0
   }
 
   object NICatA2017 extends TestHelper {
@@ -126,6 +141,8 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers {
     val niLimit = 8164
     val ptUelRateForCat = 2.00
     val NICategory = buildNiCategoryA(2.00)
+    val basicNiThresholdUkValue = 0.00
+    val taxHigherRateBandCapacity = 0.0
   }
 
   object NICatA2016Default extends TestHelper {
@@ -139,6 +156,8 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers {
     val niLimit = 8112
     val ptUelRateForCat = 12.00
     val NICategory = buildNiCategory("A", ptUelRateForCat)
+    val basicNiThresholdUkValue = 0.00
+    val taxHigherRateBandCapacity = 0.0
   }
 
   object NICatA2018 extends TestHelper {
@@ -152,6 +171,8 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers {
     val niLimit = 8164
     val ptUelRateForCat = 0.00
     val NICategory = buildNiCategoryB
+    val basicNiThresholdUkValue = 0.00
+    val taxHigherRateBandCapacity = 0.0
   }
 
   object NICatA2019 extends TestHelper {
@@ -165,6 +186,8 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers {
     val niLimit = 8164
     val ptUelRateForCat = 0.00
     val NICategory = buildNiCategoryB
+    val basicNiThresholdUkValue = 0.00
+    val taxHigherRateBandCapacity = 0.0
   }
 
   object NICatA2020 extends TestHelper {
@@ -178,6 +201,8 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers {
     val niLimit = 8164
     val ptUelRateForCat = 0.00
     val NICategory = buildNiCategoryB
+    val basicNiThresholdUkValue = 0.00
+    val taxHigherRateBandCapacity = 0.0
   }
 
   object NICatA2018Scotland extends TestHelper {
@@ -187,10 +212,12 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers {
     val defaultTaxCode = "1185L"
     val defaultPersonalAllowance = 11850
     val niCategoryCode = "B"
-    val taxBasicBandCapacity = 24000.00
+    val taxBasicBandCapacity = 10150.00
     val niLimit = 8164
     val ptUelRateForCat = 0.00
     val NICategory = buildNiCategoryB
+    val basicNiThresholdUkValue = 34500.00
+    val taxHigherRateBandCapacity = 106570.00
   }
 
 
@@ -201,10 +228,12 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers {
     val defaultTaxCode = "1185L"
     val defaultPersonalAllowance = 11850
     val niCategoryCode = "B"
-    val taxBasicBandCapacity = 24000.00
+    val taxBasicBandCapacity = 10150.00
     val niLimit = 8164
     val ptUelRateForCat = 0.00
     val NICategory = buildNiCategoryB
+    val basicNiThresholdUkValue = 34500.00
+    val taxHigherRateBandCapacity = 106570.00
   }
 
   object NICatA2020Scotland extends TestHelper {
@@ -214,10 +243,12 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers {
     val defaultTaxCode = "1185L"
     val defaultPersonalAllowance = 11850
     val niCategoryCode = "B"
-    val taxBasicBandCapacity = 24000.00
+    val taxBasicBandCapacity = 10150.00
     val niLimit = 8164
     val ptUelRateForCat = 0.00
     val NICategory = buildNiCategoryB
+    val basicNiThresholdUkValue = 34500.00
+    val taxHigherRateBandCapacity = 106570.00
   }
 
   private val bandAndYearTests: List[TestHelper] = {
@@ -331,17 +362,19 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers {
             personalAllowanceRate = 0.00,
             defaultPersonalAllowance = x.defaultPersonalAllowance,
             taxStarterRate = if(x.location.equals(locationScotland) && now.isAfter(new LocalDate(2018,4,5))) 19.00 else 0,
-            taxStarterBandCapacity = if(x.location.equals(locationScotland) && now.isAfter(new LocalDate(2018,4,5))) 13850.00 else 0,
+            taxStarterBandCapacity = if(x.location.equals(locationScotland) && now.isAfter(new LocalDate(2018,4,5))) 2000.00 else 0,
             taxBasicRate = 20.00,
             taxBasicBandCapacity = x.taxBasicBandCapacity,
             taxIntermediateRate = if(x.location.equals(locationScotland) && now.isAfter(new LocalDate(2018,4,5))) 21.00 else 0,
-            taxIntermediateBandCapacity = if(x.location.equals(locationScotland) && now.isAfter(new LocalDate(2018,4,5))) 43430.00 else 0,
+            taxIntermediateBandCapacity = if(x.location.equals(locationScotland) && now.isAfter(new LocalDate(2018,4,5))) 19430.00 else 0,
+            taxHigherRateBandCapacity = x.taxHigherRateBandCapacity,
             taxHigherRate = if(x.location.equals(locationScotland) && now.isAfter(new LocalDate(2018,4,5))) 41.00 else 40.00,
             taxHigherBandUpperLimit = 150000.00,
             taxAdditionalRate = if(x.location.equals(locationScotland) && now.isAfter(new LocalDate(2018,4,5))) 46.00 else 45.00,
             taxAdditionalBandLowerLimit = 150000.01,
             niLimit = x.niLimit,
-            niCategory = x.NICategory
+            niCategory = x.NICategory,
+            basicNiThresholdUk = x.basicNiThresholdUkValue
           )
 
           config shouldBe taxYear
@@ -451,5 +484,7 @@ sealed trait Helpers {
     val niLimit: Int
     val ptUelRateForCat: Double
     val NICategory: NiCategory
+    val basicNiThresholdUkValue: Double
+    val taxHigherRateBandCapacity: Double
   }
 }
