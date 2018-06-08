@@ -21,7 +21,7 @@ import com.github.fge.jackson.JsonLoader
 import models.input.tc.TCCalculatorInput
 import models.output.tc.TCCalculatorOutput
 import org.joda.time.LocalDate
-import org.mockito.Matchers._
+import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.mock.MockitoSugar

@@ -26,7 +26,6 @@ import models.output.esc.{ESCCalculatorOutput, ESCSavings}
 import models.output.tc.TCCalculatorOutput
 import models.output.tfc.{TFCCalculatorOutput, TFCContribution}
 import org.joda.time.LocalDate
-import org.mockito.Matchers._
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.mock.MockitoSugar
@@ -36,6 +35,8 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import service.AuditEvents
 import utils.FakeCCCalculatorApplication
+import org.mockito.ArgumentMatchers._
+
 
 import scala.concurrent.Future
 
