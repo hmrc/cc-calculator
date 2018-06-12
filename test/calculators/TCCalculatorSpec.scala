@@ -20,12 +20,12 @@ import models.input.tc._
 import models.output.tc.{Element, Elements, Period}
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
-import org.mockito.Matchers._
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.mock.MockitoSugar
 import uk.gov.hmrc.play.test.UnitSpec
 import utils._
+import org.mockito.ArgumentMatchers._
 
 import scala.collection.immutable.Nil
 
