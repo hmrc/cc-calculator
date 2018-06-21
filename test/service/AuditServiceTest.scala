@@ -46,7 +46,7 @@ class AuditServiceTest extends UnitSpec {
 
       implicit val request = FakeRequest()
 
-      implicit var hc = new HeaderCarrier(forwarded = Some(ForwardedFor("1.2.3.4,5.6.7.8")),  // test the IP address is in adutit request
+      implicit var hc = new HeaderCarrier(forwarded = Some(ForwardedFor("testIp")),  // test the IP address is in audit request
         sessionId = Some(SessionId("sessionid-random")))
 
       val auditConnectorObj = new AuditConnector {
@@ -77,7 +77,7 @@ class AuditServiceTest extends UnitSpec {
       auditEvent.auditSource should equal("cc-eligibility")
       auditEvent.auditType should equal("testTranType")
       auditEvent.detail("randomDetails") should equal("+=+=+=+=+=+=+=+=+")
-
+      auditEvent.tags.get("x-forwarded-for") shouldBe Some("testIp")
     }
 
   }
