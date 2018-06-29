@@ -7,9 +7,9 @@ resolvers += "scoverage-bintray" at "https://dl.bintray.com/sksamuel/sbt-plugins
 
 resolvers += "Sonatype snapshots" at "http://oss.sonatype.org/content/repositories/snapshots/"
 
-addSbtPlugin("uk.gov.hmrc" % "sbt-auto-build" % "1.8.0")
+addSbtPlugin("uk.gov.hmrc" % "sbt-auto-build" % "1.9.0")
 
-addSbtPlugin("uk.gov.hmrc" % "sbt-git-versioning" % "0.9.0")
+addSbtPlugin("uk.gov.hmrc" % "sbt-git-versioning" % "0.10.0")
 
 addSbtPlugin("com.github.gseitz" % "sbt-release" % "0.8.5")
 
