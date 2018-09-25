@@ -3,10 +3,11 @@ import play.sbt.routes.RoutesKeys.routesGenerator
 import sbt.Keys._
 import sbt._
 import scoverage._
-import uk.gov.hmrc.SbtAutoBuildPlugin
+import uk.gov.hmrc.{SbtArtifactory, SbtAutoBuildPlugin}
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin
-import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
+import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin.publishingSettings
 import uk.gov.hmrc.versioning.SbtGitVersioning
+import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 
 
 trait MicroService {
@@ -14,7 +15,12 @@ trait MicroService {
   val appName: String
 
   lazy val appDependencies : Seq[ModuleID] = ???
-  lazy val plugins : Seq[Plugins] = Seq()
+  lazy val plugins : Seq[Plugins] = Seq(
+    SbtAutoBuildPlugin,
+    SbtGitVersioning,
+    SbtDistributablesPlugin,
+    SbtArtifactory
+  )
   lazy val playSettings : Seq[Setting[_]] = Seq.empty
 
   lazy val scoverageSettings = {
@@ -26,10 +32,13 @@ trait MicroService {
       parallelExecution in Test := false
     )
   }
+  import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
+
 
   lazy val microservice = Project(appName, file("."))
-    .enablePlugins(Seq(play.sbt.PlayScala, SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin) ++ plugins : _*)
+    .enablePlugins(Seq(play.sbt.PlayScala) ++ plugins : _*)
     .settings(playSettings ++ scoverageSettings : _*)
+    .settings(majorVersion := 1)
     .settings(publishingSettings : _*)
     .settings(
       libraryDependencies ++= appDependencies,
@@ -45,5 +54,8 @@ trait MicroService {
       crossScalaVersions := Seq("2.11.11"),
       ivyScala := ivyScala.value map { _.copy(overrideScalaVersion = true) }
     )
+
+
+
 
 }
