@@ -12,10 +12,10 @@ private object AppDependencies {
   import play.core.PlayVersion
   import play.sbt.PlayImport._
 
-  private val microServiceBootstrapVersion = "8.3.0"
+  private val microServiceBootstrapVersion = "9.1.0"
   private val scalaTestVersion = "3.0.0"
   private val pegDownVersion = "1.6.0"
-  private val hmrcTestVersion = "3.1.0"
+  private val hmrcTestVersion = "3.3.0"
   private val jsonSchemaValidator = "2.2.6"
   private val json4s = "3.3.0"
   private val mockitoVersion = "2.18.3"
