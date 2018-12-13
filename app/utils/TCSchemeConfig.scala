@@ -16,6 +16,7 @@
 
 package utils
 
+import config.RunModeConfig
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import play.api.Configuration
@@ -56,9 +57,9 @@ case class TCTaxYearConfig(
                             thresholds: Thresholds
                             )
 
-object TCConfig extends TCConfig
+object TCConfig extends TCConfig with RunModeConfig
 
-trait TCConfig extends ServicesConfig with CCConfig with  LoadConfig {
+trait TCConfig extends ServicesConfig with CCConfig with LoadConfig with RunModeConfig {
   val defaultMaxNameLength: Int = 25
   lazy val monthsInTaxYear: Int = 12
   lazy val taxYearEndMonth = getInt(s"tc.end-of-tax-year-date.month")

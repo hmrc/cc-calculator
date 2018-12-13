@@ -16,11 +16,12 @@
 
 package utils
 
+import config.RunModeConfig
 import org.joda.time.LocalDate
 import play.api.Configuration
 import uk.gov.hmrc.play.config.ServicesConfig
 
-trait ESCConfig extends CCConfig with ServicesConfig with MessagesObject with LoadConfig {
+trait ESCConfig extends CCConfig with ServicesConfig with MessagesObject with LoadConfig with RunModeConfig {
   lazy val upperMonthsLimitValidation = getInt(s"esc.months-upper-limit")
   lazy val lowerMonthsLimitValidation = getInt(s"esc.months-lower-limit")
   lazy val lowerPeriodsLimitValidation = getInt(s"esc.periods-lower-limit")
@@ -132,7 +133,7 @@ trait ESCConfig extends CCConfig with ServicesConfig with MessagesObject with Lo
   }
 }
 
-object ESCConfig extends ESCConfig
+object ESCConfig extends ESCConfig with RunModeConfig
 
 case class NiCategory(
           niCategoryCode: String,

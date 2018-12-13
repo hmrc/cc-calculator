@@ -17,6 +17,7 @@
 package models.input.esc
 
 import config.ConfigConstants._
+import config.RunModeConfig
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import play.api.data.validation.ValidationError
@@ -30,7 +31,7 @@ case class ESCCalculatorInput(
                                location: String
                               )
 
-object ESCCalculatorInput extends ESCConfig with MessagesObject {
+object ESCCalculatorInput extends ESCConfig with MessagesObject with RunModeConfig {
   implicit val escEligibilityReads : Reads[ESCCalculatorInput] = (
       (JsPath \ "taxYears").read[List[ESCTaxYear]].filter(ValidationError(messages("cc.calc.invalid.number.of.ty")))
         (taxYears => taxYears.length >= lowerTaxYearsLimitValidation) and
@@ -44,7 +45,7 @@ case class ESCTaxYear(
                     periods: List[ESCPeriod]
                     )
 
-object ESCTaxYear extends ESCConfig with MessagesObject {
+object ESCTaxYear extends ESCConfig with MessagesObject with RunModeConfig {
   implicit val taxYearReads: Reads[ESCTaxYear] = (
     (JsPath \ "from").read[LocalDate](jodaLocalDateReads(datePattern)) and
       (JsPath \ "until").read[LocalDate](jodaLocalDateReads(datePattern)) and
@@ -61,7 +62,7 @@ case class ESCPeriod(
                       children: List[Child]
                       )
 
-object ESCPeriod extends ESCConfig with MessagesObject {
+object ESCPeriod extends ESCConfig with MessagesObject with RunModeConfig {
   implicit val periodReads : Reads[ESCPeriod] = (
     (JsPath \ "from").read[LocalDate](jodaLocalDateReads(datePattern)) and
       (JsPath \ "until").read[LocalDate](jodaLocalDateReads(datePattern)) and
@@ -170,7 +171,7 @@ case class ESCClaimant(
   }
 }
 
-object ESCClaimant extends ESCConfig with MessagesObject {
+object ESCClaimant extends ESCConfig with MessagesObject with RunModeConfig {
   implicit val claimantReads : Reads[ESCClaimant] = (
     (JsPath \ "qualifying").read[Boolean].orElse(Reads.pure(false)) and
       (JsPath \ "isPartner").read[Boolean].orElse(Reads.pure(false)) and

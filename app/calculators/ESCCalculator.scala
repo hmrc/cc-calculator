@@ -16,11 +16,13 @@
 
 package calculators
 
+import config.RunModeConfig
 import models.input.esc._
 import models.output.esc.{ESCCalculatorOutput, ESCSavings}
 import models.utility.{CalculationNIBands, CalculationTaxBands}
 import org.joda.time.LocalDate
-import play.api.Logger
+import play.api.Mode.Mode
+import play.api.{Configuration, Logger}
 import utils.{ESCConfig, ESCTaxYearConfig, MessagesObject, Periods}
 
 import scala.concurrent.Future
@@ -788,4 +790,4 @@ trait ESCCalculator extends ESCCalculatorTax with ESCCalculatorNi {
   }
 }
 
-object ESCCalculator extends ESCCalculator
+object ESCCalculator extends ESCCalculator with RunModeConfig

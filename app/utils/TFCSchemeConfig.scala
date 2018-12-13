@@ -16,6 +16,7 @@
 
 package utils
 
+import config.RunModeConfig
 import org.joda.time.LocalDate
 import play.api.Configuration
 import uk.gov.hmrc.play.config.ServicesConfig
@@ -41,7 +42,7 @@ case class TFCTaxYearConfig(
                              maxGovtContributionForDisabled: Double
                              )
 
-object TFCConfig extends CCConfig with TFCConfig with ServicesConfig with LoadConfig {
+object TFCConfig extends CCConfig with TFCConfig with ServicesConfig with LoadConfig with RunModeConfig {
 
   def getConfig(currentDate: LocalDate) : TFCTaxYearConfig  = {
 
