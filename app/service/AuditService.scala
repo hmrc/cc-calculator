@@ -16,7 +16,6 @@
 
 package service
 
-import config.MicroserviceAuditConnector
 import play.api.mvc.Request
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.{AuditConnector, AuditResult}
@@ -28,7 +27,7 @@ import scala.concurrent.Future
 
 object AuditService extends AuditService {
   override lazy val auditSource = "cc-calculator"
-  override lazy val auditConnector = MicroserviceAuditConnector
+  override lazy val auditConnector: AuditConnector = auditConnector
 }
 
 trait AuditService {

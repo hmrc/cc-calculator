@@ -16,7 +16,6 @@
 
 package service
 
-import config.MicroserviceAuditConnector
 import play.api.test.FakeRequest
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.logging.{ForwardedFor, SessionId}
