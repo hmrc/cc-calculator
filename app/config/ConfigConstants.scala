@@ -16,8 +16,17 @@
 
 package config
 
+import play.api.Mode.Mode
+import play.api.{Configuration, Play}
+
 object ConfigConstants {
 
   lazy val noOfMonths: Int = 12
   lazy val defaultAmount = BigDecimal(0.00)
+
+  def appNameConfiguration: Configuration = Play.current.configuration
+  def runModeConfiguration: Configuration = Play.current.configuration
+  def mode: Mode = Play.current.mode
+
+
 }

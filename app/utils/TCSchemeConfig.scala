@@ -16,11 +16,11 @@
 
 package utils
 
-import config.RunModeConfig
+import javax.inject.Inject
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import play.api.Configuration
-import uk.gov.hmrc.play.config.ServicesConfig
+import uk.gov.hmrc.play.config.{RunMode, ServicesConfig}
 
 case class WTC(
                 basicElement : Int,
@@ -57,9 +57,9 @@ case class TCTaxYearConfig(
                             thresholds: Thresholds
                             )
 
-object TCConfig extends TCConfig with RunModeConfig
+object TCConfig extends TCConfig
 
-trait TCConfig extends ServicesConfig with CCConfig with LoadConfig with RunModeConfig {
+trait TCConfig extends ServicesConfig with CCConfig with LoadConfig {
   val defaultMaxNameLength: Int = 25
   lazy val monthsInTaxYear: Int = 12
   lazy val taxYearEndMonth = getInt(s"tc.end-of-tax-year-date.month")

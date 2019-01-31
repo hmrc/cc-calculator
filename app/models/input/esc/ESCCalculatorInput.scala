@@ -17,9 +17,11 @@
 package models.input.esc
 
 import config.ConfigConstants._
-import config.RunModeConfig
+import javax.inject.Inject
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
+import play.api.Mode.Mode
+import play.api.{Configuration, Play}
 import play.api.data.validation.ValidationError
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Reads._
@@ -31,7 +33,8 @@ case class ESCCalculatorInput(
                                location: String
                               )
 
-object ESCCalculatorInput extends ESCConfig with MessagesObject with RunModeConfig {
+class ESCCalculatorInputImpl @Inject()() extends ESCConfig with MessagesObject with CCConfig {
+
   implicit val escEligibilityReads : Reads[ESCCalculatorInput] = (
       (JsPath \ "taxYears").read[List[ESCTaxYear]].filter(ValidationError(messages("cc.calc.invalid.number.of.ty")))
         (taxYears => taxYears.length >= lowerTaxYearsLimitValidation) and
@@ -45,7 +48,8 @@ case class ESCTaxYear(
                     periods: List[ESCPeriod]
                     )
 
-object ESCTaxYear extends ESCConfig with MessagesObject with RunModeConfig {
+object ESCTaxYear extends ESCConfig with MessagesObject with CCConfig {
+
   implicit val taxYearReads: Reads[ESCTaxYear] = (
     (JsPath \ "from").read[LocalDate](jodaLocalDateReads(datePattern)) and
       (JsPath \ "until").read[LocalDate](jodaLocalDateReads(datePattern)) and
@@ -62,7 +66,8 @@ case class ESCPeriod(
                       children: List[Child]
                       )
 
-object ESCPeriod extends ESCConfig with MessagesObject with RunModeConfig {
+object ESCPeriod extends ESCConfig with MessagesObject {
+
   implicit val periodReads : Reads[ESCPeriod] = (
     (JsPath \ "from").read[LocalDate](jodaLocalDateReads(datePattern)) and
       (JsPath \ "until").read[LocalDate](jodaLocalDateReads(datePattern)) and
@@ -171,7 +176,7 @@ case class ESCClaimant(
   }
 }
 
-object ESCClaimant extends ESCConfig with MessagesObject with RunModeConfig {
+object ESCClaimant extends ESCConfig with MessagesObject {
   implicit val claimantReads : Reads[ESCClaimant] = (
     (JsPath \ "qualifying").read[Boolean].orElse(Reads.pure(false)) and
       (JsPath \ "isPartner").read[Boolean].orElse(Reads.pure(false)) and

@@ -21,10 +21,16 @@ import java.util.Calendar
 
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
-import play.api.Configuration
+import play.api.{Configuration, Play}
+import play.api.Mode.Mode
 import uk.gov.hmrc.play.config.ServicesConfig
 
 trait CCConfig extends ServicesConfig {
+
+  def appNameConfiguration: Configuration = Play.current.configuration
+  override def runModeConfiguration: Configuration = Play.current.configuration
+  override def mode: Mode = Play.current.mode
+
 
   val formatterDatePattern = "dd-MM-yyyy"
 

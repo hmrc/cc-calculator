@@ -35,12 +35,9 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 @Singleton
-class CalculatorController @Inject()(val messagesApi: MessagesApi) extends BaseController with I18nSupport {
-
-  val auditEvent: AuditEvents = AuditEvents
-  val tcCalculator: TCCalculator = TCCalculator
-  val tfcCalculator: TFCCalculator = TFCCalculator
-  val escCalculator: ESCCalculator = ESCCalculator
+class CalculatorController @Inject()(val messagesApi: MessagesApi, escCalculator: ESCCalculator,
+                                     tcCalculator: TCCalculator, tfcCalculator: TFCCalculator,
+                                     auditEvent: AuditEvents) extends BaseController with I18nSupport {
 
   def calculate: Action[JsValue] = Action.async(parse.json) { implicit request =>
     request.body.validate[CalculatorInput].fold(

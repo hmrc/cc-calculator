@@ -32,10 +32,8 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 @Singleton
-class TaxCreditCalculatorController @Inject()(val messagesApi: MessagesApi) extends BaseController with I18nSupport {
-
-  val auditEvent: AuditEvents = AuditEvents
-  val calculator: TCCalculator = TCCalculator
+class TaxCreditCalculatorController @Inject()(val messagesApi: MessagesApi, auditEvent: AuditEvents,
+                                              calculator: TCCalculator) extends BaseController with I18nSupport {
 
   def calculate: Action[JsValue] = Action.async(parse.json) {
     implicit request =>

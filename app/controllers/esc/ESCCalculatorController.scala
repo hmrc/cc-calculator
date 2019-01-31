@@ -32,10 +32,8 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 @Singleton
-class ESCCalculatorController @Inject()(val messagesApi: MessagesApi) extends BaseController with I18nSupport {
-
-  val auditEvent: AuditEvents = AuditEvents
-  val calculator: ESCCalculator = ESCCalculator
+class ESCCalculatorController @Inject()(val messagesApi: MessagesApi, auditEvent: AuditEvents,
+                                        calculator: ESCCalculator) extends BaseController with I18nSupport {
 
   def calculate: Action[JsValue] = Action.async(parse.json) {
     implicit request =>
