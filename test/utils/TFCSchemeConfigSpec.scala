@@ -18,32 +18,36 @@ package utils
 
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
+import org.scalatest.mockito.MockitoSugar
 
-class TFCSchemeConfigSpec extends FakeCCCalculatorApplication {
+class TFCSchemeConfigSpec extends FakeCCCalculatorApplication with MockitoSugar {
+
+  val tfcConfig = app.injector.instanceOf[TFCConfig]
+
 
   "TFC SchemeConfig" should {
 
     "populate end day of the tax year from config file" in {
-      TFCConfig.taxYearEndDay shouldBe 6
+      tfcConfig.appConfig.taxYearEndDay shouldBe 6
     }
 
     "populate end month of the tax year from config file" in {
-      TFCConfig.taxYearEndMonth shouldBe 4
+      tfcConfig.appConfig.taxYearEndMonth shouldBe 4
     }
 
     "return max no of children from config file" in {
-      TFCConfig.maxNoOfChildren shouldBe 25
+      tfcConfig.appConfig.maxNoOfChildren shouldBe 25
     }
 
     "return max name length from config file" in {
-      TFCConfig.maxNameLength shouldBe 25
+      tfcConfig.appConfig.maxNameLength shouldBe 25
     }
 
     "(following year) return the end date of tax year" in {
       val pattern = "dd-MM-yyyy"
       val formatter = DateTimeFormat.forPattern(pattern)
       val now = LocalDate.parse("23-06-2016", formatter)
-      val endOfTaxYear = TFCConfig.taxYearEndDate(now, "tfc")
+      val endOfTaxYear = tfcConfig.taxYearEndDate(now, "tfc")
       endOfTaxYear shouldBe LocalDate.parse("06-04-2017", formatter)
     }
 
@@ -51,7 +55,7 @@ class TFCSchemeConfigSpec extends FakeCCCalculatorApplication {
       val pattern = "dd-MM-yyyy"
       val formatter = DateTimeFormat.forPattern(pattern)
       val now = LocalDate.parse("23-02-2016", formatter)
-      val endOfTaxYear = TFCConfig.taxYearEndDate(now, "tfc")
+      val endOfTaxYear = tfcConfig.taxYearEndDate(now, "tfc")
       endOfTaxYear shouldBe LocalDate.parse("06-04-2016", formatter)
     }
 
@@ -59,7 +63,7 @@ class TFCSchemeConfigSpec extends FakeCCCalculatorApplication {
       val pattern = "dd-MM-yyyy"
       val formatter = DateTimeFormat.forPattern(pattern)
       val fromDate = LocalDate.parse("24-07-2016", formatter)
-      val config = TFCConfig.getConfig(fromDate)
+      val config = tfcConfig.getConfig(fromDate)
       val tfcTaxYear = TFCTaxYearConfig(
         topUpPercent = 20,
         maxEligibleChildcareAmount = 2500,
@@ -74,7 +78,7 @@ class TFCSchemeConfigSpec extends FakeCCCalculatorApplication {
       val pattern = "dd-MM-yyyy"
       val formatter = DateTimeFormat.forPattern(pattern)
       val fromDate = LocalDate.parse("24-07-2017", formatter)
-      val config = TFCConfig.getConfig(fromDate)
+      val config = tfcConfig.getConfig(fromDate)
       val tfcTaxYear = TFCTaxYearConfig(
         topUpPercent = 20,
         maxEligibleChildcareAmount = 2500,
@@ -89,7 +93,7 @@ class TFCSchemeConfigSpec extends FakeCCCalculatorApplication {
       val pattern = "dd-MM-yyyy"
       val formatter = DateTimeFormat.forPattern(pattern)
       val fromDate = LocalDate.parse("24-07-2018", formatter)
-      val config = TFCConfig.getConfig(fromDate)
+      val config = tfcConfig.getConfig(fromDate)
       val tfcTaxYear = TFCTaxYearConfig(
         topUpPercent = 20,
         maxEligibleChildcareAmount = 2500,
@@ -104,7 +108,7 @@ class TFCSchemeConfigSpec extends FakeCCCalculatorApplication {
       val pattern = "dd-MM-yyyy"
       val formatter = DateTimeFormat.forPattern(pattern)
       val fromDate = LocalDate.parse("24-07-2015", formatter)
-      val config = TFCConfig.getConfig(fromDate)
+      val config = tfcConfig.getConfig(fromDate)
       val tfcTaxYear = TFCTaxYearConfig(
         topUpPercent = 20,
         maxEligibleChildcareAmount = 2500,
@@ -119,7 +123,7 @@ class TFCSchemeConfigSpec extends FakeCCCalculatorApplication {
       val pattern = "dd-MM-yyyy"
       val formatter = DateTimeFormat.forPattern(pattern)
       val fromDate = LocalDate.parse("05-04-2016", formatter)
-      val config = TFCConfig.getConfig(fromDate)
+      val config = tfcConfig.getConfig(fromDate)
       val tfcTaxYear = TFCTaxYearConfig(
         topUpPercent = 20,
         maxEligibleChildcareAmount = 2500,
@@ -134,7 +138,7 @@ class TFCSchemeConfigSpec extends FakeCCCalculatorApplication {
       val pattern = "dd-MM-yyyy"
       val formatter = DateTimeFormat.forPattern(pattern)
       val fromDate = LocalDate.parse("06-04-2016", formatter)
-      val config = TFCConfig.getConfig(fromDate)
+      val config = tfcConfig.getConfig(fromDate)
       val tfcTaxYear = TFCTaxYearConfig(
         topUpPercent = 20,
         maxEligibleChildcareAmount = 2500,
@@ -149,7 +153,7 @@ class TFCSchemeConfigSpec extends FakeCCCalculatorApplication {
       val pattern = "dd-MM-yyyy"
       val formatter = DateTimeFormat.forPattern(pattern)
       val fromDate = LocalDate.parse("05-04-2017", formatter)
-      val config = TFCConfig.getConfig(fromDate)
+      val config = tfcConfig.getConfig(fromDate)
       val tfcTaxYear = TFCTaxYearConfig(
         topUpPercent = 20,
         maxEligibleChildcareAmount = 2500,
@@ -164,7 +168,7 @@ class TFCSchemeConfigSpec extends FakeCCCalculatorApplication {
       val pattern = "dd-MM-yyyy"
       val formatter = DateTimeFormat.forPattern(pattern)
       val fromDate = LocalDate.parse("06-04-2017", formatter)
-      val config = TFCConfig.getConfig(fromDate)
+      val config = tfcConfig.getConfig(fromDate)
       val tfcTaxYear = TFCTaxYearConfig(
         topUpPercent = 20,
         maxEligibleChildcareAmount = 2500,
@@ -179,7 +183,7 @@ class TFCSchemeConfigSpec extends FakeCCCalculatorApplication {
       val pattern = "dd-MM-yyyy"
       val formatter = DateTimeFormat.forPattern(pattern)
       val fromDate = LocalDate.parse("05-04-2018", formatter)
-      val config = TFCConfig.getConfig(fromDate)
+      val config = tfcConfig.getConfig(fromDate)
       val tfcTaxYear = TFCTaxYearConfig(
         topUpPercent = 20,
         maxEligibleChildcareAmount = 2500,
@@ -194,7 +198,7 @@ class TFCSchemeConfigSpec extends FakeCCCalculatorApplication {
       val pattern = "dd-MM-yyyy"
       val formatter = DateTimeFormat.forPattern(pattern)
       val fromDate = LocalDate.parse("06-04-2018", formatter)
-      val config = TFCConfig.getConfig(fromDate)
+      val config = tfcConfig.getConfig(fromDate)
       val tfcTaxYear = TFCTaxYearConfig(
         topUpPercent = 20,
         maxEligibleChildcareAmount = 2500,

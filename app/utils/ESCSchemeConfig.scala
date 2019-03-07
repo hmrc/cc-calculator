@@ -16,37 +16,40 @@
 
 package utils
 
-import config.RunModeConfig
+import config.AppConfig
+import javax.inject.Inject
 import org.joda.time.LocalDate
 import play.api.Configuration
-import uk.gov.hmrc.play.config.ServicesConfig
 
-trait ESCConfig extends CCConfig with ServicesConfig with MessagesObject with LoadConfig with RunModeConfig {
-  lazy val upperMonthsLimitValidation = getInt(s"esc.months-upper-limit")
-  lazy val lowerMonthsLimitValidation = getInt(s"esc.months-lower-limit")
-  lazy val lowerPeriodsLimitValidation = getInt(s"esc.periods-lower-limit")
-  lazy val lowerTaxYearsLimitValidation = getInt(s"esc.tax-years-lower-limit")
-  lazy val lowerClaimantsLimitValidation = getInt(s"esc.claimants-lower-limit")
-  lazy val pre2011MaxExemptionMonthly = conf.getDouble(s"esc.pre-2011-maximum-exemption.basic-higher-additional.monthly").getOrElse(0.00)
+class ESCConfig @Inject()(appConfig: AppConfig) extends CCConfig(appConfig) with MessagesObject {
+  lazy val upperMonthsLimitValidation = appConfig.getInt(s"esc.months-upper-limit")
+  lazy val lowerMonthsLimitValidation = appConfig.getInt(s"esc.months-lower-limit")
+  lazy val lowerPeriodsLimitValidation = appConfig.getInt(s"esc.periods-lower-limit")
+  lazy val lowerTaxYearsLimitValidation = appConfig.getInt(s"esc.tax-years-lower-limit")
+  lazy val lowerClaimantsLimitValidation = appConfig. getInt(s"esc.claimants-lower-limit")
+  lazy val pre2011MaxExemptionMonthly = appConfig.runModeConfiguration
+    .getDouble(s"esc.pre-2011-maximum-exemption.basic-higher-additional.monthly").getOrElse(0.00)
 
   def getConfig(currentDate: LocalDate, niCategoryCode: String, location: String): ESCTaxYearConfig = {
-    val configs: Seq[play.api.Configuration] = conf.getConfigSeq("esc.rule-change").get
+    val configs: Seq[play.api.Configuration] = appConfig.runModeConfiguration.getConfigSeq("esc.rule-change").get
 
     // get the default config and keep
-    val defaultConfig = configs.filter(x => {
-      x.getString("rule-date").equals(Some("default"))
-    }).head
+    val defaultConfig =
+      configs.find(_.getString("rule-date").contains("default")).head
+
     // fetch the config if it matches the particular year
     val result = getConfigForTaxYear(currentDate, configs).getOrElse(defaultConfig)
     getTaxYear(niCategoryCode, result, location)
   }
 
   def getLatestConfig(currentDate: LocalDate): Configuration = {
-    val configs: Seq[play.api.Configuration] = conf.getConfigSeq("esc.rule-change").get
+    val configs: Seq[play.api.Configuration] =
+      appConfig.runModeConfiguration.getConfigSeq("esc.rule-change").get
+
     // get the default config and keep
-    val defaultConfig = configs.filter(x => {
-      x.getString("rule-date").equals(Some("default"))
-    }).head
+    val defaultConfig =
+      configs.find(_.getString("rule-date").contains("default")).head
+
     // fetch the config if it matches the particular year
     getConfigForTaxYear(currentDate, configs).getOrElse(defaultConfig)
   }
@@ -133,8 +136,6 @@ trait ESCConfig extends CCConfig with ServicesConfig with MessagesObject with Lo
   }
 }
 
-object ESCConfig extends ESCConfig with RunModeConfig
-
 case class NiCategory(
           niCategoryCode: String,
           lelMonthlyLowerLimitForCat: Double,
@@ -147,8 +148,8 @@ case class NiCategory(
           ptUelMonthlyUpperLimitForCat: Double,
           ptUelRateForCat: Double,
           aboveUelMonthlyLowerLimitForCat: Double,
-          aboveUelRateForCat: Double
-                       )
+          aboveUelRateForCat: Double)
+
 case class ESCTaxYearConfig (
                              post2011MaxExemptionMonthlyBasic: Double,
                              post2011MaxExemptionMonthlyHigher: Double,
@@ -169,5 +170,4 @@ case class ESCTaxYearConfig (
                              taxAdditionalBandLowerLimit: Double,
                              niLimit: Double,
                              niCategory: NiCategory,
-                             basicNiThresholdUk: Double
-                             )
+                             basicNiThresholdUk: Double)

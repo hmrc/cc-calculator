@@ -16,23 +16,11 @@
 
 package utils
 
-import config.RunModeConfig
+import config.AppConfig
+import javax.inject.Inject
 import org.joda.time.LocalDate
 import play.api.Configuration
-import uk.gov.hmrc.play.config.ServicesConfig
-
-/**
- * Created by user on 26/01/16.
- */
-
-trait TFCConfig extends ServicesConfig {
-  val defaultMaxNoOfChildren = 25
-  lazy val maxNoOfChildren = getInt(s"tfc.max-no-of-children")
-  val defaultMaxNameLength = 25
-  lazy val maxNameLength = getInt(s"tfc.max-name-length")
-  lazy val taxYearEndMonth = getInt(s"tfc.end-of-tax-year-date.month")
-  lazy val taxYearEndDay = getInt(s"tfc.end-of-tax-year-date.day")
-}
+import play.api.Mode.Mode
 
 case class TFCTaxYearConfig(
                              topUpPercent: Double,
@@ -42,15 +30,19 @@ case class TFCTaxYearConfig(
                              maxGovtContributionForDisabled: Double
                              )
 
-object TFCConfig extends CCConfig with TFCConfig with ServicesConfig with LoadConfig with RunModeConfig {
+class TFCConfig @Inject()(val appConfig: AppConfig) extends CCConfig(appConfig) {
+
+  val mode: Mode = appConfig.mode
+  val runModeConfiguration: Configuration = appConfig.runModeConfiguration
 
   def getConfig(currentDate: LocalDate) : TFCTaxYearConfig  = {
 
-    val configs: Seq[play.api.Configuration] = conf.getConfigSeq("tfc.rule-change").get
+    val configs: Seq[play.api.Configuration] = runModeConfiguration.getConfigSeq("tfc.rule-change").get
+
     // get the default config and keep
-    val defaultConfig = configs.filter(x => {
-      x.getString("rule-date").equals(Some("default"))
-    }).head
+    val defaultConfig: Configuration =
+      configs.find(_.getString("rule-date").contains("default")).head
+
     // fetch the config if it matches the particular year
     getConfigForTaxYear(currentDate, configs) match {
       case Some(x) => getTaxYear(x)

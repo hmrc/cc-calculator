@@ -16,13 +16,16 @@
 
 package utils
 
+import com.codahale.metrics.SharedMetricRegistries
 import com.typesafe.config.ConfigFactory
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
+import org.scalatest.mockito.MockitoSugar
 import play.api.Configuration
-import utils.ESCConfig._
 
-class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers {
+class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers with MockitoSugar {
+
+  val escConf = app.injector.instanceOf[ESCConfig]
 
   object NICatADefault extends TestHelper {
     val description = "Default ESC SchemeConfig - NI cat A"
@@ -271,36 +274,36 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers {
   }
 
   "ESC SchemeConfig" should {
-
-    "(ESC) populate upper months limit from config file" in new ESCConfig {
-      upperMonthsLimitValidation shouldBe 100
+    SharedMetricRegistries.clear()
+    "(ESC) populate upper months limit from config file" in {
+      escConf.upperMonthsLimitValidation shouldBe 100
     }
 
-    "(ESC) populate lower months limit from config file" in new ESCConfig {
-      lowerMonthsLimitValidation shouldBe 0
+    "(ESC) populate lower months limit from config file" in {
+      escConf.lowerMonthsLimitValidation shouldBe 0
     }
 
-    "(ESC) populate lower claimants limit from config file" in new ESCConfig {
-      lowerClaimantsLimitValidation shouldBe 1
+    "(ESC) populate lower claimants limit from config file" in {
+      escConf.lowerClaimantsLimitValidation shouldBe 1
     }
 
-    "(ESC) populate lower periods limit from config file" in new ESCConfig {
-      lowerPeriodsLimitValidation shouldBe 1
+    "(ESC) populate lower periods limit from config file" in {
+      escConf.lowerPeriodsLimitValidation shouldBe 1
     }
 
-    "(ESC) populate lower tax years limit from config file" in new ESCConfig {
-      lowerTaxYearsLimitValidation shouldBe 1
+    "(ESC) populate lower tax years limit from config file" in {
+      escConf.lowerTaxYearsLimitValidation shouldBe 1
     }
 
-    "(ESC) populate maximum monthly exemption pre-2011 from config file" in new ESCConfig {
-      pre2011MaxExemptionMonthly shouldBe 243
+    "(ESC) populate maximum monthly exemption pre-2011 from config file" in {
+      escConf.pre2011MaxExemptionMonthly shouldBe 243
     }
 
     "Return 243 for post-2011-maximum-exemption" in {
       val pattern = "dd-MM-yyyy"
       val formatter = DateTimeFormat.forPattern(pattern)
       val fromDate = LocalDate.parse("23-05-2016", formatter)
-      ESCConfig.getMaxBottomBandAllowance(fromDate) shouldBe 243
+      escConf.getMaxBottomBandAllowance(fromDate) shouldBe 243
 
     }
 
@@ -308,7 +311,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers {
       val pattern = "dd-MM-yyyy"
       val formatter = DateTimeFormat.forPattern(pattern)
       val fromDate = LocalDate.parse("23-05-2016", formatter)
-      ESCConfig.getNILimit(fromDate) shouldBe 8112
+      escConf.getNILimit(fromDate) shouldBe 8112
 
     }
 
@@ -317,7 +320,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers {
       val formatter = DateTimeFormat.forPattern(pattern)
       val fromDate = LocalDate.parse("23-05-2016", formatter)
       try {
-        val result = ESCConfig.getConfig(fromDate, "Z", locationEngland)
+        val result = escConf.getConfig(fromDate, "Z", locationEngland)
         result shouldBe a[NoSuchElementException]
       } catch {
         case e: Exception =>
@@ -332,11 +335,11 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers {
       val formatter = DateTimeFormat.forPattern(pattern)
       val fromDate = LocalDate.parse("23-05-2017", formatter)
       // fetch the config if it matches the particular year
-      val configForTaxYear = getConfigForTaxYear(fromDate, configs)
+      val configForTaxYear = escConf.getConfigForTaxYear(fromDate, configs)
       try {
         val result = configForTaxYear match {
           case Some(x) =>
-            getNiCategory("B", x)
+            escConf.getNiCategory("B", x)
           case _ => 0
         }
         result shouldBe a[NoSuchElementException]
@@ -352,7 +355,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers {
           val pattern = "dd-MM-yyyy"
           val formatter = DateTimeFormat.forPattern(pattern)
           val now = LocalDate.parse(x.date, formatter)
-          val config = ESCConfig.getConfig(now, x.niCategoryCode, x.location)
+          val config = escConf.getConfig(now, x.niCategoryCode, x.location)
 
           val taxYear = ESCTaxYearConfig(
             post2011MaxExemptionMonthlyBasic = 243.00,
@@ -385,7 +388,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers {
       val pattern = "dd-MM-yyyy"
       val formatter = DateTimeFormat.forPattern(pattern)
       val fromDate = LocalDate.parse("06-09-2017", formatter)
-      val escTaxYearConfig = ESCConfig.getConfig(fromDate, "A", locationEngland)
+      val escTaxYearConfig = escConf.getConfig(fromDate, "A", locationEngland)
       escTaxYearConfig.niCategory.ptUelMonthlyUpperLimitForCat shouldBe 3753.00
     }
 
@@ -393,7 +396,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers {
       val pattern = "dd-MM-yyyy"
       val formatter = DateTimeFormat.forPattern(pattern)
       val fromDate = LocalDate.parse("06-12-2016", formatter)
-      val escTaxYearConfig = ESCConfig.getConfig(fromDate, "A", locationEngland)
+      val escTaxYearConfig = escConf.getConfig(fromDate, "A", locationEngland)
       escTaxYearConfig.taxBasicBandCapacity shouldBe 32000.00
     }
 

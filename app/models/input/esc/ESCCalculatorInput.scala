@@ -17,9 +17,9 @@
 package models.input.esc
 
 import config.ConfigConstants._
-import config.RunModeConfig
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
+import play.api.Play
 import play.api.data.validation.ValidationError
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Reads._
@@ -31,10 +31,11 @@ case class ESCCalculatorInput(
                                location: String
                               )
 
-object ESCCalculatorInput extends ESCConfig with MessagesObject with RunModeConfig {
+object ESCCalculatorInput extends MessagesObject {
+  private lazy val conf = Play.current.injector.instanceOf[ESCConfig]
   implicit val escEligibilityReads : Reads[ESCCalculatorInput] = (
       (JsPath \ "taxYears").read[List[ESCTaxYear]].filter(ValidationError(messages("cc.calc.invalid.number.of.ty")))
-        (taxYears => taxYears.length >= lowerTaxYearsLimitValidation) and
+        (taxYears => taxYears.length >= conf.lowerTaxYearsLimitValidation) and
         (JsPath \ "location").read[String]
     )(ESCCalculatorInput.apply _)
 }
@@ -45,13 +46,14 @@ case class ESCTaxYear(
                     periods: List[ESCPeriod]
                     )
 
-object ESCTaxYear extends ESCConfig with MessagesObject with RunModeConfig {
+object ESCTaxYear extends MessagesObject {
+  private lazy val conf = Play.current.injector.instanceOf[ESCConfig]
   implicit val taxYearReads: Reads[ESCTaxYear] = (
     (JsPath \ "from").read[LocalDate](jodaLocalDateReads(datePattern)) and
       (JsPath \ "until").read[LocalDate](jodaLocalDateReads(datePattern)) and
         (JsPath \ "periods").read[List[ESCPeriod]].filter(
           ValidationError(messages("cc.calc.invalid.number.of.periods"))
-        )(periods => periods.length >= lowerPeriodsLimitValidation)
+        )(periods => periods.length >= conf.lowerPeriodsLimitValidation)
     )(ESCTaxYear.apply _)
 }
 
@@ -62,12 +64,14 @@ case class ESCPeriod(
                       children: List[Child]
                       )
 
-object ESCPeriod extends ESCConfig with MessagesObject with RunModeConfig {
+object ESCPeriod extends MessagesObject {
+  private lazy val conf = Play.current.injector.instanceOf[ESCConfig]
+
   implicit val periodReads : Reads[ESCPeriod] = (
     (JsPath \ "from").read[LocalDate](jodaLocalDateReads(datePattern)) and
       (JsPath \ "until").read[LocalDate](jodaLocalDateReads(datePattern)) and
         (JsPath \ "claimants").read[List[ESCClaimant]].filter(ValidationError(messages("cc.calc.invalid.number.of.claimants"))
-        )(claimants => claimants.length >= lowerClaimantsLimitValidation) and
+        )(claimants => claimants.length >= conf.lowerClaimantsLimitValidation) and
           (JsPath \ "children").read[List[Child]]
     )(ESCPeriod.apply _)
 }
@@ -171,12 +175,14 @@ case class ESCClaimant(
   }
 }
 
-object ESCClaimant extends ESCConfig with MessagesObject with RunModeConfig {
+object ESCClaimant extends MessagesObject {
+  private lazy val conf = Play.current.injector.instanceOf[ESCConfig]
+
   implicit val claimantReads : Reads[ESCClaimant] = (
     (JsPath \ "qualifying").read[Boolean].orElse(Reads.pure(false)) and
       (JsPath \ "isPartner").read[Boolean].orElse(Reads.pure(false)) and
         (JsPath \ "eligibleMonthsInPeriod").read[Int].filter(ValidationError(messages("cc.calc.invalid.number.of.months"))
-        )(months => months >= lowerMonthsLimitValidation && months < upperMonthsLimitValidation) and
+        )(months => months >= conf.lowerMonthsLimitValidation && months < conf.upperMonthsLimitValidation) and
           (JsPath \ "previousIncome").readNullable[ESCIncome] and
             (JsPath \ "currentIncome").readNullable[ESCIncome] and
               (JsPath \ "vouchers").read[Boolean] and

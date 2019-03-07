@@ -31,9 +31,9 @@ import scala.collection.immutable.Nil
 
 class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with MockitoSugar with BeforeAndAfterEach with org.scalatest.PrivateMethodTester {
 
-  val tcCalculator = new TCCalculator {
-    override val tcConfig: TCConfig = mock[TCConfig]
-  }
+  val tcConf = mock[TCConfig]
+
+  val tcCalculator = new TCCalculator(tcConf)
   val mockTCTaxYearConfig: TCTaxYearConfig = mock[TCTaxYearConfig]
   val mockThresholds: Thresholds = mock[Thresholds]
   val mockWTC = mock[WTC]
@@ -1446,8 +1446,8 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with Mo
       val untilDate = LocalDate.parse("2016-05-21", formatter)
 
       val income = 5000.00
-      val wtcThreshold = TCConfig.getConfig(fromDate).thresholds.wtcIncomeThreshold
-      val ctcThreshold = TCConfig.getConfig(fromDate).thresholds.ctcIncomeThreshold
+      val wtcThreshold = tcConf.getConfig(fromDate).thresholds.wtcIncomeThreshold
+      val ctcThreshold = tcConf.getConfig(fromDate).thresholds.ctcIncomeThreshold
       val period = {
         models.output.tc.Period(
           from = fromDate,
@@ -1484,8 +1484,8 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with Mo
       val untilDate = LocalDate.parse("2016-05-21", formatter)
 
       val income = 100000.00
-      val wtcThreshold = TCConfig.getConfig(fromDate).thresholds.wtcIncomeThreshold
-      val ctcThreshold = TCConfig.getConfig(fromDate).thresholds.ctcIncomeThreshold
+      val wtcThreshold = tcConf.getConfig(fromDate).thresholds.wtcIncomeThreshold
+      val ctcThreshold = tcConf.getConfig(fromDate).thresholds.ctcIncomeThreshold
       val period = {
         models.output.tc.Period(
           from = fromDate,
@@ -1522,8 +1522,8 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with Mo
       val untilDate = LocalDate.parse("2016-05-21", formatter)
 
       val income = 100000.00
-      val wtcThreshold = TCConfig.getConfig(fromDate).thresholds.wtcIncomeThreshold
-      val ctcThreshold = TCConfig.getConfig(fromDate).thresholds.ctcIncomeThreshold
+      val wtcThreshold = tcConf.getConfig(fromDate).thresholds.wtcIncomeThreshold
+      val ctcThreshold = tcConf.getConfig(fromDate).thresholds.ctcIncomeThreshold
       val period = {
         models.output.tc.Period(
           from = fromDate,
@@ -1562,8 +1562,8 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with Mo
       val untilDate = LocalDate.parse("2016-05-21", formatter)
 
       val income = 100000.00
-      val wtcThreshold = TCConfig.getConfig(fromDate).thresholds.wtcIncomeThreshold
-      val ctcThreshold = TCConfig.getConfig(fromDate).thresholds.ctcIncomeThreshold
+      val wtcThreshold = tcConf.getConfig(fromDate).thresholds.wtcIncomeThreshold
+      val ctcThreshold = tcConf.getConfig(fromDate).thresholds.ctcIncomeThreshold
       val period = {
         models.output.tc.Period(
           from = fromDate,
@@ -1602,8 +1602,8 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with Mo
       val untilDate = LocalDate.parse("2016-05-21", formatter)
 
       val income = 100000.00
-      val wtcThreshold = TCConfig.getConfig(fromDate).thresholds.wtcIncomeThreshold
-      val ctcThreshold = TCConfig.getConfig(fromDate).thresholds.ctcIncomeThreshold
+      val wtcThreshold = tcConf.getConfig(fromDate).thresholds.wtcIncomeThreshold
+      val ctcThreshold = tcConf.getConfig(fromDate).thresholds.ctcIncomeThreshold
       val period = {
         models.output.tc.Period(
           from = fromDate,
@@ -1643,8 +1643,8 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with Mo
       val untilDate = LocalDate.parse("2016-05-21", formatter)
 
       val income = 100000.00
-      val wtcThreshold = TCConfig.getConfig(fromDate).thresholds.wtcIncomeThreshold
-      val ctcThreshold = TCConfig.getConfig(fromDate).thresholds.ctcIncomeThreshold
+      val wtcThreshold = tcConf.getConfig(fromDate).thresholds.wtcIncomeThreshold
+      val ctcThreshold = tcConf.getConfig(fromDate).thresholds.ctcIncomeThreshold
       val period = {
         models.output.tc.Period(
           from = fromDate,
@@ -1684,8 +1684,8 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with Mo
       val untilDate = LocalDate.parse("2016-05-21", formatter)
 
       val income = 100000.00
-      val wtcThreshold = TCConfig.getConfig(fromDate).thresholds.wtcIncomeThreshold
-      val ctcThreshold = TCConfig.getConfig(fromDate).thresholds.ctcIncomeThreshold
+      val wtcThreshold = tcConf.getConfig(fromDate).thresholds.wtcIncomeThreshold
+      val ctcThreshold = tcConf.getConfig(fromDate).thresholds.ctcIncomeThreshold
       val period = {
         models.output.tc.Period(
           from = fromDate,

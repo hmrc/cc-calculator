@@ -16,7 +16,7 @@
 
 package controllers
 
-import calculators.{ESCCalculator, TCCalculator, TFCCalculator}
+import calculators._
 import com.github.fge.jackson.JsonLoader
 import models.input.esc.ESCCalculatorInput
 import models.input.tc.TCCalculatorInput
@@ -28,7 +28,6 @@ import models.output.tfc.{TFCCalculatorOutput, TFCContribution}
 import org.joda.time.LocalDate
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
-import org.scalatest.mock.MockitoSugar
 import play.api.i18n.Messages.Implicits._
 import play.api.libs.json.{JsValue, Json}
 import play.api.test.FakeRequest
@@ -36,12 +35,18 @@ import play.api.test.Helpers._
 import service.AuditEvents
 import utils.FakeCCCalculatorApplication
 import org.mockito.ArgumentMatchers._
-
+import org.scalatest.mockito.MockitoSugar
 
 import scala.concurrent.Future
 
 class CalculatorControllerSpec extends FakeCCCalculatorApplication with MockitoSugar with BeforeAndAfterEach {
   implicit val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json")
+
+  lazy val audits = app.injector.instanceOf[AuditEvents]
+  lazy val tcc = app.injector.instanceOf[TCCalculator]
+  lazy val tfc = app.injector.instanceOf[TFCCalculator]
+  lazy val esc = app.injector.instanceOf[ESCCalculator]
+
 
   "CalculatorController" should {
 
@@ -51,24 +56,11 @@ class CalculatorControllerSpec extends FakeCCCalculatorApplication with MockitoS
       status(result.get) should not be NOT_FOUND
     }
 
-    "use correct objects" in {
-      val sut = new CalculatorController(applicationMessagesApi)
-      sut.auditEvent shouldBe AuditEvents
-      sut.tcCalculator shouldBe TCCalculator
-      sut.tfcCalculator shouldBe TFCCalculator
-      sut.escCalculator shouldBe ESCCalculator
-    }
-
     "calling calculate" should {
 
       "return BAD_REQUEST" when {
         "invalid request is given" in {
-          val sut = new CalculatorController(applicationMessagesApi) {
-            override val auditEvent: AuditEvents = mock[AuditEvents]
-            override val tcCalculator: TCCalculator = mock[TCCalculator]
-            override val tfcCalculator: TFCCalculator = mock[TFCCalculator]
-            override val escCalculator: ESCCalculator = mock[ESCCalculator]
-          }
+          val sut = new CalculatorController(applicationMessagesApi, audits, tcc, tfc, esc)
 
           val result = await(sut.calculate()(request.withBody(Json.obj("tc" -> "test", "tfc" -> "test", "esc" -> "test"))))
           status(result) shouldBe BAD_REQUEST
@@ -76,15 +68,15 @@ class CalculatorControllerSpec extends FakeCCCalculatorApplication with MockitoS
       }
 
       "calculate savings" when {
+
+        val stubbedTCC = mock[TCCalculator]
+        val stubbedTFC = mock[TFCCalculator]
+        val stubbedESC = mock[ESCCalculator]
+
         "valid data is given" when {
 
           "request doesn't contain any data" in {
-            val sut = new CalculatorController(applicationMessagesApi) {
-              override val auditEvent: AuditEvents = mock[AuditEvents]
-              override val tcCalculator: TCCalculator = mock[TCCalculator]
-              override val tfcCalculator: TFCCalculator = mock[TFCCalculator]
-              override val escCalculator: ESCCalculator = mock[ESCCalculator]
-            }
+            val sut = new CalculatorController(applicationMessagesApi, audits, tcc, tfc, esc)
 
             val result = await(sut.calculate()(request.withBody(Json.obj())))
             status(result) shouldBe OK
@@ -92,18 +84,11 @@ class CalculatorControllerSpec extends FakeCCCalculatorApplication with MockitoS
           }
 
           "request contains data only for TC" in {
-            val sut = new CalculatorController(applicationMessagesApi) {
-              override val auditEvent: AuditEvents = mock[AuditEvents]
-              override val tcCalculator: TCCalculator = mock[TCCalculator]
-              override val tfcCalculator: TFCCalculator = mock[TFCCalculator]
-              override val escCalculator: ESCCalculator = mock[ESCCalculator]
-            }
+            val sut = new CalculatorController(applicationMessagesApi, audits, stubbedTCC, tfc, esc)
             val validInput: JsValue = Json.parse(JsonLoader.fromResource("/json/tc/input/valid_json.json").toString)
 
-            when(
-              sut.tcCalculator.award(any[TCCalculatorInput])
-            ).thenReturn(
-              Future.successful(
+            when(stubbedTCC.award(any[TCCalculatorInput]))
+              .thenReturn(Future.successful(
                 TCCalculatorOutput(
                   from = LocalDate.now,
                   until = LocalDate.now.plusYears(1),
@@ -120,19 +105,12 @@ class CalculatorControllerSpec extends FakeCCCalculatorApplication with MockitoS
           }
 
           "request contains data only for TFC" in {
-            val sut = new CalculatorController(applicationMessagesApi) {
-              override val auditEvent: AuditEvents = mock[AuditEvents]
-              override val tcCalculator: TCCalculator = mock[TCCalculator]
-              override val tfcCalculator: TFCCalculator = mock[TFCCalculator]
-              override val escCalculator: ESCCalculator = mock[ESCCalculator]
-            }
+            val sut = new CalculatorController(applicationMessagesApi, audits, tcc, stubbedTFC, esc)
 
             val validInput: JsValue = Json.parse(JsonLoader.fromResource("/json/tfc/input/calculator_input_test.json").toString)
 
-            when(
-              sut.tfcCalculator.award(any[TFCCalculatorInput])
-            ).thenReturn(
-              Future.successful(
+            when(stubbedTFC.award(any[TFCCalculatorInput]))
+              .thenReturn(Future.successful(
                 TFCCalculatorOutput(
                   householdContribution = TFCContribution(parent = 0, government = 200, totalChildCareSpend = 0),
                   numberOfPeriods = 0,
@@ -147,19 +125,12 @@ class CalculatorControllerSpec extends FakeCCCalculatorApplication with MockitoS
           }
 
           "request contains data only for ESC" in {
-            val sut = new CalculatorController(applicationMessagesApi) {
-              override val auditEvent: AuditEvents = mock[AuditEvents]
-              override val tcCalculator: TCCalculator = mock[TCCalculator]
-              override val tfcCalculator: TFCCalculator = mock[TFCCalculator]
-              override val escCalculator: ESCCalculator = mock[ESCCalculator]
-            }
+            val sut = new CalculatorController(applicationMessagesApi, audits, tcc, tfc, stubbedESC)
 
             val validInput: JsValue = Json.parse(JsonLoader.fromResource(s"/json/esc/input/calculator_input_test.json").toString)
 
-            when(
-              sut.escCalculator.award(any[ESCCalculatorInput])
-            ).thenReturn(
-              Future.successful(
+            when(stubbedESC.award(any[ESCCalculatorInput]))
+              .thenReturn(Future.successful(
                 ESCCalculatorOutput(
                   from = LocalDate.now,
                   until = LocalDate.now.plusYears(1),
@@ -179,21 +150,14 @@ class CalculatorControllerSpec extends FakeCCCalculatorApplication with MockitoS
           }
 
           "request contains data for TC, TFC and ESC" in {
-            val sut = new CalculatorController(applicationMessagesApi) {
-              override val auditEvent: AuditEvents = mock[AuditEvents]
-              override val tcCalculator: TCCalculator = mock[TCCalculator]
-              override val tfcCalculator: TFCCalculator = mock[TFCCalculator]
-              override val escCalculator: ESCCalculator = mock[ESCCalculator]
-            }
+            val sut = new CalculatorController(applicationMessagesApi, audits, stubbedTCC, stubbedTFC, stubbedESC)
 
             val validTCInput: JsValue = Json.parse(JsonLoader.fromResource("/json/tc/input/valid_json.json").toString)
             val validTFCInput: JsValue = Json.parse(JsonLoader.fromResource("/json/tfc/input/calculator_input_test.json").toString)
             val validESCInput: JsValue = Json.parse(JsonLoader.fromResource(s"/json/esc/input/calculator_input_test.json").toString)
 
-            when(
-              sut.tcCalculator.award(any[TCCalculatorInput])
-            ).thenReturn(
-              Future.successful(
+            when(stubbedTCC.award(any[TCCalculatorInput]))
+              .thenReturn(Future.successful(
                 TCCalculatorOutput(
                   from = LocalDate.now,
                   until = LocalDate.now.plusYears(1),
@@ -204,10 +168,8 @@ class CalculatorControllerSpec extends FakeCCCalculatorApplication with MockitoS
               )
             )
 
-            when(
-              sut.tfcCalculator.award(any[TFCCalculatorInput])
-            ).thenReturn(
-              Future.successful(
+            when(stubbedTFC.award(any[TFCCalculatorInput]))
+              .thenReturn(Future.successful(
                 TFCCalculatorOutput(
                   householdContribution = TFCContribution(parent = 0, government = 200, totalChildCareSpend = 0),
                   numberOfPeriods = 0,
@@ -216,10 +178,8 @@ class CalculatorControllerSpec extends FakeCCCalculatorApplication with MockitoS
               )
             )
 
-            when(
-              sut.escCalculator.award(any[ESCCalculatorInput])
-            ).thenReturn(
-              Future.successful(
+            when(stubbedESC.award(any[ESCCalculatorInput]))
+              .thenReturn(Future.successful(
                 ESCCalculatorOutput(
                   from = LocalDate.now,
                   until = LocalDate.now.plusYears(1),

@@ -16,7 +16,6 @@
 
 package service
 
-import config.MicroserviceAuditConnector
 import play.api.test.FakeRequest
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.logging.{ForwardedFor, SessionId}
@@ -27,20 +26,9 @@ import uk.gov.hmrc.play.test.UnitSpec
 
 import scala.concurrent.{ExecutionContext, Future}
 
-/**
- * Created by user on 22/04/16.
- */
 class AuditServiceTest extends UnitSpec {
 
   "AuditService" when {
-
-    "use the correct audit connector" in {
-      AuditService.auditConnector shouldBe MicroserviceAuditConnector
-    }
-
-    "use the correct audit source" in {
-      AuditService.auditSource shouldBe "cc-calculator"
-    }
 
     "auditer should send message" in {
 
@@ -60,9 +48,8 @@ class AuditServiceTest extends UnitSpec {
         }
       }
 
-      val auditTest = new AuditService {
-        override def auditConnector = auditConnectorObj
-        override def auditSource = "cc-eligibility"
+      val auditTest: AuditService = new AuditService(auditConnectorObj) {
+        override val auditSource = "cc-eligibility"
       }
 
       auditTest.sendEvent("testTranType", Map("randomDetails" -> "+=+=+=+=+=+=+=+=+"))(request,hc)
@@ -72,7 +59,7 @@ class AuditServiceTest extends UnitSpec {
 
       val auditEvent : DataEvent = auditConnectorObj.lastAuditEvent.get
 
-      auditEvent should not equal(Nil)
+      auditEvent should not equal Nil
 
       auditEvent.auditSource should equal("cc-eligibility")
       auditEvent.auditType should equal("testTranType")

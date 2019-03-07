@@ -16,11 +16,11 @@
 
 package utils
 
-import config.RunModeConfig
+import config.AppConfig
+import javax.inject.Inject
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import play.api.Configuration
-import uk.gov.hmrc.play.config.ServicesConfig
 
 case class WTC(
                 basicElement : Int,
@@ -57,13 +57,13 @@ case class TCTaxYearConfig(
                             thresholds: Thresholds
                             )
 
-object TCConfig extends TCConfig with RunModeConfig
 
-trait TCConfig extends ServicesConfig with CCConfig with LoadConfig with RunModeConfig {
+class TCConfig @Inject()(appConfig: AppConfig) extends CCConfig(appConfig) {
+
   val defaultMaxNameLength: Int = 25
   lazy val monthsInTaxYear: Int = 12
-  lazy val taxYearEndMonth = getInt(s"tc.end-of-tax-year-date.month")
-  lazy val taxYearEndDay = getInt(s"tc.end-of-tax-year-date.day")
+  lazy val taxYearEndMonth = appConfig.getInt(s"tc.end-of-tax-year-date.month")
+  lazy val taxYearEndDay = appConfig.getInt(s"tc.end-of-tax-year-date.day")
 
   def getCurrentTaxYearDateRange(fromDate : LocalDate) : (LocalDate, LocalDate) = {
     val pattern = "dd-MM-yyyy"
@@ -78,11 +78,9 @@ trait TCConfig extends ServicesConfig with CCConfig with LoadConfig with RunMode
 
   def getConfig(currentDate: LocalDate) : TCTaxYearConfig  = {
 
-    val configs: Seq[play.api.Configuration] = conf.getConfigSeq("tc.rule-change").get
+    val configs: Seq[play.api.Configuration] = appConfig.runModeConfiguration.getConfigSeq("tc.rule-change").get
     // get the default config and keep
-    val defaultConfig = configs.filter(x => {
-      x.getString("rule-date").equals(Some("default"))
-    }).head
+    val defaultConfig = configs.find(_.getString("rule-date").contains("default")).head
     // fetch the config if it matches the particular year
     val result = getConfigForTaxYear(currentDate, configs)
 

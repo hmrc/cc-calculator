@@ -17,7 +17,6 @@
 package config
 
 object ConfigConstants {
-
   lazy val noOfMonths: Int = 12
   lazy val defaultAmount = BigDecimal(0.00)
 }

@@ -16,6 +16,7 @@
 
 package calculators
 
+import javax.inject.Inject
 import models.input.tc._
 import models.output.tc.{Element, Elements, TCCalculatorOutput, TaxYear}
 import org.joda.time.LocalDate
@@ -527,7 +528,7 @@ trait TCCalculatorHelpers extends CCCalculatorHelper {
 
 }
 
-trait TCCalculator extends TCCalculatorElements with TCCalculatorHelpers {
+class TCCalculator @Inject()(val tcConfig: TCConfig) extends TCCalculatorElements with TCCalculatorHelpers {
 
   import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -679,8 +680,4 @@ trait TCCalculator extends TCCalculatorElements with TCCalculatorHelpers {
     })
   }
 
-}
-
-object TCCalculator extends TCCalculator {
-  override val tcConfig = TCConfig
 }

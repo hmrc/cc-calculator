@@ -18,10 +18,11 @@ package utils
 
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
+import org.scalatest.mockito.MockitoSugar
 import org.scalatest.prop.TableDrivenPropertyChecks.forAll
 import org.scalatest.prop.Tables.Table
 
-class TCSchemeConfigSpec extends FakeCCCalculatorApplication {
+class TCSchemeConfigSpec extends FakeCCCalculatorApplication with MockitoSugar {
 
   override val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
 
@@ -172,19 +173,16 @@ class TCSchemeConfigSpec extends FakeCCCalculatorApplication {
 
 
   "TC SchemeConfig" should {
-
+    val tcConfig = app.injector.instanceOf[TCConfig]
     "return 12 for months in tax year" in {
-      val tcConfig = new TCConfig {}
       tcConfig.monthsInTaxYear shouldBe 12
     }
 
     "Tax year end month from config file" in {
-      val tcConfig = new TCConfig {}
       tcConfig.taxYearEndMonth shouldBe 4
     }
 
     "Tax year end date from config file" in {
-      val tcConfig = new TCConfig {}
       tcConfig.taxYearEndDay shouldBe 6
     }
 
@@ -205,9 +203,9 @@ class TCSchemeConfigSpec extends FakeCCCalculatorApplication {
 
     forAll(configTestCases) { case (taxYear, date, taxYearConfig) =>
 
-      s"return ${taxYear} TC taxYear Config for a date ${date}" in {
+      s"return $taxYear TC taxYear Config for a date $date" in {
         val fromDate = LocalDate.parse(date, formatter)
-        val tcConfig = new TCConfig {}
+        val tcConfig = app.injector.instanceOf[TCConfig]
         val config = tcConfig.getConfig(fromDate)
         config shouldBe taxYearConfig
       }
@@ -223,11 +221,11 @@ class TCSchemeConfigSpec extends FakeCCCalculatorApplication {
 
     forAll(datesTestCases) { case (testDate, startDate, endDate) =>
 
-      s"return tax year start date: ${startDate} and end date ${endDate} when passed date is ${testDate}" in {
+      s"return tax year start date: $startDate and end date $endDate when passed date is $testDate" in {
         val today = LocalDate.parse(testDate, formatter)
         val taxYearStartDate = LocalDate.parse(startDate, formatter)
         val taxYearEndDate = LocalDate.parse(endDate, formatter)
-        val tcConfig = new TCConfig {}
+        val tcConfig = app.injector.instanceOf[TCConfig]
         val resultTuple = tcConfig.getCurrentTaxYearDateRange(today)
         resultTuple._1 shouldBe taxYearStartDate
         resultTuple._2 shouldBe taxYearEndDate

@@ -17,6 +17,7 @@
 package models.input.tfc
 
 import org.joda.time.LocalDate
+import play.api.Play
 import play.api.data.validation.ValidationError
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Reads._
@@ -45,17 +46,20 @@ case class TFCPeriod(
                       periodEligibility: Boolean,
                       children: List[TFCChild]
                     ){
-  def configRule : TFCTaxYearConfig = TFCConfig.getConfig(from)
+  lazy val conf = Play.current.injector.instanceOf[TFCConfig]
+  def configRule : TFCTaxYearConfig = conf.getConfig(from)
 }
 
 object TFCPeriod extends MessagesObject {
+
+  lazy val conf = Play.current.injector.instanceOf[TFCConfig]
 
   implicit val periodFormat : Reads[TFCPeriod] = (
     (JsPath \ "from").read[LocalDate](jodaLocalDateReads(datePattern)) and
       (JsPath \ "until").read[LocalDate](jodaLocalDateReads(datePattern)) and
         (JsPath \ "periodEligibility").read[Boolean] and
           (JsPath \ "children").read[List[TFCChild]].filter(ValidationError(messages("cc.calc.invalid.number.of.children"))
-          )(children => children.nonEmpty && children.length <= TFCConfig.maxNoOfChildren)
+          )(children => children.nonEmpty && children.length <= conf.appConfig.maxNoOfChildren)
     )(TFCPeriod.apply _)
 }
 

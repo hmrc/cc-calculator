@@ -24,7 +24,7 @@ import org.joda.time.LocalDate
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
-import org.scalatest.mock.MockitoSugar
+import org.scalatest.mockito.MockitoSugar
 import org.scalatest.prop.TableDrivenPropertyChecks._
 import org.scalatest.prop.Tables.Table
 import play.api.i18n.Messages.Implicits._
@@ -50,6 +50,11 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
     ("invalid_date", "/taxYears(0)/from", "error.expected.jodadate.format", "\"\""),
     ("negative_childcare_cost", "/taxYears(0)/periods(0)/children(0)/childcareCost", "Childcare Spend cost should not be less than 0.00", "")
   )
+
+  lazy val audits = app.injector.instanceOf[AuditEvents]
+  lazy val tcc = app.injector.instanceOf[TCCalculator]
+
+
   "when calculate is called" should {
 
     "not return NOT_FOUND for this endpoint" in {
@@ -59,7 +64,7 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
     }
 
     "return status OK and the response of calculator.incomeAdvice if valid request is given" in {
-      val SUT = new TaxCreditCalculatorController(applicationMessagesApi) {
+      val SUT = new TaxCreditCalculatorController(applicationMessagesApi, audits, tcc) {
         override val calculator =  mock[TCCalculator]
         override val auditEvent = mock[AuditEvents]
       }
@@ -74,7 +79,7 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
     }
 
     "return INTERNAL_SERVER_ERROR and error message if calculator.incomeAdvice throws exception" in {
-      val SUT = new TaxCreditCalculatorController(applicationMessagesApi) {
+      val SUT = new TaxCreditCalculatorController(applicationMessagesApi, audits, tcc) {
         override val calculator =  mock[TCCalculator]
         override val auditEvent = mock[AuditEvents]
       }
@@ -98,12 +103,12 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
 
       forAll(invalidData) { case (invalidJson, path, error, args) =>
 
-        s"${invalidJson} is given and return error: '${error}' for path: '${path}'" in {
-          val SUT = new TaxCreditCalculatorController(applicationMessagesApi) {
+        s"$invalidJson is given and return error: '$error' for path: '$path'" in {
+          val SUT = new TaxCreditCalculatorController(applicationMessagesApi, audits, tcc) {
             override val calculator =  mock[TCCalculator]
             override val auditEvent = mock[AuditEvents]
           }
-          val json = Json.parse(JsonLoader.fromResource(s"/json/tc/input/${invalidJson}.json").toString)
+          val json = Json.parse(JsonLoader.fromResource(s"/json/tc/input/$invalidJson.json").toString)
           val invalidRequest: FakeRequest[JsValue] = request.withBody(json)
 
           when(
@@ -119,11 +124,11 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
                |    "status": 400,
                |    "errors": [
                |    {
-               |       "path": "${path}",
+               |       "path": "$path",
                |       "validationErrors": [
                |       {
-               |         "message": "${error}",
-               |         "args": [${args}]
+               |         "message": "$error",
+               |         "args": [$args]
                |       }
                |       ]
                |    }

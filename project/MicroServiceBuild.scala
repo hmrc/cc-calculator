@@ -12,20 +12,14 @@ private object AppDependencies {
   import play.core.PlayVersion
   import play.sbt.PlayImport._
 
-  private val microServiceBootstrapVersion = "10.2.0"
-  private val scalaTestVersion = "3.0.0"
-  private val pegDownVersion = "1.6.0"
-  private val hmrcTestVersion = "3.4.0-play-25"
-  private val jsonSchemaValidator = "2.2.6"
-  private val json4s = "3.3.0"
-  private val mockitoVersion = "2.18.3"
-  private val scalaTestPlusVersion = "2.0.0"
 
-  val compile = Seq(
+  val compile: Seq[ModuleID] = Seq(
     ws,
-    "uk.gov.hmrc" %% "microservice-bootstrap" % microServiceBootstrapVersion,
-    "com.github.fge" % "json-schema-validator" % jsonSchemaValidator,
-    "org.json4s" %% "json4s-jackson" % json4s
+    "uk.gov.hmrc" %% "bootstrap-play-25" % "4.9.0",
+    "com.github.fge" % "json-schema-validator" % "2.2.6",
+    "org.json4s" %% "json4s-jackson" % "3.3.0",
+    "uk.gov.hmrc" %% "govuk-template" % "5.30.0-play-25",
+    "uk.gov.hmrc" %% "play-ui" % "7.33.0-play-25"
   )
 
   trait TestDependencies {
@@ -34,18 +28,18 @@ private object AppDependencies {
   }
 
   object Test {
-    def apply() = new TestDependencies {
+    def apply(): Seq[ModuleID] = new TestDependencies {
       override lazy val test = Seq(
-        "org.scalatestplus.play" %% "scalatestplus-play" % scalaTestPlusVersion % scope,
-        "uk.gov.hmrc" %% "hmrctest" % hmrcTestVersion % scope,
-        "org.scalatest" %% "scalatest" % scalaTestVersion % scope,
-        "org.pegdown" % "pegdown" % pegDownVersion % scope,
+        "org.scalatestplus.play" %% "scalatestplus-play" % "2.0.0" % scope,
+        "uk.gov.hmrc" %% "hmrctest" % "3.4.0-play-25" % scope,
+        "org.scalatest" %% "scalatest" % "3.0.0" % scope,
+        "org.pegdown" % "pegdown" % "1.6.0" % scope,
         "com.typesafe.play" %% "play-test" % PlayVersion.current % scope,
-        "org.mockito" % "mockito-core" % mockitoVersion % scope
+        "org.mockito" % "mockito-core" % "2.18.3" % scope
       )
     }.test
   }
 
-  def apply() = compile ++ Test()
+  def apply(): Seq[ModuleID] = compile ++ Test()
 }
 
