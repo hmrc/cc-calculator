@@ -16,9 +16,8 @@
 
 package controllers.tfc
 
-import javax.inject.{Inject, Singleton}
-
 import calculators.TFCCalculator
+import javax.inject.{Inject, Singleton}
 import models.input.tfc.TFCCalculatorInput
 import models.output.tfc.TFCCalculatorOutput
 import play.api.Logger
@@ -26,16 +25,15 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Action
 import service.AuditEvents
-import uk.gov.hmrc.play.microservice.controller.BaseController
+import uk.gov.hmrc.play.bootstrap.controller.BaseController
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 @Singleton
-class TFCCalculatorController @Inject()(val messagesApi: MessagesApi) extends BaseController with I18nSupport {
-
-  val auditEvent: AuditEvents = AuditEvents
-  val calculator: TFCCalculator = TFCCalculator
+class TFCCalculatorController @Inject()(val messagesApi: MessagesApi,
+                                        val auditEvent: AuditEvents,
+                                        val calculator: TFCCalculator) extends BaseController with I18nSupport {
 
   def calculate: Action[JsValue] = Action.async(parse.json) {
     implicit request =>

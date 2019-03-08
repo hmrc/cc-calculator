@@ -28,9 +28,6 @@ import utils.FakeCCCalculatorApplication
 import scala.collection.mutable.ListBuffer
 import scala.concurrent.{ExecutionContext, Future}
 
-/**
- * Created by user on 25/04/16.
- */
 class AuditEventsTest extends UnitSpec with FakeCCCalculatorApplication with MockitoSugar {
   implicit val request = FakeRequest()
   implicit var hc = new HeaderCarrier()
@@ -55,14 +52,11 @@ class AuditEventsTest extends UnitSpec with FakeCCCalculatorApplication with Moc
 
   def createAuditor(observableAuditConnector : ObservableAuditConnector) = {
 
-    val testAuditService = new AuditService {
-      override lazy val auditSource = "cc-calculator"
-      override def auditConnector = observableAuditConnector
+    val testAuditService = new AuditService(observableAuditConnector) {
+      override val auditSource = "cc-calculator"
     }
 
-    new AuditEvents {
-      override def auditService : AuditService = testAuditService
-    }
+    new AuditEvents(testAuditService)
   }
 
   "Audit Events" should {

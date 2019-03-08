@@ -19,20 +19,21 @@ package utils
 import java.text.SimpleDateFormat
 import java.util.Calendar
 
+import config.AppConfig
+import javax.inject.Inject
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import play.api.Configuration
-import uk.gov.hmrc.play.config.ServicesConfig
 
-trait CCConfig extends ServicesConfig {
+class CCConfig @Inject()(appConfig: AppConfig) {
 
   val formatterDatePattern = "dd-MM-yyyy"
 
   def getConfigForTaxYear(currentDate: LocalDate, configs : Seq[Configuration]) : Option[Configuration] =  {
     //get the configs for all years except the default
-    val configsExcludingDefault = configs.filter(x => {
-      !x.getString("rule-date").equals(Some("default"))
-    })
+    val configsExcludingDefault =
+      configs.filterNot(_.getString("rule-date").contains("default"))
+
     // ensure the latest date is in the head position
     val sorted = configsExcludingDefault.sortBy(c => {
       val predicate = new SimpleDateFormat(formatterDatePattern).parse(c.getString("rule-date").getOrElse(""))
@@ -87,8 +88,8 @@ trait CCConfig extends ServicesConfig {
   }
 
   def taxYearEndDate(now: LocalDate = LocalDate.now(), schemeName: String): LocalDate = {
-    val month = getInt(s"$schemeName.end-of-tax-year-date.month")
-    val day = getInt(s"$schemeName.end-of-tax-year-date.day")
+    val month = appConfig.getInt(s"$schemeName.end-of-tax-year-date.month")
+    val day = appConfig.getInt(s"$schemeName.end-of-tax-year-date.day")
     // have to determine the year as this is not a fixed date
     val year = {
       val calendar = Calendar.getInstance()

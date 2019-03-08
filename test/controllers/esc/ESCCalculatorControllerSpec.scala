@@ -25,7 +25,7 @@ import org.joda.time.LocalDate
 import org.mockito.ArgumentMatchers.{eq => mockEq, _}
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
-import org.scalatest.mock.MockitoSugar
+import org.scalatest.mockito.MockitoSugar
 import org.scalatest.prop.TableDrivenPropertyChecks._
 import org.scalatest.prop.Tables.Table
 import play.api.http.Status
@@ -39,6 +39,9 @@ import utils.FakeCCCalculatorApplication
 import scala.concurrent.Future
 
 class ESCCalculatorControllerSpec extends FakeCCCalculatorApplication with MockitoSugar with BeforeAndAfterEach {
+
+  val mockCalc = mock[ESCCalculator]
+  lazy val audits = app.injector.instanceOf[AuditEvents]
 
   "ESCCalculatorController" should {
 
@@ -55,31 +58,27 @@ class ESCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
     )
 
     forAll(validData) { case (description, data) =>
-      s"Accept valid JSON at /employer-supported-childcare/calculate (${description})" in {
-        val controller = new ESCCalculatorController(applicationMessagesApi) {
-          override val auditEvent = mock[AuditEvents]
-          override val calculator = mock[ESCCalculator]
-        }
+      s"Accept valid JSON at /employer-supported-childcare/calculate ($description)" in {
+        val controller = new ESCCalculatorController(applicationMessagesApi, mockCalc, audits)
 
-        val inputJson: JsValue = Json.parse(JsonLoader.fromResource(s"/json/esc/input/${data}").toString)
+        val inputJson: JsValue = Json.parse(JsonLoader.fromResource(s"/json/esc/input/$data").toString)
         val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-        when(controller.calculator.award(any[ESCCalculatorInput]())).thenReturn(Future.successful(ESCCalculatorOutput(from = LocalDate.now, until = LocalDate.now, totalSavings = ESCSavings(), taxYears = List())))
+        when(mockCalc.award(any[ESCCalculatorInput]()))
+          .thenReturn(Future.successful(ESCCalculatorOutput(from = LocalDate.now, until = LocalDate.now, totalSavings = ESCSavings(), taxYears = List())))
+
         val result = await(controller.calculate()(request))
         status(result) shouldBe Status.OK
       }
     }
 
     "Accept invalid JSON at /employer-supported-childcare/calculate and return a BadRequest with an error (0 Tax Year)" in {
-      val controller = new ESCCalculatorController(applicationMessagesApi) {
-        override val calculator = mock[ESCCalculator]
-        override val auditEvent = mock[AuditEvents]
-      }
+      val controller = new ESCCalculatorController(applicationMessagesApi, mockCalc, audits)
 
       val inputJson: JsValue = Json.parse(JsonLoader.fromResource("/json/esc/input/no_tax_year.json").toString)
       val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.calculator.award(any[ESCCalculatorInput]())).thenReturn(Future.successful(mock[ESCCalculatorOutput]))
+      when(mockCalc.award(any[ESCCalculatorInput]())).thenReturn(Future.successful(mock[ESCCalculatorOutput]))
       val result = await(controller.calculate()(request))
       status(result) shouldBe Status.BAD_REQUEST
 
@@ -107,15 +106,12 @@ class ESCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
     }
 
     "Accept invalid JSON at /employer-supported-childcare/calculate and return a BadRequest with an error (negative value in eligible months)" in {
-      val controller = new ESCCalculatorController(applicationMessagesApi) {
-        override val calculator = mock[ESCCalculator]
-        override val auditEvent = mock[AuditEvents]
-      }
+      val controller = new ESCCalculatorController(applicationMessagesApi, mockCalc, audits)
 
       val inputJson: JsValue = Json.parse(JsonLoader.fromResource("/json/esc/input/negative_eligible_months.json").toString)
       val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.calculator.award(any[ESCCalculatorInput]())).thenReturn(Future.successful(mock[ESCCalculatorOutput]))
+      when(mockCalc.award(any[ESCCalculatorInput]())).thenReturn(Future.successful(mock[ESCCalculatorOutput]))
       val result = await(controller.calculate()(request))
       status(result) shouldBe Status.BAD_REQUEST
 
@@ -144,16 +140,13 @@ class ESCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
 
     "Accept invalid JSON at /employer-supported-childcare/calculate and return a BadRequest with an error (value more than 99 in eligible months)" in {
 
-      val controller = new ESCCalculatorController(applicationMessagesApi) {
-        override val calculator = mock[ESCCalculator]
-        override val auditEvent = mock[AuditEvents]
-      }
+      val controller = new ESCCalculatorController(applicationMessagesApi, mockCalc, audits)
 
       val inputJson: JsValue = Json.parse(JsonLoader.fromResource("/json/esc/input/more_than_upper_limit_eligible_months.json").toString)
       val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
 
-      when(controller.calculator.award(any[ESCCalculatorInput]())).thenReturn(Future.successful(mock[ESCCalculatorOutput]))
+      when(mockCalc.award(any[ESCCalculatorInput]())).thenReturn(Future.successful(mock[ESCCalculatorOutput]))
       val result = await(controller.calculate()(request))
       status(result) shouldBe Status.BAD_REQUEST
 
@@ -181,15 +174,12 @@ class ESCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
     }
 
     "Accept invalid JSON at /employer-supported-childcare/calculate and return a BadRequest with an error (0 periods)" in {
-      val controller = new ESCCalculatorController(applicationMessagesApi) {
-        override val calculator = mock[ESCCalculator]
-        override val auditEvent = mock[AuditEvents]
-      }
+      val controller = new ESCCalculatorController(applicationMessagesApi, mockCalc, audits)
 
       val inputJson = Json.parse(JsonLoader.fromResource("/json/esc/input/no_periods.json").toString)
       val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.calculator.award(any[ESCCalculatorInput]())).thenReturn(Future.successful(mock[ESCCalculatorOutput]))
+      when(mockCalc.award(any[ESCCalculatorInput]())).thenReturn(Future.successful(mock[ESCCalculatorOutput]))
       val result = await(controller.calculate()(request))
       status(result) shouldBe Status.BAD_REQUEST
 
@@ -217,15 +207,12 @@ class ESCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
     }
 
     "Accept invalid JSON at /employer-supported-childcare/calculate and return a BadRequest with an error (0 claimants)" in {
-      val controller = new ESCCalculatorController(applicationMessagesApi) {
-        override val calculator = mock[ESCCalculator]
-        override val auditEvent = mock[AuditEvents]
-      }
+      val controller = new ESCCalculatorController(applicationMessagesApi, mockCalc, audits)
 
       val inputJson = Json.parse(JsonLoader.fromResource("/json/esc/input/no_claimants.json").toString)
       val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.calculator.award(any[ESCCalculatorInput]())).thenReturn(Future.successful(mock[ESCCalculatorOutput]))
+      when(mockCalc.award(any[ESCCalculatorInput]())).thenReturn(Future.successful(mock[ESCCalculatorOutput]))
       val result = await(controller.calculate()(request))
       status(result) shouldBe Status.BAD_REQUEST
 
@@ -254,15 +241,12 @@ class ESCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
 
 
     "Accept invalid JSON at /employer-supported-childcare/calculate and return a BadRequest with an error (negative voucher amount)" in {
-      val controller = new ESCCalculatorController(applicationMessagesApi) {
-        override val calculator = mock[ESCCalculator]
-        override val auditEvent = mock[AuditEvents]
-      }
+      val controller = new ESCCalculatorController(applicationMessagesApi, mockCalc, audits)
 
       val inputJson = Json.parse(JsonLoader.fromResource("/json/esc/input/negative_voucher_amount.json").toString)
       val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.calculator.award(any[ESCCalculatorInput]())).thenReturn(Future.successful(mock[ESCCalculatorOutput]))
+      when(mockCalc.award(any[ESCCalculatorInput]())).thenReturn(Future.successful(mock[ESCCalculatorOutput]))
       val result = await(controller.calculate()(request))
       status(result) shouldBe Status.BAD_REQUEST
 
@@ -290,15 +274,12 @@ class ESCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
     }
 
     "Accept invalid JSON at /employer-supported-childcare/calculate and return a BadRequest with an error (date missing)" in {
-      val controller = new ESCCalculatorController(applicationMessagesApi) {
-        override val calculator = mock[ESCCalculator]
-        override val auditEvent = mock[AuditEvents]
-      }
+      val controller = new ESCCalculatorController(applicationMessagesApi, mockCalc, audits)
 
       val inputJson = Json.parse(JsonLoader.fromResource("/json/esc/input/date_missing.json").toString)
       val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.calculator.award(any[ESCCalculatorInput]())).thenReturn(Future.successful(mock[ESCCalculatorOutput]))
+      when(mockCalc.award(any[ESCCalculatorInput]())).thenReturn(Future.successful(mock[ESCCalculatorOutput]))
       val result = await(controller.calculate()(request))
       status(result) shouldBe Status.BAD_REQUEST
 
@@ -326,15 +307,12 @@ class ESCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
     }
 
     "Accept invalid JSON at /employer-supported-childcare/calculate and return a BadRequest with an error (incorrect data type)" in {
-      val controller = new ESCCalculatorController(applicationMessagesApi) {
-        override val calculator = mock[ESCCalculator]
-        override val auditEvent = mock[AuditEvents]
-      }
+      val controller = new ESCCalculatorController(applicationMessagesApi, mockCalc, audits)
 
       val inputJson = Json.parse(JsonLoader.fromResource("/json/esc/input/incorrect_data_type.json").toString)
       val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.calculator.award(any[ESCCalculatorInput]())).thenReturn(Future.successful(mock[ESCCalculatorOutput]))
+      when(mockCalc.award(any[ESCCalculatorInput]())).thenReturn(Future.successful(mock[ESCCalculatorOutput]))
       val result = await(controller.calculate()(request))
       status(result) shouldBe Status.BAD_REQUEST
 
@@ -362,17 +340,14 @@ class ESCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
     }
 
     "Return Internal Server Error with error message if an exception is thrown during calculation " in {
-      val controller = new ESCCalculatorController(applicationMessagesApi) {
-        override val calculator = mock[ESCCalculator]
-        override val auditEvent = mock[AuditEvents]
-      }
+      val controller = new ESCCalculatorController(applicationMessagesApi, mockCalc, audits)
 
       val resource: JsonNode = JsonLoader.fromResource("/json/esc/input/calculator_input_test.json")
       val inputJson: JsValue = Json.parse(resource.toString)
       val request: FakeRequest[JsValue] = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
       val JsonResult = inputJson.validate[ESCCalculatorInput]
 
-      when(controller.calculator.award(mockEq(JsonResult.get))).thenReturn(Future.failed(new Exception("Something bad happened")))
+      when(mockCalc.award(mockEq(JsonResult.get))).thenReturn(Future.failed(new Exception("Something bad happened")))
       val result = await(controller.calculate()(request))
       val outputJSON = Json.parse(
         """

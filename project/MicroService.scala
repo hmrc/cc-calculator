@@ -9,7 +9,6 @@ import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin.publishingSettings
 import uk.gov.hmrc.versioning.SbtGitVersioning
 import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 
-
 trait MicroService {
 
   val appName: String
@@ -50,7 +49,7 @@ trait MicroService {
         Resolver.typesafeRepo("releases"),
         Resolver.jcenterRepo
       ),
-      scalaVersion := "2.11.11",
+      scalaVersion := "2.11.12",
       crossScalaVersions := Seq("2.11.11"),
       ivyScala := ivyScala.value map { _.copy(overrideScalaVersion = true) }
     )

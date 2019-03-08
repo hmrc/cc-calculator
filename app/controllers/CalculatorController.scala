@@ -16,9 +16,8 @@
 
 package controllers
 
-import javax.inject.{Inject, Singleton}
-
 import calculators.{ESCCalculator, TCCalculator, TFCCalculator}
+import javax.inject.{Inject, Singleton}
 import models.input.CalculatorInput
 import models.input.esc.ESCCalculatorInput
 import models.input.tc.TCCalculatorInput
@@ -29,18 +28,17 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Action
 import service.AuditEvents
-import uk.gov.hmrc.play.microservice.controller.BaseController
+import uk.gov.hmrc.play.bootstrap.controller.BaseController
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 @Singleton
-class CalculatorController @Inject()(val messagesApi: MessagesApi) extends BaseController with I18nSupport {
-
-  val auditEvent: AuditEvents = AuditEvents
-  val tcCalculator: TCCalculator = TCCalculator
-  val tfcCalculator: TFCCalculator = TFCCalculator
-  val escCalculator: ESCCalculator = ESCCalculator
+class CalculatorController @Inject()(val messagesApi: MessagesApi,
+                                     val auditEvent: AuditEvents,
+                                     val tcCalculator: TCCalculator,
+                                     val tfcCalculator: TFCCalculator,
+                                     val escCalculator: ESCCalculator) extends BaseController with I18nSupport {
 
   def calculate: Action[JsValue] = Action.async(parse.json) { implicit request =>
     request.body.validate[CalculatorInput].fold(
