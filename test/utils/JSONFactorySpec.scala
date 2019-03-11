@@ -26,8 +26,8 @@ class JSONFactorySpec extends FakeCCCalculatorApplication {
     "Return a valid output JSON when error sequence and status are passed" in {
       val status = 400
       val JSONPath = JsPath \ "tc"
-      val validationError = ValidationError("Very Bad Thing Happened", 400)
-      val errorTuple: (play.api.libs.json.JsPath, Seq[play.api.data.validation.ValidationError]) = (JSONPath, Seq(validationError))
+      val validationError = JsonValidationError("Very Bad Thing Happened", 400)
+      val errorTuple: (JsPath, Seq[JsonValidationError]) = (JSONPath, Seq(validationError))
 
       val outputJSON = Json.parse(
         """

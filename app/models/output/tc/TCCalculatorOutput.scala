@@ -18,6 +18,8 @@ package models.output.tc
 
 import org.joda.time.LocalDate
 import play.api.libs.json._
+import play.api.libs.json.JodaWrites._
+import play.api.libs.json.JodaReads._
 
 object TCCalculatorOutput {
   implicit val TCCalculationWrites: Writes[TCCalculatorOutput] = Json.writes[TCCalculatorOutput]

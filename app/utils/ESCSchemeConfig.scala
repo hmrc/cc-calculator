@@ -20,18 +20,18 @@ import config.AppConfig
 import javax.inject.Inject
 import org.joda.time.LocalDate
 import play.api.Configuration
+import play.api.i18n.Lang
 
-class ESCConfig @Inject()(appConfig: AppConfig) extends CCConfig(appConfig) with MessagesObject {
-  lazy val upperMonthsLimitValidation = appConfig.getInt(s"esc.months-upper-limit")
-  lazy val lowerMonthsLimitValidation = appConfig.getInt(s"esc.months-lower-limit")
-  lazy val lowerPeriodsLimitValidation = appConfig.getInt(s"esc.periods-lower-limit")
-  lazy val lowerTaxYearsLimitValidation = appConfig.getInt(s"esc.tax-years-lower-limit")
-  lazy val lowerClaimantsLimitValidation = appConfig. getInt(s"esc.claimants-lower-limit")
-  lazy val pre2011MaxExemptionMonthly = appConfig.runModeConfiguration
+class ESCConfig @Inject()(appConfig: AppConfig,
+                          configuration: Configuration) extends CCConfig(appConfig) with MessagesObject {
+
+  private implicit val lang: Lang = Lang("en")
+
+  lazy val pre2011MaxExemptionMonthly = configuration
     .getDouble(s"esc.pre-2011-maximum-exemption.basic-higher-additional.monthly").getOrElse(0.00)
 
   def getConfig(currentDate: LocalDate, niCategoryCode: String, location: String): ESCTaxYearConfig = {
-    val configs: Seq[play.api.Configuration] = appConfig.runModeConfiguration.getConfigSeq("esc.rule-change").get
+    val configs: Seq[Configuration] = configuration.getConfigSeq("esc.rule-change").get
 
     // get the default config and keep
     val defaultConfig =
@@ -43,8 +43,8 @@ class ESCConfig @Inject()(appConfig: AppConfig) extends CCConfig(appConfig) with
   }
 
   def getLatestConfig(currentDate: LocalDate): Configuration = {
-    val configs: Seq[play.api.Configuration] =
-      appConfig.runModeConfiguration.getConfigSeq("esc.rule-change").get
+    val configs: Seq[Configuration] =
+      configuration.getConfigSeq("esc.rule-change").get
 
     // get the default config and keep
     val defaultConfig =

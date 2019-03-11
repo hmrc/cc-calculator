@@ -276,23 +276,23 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers with 
   "ESC SchemeConfig" should {
     SharedMetricRegistries.clear()
     "(ESC) populate upper months limit from config file" in {
-      escConf.upperMonthsLimitValidation shouldBe 100
+      escConf.appConfig.upperMonthsLimitValidation shouldBe 100
     }
 
     "(ESC) populate lower months limit from config file" in {
-      escConf.lowerMonthsLimitValidation shouldBe 0
+      escConf.appConfig.lowerMonthsLimitValidation shouldBe 0
     }
 
     "(ESC) populate lower claimants limit from config file" in {
-      escConf.lowerClaimantsLimitValidation shouldBe 1
+      escConf.appConfig.lowerClaimantsLimitValidation shouldBe 1
     }
 
     "(ESC) populate lower periods limit from config file" in {
-      escConf.lowerPeriodsLimitValidation shouldBe 1
+      escConf.appConfig.lowerPeriodsLimitValidation shouldBe 1
     }
 
     "(ESC) populate lower tax years limit from config file" in {
-      escConf.lowerTaxYearsLimitValidation shouldBe 1
+      escConf.appConfig.lowerTaxYearsLimitValidation shouldBe 1
     }
 
     "(ESC) populate maximum monthly exemption pre-2011 from config file" in {
@@ -329,7 +329,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers with 
     }
 
     "Return error if the configuration details are not present in the scheme config file for a valid niCategoryCode" in {
-      val configuration = Configuration(ConfigFactory.load((new java.io.File("/testconfig-esc.conf").getName)))
+      val configuration = Configuration(ConfigFactory.load(new java.io.File("/testconfig-esc.conf").getName))
       val configs: Seq[play.api.Configuration] = configuration.getConfigSeq("test-esc.rule-change").get
       val pattern = "dd-MM-yyyy"
       val formatter = DateTimeFormat.forPattern(pattern)

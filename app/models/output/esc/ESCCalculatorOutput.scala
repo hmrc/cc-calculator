@@ -18,6 +18,8 @@ package models.output.esc
 
 import org.joda.time.LocalDate
 import play.api.libs.json.{Json, Writes}
+import play.api.libs.json.JodaWrites._
+import play.api.libs.json.JodaReads._
 import utils.Periods
 
 /**

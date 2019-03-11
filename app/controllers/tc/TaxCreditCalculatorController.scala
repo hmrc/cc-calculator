@@ -20,20 +20,20 @@ import calculators.TCCalculator
 import javax.inject.{Inject, Singleton}
 import models.input.tc.TCCalculatorInput
 import play.api.Logger
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.I18nSupport
 import play.api.libs.json._
-import play.api.mvc.Action
+import play.api.mvc.{Action, MessagesControllerComponents}
 import service.AuditEvents
-import uk.gov.hmrc.play.bootstrap.controller.BaseController
+import uk.gov.hmrc.play.bootstrap.controller.BackendController
 import utils.JSONFactory
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 @Singleton
-class TaxCreditCalculatorController @Inject()(val messagesApi: MessagesApi,
+class TaxCreditCalculatorController @Inject()(val mcc: MessagesControllerComponents,
                                               val auditEvent: AuditEvents,
-                                              val calculator: TCCalculator) extends BaseController with I18nSupport {
+                                              val calculator: TCCalculator) extends BackendController(mcc) with I18nSupport {
 
   def calculate: Action[JsValue] = Action.async(parse.json) {
     implicit request =>
