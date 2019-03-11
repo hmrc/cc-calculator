@@ -20,6 +20,7 @@ import models.input.tfc.{TFCCalculatorInput, TFCChild}
 import models.output.tfc._
 import org.joda.time.LocalDate
 import play.api.Logger
+import play.api.i18n.Lang
 import utils.{MessagesObject, TFCTaxYearConfig}
 
 import scala.concurrent.Future
@@ -50,7 +51,7 @@ class TFCCalculator extends CCCalculatorHelper with MessagesObject {
       case (Some(f), Some(u)) => daysBetween(f,u)
       case (_, _) =>
         Logger.warn("TFCCalculator.TFCCalculatorService.getChildQualifyingDaysInTFCPeriod Exception - from and until dates are incorrect")
-        throw new IllegalArgumentException(messages("cc.scheme.config.from.until.date"))
+        throw new IllegalArgumentException(messages("cc.scheme.config.from.until.date")(Lang("en")))
     }
   }
 
@@ -105,10 +106,9 @@ class TFCCalculator extends CCCalculatorHelper with MessagesObject {
     val totalChildCareSpend: BigDecimal  = getChildCareCostForPeriod(child)
 
     val governmentContribution: BigDecimal = {
-      child.qualifying match {
-        case true => (getMaximumTopup(child, tfcTaxYearConfig)/noOfDaysInAPeriod) * (getChildQualifyingDaysInTFCPeriod(child.from, child.until))
-        case _ => BigDecimal(0.00)
-      }
+      if(child.qualifying) {
+        (getMaximumTopup(child, tfcTaxYearConfig)/noOfDaysInAPeriod) * getChildQualifyingDaysInTFCPeriod(child.from, child.until)
+      } else { BigDecimal(0.00) }
     }
 
     val governmentContributionRounded = roundup(roundDownToThreeDigits(governmentContribution))

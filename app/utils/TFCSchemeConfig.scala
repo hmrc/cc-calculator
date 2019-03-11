@@ -20,7 +20,6 @@ import config.AppConfig
 import javax.inject.Inject
 import org.joda.time.LocalDate
 import play.api.Configuration
-import play.api.Mode.Mode
 
 case class TFCTaxYearConfig(
                              topUpPercent: Double,
@@ -30,14 +29,12 @@ case class TFCTaxYearConfig(
                              maxGovtContributionForDisabled: Double
                              )
 
-class TFCConfig @Inject()(val appConfig: AppConfig) extends CCConfig(appConfig) {
-
-  val mode: Mode = appConfig.mode
-  val runModeConfiguration: Configuration = appConfig.runModeConfiguration
+class TFCConfig @Inject()(val config: AppConfig,
+                          configuration: Configuration) extends CCConfig(config) {
 
   def getConfig(currentDate: LocalDate) : TFCTaxYearConfig  = {
 
-    val configs: Seq[play.api.Configuration] = runModeConfiguration.getConfigSeq("tfc.rule-change").get
+    val configs: Seq[play.api.Configuration] = configuration.getConfigSeq("tfc.rule-change").get
 
     // get the default config and keep
     val defaultConfig: Configuration =
@@ -52,11 +49,11 @@ class TFCConfig @Inject()(val appConfig: AppConfig) extends CCConfig(appConfig) 
 
   def getTaxYear(config : Configuration): TFCTaxYearConfig = {
     TFCTaxYearConfig(
-      topUpPercent = config.getDouble("top-up-percent").get,
-      maxEligibleChildcareAmount = config.getDouble("max-eligible-child-care-amount-per-child").get,
-      maxEligibleChildcareAmountForDisabled = config.getDouble("max-eligible-child-care-amount-per-disabled-child").get,
-      maxGovtContribution = config.getDouble("max-government-contribution-per-child").get,
-      maxGovtContributionForDisabled = config.getDouble("max-government-contribution-per-disabled-child").get
+      topUpPercent = config.get[Double]("top-up-percent"),
+      maxEligibleChildcareAmount = config.get[Double]("max-eligible-child-care-amount-per-child"),
+      maxEligibleChildcareAmountForDisabled = config.get[Double]("max-eligible-child-care-amount-per-disabled-child"),
+      maxGovtContribution = config.get[Double]("max-government-contribution-per-child"),
+      maxGovtContributionForDisabled = config.get[Double]("max-government-contribution-per-disabled-child")
     )
   }
 

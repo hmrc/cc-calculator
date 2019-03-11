@@ -21,19 +21,19 @@ import javax.inject.{Inject, Singleton}
 import models.input.esc.ESCCalculatorInput
 import models.output.esc.ESCCalculatorOutput
 import play.api.Logger
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.I18nSupport
 import play.api.libs.json.{JsValue, Json}
-import play.api.mvc.Action
+import play.api.mvc.{Action, MessagesControllerComponents}
 import service.AuditEvents
-import uk.gov.hmrc.play.bootstrap.controller.BaseController
+import uk.gov.hmrc.play.bootstrap.controller.BackendController
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 @Singleton
-class ESCCalculatorController @Inject()(val messagesApi: MessagesApi,
+class ESCCalculatorController @Inject()(val mcc: MessagesControllerComponents,
                                         val calculator: ESCCalculator,
-                                        auditEvent: AuditEvents) extends BaseController with I18nSupport {
+                                        auditEvent: AuditEvents) extends BackendController(mcc) with I18nSupport {
 
 
   def calculate: Action[JsValue] = Action.async(parse.json) {

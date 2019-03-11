@@ -25,7 +25,7 @@ import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import play.api.Configuration
 
-class CCConfig @Inject()(appConfig: AppConfig) {
+class CCConfig @Inject()(val appConfig: AppConfig) {
 
   val formatterDatePattern = "dd-MM-yyyy"
 
@@ -88,8 +88,8 @@ class CCConfig @Inject()(appConfig: AppConfig) {
   }
 
   def taxYearEndDate(now: LocalDate = LocalDate.now(), schemeName: String): LocalDate = {
-    val month = appConfig.getInt(s"$schemeName.end-of-tax-year-date.month")
-    val day = appConfig.getInt(s"$schemeName.end-of-tax-year-date.day")
+    val month = appConfig.schemeMonth(schemeName)
+    val day = appConfig.schemeDay(schemeName)
     // have to determine the year as this is not a fixed date
     val year = {
       val calendar = Calendar.getInstance()

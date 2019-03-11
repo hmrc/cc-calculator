@@ -22,9 +22,9 @@ import org.joda.time.format.DateTimeFormat
 import org.scalatest.Suite
 import org.scalatestplus.play.OneAppPerSuite
 import play.api.Application
-import play.api.i18n.Messages
-import play.api.i18n.Messages.Implicits._
+import play.api.i18n.{Lang, MessagesApi}
 import play.api.inject.guice.GuiceApplicationBuilder
+import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.play.test.UnitSpec
 
 trait FakeCCCalculatorApplication extends UnitSpec with OneAppPerSuite {
@@ -44,5 +44,7 @@ trait FakeCCCalculatorApplication extends UnitSpec with OneAppPerSuite {
     .build()
 
   implicit lazy val mat: Materializer = app.materializer
-  implicit lazy val messages: Messages = applicationMessages
+  implicit val lang: Lang = Lang("en")
+  implicit lazy val messages: MessagesApi = app.injector.instanceOf[MessagesApi]
+  implicit lazy val mcc: MessagesControllerComponents = app.injector.instanceOf[MessagesControllerComponents]
 }

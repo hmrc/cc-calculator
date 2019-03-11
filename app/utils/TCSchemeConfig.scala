@@ -58,18 +58,17 @@ case class TCTaxYearConfig(
                             )
 
 
-class TCConfig @Inject()(appConfig: AppConfig) extends CCConfig(appConfig) {
+class TCConfig @Inject()(config: AppConfig,
+                         configuration: Configuration) extends CCConfig(config) {
 
   val defaultMaxNameLength: Int = 25
   lazy val monthsInTaxYear: Int = 12
-  lazy val taxYearEndMonth = appConfig.getInt(s"tc.end-of-tax-year-date.month")
-  lazy val taxYearEndDay = appConfig.getInt(s"tc.end-of-tax-year-date.day")
 
   def getCurrentTaxYearDateRange(fromDate : LocalDate) : (LocalDate, LocalDate) = {
     val pattern = "dd-MM-yyyy"
     val formatter = DateTimeFormat.forPattern(pattern)
-    val month = taxYearEndMonth
-    val day = taxYearEndDay
+    val month = config.taxYearEndMonth
+    val day = config.taxYearEndDay
     val currentTaxYear = getCurrentTaxYear(fromDate)
     val taxYearStartDate = LocalDate.parse(s"$day-$month-$currentTaxYear", formatter)
     val taxYearEndDate = LocalDate.parse(s"$day-$month-${currentTaxYear + 1}", formatter)
@@ -78,7 +77,7 @@ class TCConfig @Inject()(appConfig: AppConfig) extends CCConfig(appConfig) {
 
   def getConfig(currentDate: LocalDate) : TCTaxYearConfig  = {
 
-    val configs: Seq[play.api.Configuration] = appConfig.runModeConfiguration.getConfigSeq("tc.rule-change").get
+    val configs: Seq[play.api.Configuration] = configuration.getConfigSeq("tc.rule-change").get
     // get the default config and keep
     val defaultConfig = configs.find(_.getString("rule-date").contains("default")).head
     // fetch the config if it matches the particular year

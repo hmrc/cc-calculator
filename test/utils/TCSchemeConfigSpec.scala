@@ -179,11 +179,11 @@ class TCSchemeConfigSpec extends FakeCCCalculatorApplication with MockitoSugar {
     }
 
     "Tax year end month from config file" in {
-      tcConfig.taxYearEndMonth shouldBe 4
+      tcConfig.appConfig.taxYearEndMonth shouldBe 4
     }
 
     "Tax year end date from config file" in {
-      tcConfig.taxYearEndDay shouldBe 6
+      tcConfig.appConfig.taxYearEndDay shouldBe 6
     }
 
     val configTestCases = Table(

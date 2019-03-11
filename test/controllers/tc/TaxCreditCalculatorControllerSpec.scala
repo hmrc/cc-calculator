@@ -64,7 +64,7 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
     }
 
     "return status OK and the response of calculator.incomeAdvice if valid request is given" in {
-      val SUT = new TaxCreditCalculatorController(applicationMessagesApi, audits, tcc) {
+      val SUT = new TaxCreditCalculatorController(mcc, audits, tcc) {
         override val calculator =  mock[TCCalculator]
         override val auditEvent = mock[AuditEvents]
       }
@@ -79,7 +79,7 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
     }
 
     "return INTERNAL_SERVER_ERROR and error message if calculator.incomeAdvice throws exception" in {
-      val SUT = new TaxCreditCalculatorController(applicationMessagesApi, audits, tcc) {
+      val SUT = new TaxCreditCalculatorController(mcc, audits, tcc) {
         override val calculator =  mock[TCCalculator]
         override val auditEvent = mock[AuditEvents]
       }
@@ -104,7 +104,7 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
       forAll(invalidData) { case (invalidJson, path, error, args) =>
 
         s"$invalidJson is given and return error: '$error' for path: '$path'" in {
-          val SUT = new TaxCreditCalculatorController(applicationMessagesApi, audits, tcc) {
+          val SUT = new TaxCreditCalculatorController(mcc, audits, tcc) {
             override val calculator =  mock[TCCalculator]
             override val auditEvent = mock[AuditEvents]
           }

@@ -1,4 +1,4 @@
-import play.routes.compiler.StaticRoutesGenerator
+import play.routes.compiler.InjectedRoutesGenerator
 import play.sbt.routes.RoutesKeys.routesGenerator
 import sbt.Keys._
 import sbt._
@@ -43,7 +43,7 @@ trait MicroService {
       libraryDependencies ++= appDependencies,
       retrieveManaged := true,
       evictionWarningOptions in update := EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
-      routesGenerator := StaticRoutesGenerator,
+      routesGenerator := InjectedRoutesGenerator,
       resolvers := Seq(
         Resolver.bintrayRepo("hmrc", "releases"),
         Resolver.typesafeRepo("releases"),
@@ -53,8 +53,5 @@ trait MicroService {
       crossScalaVersions := Seq("2.11.11"),
       ivyScala := ivyScala.value map { _.copy(overrideScalaVersion = true) }
     )
-
-
-
 
 }

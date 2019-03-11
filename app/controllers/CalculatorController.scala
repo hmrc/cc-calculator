@@ -24,21 +24,21 @@ import models.input.tc.TCCalculatorInput
 import models.input.tfc.TFCCalculatorInput
 import models.output.CalculatorOutput
 import play.api.Logger
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.I18nSupport
 import play.api.libs.json.{JsValue, Json}
-import play.api.mvc.Action
+import play.api.mvc.{Action, MessagesControllerComponents}
 import service.AuditEvents
-import uk.gov.hmrc.play.bootstrap.controller.BaseController
+import uk.gov.hmrc.play.bootstrap.controller.BackendController
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 @Singleton
-class CalculatorController @Inject()(val messagesApi: MessagesApi,
+class CalculatorController @Inject()(val mcc: MessagesControllerComponents,
                                      val auditEvent: AuditEvents,
                                      val tcCalculator: TCCalculator,
                                      val tfcCalculator: TFCCalculator,
-                                     val escCalculator: ESCCalculator) extends BaseController with I18nSupport {
+                                     val escCalculator: ESCCalculator) extends BackendController(mcc) with I18nSupport {
 
   def calculate: Action[JsValue] = Action.async(parse.json) { implicit request =>
     request.body.validate[CalculatorInput].fold(

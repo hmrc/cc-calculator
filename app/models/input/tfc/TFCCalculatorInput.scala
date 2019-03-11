@@ -18,9 +18,9 @@ package models.input.tfc
 
 import org.joda.time.LocalDate
 import play.api.Play
-import play.api.data.validation.ValidationError
+import play.api.i18n.Lang
 import play.api.libs.functional.syntax._
-import play.api.libs.json.Reads._
+import play.api.libs.json.JodaReads._
 import play.api.libs.json._
 import utils._
 
@@ -32,11 +32,12 @@ case class TFCCalculatorInput(
                              )
 
 object TFCCalculatorInput extends MessagesObject {
+  private implicit val lang: Lang = Lang("en")
   implicit val tfcEligibilityFormat: Reads[TFCCalculatorInput] = (
     (JsPath \ "from").read[LocalDate](jodaLocalDateReads(datePattern)) and
       (JsPath \ "until").read[LocalDate](jodaLocalDateReads(datePattern)) and
         (JsPath \ "householdEligibility").read[Boolean] and
-          (JsPath \ "periods").read[List[TFCPeriod]].filter(ValidationError(messages("cc.calc.invalid.number.of.periods")))(periods => periods.nonEmpty)
+          (JsPath \ "periods").read[List[TFCPeriod]].filter(JsonValidationError(messages("cc.calc.invalid.number.of.periods")))(periods => periods.nonEmpty)
     )(TFCCalculatorInput.apply _)
 }
 
@@ -51,14 +52,14 @@ case class TFCPeriod(
 }
 
 object TFCPeriod extends MessagesObject {
-
+  private implicit val lang: Lang = Lang("en")
   lazy val conf = Play.current.injector.instanceOf[TFCConfig]
 
   implicit val periodFormat : Reads[TFCPeriod] = (
     (JsPath \ "from").read[LocalDate](jodaLocalDateReads(datePattern)) and
       (JsPath \ "until").read[LocalDate](jodaLocalDateReads(datePattern)) and
         (JsPath \ "periodEligibility").read[Boolean] and
-          (JsPath \ "children").read[List[TFCChild]].filter(ValidationError(messages("cc.calc.invalid.number.of.children"))
+          (JsPath \ "children").read[List[TFCChild]].filter(JsonValidationError(messages("cc.calc.invalid.number.of.children"))
           )(children => children.nonEmpty && children.length <= conf.appConfig.maxNoOfChildren)
     )(TFCPeriod.apply _)
 }
@@ -77,7 +78,7 @@ case class TFCChild(
 }
 
 object TFCChild extends MessagesObject {
-
+  private implicit val lang: Lang = Lang("en")
   def childSpendValidation(cost: BigDecimal) : Boolean = {
     cost >= BigDecimal(0.00)
   }
@@ -85,7 +86,7 @@ object TFCChild extends MessagesObject {
     (JsPath \ "qualifying").read[Boolean] and
       ((JsPath \ "from").readNullable[LocalDate](jodaLocalDateReads(datePattern)) or Reads.optionWithNull(jodaLocalDateReads(datePattern))) and
         ((JsPath \ "until").readNullable[LocalDate](jodaLocalDateReads(datePattern)) or Reads.optionWithNull(jodaLocalDateReads(datePattern))) and
-          (JsPath \ "childcareCost").read[BigDecimal].filter(ValidationError(messages("cc.calc.childcare.spend.too.low")))(x => childSpendValidation(x)) and
+          (JsPath \ "childcareCost").read[BigDecimal].filter(JsonValidationError(messages("cc.calc.childcare.spend.too.low")))(x => childSpendValidation(x)) and
             (JsPath \ "childcareCostPeriod").read[Periods.Period] and
               (JsPath \ "disability").read[TFCDisability]
     )(TFCChild.apply _)

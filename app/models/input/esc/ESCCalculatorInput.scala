@@ -16,71 +16,66 @@
 
 package models.input.esc
 
+import config.AppConfig
 import config.ConfigConstants._
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import play.api.Play
-import play.api.data.validation.ValidationError
+import play.api.i18n.Lang
 import play.api.libs.functional.syntax._
-import play.api.libs.json.Reads._
-import play.api.libs.json.{JsPath, Json, Reads}
+import play.api.libs.json.JodaReads._
+import play.api.libs.json.{JsPath, Json, JsonValidationError, Reads}
 import utils.{Periods, _}
 
-case class ESCCalculatorInput(
-                               taxYears: List[ESCTaxYear],
-                               location: String
-                              )
+case class ESCCalculatorInput(taxYears: List[ESCTaxYear],
+                              location: String)
 
 object ESCCalculatorInput extends MessagesObject {
-  private lazy val conf = Play.current.injector.instanceOf[ESCConfig]
+  private implicit val lang: Lang = Lang("en")
+  private lazy val conf = Play.current.injector.instanceOf[AppConfig]
+
   implicit val escEligibilityReads : Reads[ESCCalculatorInput] = (
-      (JsPath \ "taxYears").read[List[ESCTaxYear]].filter(ValidationError(messages("cc.calc.invalid.number.of.ty")))
+      (JsPath \ "taxYears").read[List[ESCTaxYear]].filter(JsonValidationError(messages("cc.calc.invalid.number.of.ty")))
         (taxYears => taxYears.length >= conf.lowerTaxYearsLimitValidation) and
         (JsPath \ "location").read[String]
     )(ESCCalculatorInput.apply _)
 }
 
-case class ESCTaxYear(
-                    from: LocalDate,
-                    until: LocalDate,
-                    periods: List[ESCPeriod]
-                    )
+case class ESCTaxYear(from: LocalDate,
+                      until: LocalDate,
+                      periods: List[ESCPeriod])
 
 object ESCTaxYear extends MessagesObject {
-  private lazy val conf = Play.current.injector.instanceOf[ESCConfig]
+  private lazy val conf = Play.current.injector.instanceOf[AppConfig]
   implicit val taxYearReads: Reads[ESCTaxYear] = (
     (JsPath \ "from").read[LocalDate](jodaLocalDateReads(datePattern)) and
       (JsPath \ "until").read[LocalDate](jodaLocalDateReads(datePattern)) and
         (JsPath \ "periods").read[List[ESCPeriod]].filter(
-          ValidationError(messages("cc.calc.invalid.number.of.periods"))
+          JsonValidationError(messages("cc.calc.invalid.number.of.periods")(Lang("en")))
         )(periods => periods.length >= conf.lowerPeriodsLimitValidation)
     )(ESCTaxYear.apply _)
 }
 
-case class ESCPeriod(
-                      from: LocalDate,
-                      until: LocalDate,
-                      claimants: List[ESCClaimant],
-                      children: List[Child]
-                      )
+case class ESCPeriod(from: LocalDate,
+                     until: LocalDate,
+                     claimants: List[ESCClaimant],
+                     children: List[Child])
 
 object ESCPeriod extends MessagesObject {
-  private lazy val conf = Play.current.injector.instanceOf[ESCConfig]
+  private lazy val conf = Play.current.injector.instanceOf[AppConfig]
 
   implicit val periodReads : Reads[ESCPeriod] = (
     (JsPath \ "from").read[LocalDate](jodaLocalDateReads(datePattern)) and
       (JsPath \ "until").read[LocalDate](jodaLocalDateReads(datePattern)) and
-        (JsPath \ "claimants").read[List[ESCClaimant]].filter(ValidationError(messages("cc.calc.invalid.number.of.claimants"))
+        (JsPath \ "claimants").read[List[ESCClaimant]].filter(JsonValidationError(messages("cc.calc.invalid.number.of.claimants")(Lang("en")))
         )(claimants => claimants.length >= conf.lowerClaimantsLimitValidation) and
           (JsPath \ "children").read[List[Child]]
     )(ESCPeriod.apply _)
 }
 
-case class Child(
-                  qualifying: Boolean = false,
-                  childCareCost: BigDecimal,
-                  childCareCostPeriod: Periods.Period = Periods.Monthly
-                )
+case class Child(qualifying: Boolean = false,
+                 childCareCost: BigDecimal,
+                 childCareCostPeriod: Periods.Period = Periods.Monthly)
 
 object Child extends MessagesObject {
 
@@ -90,19 +85,17 @@ object Child extends MessagesObject {
 
   implicit val childReads : Reads[Child] = (
     (JsPath \ "qualifying").read[Boolean] and
-      (JsPath \ "childCareCost").read[BigDecimal].filter(ValidationError(messages("cc.calc.childcare.spend.too.low"))
+      (JsPath \ "childCareCost").read[BigDecimal].filter(JsonValidationError(messages("cc.calc.childcare.spend.too.low")(Lang("en")))
       )(x => childSpendValidation(x)) and
         (JsPath \ "childCareCostPeriod").read[Periods.Period]
     )(Child.apply _)
 
 }
 //gross and taxablePay are annual amounts
-case class ESCTotalIncome(
-                   taxablePay: BigDecimal = BigDecimal(0.00),
-                   gross: BigDecimal = BigDecimal(0.00),
-                   taxCode: String = "",
-                   niCategory: String = ""
-                   ) {
+case class ESCTotalIncome(taxablePay: BigDecimal = BigDecimal(0.00),
+                          gross: BigDecimal = BigDecimal(0.00),
+                          taxCode: String = "",
+                          niCategory: String = "") {
 
   def adjustPersonalAllowance(defaultPersonalAllowance :BigDecimal) : BigDecimal = {
     gross match {
@@ -122,25 +115,21 @@ case class ESCTotalIncome(
   }
 }
 
-case class ESCIncome(
-                   employmentIncome : Option[BigDecimal] = None,
-                   pension : Option[BigDecimal] = None,
-                   taxCode: Option[String] = None
-                 )
+case class ESCIncome(employmentIncome : Option[BigDecimal] = None,
+                     pension : Option[BigDecimal] = None,
+                     taxCode: Option[String] = None)
 
 object ESCIncome {
   implicit val incomeRead: Reads[ESCIncome] = Json.reads[ESCIncome]
 }
 
-case class ESCClaimant(
-                      qualifying: Boolean = false,
-                      isPartner: Boolean = false,
-                      eligibleMonthsInPeriod: Int,
-                      previousIncome: Option[ESCIncome],
-                      currentIncome: Option[ESCIncome],
-                      vouchers: Boolean = false,
-                      escStartDate: LocalDate
-                      ) extends MessagesObject
+case class ESCClaimant(qualifying: Boolean = false,
+                       isPartner: Boolean = false,
+                       eligibleMonthsInPeriod: Int,
+                       previousIncome: Option[ESCIncome],
+                       currentIncome: Option[ESCIncome],
+                       vouchers: Boolean = false,
+                       escStartDate: LocalDate) extends MessagesObject
 {
   def isESCStartDateBefore2011 : Boolean = {
     //returns true if ESC start date is before 6th April 2011
@@ -176,12 +165,12 @@ case class ESCClaimant(
 }
 
 object ESCClaimant extends MessagesObject {
-  private lazy val conf = Play.current.injector.instanceOf[ESCConfig]
+  private lazy val conf = Play.current.injector.instanceOf[AppConfig]
 
   implicit val claimantReads : Reads[ESCClaimant] = (
     (JsPath \ "qualifying").read[Boolean].orElse(Reads.pure(false)) and
       (JsPath \ "isPartner").read[Boolean].orElse(Reads.pure(false)) and
-        (JsPath \ "eligibleMonthsInPeriod").read[Int].filter(ValidationError(messages("cc.calc.invalid.number.of.months"))
+        (JsPath \ "eligibleMonthsInPeriod").read[Int].filter(JsonValidationError(messages("cc.calc.invalid.number.of.months")(Lang("en")))
         )(months => months >= conf.lowerMonthsLimitValidation && months < conf.upperMonthsLimitValidation) and
           (JsPath \ "previousIncome").readNullable[ESCIncome] and
             (JsPath \ "currentIncome").readNullable[ESCIncome] and

@@ -22,11 +22,14 @@ import models.output.esc.{ESCCalculatorOutput, ESCSavings}
 import models.utility.{CalculationNIBands, CalculationTaxBands}
 import org.joda.time.LocalDate
 import play.api.Logger
+import play.api.i18n.Lang
 import utils.{ESCConfig, ESCTaxYearConfig, MessagesObject, Periods}
 
 import scala.concurrent.Future
 
 class ESCCalculatorHelpers @Inject()(escConfig: ESCConfig) extends CCCalculatorHelper with MessagesObject {
+
+  private implicit val lang: Lang = Lang("en")
 
   private def toInt(string: String): Option[Int] = {
     try {

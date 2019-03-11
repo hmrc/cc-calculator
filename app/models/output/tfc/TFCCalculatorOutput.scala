@@ -18,6 +18,8 @@ package models.output.tfc
 
 import org.joda.time.LocalDate
 import play.api.libs.json.{Json, Writes}
+import play.api.libs.json.JodaWrites._
+import play.api.libs.json.JodaReads._
 
 /**
  * Created by user on 18/06/15.
