@@ -182,8 +182,8 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers with 
     val description = "ESC SchemeConfig - 2019 Tax Year"
     val date = "06-04-2019"
     val location = locationEngland
-    val defaultTaxCode = "1185L"
-    val defaultPersonalAllowance = 11850
+    val defaultTaxCode = "1250L"
+    val defaultPersonalAllowance = 12500
     val niCategoryCode = "B"
     val taxBasicBandCapacity = 34500.00
     val niLimit = 8164
@@ -197,8 +197,8 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers with 
     val description = "ESC SchemeConfig - 2020 Tax Year"
     val date = "06-04-2020"
     val location = locationEngland
-    val defaultTaxCode = "1185L"
-    val defaultPersonalAllowance = 11850
+    val defaultTaxCode = "1250L"
+    val defaultPersonalAllowance = 12500
     val niCategoryCode = "B"
     val taxBasicBandCapacity = 34500.00
     val niLimit = 8164
@@ -228,8 +228,8 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers with 
     val description = "ESC SchemeConfig - 2019 Tax Year, location scotland"
     val date = "06-04-2019"
     val location = locationScotland
-    val defaultTaxCode = "1185L"
-    val defaultPersonalAllowance = 11850
+    val defaultTaxCode = "1250L"
+    val defaultPersonalAllowance = 12500
     val niCategoryCode = "B"
     val taxBasicBandCapacity = 10150.00
     val niLimit = 8164
@@ -243,8 +243,8 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers with 
     val description = "ESC SchemeConfig - 2020 Tax Year, location scotland"
     val date = "06-04-2020"
     val location = locationScotland
-    val defaultTaxCode = "1185L"
-    val defaultPersonalAllowance = 11850
+    val defaultTaxCode = "1250L"
+    val defaultPersonalAllowance = 12500
     val niCategoryCode = "B"
     val taxBasicBandCapacity = 10150.00
     val niLimit = 8164
