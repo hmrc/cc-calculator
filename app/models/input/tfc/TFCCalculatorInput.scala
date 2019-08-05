@@ -60,7 +60,7 @@ object TFCPeriod extends MessagesObject {
       (JsPath \ "until").read[LocalDate](jodaLocalDateReads(datePattern)) and
         (JsPath \ "periodEligibility").read[Boolean] and
           (JsPath \ "children").read[List[TFCChild]].filter(JsonValidationError(messages("cc.calc.invalid.number.of.children"))
-          )(children => children.nonEmpty && children.length <= conf.appConfig.maxNoOfChildren)
+          )(children => children.nonEmpty && children.length <= conf.appConfig.defaultMaxNoOfChildren)
     )(TFCPeriod.apply _)
 }
 

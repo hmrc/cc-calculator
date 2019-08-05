@@ -61,7 +61,6 @@ case class TCTaxYearConfig(
 class TCConfig @Inject()(config: AppConfig,
                          configuration: Configuration) extends CCConfig(config) {
 
-  val defaultMaxNameLength: Int = 25
   lazy val monthsInTaxYear: Int = 12
 
   def getCurrentTaxYearDateRange(fromDate : LocalDate) : (LocalDate, LocalDate) = {

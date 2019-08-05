@@ -18,11 +18,11 @@ package utils
 
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 
 class TFCSchemeConfigSpec extends FakeCCCalculatorApplication with MockitoSugar {
 
-  val tfcConfig = app.injector.instanceOf[TFCConfig]
+  val tfcConfig: TFCConfig = app.injector.instanceOf[TFCConfig]
 
 
   "TFC SchemeConfig" should {
@@ -36,11 +36,7 @@ class TFCSchemeConfigSpec extends FakeCCCalculatorApplication with MockitoSugar 
     }
 
     "return max no of children from config file" in {
-      tfcConfig.appConfig.maxNoOfChildren shouldBe 25
-    }
-
-    "return max name length from config file" in {
-      tfcConfig.appConfig.maxNameLength shouldBe 25
+      tfcConfig.appConfig.defaultMaxNoOfChildren shouldBe 25
     }
 
     "(following year) return the end date of tax year" in {
@@ -66,8 +62,6 @@ class TFCSchemeConfigSpec extends FakeCCCalculatorApplication with MockitoSugar 
       val config = tfcConfig.getConfig(fromDate)
       val tfcTaxYear = TFCTaxYearConfig(
         topUpPercent = 20,
-        maxEligibleChildcareAmount = 2500,
-        maxEligibleChildcareAmountForDisabled = 5000,
         maxGovtContribution = 500,
         maxGovtContributionForDisabled = 1000
       )
@@ -81,8 +75,6 @@ class TFCSchemeConfigSpec extends FakeCCCalculatorApplication with MockitoSugar 
       val config = tfcConfig.getConfig(fromDate)
       val tfcTaxYear = TFCTaxYearConfig(
         topUpPercent = 20,
-        maxEligibleChildcareAmount = 2500,
-        maxEligibleChildcareAmountForDisabled = 5000,
         maxGovtContribution = 500,
         maxGovtContributionForDisabled = 1000
       )
@@ -96,8 +88,6 @@ class TFCSchemeConfigSpec extends FakeCCCalculatorApplication with MockitoSugar 
       val config = tfcConfig.getConfig(fromDate)
       val tfcTaxYear = TFCTaxYearConfig(
         topUpPercent = 20,
-        maxEligibleChildcareAmount = 2500,
-        maxEligibleChildcareAmountForDisabled = 5000,
         maxGovtContribution = 500,
         maxGovtContributionForDisabled = 1000
       )
@@ -111,8 +101,6 @@ class TFCSchemeConfigSpec extends FakeCCCalculatorApplication with MockitoSugar 
       val config = tfcConfig.getConfig(fromDate)
       val tfcTaxYear = TFCTaxYearConfig(
         topUpPercent = 20,
-        maxEligibleChildcareAmount = 2500,
-        maxEligibleChildcareAmountForDisabled = 5000,
         maxGovtContribution = 500,
         maxGovtContributionForDisabled = 1000
       )
@@ -126,8 +114,6 @@ class TFCSchemeConfigSpec extends FakeCCCalculatorApplication with MockitoSugar 
       val config = tfcConfig.getConfig(fromDate)
       val tfcTaxYear = TFCTaxYearConfig(
         topUpPercent = 20,
-        maxEligibleChildcareAmount = 2500,
-        maxEligibleChildcareAmountForDisabled = 5000,
         maxGovtContribution = 500,
         maxGovtContributionForDisabled = 1000
       )
@@ -141,8 +127,6 @@ class TFCSchemeConfigSpec extends FakeCCCalculatorApplication with MockitoSugar 
       val config = tfcConfig.getConfig(fromDate)
       val tfcTaxYear = TFCTaxYearConfig(
         topUpPercent = 20,
-        maxEligibleChildcareAmount = 2500,
-        maxEligibleChildcareAmountForDisabled = 5000,
         maxGovtContribution = 500,
         maxGovtContributionForDisabled = 1000
       )
@@ -156,8 +140,6 @@ class TFCSchemeConfigSpec extends FakeCCCalculatorApplication with MockitoSugar 
       val config = tfcConfig.getConfig(fromDate)
       val tfcTaxYear = TFCTaxYearConfig(
         topUpPercent = 20,
-        maxEligibleChildcareAmount = 2500,
-        maxEligibleChildcareAmountForDisabled = 5000,
         maxGovtContribution = 500,
         maxGovtContributionForDisabled = 1000
       )
@@ -171,8 +153,6 @@ class TFCSchemeConfigSpec extends FakeCCCalculatorApplication with MockitoSugar 
       val config = tfcConfig.getConfig(fromDate)
       val tfcTaxYear = TFCTaxYearConfig(
         topUpPercent = 20,
-        maxEligibleChildcareAmount = 2500,
-        maxEligibleChildcareAmountForDisabled = 5000,
         maxGovtContribution = 500,
         maxGovtContributionForDisabled = 1000
       )
@@ -186,8 +166,6 @@ class TFCSchemeConfigSpec extends FakeCCCalculatorApplication with MockitoSugar 
       val config = tfcConfig.getConfig(fromDate)
       val tfcTaxYear = TFCTaxYearConfig(
         topUpPercent = 20,
-        maxEligibleChildcareAmount = 2500,
-        maxEligibleChildcareAmountForDisabled = 5000,
         maxGovtContribution = 500,
         maxGovtContributionForDisabled = 1000
       )
@@ -201,8 +179,6 @@ class TFCSchemeConfigSpec extends FakeCCCalculatorApplication with MockitoSugar 
       val config = tfcConfig.getConfig(fromDate)
       val tfcTaxYear = TFCTaxYearConfig(
         topUpPercent = 20,
-        maxEligibleChildcareAmount = 2500,
-        maxEligibleChildcareAmountForDisabled = 5000,
         maxGovtContribution = 500,
         maxGovtContributionForDisabled = 1000
       )
