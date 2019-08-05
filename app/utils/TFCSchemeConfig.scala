@@ -23,8 +23,6 @@ import play.api.Configuration
 
 case class TFCTaxYearConfig(
                              topUpPercent: Double,
-                             maxEligibleChildcareAmount: Double,
-                             maxEligibleChildcareAmountForDisabled: Double,
                              maxGovtContribution: Double,
                              maxGovtContributionForDisabled: Double
                              )
@@ -50,8 +48,6 @@ class TFCConfig @Inject()(val config: AppConfig,
   def getTaxYear(config : Configuration): TFCTaxYearConfig = {
     TFCTaxYearConfig(
       topUpPercent = config.get[Double]("top-up-percent"),
-      maxEligibleChildcareAmount = config.get[Double]("max-eligible-child-care-amount-per-child"),
-      maxEligibleChildcareAmountForDisabled = config.get[Double]("max-eligible-child-care-amount-per-disabled-child"),
       maxGovtContribution = config.get[Double]("max-government-contribution-per-child"),
       maxGovtContributionForDisabled = config.get[Double]("max-government-contribution-per-disabled-child")
     )

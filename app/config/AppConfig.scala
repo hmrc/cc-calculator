@@ -22,7 +22,6 @@ import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 class AppConfig @Inject()(val config: ServicesConfig) {
 
   val defaultMaxNoOfChildren = 25
-  val defaultMaxNameLength = 25
 
   lazy val upperMonthsLimitValidation: Int = config.getInt("esc.months-upper-limit")
   lazy val lowerMonthsLimitValidation: Int = config.getInt("esc.months-lower-limit")
@@ -30,8 +29,6 @@ class AppConfig @Inject()(val config: ServicesConfig) {
   lazy val lowerTaxYearsLimitValidation: Int = config.getInt("esc.tax-years-lower-limit")
   lazy val lowerClaimantsLimitValidation: Int =  config.getInt("esc.claimants-lower-limit")
 
-  lazy val maxNoOfChildren: Int = config.getInt("tfc.max-no-of-children")
-  lazy val maxNameLength: Int = config.getInt("tfc.max-name-length")
   lazy val taxYearEndMonth: Int = config.getInt("tfc.end-of-tax-year-date.month")
   lazy val taxYearEndDay: Int = config.getInt("tfc.end-of-tax-year-date.day")
 
