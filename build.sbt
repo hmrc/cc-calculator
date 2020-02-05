@@ -26,6 +26,7 @@ lazy val scoverageSettings = {
 
 lazy val microservice = Project(appName, file("."))
   .enablePlugins(Seq(play.sbt.PlayScala) ++ plugins : _*)
+  .disablePlugins(JUnitXmlReportPlugin) // this is an experimental plugin that is (currently) enabled by default and prevents deployment to QA environment
   .settings(playSettings ++ scoverageSettings : _*)
   .settings(PlayKeys.playDefaultPort := 9372)
   .settings(majorVersion := 1)
@@ -34,6 +35,7 @@ lazy val microservice = Project(appName, file("."))
     targetJvm := "jvm-1.8",
     scalaVersion := "2.12.10",
     libraryDependencies ++= AppDependencies(),
+    dependencyOverrides += "commons-codec" % "commons-codec" % "1.12",
     retrieveManaged := true,
     evictionWarningOptions in update := EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
     routesGenerator := InjectedRoutesGenerator,
