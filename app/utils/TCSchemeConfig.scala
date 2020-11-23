@@ -76,9 +76,9 @@ class TCConfig @Inject()(config: AppConfig,
 
   def getConfig(currentDate: LocalDate) : TCTaxYearConfig  = {
 
-    val configs: Seq[play.api.Configuration] = configuration.getConfigSeq("tc.rule-change").get
+    val configs: Seq[play.api.Configuration] = configuration.get[Seq[Configuration]]("tc.rule-change")
     // get the default config and keep
-    val defaultConfig = configs.find(_.getString("rule-date").contains("default")).head
+    val defaultConfig = configs.find(_.get[String]("rule-date").contains("default")).head
     // fetch the config if it matches the particular year
     val result = getConfigForTaxYear(currentDate, configs)
 
@@ -93,31 +93,31 @@ class TCConfig @Inject()(config: AppConfig,
 
   def getTaxYear(config : Configuration): TCTaxYearConfig = {
     TCTaxYearConfig(
-      otherIncomeAdjustment = config.getDouble("other-adjustment").get,
-      currentIncomeFallDifferenceAmount = config.getDouble("current-income-fall-difference-amount").get,
-      currentIncomeRiseDifferenceAmount = config.getDouble("current-income-rise-difference-amount").get,
+      otherIncomeAdjustment = config.get[Double]("other-adjustment"),
+      currentIncomeFallDifferenceAmount = config.get[Double]("current-income-fall-difference-amount"),
+      currentIncomeRiseDifferenceAmount = config.get[Double]("current-income-rise-difference-amount"),
       wtc = WTC(
-        basicElement = config.getInt("input-elements.wtc.basic-element").get,
-        coupleElement = config.getInt("input-elements.wtc.second-adult-element").get,
-        loneParentElement = config.getInt("input-elements.wtc.lone-parent-element").get,
-        hours30Element = config.getInt("input-elements.wtc.30-hour-element").get,
-        disabledWorkerElement = config.getInt("input-elements.wtc.disabled-worker-element").get,
-        severeDisabilityWorkerElement = config.getInt("input-elements.wtc.severe-disabled-worker-element").get,
-        maxChildcareOneChildElement = config.getInt("input-elements.wtc.max-childcare-element-one-child").get,
-        maxChildcareMoreChildrenElement = config.getInt("input-elements.wtc.max-childcare-element-more-children").get,
-        eligibleCostCoveredPercent = config.getInt("input-elements.wtc.percent-of-eligible-cost-covered").get
+        basicElement = config.get[Int]("input-elements.wtc.basic-element"),
+        coupleElement = config.get[Int]("input-elements.wtc.second-adult-element"),
+        loneParentElement = config.get[Int]("input-elements.wtc.lone-parent-element"),
+        hours30Element = config.get[Int]("input-elements.wtc.30-hour-element"),
+        disabledWorkerElement = config.get[Int]("input-elements.wtc.disabled-worker-element"),
+        severeDisabilityWorkerElement = config.get[Int]("input-elements.wtc.severe-disabled-worker-element"),
+        maxChildcareOneChildElement = config.get[Int]("input-elements.wtc.max-childcare-element-one-child"),
+        maxChildcareMoreChildrenElement = config.get[Int]("input-elements.wtc.max-childcare-element-more-children"),
+        eligibleCostCoveredPercent = config.get[Int]("input-elements.wtc.percent-of-eligible-cost-covered")
       ),
       ctc = CTC(
-        childElement = config.getInt("input-elements.ctc.child-element").get,
-        youngPersonElement = config.getInt("input-elements.ctc.young-person-element").get,
-        disabledChildElement = config.getInt("input-elements.ctc.disabled-child-element").get,
-        severeDisabilityChildElement = config.getInt("input-elements.ctc.severe-disabled-child-element").get,
-        familyElement = config.getInt("input-elements.ctc.family-element").get
+        childElement = config.get[Int]("input-elements.ctc.child-element"),
+        youngPersonElement = config.get[Int]("input-elements.ctc.young-person-element"),
+        disabledChildElement = config.get[Int]("input-elements.ctc.disabled-child-element"),
+        severeDisabilityChildElement = config.get[Int]("input-elements.ctc.severe-disabled-child-element"),
+        familyElement = config.get[Int]("input-elements.ctc.family-element")
       ),
       thresholds = Thresholds(
-        wtcIncomeThreshold = config.getInt("thresholds.wtc-income-threshold").get,
-        ctcIncomeThreshold = config.getInt("thresholds.ctc-income-threshold").get,
-        taperRatePercent = config.getInt("thresholds.percent-of-taper-rate").get
+        wtcIncomeThreshold = config.get[Int]("thresholds.wtc-income-threshold"),
+        ctcIncomeThreshold = config.get[Int]("thresholds.ctc-income-threshold"),
+        taperRatePercent = config.get[Int]("thresholds.percent-of-taper-rate")
       )
     )
   }

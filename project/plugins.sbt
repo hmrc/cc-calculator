@@ -2,13 +2,13 @@ resolvers += Resolver.url("HMRC Sbt Plugin Releases", url("https://dl.bintray.co
 
 resolvers += "HMRC Releases" at "https://dl.bintray.com/hmrc/releases"
 
-resolvers += "Typesafe Releases" at "http://repo.typesafe.com/typesafe/releases/"
+resolvers += "Typesafe Releases" at "https://repo.typesafe.com/typesafe/releases/"
 
 resolvers += "scoverage-bintray" at "https://dl.bintray.com/sksamuel/sbt-plugins/"
 
-resolvers += "Sonatype snapshots" at "http://oss.sonatype.org/content/repositories/snapshots/"
+resolvers += "Sonatype snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/"
 
-addSbtPlugin("uk.gov.hmrc" % "sbt-auto-build" % "2.5.0")
+addSbtPlugin("uk.gov.hmrc" % "sbt-auto-build" % "2.10.0")
 
 addSbtPlugin("uk.gov.hmrc" % "sbt-git-versioning" % "2.1.0")
 
@@ -20,4 +20,4 @@ addSbtPlugin("org.scoverage" % "sbt-scoverage" % "1.6.1")
 
 addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "1.0.0")
 
-addSbtPlugin("uk.gov.hmrc" % "sbt-artifactory" % "1.0.0")
+addSbtPlugin("uk.gov.hmrc" % "sbt-artifactory" % "1.8.0")

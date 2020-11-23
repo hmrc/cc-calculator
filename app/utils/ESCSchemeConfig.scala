@@ -27,15 +27,15 @@ class ESCConfig @Inject()(appConfig: AppConfig,
 
   private implicit val lang: Lang = Lang("en")
 
-  lazy val pre2011MaxExemptionMonthly = configuration
-    .getDouble(s"esc.pre-2011-maximum-exemption.basic-higher-additional.monthly").getOrElse(0.00)
+  lazy val pre2011MaxExemptionMonthly: Double = configuration
+    .get[Double](s"esc.pre-2011-maximum-exemption.basic-higher-additional.monthly")
 
   def getConfig(currentDate: LocalDate, niCategoryCode: String, location: String): ESCTaxYearConfig = {
-    val configs: Seq[Configuration] = configuration.getConfigSeq("esc.rule-change").get
+    val configs: Seq[Configuration] = configuration.get[Seq[Configuration]]("esc.rule-change")
 
     // get the default config and keep
     val defaultConfig =
-      configs.find(_.getString("rule-date").contains("default")).head
+      configs.find(_.get[String]("rule-date").contains("default")).head
 
     // fetch the config if it matches the particular year
     val result = getConfigForTaxYear(currentDate, configs).getOrElse(defaultConfig)
@@ -44,11 +44,11 @@ class ESCConfig @Inject()(appConfig: AppConfig,
 
   def getLatestConfig(currentDate: LocalDate): Configuration = {
     val configs: Seq[Configuration] =
-      configuration.getConfigSeq("esc.rule-change").get
+      configuration.get[Seq[Configuration]]("esc.rule-change")
 
     // get the default config and keep
     val defaultConfig =
-      configs.find(_.getString("rule-date").contains("default")).head
+      configs.find(_.get[String]("rule-date").contains("default")).head
 
     // fetch the config if it matches the particular year
     getConfigForTaxYear(currentDate, configs).getOrElse(defaultConfig)
@@ -56,12 +56,12 @@ class ESCConfig @Inject()(appConfig: AppConfig,
 
   def getNILimit(currentDate: LocalDate): Double = {
     val result = getLatestConfig(currentDate)
-    result.getDouble("ni-limit").get
+    result.get[Double]("ni-limit")
   }
 
   def getMaxBottomBandAllowance(currentDate: LocalDate): Double = {
     val result = getLatestConfig(currentDate)
-    result.getDouble("post-2011-maximum-exemption.basic.monthly").get
+    result.get[Double]("post-2011-maximum-exemption.basic.monthly")
   }
 
   private def getTaxYear(niCategoryCode: String, config: Configuration, location: String): ESCTaxYearConfig = {
@@ -97,7 +97,7 @@ class ESCConfig @Inject()(appConfig: AppConfig,
   def getNiCategory(niCategoryCode: String, config: Configuration): NiCategory ={
     // get the ni Category
     val niCode = niCategoryCode match {
-      case cat if cat.isEmpty => config.getString("default-ni-code").get
+      case cat if cat.isEmpty => config.get[String]("default-ni-code")
       case cat if cat.equals("A") || cat.equals("B") || cat.equals("C") => cat
       case _ => throw new NoSuchElementException(messages("cc.scheme.config.invalid.ni.category"))
     }
@@ -112,20 +112,20 @@ class ESCConfig @Inject()(appConfig: AppConfig,
     niCategories match {
       case Nil =>  acc
       case head :: tail =>
-        if (head.getString("ni-cat-code").get.equals(code)) {
+        if (head.get[String]("ni-cat-code").equals(code)) {
           val niCat = NiCategory(
             niCategoryCode = code,
-            lelMonthlyLowerLimitForCat = head.getDouble("LEL.monthly-lower-limit").get,
-            lelMonthlyUpperLimitForCat = head.getDouble("LEL.monthly-upper-limit").get,
-            lelRateForCat = head.getDouble("LEL.rate").get,
-            lelPtMonthlyLowerLimitForCat = head.getDouble("LEL-PT.monthly-lower-limit").get,
-            lelPtMonthlyUpperLimitForCat = head.getDouble("LEL-PT.monthly-upper-limit").get,
-            lelPtRateForCat = head.getDouble("LEL-PT.rate").get,
-            ptUelMonthlyLowerLimitForCat = head.getDouble("PT-UEL.monthly-lower-limit").get,
-            ptUelMonthlyUpperLimitForCat = head.getDouble("PT-UEL.monthly-upper-limit").get,
-            ptUelRateForCat = head.getDouble("PT-UEL.rate").get,
-            aboveUelMonthlyLowerLimitForCat = head.getDouble("above-UEL.monthly-lower-limit").get,
-            aboveUelRateForCat = head.getDouble("above-UEL.rate").get
+            lelMonthlyLowerLimitForCat = head.get[Double]("LEL.monthly-lower-limit"),
+            lelMonthlyUpperLimitForCat = head.get[Double]("LEL.monthly-upper-limit"),
+            lelRateForCat = head.get[Double]("LEL.rate"),
+            lelPtMonthlyLowerLimitForCat = head.get[Double]("LEL-PT.monthly-lower-limit"),
+            lelPtMonthlyUpperLimitForCat = head.get[Double]("LEL-PT.monthly-upper-limit"),
+            lelPtRateForCat = head.get[Double]("LEL-PT.rate"),
+            ptUelMonthlyLowerLimitForCat = head.get[Double]("PT-UEL.monthly-lower-limit"),
+            ptUelMonthlyUpperLimitForCat = head.get[Double]("PT-UEL.monthly-upper-limit"),
+            ptUelRateForCat = head.get[Double]("PT-UEL.rate"),
+            aboveUelMonthlyLowerLimitForCat = head.get[Double]("above-UEL.monthly-lower-limit"),
+            aboveUelRateForCat = head.get[Double]("above-UEL.rate")
           )
           getNiCategoryHelper(code, Nil, Some(niCat))
         }
