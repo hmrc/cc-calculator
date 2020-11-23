@@ -52,7 +52,7 @@ class AuditServiceTest extends UnitSpec {
         override val auditSource = "cc-eligibility"
       }
 
-      auditTest.sendEvent("testTranType", Map("randomDetails" -> "+=+=+=+=+=+=+=+=+"))(request,hc)
+      auditTest.sendEvent("testTranType", Map("randomDetails" -> "+=+=+=+=+=+=+=+=+"))(hc)
 
 
       auditTest.sendEvent("testTranType", Map("randomDetails" -> "+=+=+=+=+=+=+=+=+"))

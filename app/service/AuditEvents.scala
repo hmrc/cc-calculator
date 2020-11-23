@@ -23,35 +23,35 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 class AuditEvents @Inject()(val auditService: AuditService) {
 
-  def auditRequest(data: String)(implicit request: Request[_], hc: HeaderCarrier): Unit = {
+  def auditRequest(data: String)(implicit hc: HeaderCarrier): Unit = {
     auditEvent("Request", data)
   }
 
-  def auditTFCRequest(data : String) (implicit request: Request[_], hc: HeaderCarrier): Unit = {
+  def auditTFCRequest(data : String) (implicit hc: HeaderCarrier): Unit = {
     auditEvent("TFCRequest", data)
   }
 
-  def auditTFCResponse(data : String) (implicit request: Request[_], hc: HeaderCarrier): Unit = {
+  def auditTFCResponse(data : String) (implicit hc: HeaderCarrier): Unit = {
     auditEvent("TFCResponse", data)
   }
 
-  def auditTCRequest(data : String) (implicit request: Request[_], hc: HeaderCarrier): Unit = {
+  def auditTCRequest(data : String) (implicit hc: HeaderCarrier): Unit = {
     auditEvent("TCRequest", data)
   }
 
-  def auditTCResponse(data : String) (implicit request: Request[_], hc: HeaderCarrier): Unit = {
+  def auditTCResponse(data : String) (implicit hc: HeaderCarrier): Unit = {
     auditEvent("TCResponse", data)
   }
 
-  def auditESCRequest(data : String) (implicit request: Request[_], hc: HeaderCarrier): Unit = {
+  def auditESCRequest(data : String) (implicit hc: HeaderCarrier): Unit = {
     auditEvent("ESCRequest", data)
   }
 
-  def auditESCResponse(data : String) (implicit request: Request[_], hc: HeaderCarrier): Unit = {
+  def auditESCResponse(data : String) (implicit hc: HeaderCarrier): Unit = {
     auditEvent("ESCResponse", data)
   }
 
-  private def auditEvent(auditEventType : String, data: String) (implicit request: Request[_], hc: HeaderCarrier): Unit = {
+  private def auditEvent(auditEventType : String, data: String) (implicit hc: HeaderCarrier): Unit = {
     auditService.sendEvent(auditEventType, Map("data" -> data))
   }
 

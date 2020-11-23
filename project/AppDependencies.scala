@@ -6,10 +6,10 @@ object AppDependencies {
   
   val compile: Seq[ModuleID] = Seq(
     ws,
-    "uk.gov.hmrc"                   %% "bootstrap-play-26"      % "1.3.0",
-    "com.github.java-json-tools"    % "json-schema-validator"   % "2.2.13",
-    "org.json4s"                    %% "json4s-jackson"         % "3.6.7",
-    "com.typesafe.play"             %% "play-json-joda"         % "2.8.1"
+    "uk.gov.hmrc"                   %% "bootstrap-play-26"      % "1.9.0",
+    "com.github.java-json-tools"    % "json-schema-validator"   % "2.2.14",
+    "org.json4s"                    %% "json4s-jackson"         % "3.6.10",
+    "com.typesafe.play"             %% "play-json-joda"         % "2.9.1"
   )
 
   trait TestDependencies {

@@ -32,11 +32,11 @@ class CCConfig @Inject()(val appConfig: AppConfig) {
   def getConfigForTaxYear(currentDate: LocalDate, configs : Seq[Configuration]) : Option[Configuration] =  {
     //get the configs for all years except the default
     val configsExcludingDefault =
-      configs.filterNot(_.getString("rule-date").contains("default"))
+      configs.filterNot(_.get[String]("rule-date").contains("default"))
 
     // ensure the latest date is in the head position
     val sorted = configsExcludingDefault.sortBy(c => {
-      val predicate = new SimpleDateFormat(formatterDatePattern).parse(c.getString("rule-date").getOrElse(""))
+      val predicate = new SimpleDateFormat(formatterDatePattern).parse(c.get[String]("rule-date"))
       predicate
     }).reverse
     val result = getConfigHelper(currentDate, sorted.toList, None)
@@ -48,7 +48,7 @@ class CCConfig @Inject()(val appConfig: AppConfig) {
     taxYearConfigs match {
       case Nil => acc
       case head :: tail =>
-        val configDate = new SimpleDateFormat(formatterDatePattern).parse(head.getString("rule-date").get)
+        val configDate = new SimpleDateFormat(formatterDatePattern).parse(head.get[String]("rule-date"))
         // exit tail recursive
         if (currentDate.toDate.after(configDate) || currentDate.toDate.compareTo(configDate) == 0) {
           getConfigHelper(currentDate, Nil, Some(head))

@@ -32,11 +32,11 @@ class TFCConfig @Inject()(val config: AppConfig,
 
   def getConfig(currentDate: LocalDate) : TFCTaxYearConfig  = {
 
-    val configs: Seq[play.api.Configuration] = configuration.getConfigSeq("tfc.rule-change").get
+    val configs: Seq[play.api.Configuration] = configuration.get[Seq[Configuration]]("tfc.rule-change")
 
     // get the default config and keep
     val defaultConfig: Configuration =
-      configs.find(_.getString("rule-date").contains("default")).head
+      configs.find(_.get[String]("rule-date").contains("default")).head
 
     // fetch the config if it matches the particular year
     getConfigForTaxYear(currentDate, configs) match {
