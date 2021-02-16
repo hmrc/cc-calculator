@@ -52,6 +52,10 @@ trait FakeCCCalculatorApplication extends PlaySpec {
 
   lazy val app: Application =
     new GuiceApplicationBuilder()
+      .disable[com.kenshoo.play.metrics.PlayModule]
+      .disable[com.kenshoo.play.metrics.MetricsController]
+      .configure(Configuration("metrics.enabled" -> false))
+      .configure(Configuration("metrics.jvm" -> false))
       .configure(config)
       .build()
 
