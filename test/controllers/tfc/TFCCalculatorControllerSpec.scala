@@ -196,7 +196,7 @@ class TFCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
           |         "path":"/periods(0)/children",
           |         "validationErrors":[
           |            {
-          |               "message":"Please provide at least 1 child or maximun of 25 children",
+          |               "message":"Please provide at least 1 child or maximum of 25 children",
           |               "args":[
           |
           |               ]

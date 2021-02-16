@@ -16,6 +16,7 @@
 
 package models.input.tfc
 
+import com.google.inject.Inject
 import config.{AppConfig, AppConfigConstantSettings}
 import org.joda.time.LocalDate
 import play.api.Play
@@ -42,18 +43,25 @@ object TFCCalculatorInput extends MessagesObject {
     )(TFCCalculatorInput.apply _)
 }
 
-case class TFCPeriod(
+case class TFCPeriod @Inject() (
                       from: LocalDate,
                       until: LocalDate,
                       periodEligibility: Boolean,
                       children: List[TFCChild]
-                    ){
-  lazy val conf = Play.current.injector.instanceOf[TFCConfig]
+                    )(conf: Option[TFCConfig]){
 
-  def configRule : TFCTaxYearConfig = conf.getConfig(from)
+  def configRule : TFCTaxYearConfig = conf.get.getConfig(from)
 }
 
 object TFCPeriod extends MessagesObject with AppConfigConstantSettings {
+
+  def apply(from: LocalDate, until: LocalDate, periodEligibility: Boolean, children: List[TFCChild]): TFCPeriod = {
+    new TFCPeriod(from, until, periodEligibility, children)(None)
+  }
+
+  def apply(from: LocalDate, until: LocalDate, periodEligibility: Boolean, children: List[TFCChild], conf: Option[TFCConfig], booleanVal: Option[Boolean]): TFCPeriod = {
+    new TFCPeriod(from, until, periodEligibility, children)(conf)
+  }
 
   implicit val periodFormat : Reads[TFCPeriod] = (
     (JsPath \ "from").read[LocalDate](jodaLocalDateReads(datePattern)) and
@@ -61,7 +69,7 @@ object TFCPeriod extends MessagesObject with AppConfigConstantSettings {
         (JsPath \ "periodEligibility").read[Boolean] and
           (JsPath \ "children").read[List[TFCChild]].filter(JsonValidationError("Please provide at least 1 child or maximum of 25 children")
           )(children => children.nonEmpty && children.length <= defaultMaxNoOfChildren)
-    )(TFCPeriod.apply _)
+    )(TFCPeriod.apply(_,_,_,_))
 }
 
 case class TFCChild(
@@ -86,7 +94,7 @@ object TFCChild extends MessagesObject {
     (JsPath \ "qualifying").read[Boolean] and
       ((JsPath \ "from").readNullable[LocalDate](jodaLocalDateReads(datePattern)) or Reads.optionWithNull(jodaLocalDateReads(datePattern))) and
         ((JsPath \ "until").readNullable[LocalDate](jodaLocalDateReads(datePattern)) or Reads.optionWithNull(jodaLocalDateReads(datePattern))) and
-          (JsPath \ "childcareCost").read[BigDecimal].filter(JsonValidationError("Please provide at least 1 Period"))(x => childSpendValidation(x)) and
+          (JsPath \ "childcareCost").read[BigDecimal].filter(JsonValidationError("Childcare Spend cost should not be less than 0.00"))(x => childSpendValidation(x)) and
             (JsPath \ "childcareCostPeriod").read[Periods.Period] and
               (JsPath \ "disability").read[TFCDisability]
     )(TFCChild.apply _)

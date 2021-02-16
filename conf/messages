@@ -9,7 +9,7 @@ cc.calc.gross.amount.less.than.0 = Gross amount should not be less than 0.00
 #cc.calc.invalid.number.of.ty = Please provide at least 1 Tax Year
     cc.calc.invalid.number.of.periods = Please provide at least 1 Period
 cc.calc.invalid.number.of.claimants = Please provide at least 1 claimant
-    cc.calc.invalid.number.of.children = Please provide at least 1 child or maximun of 25 children
+    cc.calc.invalid.number.of.children = Please provide at least 1 child or maximum of 25 children
 cc.calc.invalid.request.exception = You have provided a wrong type of request
 
 #### ESC #####
