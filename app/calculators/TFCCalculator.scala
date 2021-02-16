@@ -51,7 +51,7 @@ class TFCCalculator extends CCCalculatorHelper with MessagesObject with Logging 
       case (Some(f), Some(u)) => daysBetween(f,u)
       case (_, _) =>
         logger.warn("TFCCalculator.TFCCalculatorService.getChildQualifyingDaysInTFCPeriod Exception - from and until dates are incorrect")
-        throw new IllegalArgumentException(messages("cc.scheme.config.from.until.date")(Lang("en")))
+        throw new IllegalArgumentException("unspecified argument: from date until date")
     }
   }
 

@@ -20,10 +20,11 @@ import config.AppConfig
 import javax.inject.Inject
 import org.joda.time.LocalDate
 import play.api.Configuration
-import play.api.i18n.Lang
+import play.api.i18n.{Lang, MessagesApi}
 
 class ESCConfig @Inject()(appConfig: AppConfig,
-                          configuration: Configuration) extends CCConfig(appConfig) with MessagesObject {
+                          configuration: Configuration,
+                          messages: MessagesApi) extends CCConfig(appConfig) with MessagesObject {
 
   private implicit val lang: Lang = Lang("en")
 

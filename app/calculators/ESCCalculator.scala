@@ -60,7 +60,7 @@ class ESCCalculatorHelpers @Inject()(escConfig: ESCConfig)
       case Some(number) => (number * 10, code)
       case None =>
         logger.warn("ESCCalculator.ESCCalculatorHelpers.extractEmergencyCode - Exception case None")
-        throw new NoSuchElementException(messages("cc.scheme.config.invalid.tax.code"))
+        throw new NoSuchElementException("Please enter valid tax code")
     }
   }
 
@@ -73,13 +73,13 @@ class ESCCalculatorHelpers @Inject()(escConfig: ESCConfig)
           case Some(number) => (number * 10, code)
           case None =>
             logger.warn("ESCCalculator.ESCCalculatorHelpers.validateTaxCode - Exception case None")
-            throw new NoSuchElementException(messages("cc.scheme.config.invalid.tax.code"))
+            throw new NoSuchElementException("Please enter valid tax code")
         }
       case code if validateEmergencyCode(code) =>
         extractEmergencyCode(code.toUpperCase.trim)
       case _ =>
         logger.warn("ESCCalculator.ESCCalculatorHelpers.validateTaxCode - Exception case others")
-        throw new NoSuchElementException(messages("cc.scheme.config.invalid.tax.code"))
+        throw new NoSuchElementException("Please enter valid tax code")
     }
   }
 

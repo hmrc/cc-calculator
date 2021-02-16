@@ -37,7 +37,7 @@ object EnumUtils extends Logging {
     }
 }
 
-object Periods extends Enumeration with MessagesObject {
+object Periods extends Enumeration {
   type Period = Value
 
   private val yearlyIndex = 4
@@ -55,10 +55,10 @@ object Periods extends Enumeration with MessagesObject {
   def toString(period: Value): String = {
     implicit val lang: Lang = Lang("en")
     period match {
-      case Weekly => messages("cc.period.weekly")
-      case Monthly => messages("cc.period.monthly")
-      case Yearly => messages("cc.period.yearly")
-      case _ => messages("cc.period.invalid")
+      case Weekly => "cc.period.weekly"
+      case Monthly => "cc.period.monthly"
+      case Yearly => "cc.period.yearly"
+      case _ => "cc.period.invalid"
     }
   }
 

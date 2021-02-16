@@ -128,7 +128,7 @@ object TCChild extends MessagesObject {
   implicit val childFormat: Reads[TCChild] = (
        (JsPath \ "qualifying").read[Boolean] and
         (JsPath \ "childcareCost").read[BigDecimal].filter(
-          JsonValidationError(messages("cc.calc.childcare.spend.too.low")(Lang("en")))
+          JsonValidationError("Childcare Spend cost should not be less than 0.00")
         )(x => childSpendValidation(x)) and
         //childcareCost max value should be 30,000 per year (This will be based on childcareCost Period, hence should be handled in frontend)
           (JsPath \ "childcareCostPeriod").read[Periods.Period] and

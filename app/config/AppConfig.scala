@@ -19,9 +19,11 @@ package config
 import javax.inject.Inject
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
-class AppConfig @Inject()(val config: ServicesConfig) {
-
+trait AppConfigConstantSettings {
   val defaultMaxNoOfChildren = 25
+}
+
+class AppConfig @Inject()(val config: ServicesConfig) extends AppConfigConstantSettings{
 
   lazy val upperMonthsLimitValidation: Int = config.getInt("esc.months-upper-limit")
   lazy val lowerMonthsLimitValidation: Int = config.getInt("esc.months-lower-limit")
