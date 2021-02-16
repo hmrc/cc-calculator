@@ -49,6 +49,7 @@ case class TFCPeriod(
                       children: List[TFCChild]
                     ){
   lazy val conf = Play.current.injector.instanceOf[TFCConfig]
+
   def configRule : TFCTaxYearConfig = conf.getConfig(from)
 }
 
