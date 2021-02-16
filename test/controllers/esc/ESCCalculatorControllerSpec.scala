@@ -25,6 +25,7 @@ import org.joda.time.LocalDate
 import org.mockito.ArgumentMatchers.{eq => mockEq, _}
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
+import org.scalatest.Matchers.convertToAnyShouldWrapper
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatest.prop.TableDrivenPropertyChecks._
 import org.scalatest.prop.Tables.Table
@@ -43,7 +44,7 @@ class ESCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
   val mockCalc = mock[ESCCalculator]
   lazy val audits = app.injector.instanceOf[AuditEvents]
 
-  "ESCCalculatorController" should {
+  "ESCCalculatorController" must {
 
     "not return NOT_FOUND (calculate) endpoint" in {
       val result = route(app, FakeRequest(POST, "/cc-calculator/employer-supported-childcare/calculate"))

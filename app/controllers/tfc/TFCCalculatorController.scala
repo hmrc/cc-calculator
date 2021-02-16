@@ -20,12 +20,12 @@ import calculators.TFCCalculator
 import javax.inject.{Inject, Singleton}
 import models.input.tfc.TFCCalculatorInput
 import models.output.tfc.TFCCalculatorOutput
-import play.api.Logger
+import play.api.Logging
 import play.api.i18n.I18nSupport
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, MessagesControllerComponents}
 import service.AuditEvents
-import uk.gov.hmrc.play.bootstrap.controller.BackendController
+import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -33,13 +33,14 @@ import scala.concurrent.Future
 @Singleton
 class TFCCalculatorController @Inject()(val mcc: MessagesControllerComponents,
                                         val auditEvent: AuditEvents,
-                                        val calculator: TFCCalculator) extends BackendController(mcc) with I18nSupport {
+                                        val calculator: TFCCalculator) extends BackendController(mcc)
+  with I18nSupport with Logging {
 
   def calculate: Action[JsValue] = Action.async(parse.json) {
     implicit request =>
       request.body.validate[TFCCalculatorInput].fold(
         error => {
-          Logger.warn(s"TFC Calculator Validation JsError in TFCCalculatorController.calculate>>>$error")
+          logger.warn(s"TFC Calculator Validation JsError in TFCCalculatorController.calculate>>>$error")
           Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(play.api.http.Status.BAD_REQUEST, Left(error))))
         },
         result => {
@@ -51,7 +52,7 @@ class TFCCalculatorController @Inject()(val mcc: MessagesControllerComponents,
               Ok(jsonResponse)
           } recover {
             case e: Exception =>
-              Logger.warn(s"TFC Calculator Exception in TFCCalculatorController.calculate: ${e.getMessage}")
+              logger.warn(s"TFC Calculator Exception in TFCCalculatorController.calculate: ${e.getMessage}")
               InternalServerError(utils.JSONFactory.generateErrorJSON(play.api.http.Status.INTERNAL_SERVER_ERROR, Right(e)))
           }
         }

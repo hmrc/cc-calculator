@@ -20,6 +20,7 @@ import com.codahale.metrics.SharedMetricRegistries
 import com.typesafe.config.ConfigFactory
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
+import org.scalatest.Matchers.convertToAnyShouldWrapper
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.Configuration
 
@@ -273,7 +274,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers with 
       NICatA2020Scotland)
   }
 
-  "ESC SchemeConfig" should {
+  "ESC SchemeConfig" must {
     SharedMetricRegistries.clear()
     "(ESC) populate upper months limit from config file" in {
       escConf.appConfig.upperMonthsLimitValidation shouldBe 100

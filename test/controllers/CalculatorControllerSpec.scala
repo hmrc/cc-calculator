@@ -35,6 +35,7 @@ import play.api.test.Helpers._
 import service.AuditEvents
 import utils.FakeCCCalculatorApplication
 import org.mockito.ArgumentMatchers._
+import org.scalatest.Matchers.convertToAnyShouldWrapper
 import org.scalatestplus.mockito.MockitoSugar
 
 import scala.concurrent.Future
@@ -48,7 +49,7 @@ class CalculatorControllerSpec extends FakeCCCalculatorApplication with MockitoS
   lazy val esc = app.injector.instanceOf[ESCCalculator]
 
 
-  "CalculatorController" should {
+  "CalculatorController" must {
 
     "be available" in {
       val result = route(app, FakeRequest(POST, "/cc-calculator/calculate"))
@@ -56,7 +57,7 @@ class CalculatorControllerSpec extends FakeCCCalculatorApplication with MockitoS
       status(result.get) should not be NOT_FOUND
     }
 
-    "calling calculate" should {
+    "calling calculate" must {
 
       "return BAD_REQUEST" when {
         "invalid request is given" in {

@@ -16,13 +16,13 @@
 
 package utils
 
-import play.api.Logger
+import play.api.{Logger, Logging}
 import play.api.data.validation.ValidationError
 import play.api.libs.json._
 
 object JSONFactory extends JSONFactory
 
-trait JSONFactory {
+trait JSONFactory extends Logging {
 
   def generateErrorJSON(status: Int, errors: Either[Seq[(JsPath, Seq[JsonValidationError])], Exception]): JsObject = {
     errors match {
@@ -53,7 +53,7 @@ trait JSONFactory {
         }
       )
     } else {
-      Logger.warn("JSONFactory.errorBuilder - Error while generating JSON response")
+      logger.warn("JSONFactory.errorBuilder - Error while generating JSON response")
       JsArray(Seq(JsString("Error while generating JSON response")))
     }
   }

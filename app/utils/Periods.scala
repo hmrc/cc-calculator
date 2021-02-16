@@ -16,17 +16,17 @@
 
 package utils
 
-import play.api.Logger
+import play.api.Logging
 import play.api.i18n.Lang
 import play.api.libs.json._
 
-object EnumUtils {
+object EnumUtils extends Logging {
   def enumReads[E <: Enumeration](enum: E): Reads[E#Value] =
     new Reads[E#Value] {
       def reads(json: JsValue): JsResult[E#Value] = json match {
         case JsString(s) => JsSuccess(enum.withName(s))
         case _ =>
-          Logger.warn(s"EnumUtils.enumReads - JsError::: String value expected")
+          logger.warn(s"EnumUtils.enumReads - JsError::: String value expected")
           JsError("String value expected")
       }
     }

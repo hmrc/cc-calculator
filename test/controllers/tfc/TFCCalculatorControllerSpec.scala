@@ -23,6 +23,7 @@ import models.input.tfc.TFCCalculatorInput
 import models.output.tfc.{TFCCalculatorOutput, TFCContribution}
 import org.mockito.ArgumentMatchers.{eq => mockEq, _}
 import org.mockito.Mockito._
+import org.scalatest.Matchers.convertToAnyShouldWrapper
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.Status
 import play.api.i18n.Messages.Implicits._
@@ -43,7 +44,7 @@ class TFCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
   val tfcCalc = mock[TFCCalculator]
   val audit = mock[AuditEvents]
 
-  "TFCCalculatorController" should {
+  "TFCCalculatorController" must {
 
     "not return NOT_FOUND (calculate) endpoint" in {
       val result = route(app, FakeRequest(POST, "/cc-calculator/tax-free-childcare/calculate"))

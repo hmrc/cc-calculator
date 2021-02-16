@@ -24,6 +24,7 @@ import org.joda.time.LocalDate
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
+import org.scalatest.Matchers.convertToAnyShouldWrapper
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatest.prop.TableDrivenPropertyChecks._
 import org.scalatest.prop.Tables.Table
@@ -55,7 +56,7 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
   lazy val tcc = app.injector.instanceOf[TCCalculator]
 
 
-  "when calculate is called" should {
+  "when calculate is called" must {
 
     "not return NOT_FOUND for this endpoint" in {
       val result = route(app, FakeRequest(POST, "/cc-calculator/tax-credits/calculate/total-award"))

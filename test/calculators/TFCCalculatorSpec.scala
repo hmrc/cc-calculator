@@ -20,15 +20,16 @@ import models.input.tfc.{TFCCalculatorInput, TFCChild, TFCDisability}
 import models.output.tfc.{TFCCalculatorOutput, TFCContribution, TFCOutputChild, TFCPeriod}
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
-import uk.gov.hmrc.play.test.UnitSpec
+import org.scalatest.Matchers.convertToAnyShouldWrapper
+import org.scalatestplus.play.PlaySpec
 import utils.{FakeCCCalculatorApplication, Periods}
 
 import scala.concurrent.Future
 
-class TFCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication {
+class TFCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication {
 
 
-  "TFCCalculatorService" should {
+  "TFCCalculatorService" must {
 
     "return a Future[AwardPeriod] result when household eligibility is true" in {
       val tfcCalculator = new TFCCalculator { }
