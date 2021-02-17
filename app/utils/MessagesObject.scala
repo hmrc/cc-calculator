@@ -18,4 +18,11 @@ package utils
 
 trait MessagesObject {
   val datePattern = "yyyy-MM-dd"
+
+  val lowerTaxYearsLimitValidation = 1
+  val lowerPeriodsLimitValidation = 1
+  val lowerClaimantsLimitValidation = 1
+  val lowerMonthsLimitValidation = 0
+  val upperMonthsLimitValidation = 100
+
 }

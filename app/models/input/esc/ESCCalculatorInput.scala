@@ -27,11 +27,11 @@ import utils.{Periods, _}
 case class ESCCalculatorInput(taxYears: List[ESCTaxYear],
                               location: String)
 
-object ESCCalculatorInput {
+object ESCCalculatorInput extends MessagesObject {
 
   implicit val escEligibilityReads : Reads[ESCCalculatorInput] = (
       (JsPath \ "taxYears").read[List[ESCTaxYear]].filter(JsonValidationError("Please provide at least 1 Tax Year"))
-        (taxYears => taxYears.length >= 1) and
+        (taxYears => taxYears.length >= lowerTaxYearsLimitValidation) and
         (JsPath \ "location").read[String]
     )(ESCCalculatorInput.apply _)
 }
@@ -46,7 +46,7 @@ object ESCTaxYear extends MessagesObject {
       (JsPath \ "until").read[LocalDate](jodaLocalDateReads(datePattern)) and
         (JsPath \ "periods").read[List[ESCPeriod]].filter(
           JsonValidationError("Please provide at least 1 Period")
-        )(periods => periods.length >= 1)
+        )(periods => periods.length >= lowerPeriodsLimitValidation)
     )(ESCTaxYear.apply _)
 }
 
@@ -61,7 +61,7 @@ object ESCPeriod extends MessagesObject {
     (JsPath \ "from").read[LocalDate](jodaLocalDateReads(datePattern)) and
       (JsPath \ "until").read[LocalDate](jodaLocalDateReads(datePattern)) and
         (JsPath \ "claimants").read[List[ESCClaimant]].filter(JsonValidationError("Please provide at least 1 claimant")
-        )(claimants => claimants.length >= 1) and
+        )(claimants => claimants.length >= lowerClaimantsLimitValidation) and
           (JsPath \ "children").read[List[Child]]
     )(ESCPeriod.apply _)
 }
@@ -70,7 +70,7 @@ case class Child(qualifying: Boolean = false,
                  childCareCost: BigDecimal,
                  childCareCostPeriod: Periods.Period = Periods.Monthly)
 
-object Child extends MessagesObject {
+object Child {
 
   def childSpendValidation(cost: BigDecimal) : Boolean = {
     cost >= BigDecimal(0.00)
@@ -163,7 +163,7 @@ object ESCClaimant extends MessagesObject {
     (JsPath \ "qualifying").read[Boolean].orElse(Reads.pure(false)) and
       (JsPath \ "isPartner").read[Boolean].orElse(Reads.pure(false)) and
         (JsPath \ "eligibleMonthsInPeriod").read[Int].filter(JsonValidationError("Number of months should not be less than 0 and not more than 99")
-        )(months => months >= 0 && months < 100) and
+        )(months => months >= lowerMonthsLimitValidation && months < upperMonthsLimitValidation) and
           (JsPath \ "previousIncome").readNullable[ESCIncome] and
             (JsPath \ "currentIncome").readNullable[ESCIncome] and
               (JsPath \ "vouchers").read[Boolean] and
