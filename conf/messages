@@ -1,4 +1,3 @@
 #### ESC #####
 cc.scheme.config.invalid.ni.category = Please enter valid NI category (Only letter A or B or C are valid)
 cc.scheme.config.ni.category.not.found = Please ensure relevant configuration for NI category are made available in the configuration files .
-
