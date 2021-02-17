@@ -21,7 +21,7 @@ import models.input.esc._
 import models.output.esc.{ESCCalculatorOutput, ESCSavings}
 import models.utility.{CalculationNIBands, CalculationTaxBands}
 import org.joda.time.LocalDate
-import play.api.{Logger, Logging}
+import play.api.Logging
 import play.api.i18n.Lang
 import utils.{ESCConfig, ESCTaxYearConfig, MessagesObject, Periods}
 
