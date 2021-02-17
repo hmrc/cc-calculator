@@ -16,12 +16,13 @@
 
 package utils
 
-import play.api.data.validation.ValidationError
+import org.scalatest.Matchers.convertToAnyShouldWrapper
+
 import play.api.libs.json._
 
 class JSONFactorySpec extends FakeCCCalculatorApplication {
 
-  "JSONFactory" should {
+  "JSONFactory" must {
 
     "Return a valid output JSON when error sequence and status are passed" in {
       val status = 400

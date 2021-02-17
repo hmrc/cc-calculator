@@ -20,10 +20,11 @@ import config.AppConfig
 import javax.inject.Inject
 import org.joda.time.LocalDate
 import play.api.Configuration
-import play.api.i18n.Lang
+import play.api.i18n.{Lang, MessagesApi}
 
 class ESCConfig @Inject()(appConfig: AppConfig,
-                          configuration: Configuration) extends CCConfig(appConfig) with MessagesObject {
+                          configuration: Configuration,
+                          messages: MessagesApi) extends CCConfig(appConfig) with MessagesObject {
 
   private implicit val lang: Lang = Lang("en")
 
@@ -68,29 +69,29 @@ class ESCConfig @Inject()(appConfig: AppConfig,
     // get the ni Category
     val niCat = getNiCategory(niCategoryCode, config)
 
-    val localConfig = config.getConfig(s"tax.${location.toLowerCase}").getOrElse(config.getConfig("tax.default").get)
+    val localConfig = config.getOptional[Configuration](s"tax.${location.toLowerCase}").getOrElse(config.getOptional[Configuration]("tax.default").get)
 
     ESCTaxYearConfig(
-      post2011MaxExemptionMonthlyBasic = config.getDouble("post-2011-maximum-exemption.basic.monthly").get,
-      post2011MaxExemptionMonthlyHigher = config.getDouble("post-2011-maximum-exemption.higher.monthly").get,
-      post2011MaxExemptionMonthlyAdditional = config.getDouble("post-2011-maximum-exemption.additional.monthly").get,
-      defaultTaxCode = localConfig.getString("default-tax-code").get,
-      personalAllowanceRate = localConfig.getDouble("personal-allowance.rate").get,
-      defaultPersonalAllowance = localConfig.getDouble("personal-allowance.default-personal-allowance").get,
-      taxStarterRate = localConfig.getDouble("starter.rate").getOrElse(0),
-      taxStarterBandCapacity = localConfig.getDouble("starter.band-capacity-annual-amount").getOrElse(0),
-      taxBasicRate = localConfig.getDouble("basic.rate").get,
-      taxBasicBandCapacity = localConfig.getDouble("basic.band-capacity-annual-amount").get,
-      taxIntermediateRate = localConfig.getDouble("intermediate.rate").getOrElse(0),
-      taxIntermediateBandCapacity = localConfig.getDouble("intermediate.band-capacity-annual-amount").getOrElse(0),
-      taxHigherRateBandCapacity = localConfig.getDouble("higher.band-capacity-annual-amount").getOrElse(0),
-      taxHigherRate = localConfig.getDouble("higher.rate").get,
-      taxHigherBandUpperLimit = localConfig.getDouble("higher.band-annual-upper-limit").getOrElse(0),
-      taxAdditionalRate = localConfig.getDouble("additional.rate").get,
-      taxAdditionalBandLowerLimit = localConfig.getDouble("additional.band-annual-lower-limit").get,
-      niLimit = config.getDouble("ni-limit").get,
+      post2011MaxExemptionMonthlyBasic = config.getOptional[Double]("post-2011-maximum-exemption.basic.monthly").get,
+      post2011MaxExemptionMonthlyHigher = config.getOptional[Double]("post-2011-maximum-exemption.higher.monthly").get,
+      post2011MaxExemptionMonthlyAdditional = config.getOptional[Double]("post-2011-maximum-exemption.additional.monthly").get,
+      defaultTaxCode = localConfig.getOptional[String]("default-tax-code").get,
+      personalAllowanceRate = localConfig.getOptional[Double]("personal-allowance.rate").get,
+      defaultPersonalAllowance = localConfig.getOptional[Double]("personal-allowance.default-personal-allowance").get,
+      taxStarterRate = localConfig.getOptional[Double]("starter.rate").getOrElse(0),
+      taxStarterBandCapacity = localConfig.getOptional[Double]("starter.band-capacity-annual-amount").getOrElse(0),
+      taxBasicRate = localConfig.getOptional[Double]("basic.rate").get,
+      taxBasicBandCapacity = localConfig.getOptional[Double]("basic.band-capacity-annual-amount").get,
+      taxIntermediateRate = localConfig.getOptional[Double]("intermediate.rate").getOrElse(0),
+      taxIntermediateBandCapacity = localConfig.getOptional[Double]("intermediate.band-capacity-annual-amount").getOrElse(0),
+      taxHigherRateBandCapacity = localConfig.getOptional[Double]("higher.band-capacity-annual-amount").getOrElse(0),
+      taxHigherRate = localConfig.getOptional[Double]("higher.rate").get,
+      taxHigherBandUpperLimit = localConfig.getOptional[Double]("higher.band-annual-upper-limit").getOrElse(0),
+      taxAdditionalRate = localConfig.getOptional[Double]("additional.rate").get,
+      taxAdditionalBandLowerLimit = localConfig.getOptional[Double]("additional.band-annual-lower-limit").get,
+      niLimit = config.getOptional[Double]("ni-limit").get,
       niCategory = niCat,
-      basicNiThresholdUk = localConfig.getDouble("basic-ni-threshold-uk").getOrElse(0)
+      basicNiThresholdUk = localConfig.getOptional[Double]("basic-ni-threshold-uk").getOrElse(0)
     )
   }
 

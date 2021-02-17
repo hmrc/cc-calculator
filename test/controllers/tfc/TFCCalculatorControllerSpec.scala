@@ -23,9 +23,9 @@ import models.input.tfc.TFCCalculatorInput
 import models.output.tfc.{TFCCalculatorOutput, TFCContribution}
 import org.mockito.ArgumentMatchers.{eq => mockEq, _}
 import org.mockito.Mockito._
+import org.scalatest.Matchers.convertToAnyShouldWrapper
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.Status
-import play.api.i18n.Messages.Implicits._
 import play.api.libs.json.{JsValue, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -43,7 +43,7 @@ class TFCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
   val tfcCalc = mock[TFCCalculator]
   val audit = mock[AuditEvents]
 
-  "TFCCalculatorController" should {
+  "TFCCalculatorController" must {
 
     "not return NOT_FOUND (calculate) endpoint" in {
       val result = route(app, FakeRequest(POST, "/cc-calculator/tax-free-childcare/calculate"))
@@ -195,7 +195,7 @@ class TFCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
           |         "path":"/periods(0)/children",
           |         "validationErrors":[
           |            {
-          |               "message":"Please provide at least 1 child or maximun of 25 children",
+          |               "message":"Please provide at least 1 child or maximum of 25 children",
           |               "args":[
           |
           |               ]

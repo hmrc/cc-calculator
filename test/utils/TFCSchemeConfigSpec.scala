@@ -18,6 +18,7 @@ package utils
 
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
+import org.scalatest.Matchers.convertToAnyShouldWrapper
 import org.scalatestplus.mockito.MockitoSugar
 
 class TFCSchemeConfigSpec extends FakeCCCalculatorApplication with MockitoSugar {
@@ -25,7 +26,7 @@ class TFCSchemeConfigSpec extends FakeCCCalculatorApplication with MockitoSugar 
   val tfcConfig: TFCConfig = app.injector.instanceOf[TFCConfig]
 
 
-  "TFC SchemeConfig" should {
+  "TFC SchemeConfig" must {
 
     "populate end day of the tax year from config file" in {
       tfcConfig.appConfig.taxYearEndDay shouldBe 6

@@ -16,17 +16,18 @@
 
 package calculators
 
+import javax.inject.Inject
 import models.input.tfc.{TFCCalculatorInput, TFCChild}
 import models.output.tfc._
 import org.joda.time.LocalDate
-import play.api.Logger
-import play.api.i18n.Lang
-import utils.{MessagesObject, TFCTaxYearConfig}
+import play.api.Logging
+import utils.{MessagesObject, TFCConfig, TFCTaxYearConfig}
 
 import scala.concurrent.Future
 
 
-class TFCCalculator extends CCCalculatorHelper with MessagesObject {
+class TFCCalculator @Inject()(tfcConfig: TFCConfig)
+  extends CCCalculatorHelper with MessagesObject with Logging {
 
   import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -50,8 +51,8 @@ class TFCCalculator extends CCCalculatorHelper with MessagesObject {
     (from, until) match {
       case (Some(f), Some(u)) => daysBetween(f,u)
       case (_, _) =>
-        Logger.warn("TFCCalculator.TFCCalculatorService.getChildQualifyingDaysInTFCPeriod Exception - from and until dates are incorrect")
-        throw new IllegalArgumentException(messages("cc.scheme.config.from.until.date")(Lang("en")))
+        logger.warn("TFCCalculator.TFCCalculatorService.getChildQualifyingDaysInTFCPeriod Exception - from and until dates are incorrect")
+        throw new IllegalArgumentException("unspecified argument: from date until date")
     }
   }
 
@@ -67,7 +68,8 @@ class TFCCalculator extends CCCalculatorHelper with MessagesObject {
   }
 
   def getCalculatedTFCPeriods(periods: List[models.input.tfc.TFCPeriod]): List[TFCPeriod] = {
-    for (period <- periods) yield {
+    for (periodWithoutConfig <- periods) yield {
+      val period = periodWithoutConfig.createNewWithConfig(tfcConfig)
       val outputChildren = getOutputChildren(period)
       val outputPeriod = getPeriodContribution(outputChildren)
       TFCPeriod(

@@ -21,15 +21,13 @@ import models.input.esc._
 import models.output.esc.{ESCCalculatorOutput, ESCSavings}
 import models.utility.{CalculationNIBands, CalculationTaxBands}
 import org.joda.time.LocalDate
-import play.api.Logger
-import play.api.i18n.Lang
+import play.api.Logging
 import utils.{ESCConfig, ESCTaxYearConfig, MessagesObject, Periods}
 
 import scala.concurrent.Future
 
-class ESCCalculatorHelpers @Inject()(escConfig: ESCConfig) extends CCCalculatorHelper with MessagesObject {
-
-  private implicit val lang: Lang = Lang("en")
+class ESCCalculatorHelpers @Inject()(escConfig: ESCConfig)
+  extends CCCalculatorHelper with MessagesObject with Logging {
 
   private def toInt(string: String): Option[Int] = {
     try {
@@ -58,8 +56,8 @@ class ESCCalculatorHelpers @Inject()(escConfig: ESCConfig) extends CCCalculatorH
     extractNumber match {
       case Some(number) => (number * 10, code)
       case None =>
-        Logger.warn("ESCCalculator.ESCCalculatorHelpers.extractEmergencyCode - Exception case None")
-        throw new NoSuchElementException(messages("cc.scheme.config.invalid.tax.code"))
+        logger.warn("ESCCalculator.ESCCalculatorHelpers.extractEmergencyCode - Exception case None")
+        throw new NoSuchElementException("Please enter valid tax code")
     }
   }
 
@@ -71,14 +69,14 @@ class ESCCalculatorHelpers @Inject()(escConfig: ESCConfig) extends CCCalculatorH
         toInt(code.substring(0, code.length - 1)) match {
           case Some(number) => (number * 10, code)
           case None =>
-            Logger.warn("ESCCalculator.ESCCalculatorHelpers.validateTaxCode - Exception case None")
-            throw new NoSuchElementException(messages("cc.scheme.config.invalid.tax.code"))
+            logger.warn("ESCCalculator.ESCCalculatorHelpers.validateTaxCode - Exception case None")
+            throw new NoSuchElementException("Please enter valid tax code")
         }
       case code if validateEmergencyCode(code) =>
         extractEmergencyCode(code.toUpperCase.trim)
       case _ =>
-        Logger.warn("ESCCalculator.ESCCalculatorHelpers.validateTaxCode - Exception case others")
-        throw new NoSuchElementException(messages("cc.scheme.config.invalid.tax.code"))
+        logger.warn("ESCCalculator.ESCCalculatorHelpers.validateTaxCode - Exception case others")
+        throw new NoSuchElementException("Please enter valid tax code")
     }
   }
 

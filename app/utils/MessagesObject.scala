@@ -16,12 +16,13 @@
 
 package utils
 
-import play.api.Play
-import play.api.i18n.MessagesApi
-
 trait MessagesObject {
-
-  lazy val messages: MessagesApi = Play.current.injector.instanceOf[MessagesApi]
   val datePattern = "yyyy-MM-dd"
+
+  val lowerTaxYearsLimitValidation = 1
+  val lowerPeriodsLimitValidation = 1
+  val lowerClaimantsLimitValidation = 1
+  val lowerMonthsLimitValidation = 0
+  val upperMonthsLimitValidation = 100
 
 }

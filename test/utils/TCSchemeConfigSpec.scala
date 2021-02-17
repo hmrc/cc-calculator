@@ -18,6 +18,7 @@ package utils
 
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
+import org.scalatest.Matchers.convertToAnyShouldWrapper
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatest.prop.TableDrivenPropertyChecks.forAll
 import org.scalatest.prop.Tables.Table
@@ -172,7 +173,7 @@ class TCSchemeConfigSpec extends FakeCCCalculatorApplication with MockitoSugar {
   )
 
 
-  "TC SchemeConfig" should {
+  "TC SchemeConfig" must {
     val tcConfig = app.injector.instanceOf[TCConfig]
     "return 12 for months in tax year" in {
       tcConfig.monthsInTaxYear shouldBe 12

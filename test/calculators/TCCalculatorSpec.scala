@@ -23,13 +23,14 @@ import org.joda.time.format.DateTimeFormat
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.mockito.MockitoSugar
-import uk.gov.hmrc.play.test.UnitSpec
+import org.scalatestplus.play.PlaySpec
 import utils._
 import org.mockito.ArgumentMatchers._
+import org.scalatest.Matchers.convertToAnyShouldWrapper
 
 import scala.collection.immutable.Nil
 
-class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with MockitoSugar with BeforeAndAfterEach with org.scalatest.PrivateMethodTester {
+class TCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with MockitoSugar with BeforeAndAfterEach with org.scalatest.PrivateMethodTester {
 
   val tcConf = mock[TCConfig]
 
@@ -224,7 +225,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with Mo
       mockTCTaxYearConfig
     )
 
-    "calling amountForDateRange" should {
+    "calling amountForDateRange" must {
 
       "return 0" when {
         "fromDate is after toDate" in {
@@ -266,7 +267,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with Mo
 
     }
 
-    "calling getTotalMaximumAmountPerPeriod" should {
+    "calling getTotalMaximumAmountPerPeriod" must {
       val fromDate = parseDate("2016-09-27")
       val untilDate = parseDate("2017-04-06")
 
@@ -319,7 +320,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with Mo
       override val tcConfig: TCConfig = mock[TCConfig]
     }
 
-    "calling isTaperingRequiredForElements" should {
+    "calling isTaperingRequiredForElements" must {
       val threshold = 6420
 
       "return true" when {
@@ -345,7 +346,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with Mo
       }
     }
 
-    "calling getPercentOfAmount" should {
+    "calling getPercentOfAmount" must {
       "determine correctly percentage of an amount" in {
         val amount = 1000
         val percentage = 20
@@ -354,7 +355,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with Mo
       }
     }
 
-    "calling taperFirstElement" should {
+    "calling taperFirstElement" must {
 
       val fromDate = parseDate("2016-09-27")
       val untilDate = parseDate("2017-04-06")
@@ -473,7 +474,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with Mo
         children = List()
       )
 
-      "wtcWorkElement.netAmount is 0" should {
+      "wtcWorkElement.netAmount is 0" must {
         "assign the max amount for chldcare element without any tapering" in {
           val SUT = new TCCalculatorTapering {
             override val tcConfig: TCConfig = mock[TCConfig]
@@ -522,7 +523,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with Mo
         }
       }
 
-      "wtcWorkElement.netAmount isn't 0" should {
+      "wtcWorkElement.netAmount isn't 0" must {
         val setup = Period(
           from = fromDate,
           until = untilDate,
@@ -598,7 +599,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with Mo
       }
     }
 
-    "calling taperThirdElement" should {
+    "calling taperThirdElement" must {
 
       "taper CTC (Child element) corectly" in {
 
@@ -677,18 +678,10 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with Mo
   }
 
 
-  "tcCalculator" should {
+  "tcCalculator" must {
 
     val fromDate = parseDate("2016-09-27")
     val untilDate = parseDate("2017-04-06")
-
-    val inputPeriod = TCPeriod(
-      from = fromDate,
-      until = untilDate,
-      householdElements = TCHouseholdElements(),
-      claimants = List(),
-      children = List()
-    )
 
     "Determine net amount per element per period (taper amount is larger than element's max amount)" in {
       val taperAmount = BigDecimal(17000)
@@ -704,7 +697,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with Mo
       result shouldBe BigDecimal(16800.00)
     }
 
-    "determine wtc elements" should {
+    "determine wtc elements" must {
       val basicPeriod = new models.input.tc.TCPeriod(
         from = fromDate,
         until = untilDate,
@@ -2066,7 +2059,7 @@ class TCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with Mo
       setup shouldBe Nil
     }
 
-    "calculateHouseholdIncome" should {
+    "calculateHouseholdIncome" must {
       "return previous income" when {
         "previous and current incomes are equal" in {
           val income = TCIncome(

@@ -17,14 +17,15 @@
 package calculators
 
 import org.joda.time.LocalDate
-import uk.gov.hmrc.play.test.UnitSpec
+import org.scalatest.Matchers.convertToAnyShouldWrapper
+import org.scalatestplus.play.PlaySpec
 import utils.{FakeCCCalculatorApplication, Periods}
 
-class CCCalculatorHelperSpec extends UnitSpec with FakeCCCalculatorApplication {
+class CCCalculatorHelperSpec extends PlaySpec with FakeCCCalculatorApplication {
 
   object helper extends CCCalculatorHelper
 
-  "CCCalculatorHelper" should {
+  "CCCalculatorHelper" must {
 
     "round up for double numbers to 2 digits" in {
       val cost: BigDecimal = 12.249212342
@@ -99,7 +100,7 @@ class CCCalculatorHelperSpec extends UnitSpec with FakeCCCalculatorApplication {
       result shouldBe 11
     }
 
-    "amountToMonthlyAmount" should {
+    "amountToMonthlyAmount" must {
       "convert weekly amount to monthly" in {
         val result = helper.amountToMonthlyAmount(120, Periods.Weekly)
         result shouldBe 520
@@ -121,7 +122,7 @@ class CCCalculatorHelperSpec extends UnitSpec with FakeCCCalculatorApplication {
       }
     }
 
-    "amountFromPeriodToDaily" should {
+    "amountFromPeriodToDaily" must {
       "return 0 if invalid period is given" in {
         val result = helper.amountFromPeriodToDaily(6240, Periods.INVALID, 365)
         result shouldBe 0
@@ -133,7 +134,7 @@ class CCCalculatorHelperSpec extends UnitSpec with FakeCCCalculatorApplication {
       }
     }
 
-    "amountToWeeklyAmount" should {
+    "amountToWeeklyAmount" must {
       "convert weekly amount to weekly" in {
         val result = helper.amountToWeeklyAmount(120, Periods.Weekly)
         result shouldBe 120
@@ -155,7 +156,7 @@ class CCCalculatorHelperSpec extends UnitSpec with FakeCCCalculatorApplication {
       }
     }
 
-    "amountToAnnualAmount" should {
+    "amountToAnnualAmount" must {
       "convert weekly amount to yearly" in {
         val result = helper.amountToAnnualAmount(120, Periods.Weekly)
         result shouldBe 6240
@@ -177,7 +178,7 @@ class CCCalculatorHelperSpec extends UnitSpec with FakeCCCalculatorApplication {
       }
     }
 
-    "monthlyAmountToPeriod" should {
+    "monthlyAmountToPeriod" must {
       "convert monthly amount to weekly" in {
         val result = helper.monthlyAmountToPeriod(520, Periods.Weekly)
         result shouldBe 120
@@ -199,7 +200,7 @@ class CCCalculatorHelperSpec extends UnitSpec with FakeCCCalculatorApplication {
       }
     }
 
-    "annualAmountToPeriod" should {
+    "annualAmountToPeriod" must {
       "convert yearly amount to weekly" in {
         val result = helper.annualAmountToPeriod(6240, Periods.Weekly)
         result shouldBe 120

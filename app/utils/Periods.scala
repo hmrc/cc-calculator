@@ -16,17 +16,16 @@
 
 package utils
 
-import play.api.Logger
-import play.api.i18n.Lang
+import play.api.Logging
 import play.api.libs.json._
 
-object EnumUtils {
+object EnumUtils extends Logging {
   def enumReads[E <: Enumeration](enum: E): Reads[E#Value] =
     new Reads[E#Value] {
       def reads(json: JsValue): JsResult[E#Value] = json match {
         case JsString(s) => JsSuccess(enum.withName(s))
         case _ =>
-          Logger.warn(s"EnumUtils.enumReads - JsError::: String value expected")
+          logger.warn(s"EnumUtils.enumReads - JsError::: String value expected")
           JsError("String value expected")
       }
     }
@@ -37,7 +36,7 @@ object EnumUtils {
     }
 }
 
-object Periods extends Enumeration with MessagesObject {
+object Periods extends Enumeration {
   type Period = Value
 
   private val yearlyIndex = 4
@@ -53,12 +52,11 @@ object Periods extends Enumeration with MessagesObject {
   implicit def enumWrites: Writes[Period] = EnumUtils.enumWrites
 
   def toString(period: Value): String = {
-    implicit val lang: Lang = Lang("en")
     period match {
-      case Weekly => messages("cc.period.weekly")
-      case Monthly => messages("cc.period.monthly")
-      case Yearly => messages("cc.period.yearly")
-      case _ => messages("cc.period.invalid")
+      case Weekly => "cc.period.weekly"
+      case Monthly => "cc.period.monthly"
+      case Yearly => "cc.period.yearly"
+      case _ => "cc.period.invalid"
     }
   }
 

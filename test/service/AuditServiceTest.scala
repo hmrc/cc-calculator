@@ -16,28 +16,33 @@
 
 package service
 
-import play.api.test.FakeRequest
+import akka.stream.Materializer
+import org.scalatest.Matchers.convertToAnyShouldWrapper
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.logging.{ForwardedFor, SessionId}
 import uk.gov.hmrc.play.audit.http.config.AuditingConfig
 import uk.gov.hmrc.play.audit.http.connector.{AuditConnector, AuditResult}
 import uk.gov.hmrc.play.audit.model.DataEvent
-import uk.gov.hmrc.play.test.UnitSpec
+import org.scalatestplus.play.PlaySpec
+import play.api.inject.ApplicationLifecycle
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class AuditServiceTest extends UnitSpec {
+class AuditServiceTest extends PlaySpec {
 
   "AuditService" when {
 
     "auditer should send message" in {
 
-      implicit val request = FakeRequest()
-
-      implicit var hc = new HeaderCarrier(forwarded = Some(ForwardedFor("testIp")),  // test the IP address is in audit request
+      implicit val hc = HeaderCarrier(forwarded = Some(ForwardedFor("testIp")),  // test the IP address is in audit request
         sessionId = Some(SessionId("sessionid-random")))
 
       val auditConnectorObj = new AuditConnector {
+
+
+        override def materializer: Materializer = ???
+
+        override def lifecycle: ApplicationLifecycle = ???
 
         var lastAuditEvent : Option[DataEvent]  = None
 
@@ -61,9 +66,9 @@ class AuditServiceTest extends UnitSpec {
 
       auditEvent should not equal Nil
 
-      auditEvent.auditSource should equal("cc-eligibility")
-      auditEvent.auditType should equal("testTranType")
-      auditEvent.detail("randomDetails") should equal("+=+=+=+=+=+=+=+=+")
+      auditEvent.auditSource must equal("cc-eligibility")
+      auditEvent.auditType must equal("testTranType")
+      auditEvent.detail("randomDetails") must equal("+=+=+=+=+=+=+=+=+")
       auditEvent.tags.get("x-forwarded-for") shouldBe Some("testIp")
     }
 
