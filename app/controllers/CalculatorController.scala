@@ -29,6 +29,7 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, MessagesControllerComponents}
 import service.AuditEvents
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
+import utils.TFCConfig
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -38,7 +39,8 @@ class CalculatorController @Inject()(val mcc: MessagesControllerComponents,
                                      val auditEvent: AuditEvents,
                                      val tcCalculator: TCCalculator,
                                      val tfcCalculator: TFCCalculator,
-                                     val escCalculator: ESCCalculator)
+                                     val escCalculator: ESCCalculator,
+                                     val tfcConfig: TFCConfig)
   extends BackendController(mcc) with I18nSupport with Logging {
 
   def calculate: Action[JsValue] = Action.async(parse.json) { implicit request =>

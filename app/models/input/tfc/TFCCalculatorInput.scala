@@ -24,7 +24,7 @@ import play.api.i18n.Lang
 import play.api.libs.functional.syntax._
 import play.api.libs.json.JodaReads._
 import play.api.libs.json._
-import utils._
+import utils.{TFCConfig, _}
 
 case class TFCCalculatorInput(
                                from: LocalDate,
@@ -51,16 +51,17 @@ case class TFCPeriod @Inject() (
                     )(conf: Option[TFCConfig]){
 
   def configRule : TFCTaxYearConfig = conf.get.getConfig(from)
+
+  def createNewWithConfig(configIn: TFCConfig): TFCPeriod = {
+    new TFCPeriod(from, until, periodEligibility, children)(Some(configIn))
+  }
+
 }
 
 object TFCPeriod extends MessagesObject with AppConfigConstantSettings {
 
   def apply(from: LocalDate, until: LocalDate, periodEligibility: Boolean, children: List[TFCChild]): TFCPeriod = {
     new TFCPeriod(from, until, periodEligibility, children)(None)
-  }
-
-  def apply(from: LocalDate, until: LocalDate, periodEligibility: Boolean, children: List[TFCChild], conf: Option[TFCConfig], booleanVal: Option[Boolean]): TFCPeriod = {
-    new TFCPeriod(from, until, periodEligibility, children)(conf)
   }
 
   implicit val periodFormat : Reads[TFCPeriod] = (
