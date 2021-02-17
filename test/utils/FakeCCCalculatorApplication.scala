@@ -23,7 +23,6 @@ import akka.util.ByteString
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import org.scalatest.Suite
-import org.scalatestplus.play.OneAppPerSuite
 import play.api.{Application, Configuration}
 import play.api.i18n.{Lang, MessagesApi}
 import play.api.inject.guice.GuiceApplicationBuilder

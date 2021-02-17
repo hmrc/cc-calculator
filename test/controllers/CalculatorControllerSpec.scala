@@ -28,7 +28,6 @@ import models.output.tfc.{TFCCalculatorOutput, TFCContribution}
 import org.joda.time.LocalDate
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
-import play.api.i18n.Messages.Implicits._
 import play.api.libs.json.{JsValue, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._

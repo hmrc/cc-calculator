@@ -16,8 +16,7 @@
 
 package utils
 
-import play.api.{Logger, Logging}
-import play.api.data.validation.ValidationError
+import play.api.Logging
 import play.api.libs.json._
 
 object JSONFactory extends JSONFactory

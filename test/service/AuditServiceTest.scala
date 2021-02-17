@@ -37,7 +37,7 @@ class AuditServiceTest extends PlaySpec {
 
       implicit val request = FakeRequest()
 
-      implicit var hc = new HeaderCarrier(forwarded = Some(ForwardedFor("testIp")),  // test the IP address is in audit request
+      implicit val hc = HeaderCarrier(forwarded = Some(ForwardedFor("testIp")),  // test the IP address is in audit request
         sessionId = Some(SessionId("sessionid-random")))
 
       val auditConnectorObj = new AuditConnector {

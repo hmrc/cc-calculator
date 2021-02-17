@@ -20,7 +20,7 @@ import calculators.ESCCalculator
 import javax.inject.{Inject, Singleton}
 import models.input.esc.ESCCalculatorInput
 import models.output.esc.ESCCalculatorOutput
-import play.api.{Logger, Logging}
+import play.api.Logging
 import play.api.i18n.I18nSupport
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, MessagesControllerComponents}

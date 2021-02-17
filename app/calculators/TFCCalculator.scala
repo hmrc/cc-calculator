@@ -20,14 +20,14 @@ import javax.inject.Inject
 import models.input.tfc.{TFCCalculatorInput, TFCChild}
 import models.output.tfc._
 import org.joda.time.LocalDate
-import play.api.{Logger, Logging}
-import play.api.i18n.Lang
+import play.api.Logging
 import utils.{MessagesObject, TFCConfig, TFCTaxYearConfig}
 
 import scala.concurrent.Future
 
 
-class TFCCalculator @Inject()(tfcConfig: TFCConfig) extends CCCalculatorHelper with MessagesObject with Logging {
+class TFCCalculator @Inject()(tfcConfig: TFCConfig)
+  extends CCCalculatorHelper with MessagesObject with Logging {
 
   import scala.concurrent.ExecutionContext.Implicits.global
 

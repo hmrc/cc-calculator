@@ -17,9 +17,8 @@
 package models.input.tfc
 
 import com.google.inject.Inject
-import config.{AppConfig, AppConfigConstantSettings}
+import config.AppConfigConstantSettings
 import org.joda.time.LocalDate
-import play.api.Play
 import play.api.i18n.Lang
 import play.api.libs.functional.syntax._
 import play.api.libs.json.JodaReads._

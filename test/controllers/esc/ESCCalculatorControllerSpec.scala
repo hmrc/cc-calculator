@@ -30,7 +30,6 @@ import org.scalatestplus.mockito.MockitoSugar
 import org.scalatest.prop.TableDrivenPropertyChecks._
 import org.scalatest.prop.Tables.Table
 import play.api.http.Status
-import play.api.i18n.Messages.Implicits._
 import play.api.libs.json.{JsValue, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._

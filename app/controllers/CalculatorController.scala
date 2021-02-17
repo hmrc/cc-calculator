@@ -23,7 +23,7 @@ import models.input.esc.ESCCalculatorInput
 import models.input.tc.TCCalculatorInput
 import models.input.tfc.TFCCalculatorInput
 import models.output.CalculatorOutput
-import play.api.{Logger, Logging}
+import play.api.Logging
 import play.api.i18n.I18nSupport
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, MessagesControllerComponents}

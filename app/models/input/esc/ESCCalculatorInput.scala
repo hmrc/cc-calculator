@@ -16,12 +16,9 @@
 
 package models.input.esc
 
-import config.AppConfig
 import config.ConfigConstants._
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
-import play.api.Play
-import play.api.i18n.Lang
 import play.api.libs.functional.syntax._
 import play.api.libs.json.JodaReads._
 import play.api.libs.json.{JsPath, Json, JsonValidationError, Reads}
@@ -31,7 +28,6 @@ case class ESCCalculatorInput(taxYears: List[ESCTaxYear],
                               location: String)
 
 object ESCCalculatorInput {
-  private implicit val lang: Lang = Lang("en")
 
   implicit val escEligibilityReads : Reads[ESCCalculatorInput] = (
       (JsPath \ "taxYears").read[List[ESCTaxYear]].filter(JsonValidationError("Please provide at least 1 Tax Year"))
