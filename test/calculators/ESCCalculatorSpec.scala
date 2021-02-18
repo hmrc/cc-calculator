@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,14 +23,15 @@ import models.output.esc.{ESCCalculatorOutput, ESCSavings, ESCTaxAndNi}
 import models.utility.{CalculationNIBands, CalculationTaxBands}
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
+import org.scalatest.Matchers.convertToAnyShouldWrapper
 import org.scalatestplus.mockito.MockitoSugar
+import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.{JsSuccess, JsValue, Json}
-import uk.gov.hmrc.play.test.UnitSpec
 import utils.{ESCConfig, FakeCCCalculatorApplication, Periods}
 
 import scala.concurrent.Future
 
-class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with MockitoSugar with org.scalatest.PrivateMethodTester with CCCalculatorHelper {
+class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with MockitoSugar with org.scalatest.PrivateMethodTester with CCCalculatorHelper {
   val location = "england"
   val locationScotland = "scotland"
 
@@ -53,7 +54,7 @@ class ESCCalculatorSpec extends UnitSpec with FakeCCCalculatorApplication with M
     childCareCostPeriod= childCareCostPeriod
   )
 
-  "escCalcService" should {
+  "escCalcService" must {
 
     "return a Future[AwardPeriod] result" in {
       val result = escCalc.award(ESCCalculatorInput(taxYears = List(), location = "england"))

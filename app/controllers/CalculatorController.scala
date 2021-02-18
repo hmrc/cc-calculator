@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,12 +23,13 @@ import models.input.esc.ESCCalculatorInput
 import models.input.tc.TCCalculatorInput
 import models.input.tfc.TFCCalculatorInput
 import models.output.CalculatorOutput
-import play.api.Logger
+import play.api.Logging
 import play.api.i18n.I18nSupport
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, MessagesControllerComponents}
 import service.AuditEvents
-import uk.gov.hmrc.play.bootstrap.controller.BackendController
+import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
+import utils.TFCConfig
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -38,12 +39,14 @@ class CalculatorController @Inject()(val mcc: MessagesControllerComponents,
                                      val auditEvent: AuditEvents,
                                      val tcCalculator: TCCalculator,
                                      val tfcCalculator: TFCCalculator,
-                                     val escCalculator: ESCCalculator) extends BackendController(mcc) with I18nSupport {
+                                     val escCalculator: ESCCalculator,
+                                     val tfcConfig: TFCConfig)
+  extends BackendController(mcc) with I18nSupport with Logging {
 
   def calculate: Action[JsValue] = Action.async(parse.json) { implicit request =>
     request.body.validate[CalculatorInput].fold(
       error => {
-        Logger.warn("Calculator Validation JsError in CalculatorController.calculate")
+        logger.warn("Calculator Validation JsError in CalculatorController.calculate")
         Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(play.api.http.Status.BAD_REQUEST, Left(error))))
       },
       result => {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,10 +24,10 @@ import org.joda.time.LocalDate
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
+import org.scalatest.Matchers.convertToAnyShouldWrapper
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatest.prop.TableDrivenPropertyChecks._
 import org.scalatest.prop.Tables.Table
-import play.api.i18n.Messages.Implicits._
 import play.api.libs.json.{JsValue, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -55,7 +55,7 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
   lazy val tcc = app.injector.instanceOf[TCCalculator]
 
 
-  "when calculate is called" should {
+  "when calculate is called" must {
 
     "not return NOT_FOUND for this endpoint" in {
       val result = route(app, FakeRequest(POST, "/cc-calculator/tax-credits/calculate/total-award"))

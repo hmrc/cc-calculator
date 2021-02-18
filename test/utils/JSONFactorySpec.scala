@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,13 @@
 
 package utils
 
-import play.api.data.validation.ValidationError
+import org.scalatest.Matchers.convertToAnyShouldWrapper
+
 import play.api.libs.json._
 
 class JSONFactorySpec extends FakeCCCalculatorApplication {
 
-  "JSONFactory" should {
+  "JSONFactory" must {
 
     "Return a valid output JSON when error sequence and status are passed" in {
       val status = 400

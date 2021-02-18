@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package utils
 
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
+import org.scalatest.Matchers.convertToAnyShouldWrapper
 import org.scalatestplus.mockito.MockitoSugar
 
 class TFCSchemeConfigSpec extends FakeCCCalculatorApplication with MockitoSugar {
@@ -25,7 +26,7 @@ class TFCSchemeConfigSpec extends FakeCCCalculatorApplication with MockitoSugar 
   val tfcConfig: TFCConfig = app.injector.instanceOf[TFCConfig]
 
 
-  "TFC SchemeConfig" should {
+  "TFC SchemeConfig" must {
 
     "populate end day of the tax year from config file" in {
       tfcConfig.appConfig.taxYearEndDay shouldBe 6

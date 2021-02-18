@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,19 +16,22 @@
 
 package service
 
+import akka.stream.Materializer
+import org.scalatest.Matchers.convertToAnyShouldWrapper
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.test.FakeRequest
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.config.AuditingConfig
 import uk.gov.hmrc.play.audit.http.connector.{AuditConnector, AuditResult}
 import uk.gov.hmrc.play.audit.model.DataEvent
-import uk.gov.hmrc.play.test.UnitSpec
+import org.scalatestplus.play.PlaySpec
+import play.api.inject.ApplicationLifecycle
 import utils.FakeCCCalculatorApplication
 
 import scala.collection.mutable.ListBuffer
 import scala.concurrent.{ExecutionContext, Future}
 
-class AuditEventsTest extends UnitSpec with FakeCCCalculatorApplication with MockitoSugar {
+class AuditEventsTest extends PlaySpec with FakeCCCalculatorApplication with MockitoSugar {
   implicit val request = FakeRequest()
   implicit var hc = new HeaderCarrier()
 
@@ -48,7 +51,10 @@ class AuditEventsTest extends UnitSpec with FakeCCCalculatorApplication with Moc
     }
   }
 
-  def createObservableAuditConnector = new ObservableAuditConnector{}
+  def createObservableAuditConnector = new ObservableAuditConnector{
+    override def materializer: Materializer = ???
+    override def lifecycle: ApplicationLifecycle = ???
+  }
 
   def createAuditor(observableAuditConnector : ObservableAuditConnector) = {
 
@@ -59,7 +65,7 @@ class AuditEventsTest extends UnitSpec with FakeCCCalculatorApplication with Moc
     new AuditEvents(testAuditService)
   }
 
-  "Audit Events" should {
+  "Audit Events" must {
 
     "audit request received - success " in {
 
@@ -70,7 +76,7 @@ class AuditEventsTest extends UnitSpec with FakeCCCalculatorApplication with Moc
 
       val event =  observableAuditConnector.events.head
 
-      event.auditType should equal("Request")
+      event.auditType must equal("Request")
       event.detail("data") should startWith("Data")
 
     }
@@ -84,7 +90,7 @@ class AuditEventsTest extends UnitSpec with FakeCCCalculatorApplication with Moc
 
       val event =  observableAuditConnector.events.head
 
-      event.auditType should equal("TFCRequest")
+      event.auditType must equal("TFCRequest")
       event.detail("data") should startWith("Data")
 
     }
@@ -98,7 +104,7 @@ class AuditEventsTest extends UnitSpec with FakeCCCalculatorApplication with Moc
 
       val event =  observableAuditConnector.events.head
 
-      event.auditType should equal("TFCResponse")
+      event.auditType must equal("TFCResponse")
       event.detail("data") should startWith("Data")
 
     }
@@ -112,7 +118,7 @@ class AuditEventsTest extends UnitSpec with FakeCCCalculatorApplication with Moc
 
       val event =  observableAuditConnector.events.head
 
-      event.auditType should equal("TCRequest")
+      event.auditType must equal("TCRequest")
       event.detail("data") should startWith("Data")
 
     }
@@ -126,7 +132,7 @@ class AuditEventsTest extends UnitSpec with FakeCCCalculatorApplication with Moc
 
       val event =  observableAuditConnector.events.head
 
-      event.auditType should equal("TCResponse")
+      event.auditType must equal("TCResponse")
       event.detail("data") should startWith("Data")
 
     }
@@ -140,7 +146,7 @@ class AuditEventsTest extends UnitSpec with FakeCCCalculatorApplication with Moc
 
       val event =  observableAuditConnector.events.head
 
-      event.auditType should equal("ESCRequest")
+      event.auditType must equal("ESCRequest")
       event.detail("data") should startWith("Data")
 
     }
@@ -154,7 +160,7 @@ class AuditEventsTest extends UnitSpec with FakeCCCalculatorApplication with Moc
 
       val event =  observableAuditConnector.events.head
 
-      event.auditType should equal("ESCResponse")
+      event.auditType must equal("ESCResponse")
       event.detail("data") should startWith("Data")
 
     }

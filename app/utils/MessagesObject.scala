@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,13 @@
 
 package utils
 
-import play.api.Play
-import play.api.i18n.MessagesApi
-
 trait MessagesObject {
-
-  lazy val messages: MessagesApi = Play.current.injector.instanceOf[MessagesApi]
   val datePattern = "yyyy-MM-dd"
+
+  val lowerTaxYearsLimitValidation = 1
+  val lowerPeriodsLimitValidation = 1
+  val lowerClaimantsLimitValidation = 1
+  val lowerMonthsLimitValidation = 0
+  val upperMonthsLimitValidation = 100
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package utils
 
+import org.scalatest.Matchers.convertToAnyShouldWrapper
 import play.api.libs.json.{JsError, JsString, Json}
 
 /**
@@ -23,7 +24,7 @@ import play.api.libs.json.{JsError, JsString, Json}
  */
 class PeriodsSpec extends FakeCCCalculatorApplication {
 
-  "Periods" should {
+  "Periods" must {
 
     "convert Periods.Monthly to Json" in {
       val monthly = Periods.Monthly
@@ -61,7 +62,7 @@ class PeriodsSpec extends FakeCCCalculatorApplication {
     }
 
   }
-  "Enumutils" should {
+  "Enumutils" must {
     "return JsError" in {
       class test extends Enumeration
 

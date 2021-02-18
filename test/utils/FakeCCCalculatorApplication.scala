@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,18 +16,24 @@
 
 package utils
 
+import java.nio.charset.Charset
+
 import akka.stream.Materializer
+import akka.util.ByteString
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import org.scalatest.Suite
-import org.scalatestplus.play.OneAppPerSuite
-import play.api.Application
+import play.api.{Application, Configuration}
 import play.api.i18n.{Lang, MessagesApi}
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.mvc.MessagesControllerComponents
-import uk.gov.hmrc.play.test.UnitSpec
+import play.api.mvc.{MessagesControllerComponents, Result}
+import org.scalatestplus.play.PlaySpec
+import play.api.libs.json.{JsValue, Json}
 
-trait FakeCCCalculatorApplication extends UnitSpec with OneAppPerSuite {
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
+
+trait FakeCCCalculatorApplication extends PlaySpec {
   this: Suite =>
 
   val config: Map[String, _] = Map(
@@ -39,12 +45,61 @@ trait FakeCCCalculatorApplication extends UnitSpec with OneAppPerSuite {
   val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
   def parseDate(date: String): LocalDate = LocalDate.parse(date, formatter)
 
-  implicit override lazy val app: Application = new GuiceApplicationBuilder()
+  /*lazy val app: Application = new GuiceApplicationBuilder()
     .configure(config)
-    .build()
+    .build()*/
+
+  lazy val app: Application =
+    new GuiceApplicationBuilder()
+      .disable[com.kenshoo.play.metrics.PlayModule]
+      .disable[com.kenshoo.play.metrics.MetricsController]
+      .configure(Configuration("metrics.enabled" -> false))
+      .configure(Configuration("metrics.jvm" -> false))
+      .configure(config)
+      .build()
+
 
   implicit lazy val mat: Materializer = app.materializer
   implicit val lang: Lang = Lang("en")
   implicit lazy val messages: MessagesApi = app.injector.instanceOf[MessagesApi]
   implicit lazy val mcc: MessagesControllerComponents = app.injector.instanceOf[MessagesControllerComponents]
+
+  def jsonBodyOf(result: Result)(implicit mat: Materializer): JsValue = {
+    Json.parse(bodyOf(result))
+  }
+
+  def jsonBodyOf(resultF: Future[Result])(implicit mat: Materializer): Future[JsValue] = {
+    resultF.map(jsonBodyOf)
+  }
+
+  def bodyOf(result: Result)(implicit mat: Materializer): String = {
+    val bodyBytes: ByteString = await(result.body.consumeData)
+    // We use the default charset to preserve the behaviour of a previous
+    // version of this code, which used new String(Array[Byte]).
+    // If the fact that the previous version used the default charset was an
+    // accident then it may be better to decode in UTF-8 or the charset
+    // specified by the result's headers.
+    bodyBytes.decodeString(Charset.defaultCharset().name)
+  }
+
+  def bodyOf(resultF: Future[Result])(implicit mat: Materializer): Future[String] = {
+    resultF.map(bodyOf)
+  }
+
+  import scala.concurrent.duration._
+  import scala.concurrent.{Await, Future}
+
+  implicit val defaultTimeout: FiniteDuration = 5 seconds
+
+  implicit def extractAwait[A](future: Future[A]): A = await[A](future)
+
+  def await[A](future: Future[A])(implicit timeout: Duration): A = Await.result(future, timeout)
+
+  // Convenience to avoid having to wrap andThen() parameters in Future.successful
+  implicit def liftFuture[A](v: A): Future[A] = Future.successful(v)
+
+  def status(of: Result): Int = of.header.status
+
+  def status(of: Future[Result])(implicit timeout: Duration): Int = status(Await.result(of, timeout))
+
 }

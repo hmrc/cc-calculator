@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 package models.input.tc
 
 import org.joda.time.LocalDate
-import play.api.i18n.Lang
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 import play.api.libs.json.JodaReads._
@@ -128,7 +127,7 @@ object TCChild extends MessagesObject {
   implicit val childFormat: Reads[TCChild] = (
        (JsPath \ "qualifying").read[Boolean] and
         (JsPath \ "childcareCost").read[BigDecimal].filter(
-          JsonValidationError(messages("cc.calc.childcare.spend.too.low")(Lang("en")))
+          JsonValidationError("Childcare Spend cost should not be less than 0.00")
         )(x => childSpendValidation(x)) and
         //childcareCost max value should be 30,000 per year (This will be based on childcareCost Period, hence should be handled in frontend)
           (JsPath \ "childcareCostPeriod").read[Periods.Period] and
