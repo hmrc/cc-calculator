@@ -17,7 +17,7 @@
 package service
 
 import javax.inject.Inject
-import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.{HeaderCarrier, HeaderNames}
 import uk.gov.hmrc.play.audit.http.connector.{AuditConnector, AuditResult}
 import uk.gov.hmrc.play.audit.model.DataEvent
 
@@ -39,7 +39,7 @@ class AuditService @Inject()(val auditConnector: AuditConnector) {
     val auditEvent = DataEvent(
       auditSource =  auditSource,
       auditType = auditType,
-      tags = hc.headers.toMap,
+      tags = hc.headers(HeaderNames.explicitlyIncludedHeaders).toMap,
       detail = details)
 //      detail = generateDetails(request, details))
     auditEvent

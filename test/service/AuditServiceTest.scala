@@ -18,8 +18,7 @@ package service
 
 import akka.stream.Materializer
 import org.scalatest.Matchers.convertToAnyShouldWrapper
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.http.logging.{ForwardedFor, SessionId}
+import uk.gov.hmrc.http.{ForwardedFor, HeaderCarrier, SessionId}
 import uk.gov.hmrc.play.audit.http.config.AuditingConfig
 import uk.gov.hmrc.play.audit.http.connector.{AuditConnector, AuditResult}
 import uk.gov.hmrc.play.audit.model.DataEvent
