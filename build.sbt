@@ -6,12 +6,7 @@ import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 lazy val appName = "cc-calculator"
 
 lazy val appDependencies : Seq[ModuleID] = ???
-lazy val plugins : Seq[Plugins] = Seq(
-  SbtAutoBuildPlugin,
-  SbtGitVersioning,
-  SbtDistributablesPlugin,
-  SbtArtifactory
-)
+lazy val plugins : Seq[Plugins] = Seq(SbtDistributablesPlugin)
 lazy val playSettings : Seq[Setting[_]] = Seq.empty
 
 lazy val scoverageSettings = {
@@ -39,11 +34,7 @@ lazy val microservice = Project(appName, file("."))
     retrieveManaged := true,
     evictionWarningOptions in update := EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
     routesGenerator := InjectedRoutesGenerator,
-    resolvers := Seq(
-      Resolver.bintrayRepo("hmrc", "releases"),
-      Resolver.typesafeRepo("releases"),
-      Resolver.jcenterRepo
-    )
+    resolvers += Resolver.jcenterRepo
   )
   .settings(
     scalacOptions += "-P:silencer:pathFilters=routes",

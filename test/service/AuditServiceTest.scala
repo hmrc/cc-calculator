@@ -16,14 +16,12 @@
 
 package service
 
-import akka.stream.Materializer
 import org.scalatest.Matchers.convertToAnyShouldWrapper
+import org.scalatestplus.play.PlaySpec
 import uk.gov.hmrc.http.{ForwardedFor, HeaderCarrier, SessionId}
 import uk.gov.hmrc.play.audit.http.config.AuditingConfig
-import uk.gov.hmrc.play.audit.http.connector.{AuditConnector, AuditResult}
+import uk.gov.hmrc.play.audit.http.connector.{AuditChannel, AuditConnector, AuditCounter, AuditResult}
 import uk.gov.hmrc.play.audit.model.DataEvent
-import org.scalatestplus.play.PlaySpec
-import play.api.inject.ApplicationLifecycle
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -39,17 +37,18 @@ class AuditServiceTest extends PlaySpec {
       val auditConnectorObj = new AuditConnector {
 
 
-        override def materializer: Materializer = ???
-
-        override def lifecycle: ApplicationLifecycle = ???
-
         var lastAuditEvent : Option[DataEvent]  = None
 
-        override def auditingConfig: AuditingConfig = ???
         override def sendEvent(event: DataEvent)(implicit hc: HeaderCarrier = HeaderCarrier(), ec : ExecutionContext): Future[AuditResult] = {
           lastAuditEvent = Some(event.asInstanceOf[DataEvent])
           Future.successful(AuditResult.Success)
         }
+
+        override def auditingConfig: AuditingConfig = ???
+
+        override def auditChannel: AuditChannel = ???
+
+        override def auditCounter: AuditCounter = ???
       }
 
       val auditTest: AuditService = new AuditService(auditConnectorObj) {
