@@ -22,7 +22,7 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.test.FakeRequest
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.config.AuditingConfig
-import uk.gov.hmrc.play.audit.http.connector.{AuditConnector, AuditResult}
+import uk.gov.hmrc.play.audit.http.connector.{AuditChannel, AuditConnector, AuditCounter, AuditResult}
 import uk.gov.hmrc.play.audit.model.DataEvent
 import org.scalatestplus.play.PlaySpec
 import play.api.inject.ApplicationLifecycle
@@ -51,9 +51,10 @@ class AuditEventsTest extends PlaySpec with FakeCCCalculatorApplication with Moc
     }
   }
 
-  def createObservableAuditConnector = new ObservableAuditConnector{
-    override def materializer: Materializer = ???
-    override def lifecycle: ApplicationLifecycle = ???
+  def createObservableAuditConnector = new ObservableAuditConnector {
+    override def auditChannel: AuditChannel = ???
+
+    override def auditCounter: AuditCounter = ???
   }
 
   def createAuditor(observableAuditConnector : ObservableAuditConnector) = {
