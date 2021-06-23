@@ -21,6 +21,7 @@ import javax.inject.Inject
 import org.joda.time.LocalDate
 import play.api.Configuration
 import play.api.i18n.{Lang, MessagesApi}
+import scala.collection.JavaConverters.asScalaBufferConverter
 
 class ESCConfig @Inject()(appConfig: AppConfig,
                           configuration: Configuration,
@@ -102,7 +103,9 @@ class ESCConfig @Inject()(appConfig: AppConfig,
       case cat if cat.equals("A") || cat.equals("B") || cat.equals("C") => cat
       case _ => throw new NoSuchElementException(messages("cc.scheme.config.invalid.ni.category"))
     }
-    getNiCategoryHelper(niCode, config.getConfigSeq("niCategories").get, None) match {
+    val configs : Seq[play.api.Configuration] = config.underlying.getConfigList("niCategories")
+      .asScala.map(Configuration(_))
+    getNiCategoryHelper(niCode, configs, None) match {
       case Some(z) => z
       case _ =>   throw new NoSuchElementException(messages("cc.scheme.config.ni.category.not.found"))
     }
@@ -110,7 +113,7 @@ class ESCConfig @Inject()(appConfig: AppConfig,
 
   //Scottish tax changes
   def getNiCategoryHelper(code: String, niCategories: Seq[Configuration], acc: Option[NiCategory]): Option[NiCategory] = {
-    niCategories match {
+    niCategories.toList match {
       case Nil =>  acc
       case head :: tail =>
         if (head.get[String]("ni-cat-code").equals(code)) {

@@ -18,7 +18,7 @@ package utils
 
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
-import org.scalatest.Matchers.convertToAnyShouldWrapper
+import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 import org.scalatestplus.mockito.MockitoSugar
 
 class TFCSchemeConfigSpec extends FakeCCCalculatorApplication with MockitoSugar {

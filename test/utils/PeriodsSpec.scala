@@ -16,7 +16,7 @@
 
 package utils
 
-import org.scalatest.Matchers.convertToAnyShouldWrapper
+import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 import play.api.libs.json.{JsError, JsString, Json}
 
 /**

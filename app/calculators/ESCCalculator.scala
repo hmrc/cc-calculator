@@ -101,9 +101,7 @@ class ESCCalculatorHelpers @Inject()(escConfig: ESCConfig)
   }
 
   //Scottish tax changes
-  private def determineMaximumIncomeReliefPost2011BasedOnRelevantEarnings(relevantEarnings: BigDecimal,
-                                                                          calcPeriod: Periods.Period = Periods.Monthly,
-                                                                          config: ESCTaxYearConfig) = {
+  private def determineMaximumIncomeReliefPost2011BasedOnRelevantEarnings(relevantEarnings: BigDecimal, calcPeriod: Periods.Period, config: ESCTaxYearConfig) = {
     val isScottishESCTaxYearConfig = config.taxStarterRate > 0
     val niThreshold = config.basicNiThresholdUk
     val higherRateCeiling: BigDecimal = config.taxHigherBandUpperLimit
@@ -119,9 +117,7 @@ class ESCCalculatorHelpers @Inject()(escConfig: ESCConfig)
     }
   }
 
-  private def determineMaximumIncomeReliefPre2011(relevantEarnings: BigDecimal,
-                                                  calcPeriod: Periods.Period = Periods.Monthly,
-                                                  taxCode: String) = {
+  private def determineMaximumIncomeReliefPre2011(relevantEarnings: BigDecimal, calcPeriod: Periods.Period, taxCode: String) = {
     relevantEarnings match {
       case amount if amount <= 0 => BigDecimal(0.00)
       case amount if amount > 0 =>
