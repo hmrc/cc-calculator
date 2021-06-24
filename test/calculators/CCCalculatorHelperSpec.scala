@@ -17,7 +17,7 @@
 package calculators
 
 import org.joda.time.LocalDate
-import org.scalatest.Matchers.convertToAnyShouldWrapper
+import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 import org.scalatestplus.play.PlaySpec
 import utils.{FakeCCCalculatorApplication, Periods}
 

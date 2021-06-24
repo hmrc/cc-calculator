@@ -20,9 +20,10 @@ import com.codahale.metrics.SharedMetricRegistries
 import com.typesafe.config.ConfigFactory
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
-import org.scalatest.Matchers.convertToAnyShouldWrapper
+import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.Configuration
+import scala.collection.JavaConverters.asScalaBufferConverter
 
 class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers with MockitoSugar {
 
@@ -331,7 +332,8 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers with 
 
     "Return error if the configuration details are not present in the scheme config file for a valid niCategoryCode" in {
       val configuration = Configuration(ConfigFactory.load(new java.io.File("/testconfig-esc.conf").getName))
-      val configs: Seq[play.api.Configuration] = configuration.getConfigSeq("test-esc.rule-change").get
+      val configs : Seq[play.api.Configuration] = configuration.underlying.getConfigList("test-esc.rule-change").asScala.map(Configuration(_))
+
       val pattern = "dd-MM-yyyy"
       val formatter = DateTimeFormat.forPattern(pattern)
       val fromDate = LocalDate.parse("23-05-2017", formatter)

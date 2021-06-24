@@ -34,7 +34,7 @@ import play.api.test.Helpers._
 import service.AuditEvents
 import utils.{FakeCCCalculatorApplication, TFCConfig}
 import org.mockito.ArgumentMatchers._
-import org.scalatest.Matchers.convertToAnyShouldWrapper
+import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 import org.scalatestplus.mockito.MockitoSugar
 
 import scala.concurrent.Future
