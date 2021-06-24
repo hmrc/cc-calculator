@@ -28,7 +28,7 @@ lazy val microservice = Project(appName, file("."))
   .settings(publishingSettings : _*)
   .settings(
     targetJvm := "jvm-1.8",
-    scalaVersion := "2.12.14",
+    scalaVersion := "2.12.12",
     libraryDependencies ++= AppDependencies(),
     dependencyOverrides += "commons-codec" % "commons-codec" % "1.12",
     retrieveManaged := true,
@@ -40,7 +40,7 @@ lazy val microservice = Project(appName, file("."))
     scalacOptions += "-P:silencer:pathFilters=routes",
     scalacOptions += "-P:silencer:lineContentFilters=^\\w",
     libraryDependencies ++= Seq(
-      compilerPlugin("com.github.ghik" % "silencer-plugin" % "1.7.5" cross CrossVersion.full),
-      "com.github.ghik" % "silencer-lib" % "1.7.5" % Provided cross CrossVersion.full
+      compilerPlugin("com.github.ghik" % "silencer-plugin" % "1.7.1" cross CrossVersion.full),
+      "com.github.ghik" % "silencer-lib" % "1.7.1" % Provided cross CrossVersion.full
     )
   )
