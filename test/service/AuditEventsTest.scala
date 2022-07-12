@@ -16,16 +16,14 @@
 
 package service
 
-import akka.stream.Materializer
 import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.test.FakeRequest
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.config.AuditingConfig
-import uk.gov.hmrc.play.audit.http.connector.{AuditChannel, AuditConnector, AuditCounter, AuditResult}
+import uk.gov.hmrc.play.audit.http.connector.{AuditChannel, AuditConnector, AuditResult, DatastreamMetrics}
 import uk.gov.hmrc.play.audit.model.DataEvent
 import org.scalatestplus.play.PlaySpec
-import play.api.inject.ApplicationLifecycle
 import utils.FakeCCCalculatorApplication
 
 import scala.collection.mutable.ListBuffer
@@ -54,7 +52,7 @@ class AuditEventsTest extends PlaySpec with FakeCCCalculatorApplication with Moc
   def createObservableAuditConnector = new ObservableAuditConnector {
     override def auditChannel: AuditChannel = ???
 
-    override def auditCounter: AuditCounter = ???
+    override def datastreamMetrics: DatastreamMetrics = ???
   }
 
   def createAuditor(observableAuditConnector : ObservableAuditConnector) = {

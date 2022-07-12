@@ -20,7 +20,7 @@ import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 import org.scalatestplus.play.PlaySpec
 import uk.gov.hmrc.http.{ForwardedFor, HeaderCarrier, SessionId}
 import uk.gov.hmrc.play.audit.http.config.AuditingConfig
-import uk.gov.hmrc.play.audit.http.connector.{AuditChannel, AuditConnector, AuditCounter, AuditResult}
+import uk.gov.hmrc.play.audit.http.connector.{AuditChannel, AuditConnector, AuditResult, DatastreamMetrics}
 import uk.gov.hmrc.play.audit.model.DataEvent
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -48,7 +48,7 @@ class AuditServiceTest extends PlaySpec {
 
         override def auditChannel: AuditChannel = ???
 
-        override def auditCounter: AuditCounter = ???
+        override def datastreamMetrics: DatastreamMetrics = ???
       }
 
       val auditTest: AuditService = new AuditService(auditConnectorObj) {
