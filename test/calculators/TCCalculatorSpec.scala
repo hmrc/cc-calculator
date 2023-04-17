@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -1076,7 +1076,7 @@ class TCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with Mo
 
 
       "(no children) return BigDecimal(0.00) when checking weekly threshold spend for children" in {
-        val decoratedChildCareThreshold = PrivateMethod[BigDecimal]('getChildcareThresholdPerWeek)
+        val decoratedChildCareThreshold = PrivateMethod[BigDecimal](Symbol("getChildcareThresholdPerWeek"))
         val result = tcCalculator invokePrivate decoratedChildCareThreshold(basicPeriod)
         result shouldBe BigDecimal(0.00)
       }
@@ -1099,7 +1099,7 @@ class TCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with Mo
           )
         )
 
-        val decoratedChildCareThreshold = PrivateMethod[BigDecimal]('getChildcareThresholdPerWeek)
+        val decoratedChildCareThreshold = PrivateMethod[BigDecimal](Symbol("getChildcareThresholdPerWeek"))
         val result = tcCalculator invokePrivate decoratedChildCareThreshold(period)
         result shouldBe BigDecimal(175.00)
       }
@@ -1134,7 +1134,7 @@ class TCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with Mo
           )
         )
 
-        val decoratedChildCareThreshold = PrivateMethod[BigDecimal]('getChildcareThresholdPerWeek)
+        val decoratedChildCareThreshold = PrivateMethod[BigDecimal](Symbol("getChildcareThresholdPerWeek"))
         val result = tcCalculator invokePrivate decoratedChildCareThreshold(period)
         result shouldBe BigDecimal(175.00)
       }
@@ -1181,7 +1181,7 @@ class TCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with Mo
           )
         )
 
-        val decoratedChildCareThreshold = PrivateMethod[BigDecimal]('getChildcareThresholdPerWeek)
+        val decoratedChildCareThreshold = PrivateMethod[BigDecimal](Symbol("getChildcareThresholdPerWeek"))
         val result = tcCalculator invokePrivate decoratedChildCareThreshold(period)
         result shouldBe BigDecimal(300.00)
       }
@@ -2072,7 +2072,7 @@ class TCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with Mo
             ))
           )
 
-          val decoratedAdvicePeriod = PrivateMethod[BigDecimal]('calculateHouseholdIncome)
+          val decoratedAdvicePeriod = PrivateMethod[BigDecimal](Symbol("calculateHouseholdIncome"))
           val result = tcCalculator invokePrivate decoratedAdvicePeriod(LocalDate.now, income, income)
           result shouldBe 57200
         }
@@ -2099,7 +2099,7 @@ class TCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with Mo
             statutory = None
           )
 
-          val decoratedAdvicePeriod = PrivateMethod[BigDecimal]('calculateHouseholdIncome)
+          val decoratedAdvicePeriod = PrivateMethod[BigDecimal](Symbol("calculateHouseholdIncome"))
           val result = tcCalculator invokePrivate decoratedAdvicePeriod(LocalDate.now, previousIncome, currentIncome)
           result shouldBe 27500
         }
@@ -2121,7 +2121,7 @@ class TCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with Mo
             statutory = None
           )
 
-          val decoratedAdvicePeriod = PrivateMethod[BigDecimal]('calculateHouseholdIncome)
+          val decoratedAdvicePeriod = PrivateMethod[BigDecimal](Symbol("calculateHouseholdIncome"))
           val result = tcCalculator invokePrivate decoratedAdvicePeriod(LocalDate.now, previousIncome, currentIncome)
           result shouldBe 27500
         }
@@ -2143,7 +2143,7 @@ class TCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with Mo
             statutory = None
           )
 
-          val decoratedAdvicePeriod = PrivateMethod[BigDecimal]('calculateHouseholdIncome)
+          val decoratedAdvicePeriod = PrivateMethod[BigDecimal](Symbol("calculateHouseholdIncome"))
           val result = tcCalculator invokePrivate decoratedAdvicePeriod(LocalDate.now, previousIncome, currentIncome)
           result shouldBe 27500
         }

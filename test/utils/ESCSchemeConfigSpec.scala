@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -332,7 +332,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers with 
 
     "Return error if the configuration details are not present in the scheme config file for a valid niCategoryCode" in {
       val configuration = Configuration(ConfigFactory.load(new java.io.File("/testconfig-esc.conf").getName))
-      val configs : Seq[play.api.Configuration] = configuration.underlying.getConfigList("test-esc.rule-change").asScala.map(Configuration(_))
+      val configs : Seq[play.api.Configuration] = configuration.underlying.getConfigList("test-esc.rule-change").asScala.map(Configuration(_)).toSeq
 
       val pattern = "dd-MM-yyyy"
       val formatter = DateTimeFormat.forPattern(pattern)
