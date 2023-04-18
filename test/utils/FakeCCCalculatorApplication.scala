@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 package utils
 
 import java.nio.charset.Charset
-
 import akka.stream.Materializer
 import akka.util.ByteString
 import org.joda.time.LocalDate
@@ -32,6 +31,7 @@ import play.api.libs.json.{JsValue, Json}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import scala.language.postfixOps
 
 trait FakeCCCalculatorApplication extends PlaySpec {
   this: Suite =>

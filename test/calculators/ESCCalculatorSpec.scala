@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ import models.utility.{CalculationNIBands, CalculationTaxBands}
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
+import org.mockito.ArgumentMatchers
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.{JsSuccess, JsValue, Json}
@@ -1206,7 +1207,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
 
       val result = escCalc.determineSavingsPerClaimant(period, location = locationScotland)
 
-      (result(0).savings.taxSaving * 12).intValue() shouldBe  BigDecimal(467.50).intValue()
+      (result(0).savings.taxSaving * 12).intValue shouldBe  BigDecimal(467.50).intValue
     }
 
     "Have correct Tax Savings for Scotland with amount over to higher rate" in {
@@ -1220,7 +1221,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
 
       val result = escCalc.determineSavingsPerClaimant(period, location = locationScotland)
 
-      (result(0).savings.taxSaving * 12).intValue() shouldBe  BigDecimal(610).intValue()
+      (result(0).savings.taxSaving * 12).intValue shouldBe  BigDecimal(610).intValue
     }
 
     "Have correct Tax Savings for Scotland with amount over to additional rate" in {
@@ -1234,7 +1235,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
 
       val result = escCalc.determineSavingsPerClaimant(period, location = locationScotland)
 
-      (result(0).savings.taxSaving * 12).intValue() shouldBe  BigDecimal(1134).intValue()
+      (result(0).savings.taxSaving * 12).intValue shouldBe  BigDecimal(1134).intValue
     }
 
     "Have correct total ESC Tax Savings for England" in {

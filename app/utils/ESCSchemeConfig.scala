@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -104,7 +104,7 @@ class ESCConfig @Inject()(appConfig: AppConfig,
       case _ => throw new NoSuchElementException(messages("cc.scheme.config.invalid.ni.category"))
     }
     val configs : Seq[play.api.Configuration] = config.underlying.getConfigList("niCategories")
-      .asScala.map(Configuration(_))
+      .asScala.map(Configuration(_)).toSeq
     getNiCategoryHelper(niCode, configs, None) match {
       case Some(z) => z
       case _ =>   throw new NoSuchElementException(messages("cc.scheme.config.ni.category.not.found"))
