@@ -172,6 +172,35 @@ class TCSchemeConfigSpec extends FakeCCCalculatorApplication with MockitoSugar {
     )
   )
 
+  val taxYearConfig2023 = TCTaxYearConfig(
+    otherIncomeAdjustment = 300,
+    currentIncomeFallDifferenceAmount = 2500,
+    currentIncomeRiseDifferenceAmount = 2500,
+    wtc = WTC(
+      basicElement = 2070,
+      coupleElement = 2125,
+      loneParentElement = 2125,
+      hours30Element = 860,
+      disabledWorkerElement = 3345,
+      severeDisabilityWorkerElement = 1445,
+      maxChildcareOneChildElement = 175,
+      maxChildcareMoreChildrenElement = 300,
+      eligibleCostCoveredPercent = 70
+    ),
+    ctc = CTC(
+      youngPersonElement = 2935,
+      childElement = 2935,
+      disabledChildElement = 3545,
+      severeDisabilityChildElement = 1430,
+      familyElement = 545
+    ),
+    thresholds = Thresholds(
+      wtcIncomeThreshold = 6770,
+      ctcIncomeThreshold = 17005,
+      taperRatePercent = 41
+    )
+  )
+
 
   "TC SchemeConfig" must {
     val tcConfig = app.injector.instanceOf[TCConfig]
@@ -199,7 +228,8 @@ class TCSchemeConfigSpec extends FakeCCCalculatorApplication with MockitoSugar {
       ("2017", "05-04-2018", taxYearConfig2017),
       ("2018", "06-04-2018", taxYearConfig2018),
       ("2018", "23-07-2018", taxYearConfig2018),
-      ("2019", "23-07-2019", taxYearConfig2019)
+      ("2019", "23-07-2019", taxYearConfig2019),
+      ("2023", "23-07-2023", taxYearConfig2023)
     )
 
     forAll(configTestCases) { case (taxYear, date, taxYearConfig) =>
@@ -210,14 +240,14 @@ class TCSchemeConfigSpec extends FakeCCCalculatorApplication with MockitoSugar {
         val config = tcConfig.getConfig(fromDate)
         config shouldBe taxYearConfig
       }
-
     }
 
     val datesTestCases = Table(
       ("test date", "ty start date", "ty end date"),
       ("01-01-2017", "06-04-2016", "06-04-2017"),
       ("06-04-2017", "06-04-2017", "06-04-2018"),
-      ("05-04-2017", "06-04-2016", "06-04-2017")
+      ("05-04-2017", "06-04-2016", "06-04-2017"),
+      ("10-04-2023", "06-04-2023", "06-04-2024")
     )
 
     forAll(datesTestCases) { case (testDate, startDate, endDate) =>
@@ -231,7 +261,6 @@ class TCSchemeConfigSpec extends FakeCCCalculatorApplication with MockitoSugar {
         resultTuple._1 shouldBe taxYearStartDate
         resultTuple._2 shouldBe taxYearEndDate
       }
-
     }
   }
 }
