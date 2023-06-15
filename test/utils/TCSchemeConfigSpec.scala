@@ -172,7 +172,7 @@ class TCSchemeConfigSpec extends FakeCCCalculatorApplication with MockitoSugar {
     )
   )
 
-  val taxYearConfig2023 = TCTaxYearConfig(
+  val taxYearConfig2022 = TCTaxYearConfig(
     otherIncomeAdjustment = 300,
     currentIncomeFallDifferenceAmount = 2500,
     currentIncomeRiseDifferenceAmount = 2500,
@@ -197,6 +197,35 @@ class TCSchemeConfigSpec extends FakeCCCalculatorApplication with MockitoSugar {
     thresholds = Thresholds(
       wtcIncomeThreshold = 6770,
       ctcIncomeThreshold = 17005,
+      taperRatePercent = 41
+    )
+  )
+
+  val taxYearConfig2023 = TCTaxYearConfig(
+    otherIncomeAdjustment = 300,
+    currentIncomeFallDifferenceAmount = 2500,
+    currentIncomeRiseDifferenceAmount = 2500,
+    wtc = WTC(
+      basicElement = 2280,
+      coupleElement = 2340,
+      loneParentElement = 2340,
+      hours30Element = 950,
+      disabledWorkerElement = 3685,
+      severeDisabilityWorkerElement = 1595,
+      maxChildcareOneChildElement = 175,
+      maxChildcareMoreChildrenElement = 300,
+      eligibleCostCoveredPercent = 70
+    ),
+    ctc = CTC(
+      youngPersonElement = 3235,
+      childElement = 3235,
+      disabledChildElement = 3905,
+      severeDisabilityChildElement = 1575,
+      familyElement = 545
+    ),
+    thresholds = Thresholds(
+      wtcIncomeThreshold = 7455,
+      ctcIncomeThreshold = 18725,
       taperRatePercent = 41
     )
   )
@@ -229,6 +258,7 @@ class TCSchemeConfigSpec extends FakeCCCalculatorApplication with MockitoSugar {
       ("2018", "06-04-2018", taxYearConfig2018),
       ("2018", "23-07-2018", taxYearConfig2018),
       ("2019", "23-07-2019", taxYearConfig2019),
+      ("2022", "23-07-2022", taxYearConfig2022),
       ("2023", "23-07-2023", taxYearConfig2023)
     )
 
