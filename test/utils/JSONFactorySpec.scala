@@ -88,7 +88,7 @@ class JSONFactorySpec extends FakeCCCalculatorApplication {
 //      val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_51.json")
 //      val json: JsValue = Json.parse(resource.toString)
 //      val result = json.validate[TCCalculatorInput]
-//      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+//      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 //      val firstPeriodFrom = LocalDate.parse("2016-09-27", formatter)
 //      val firstPeriodTo = LocalDate.parse("2016-12-12", formatter)
 //      val secondPeriodFrom = LocalDate.parse("2016-12-12", formatter)
@@ -182,7 +182,7 @@ class JSONFactorySpec extends FakeCCCalculatorApplication {
 //      val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_51.json")
 //      val json: JsValue = Json.parse(resource.toString)
 //      val result = json.validate[TCCalculatorInput]
-//      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+//      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 //      val firstPeriodFrom = LocalDate.parse("2016-09-27", formatter)
 //      val firstPeriodTo = LocalDate.parse("2016-12-12", formatter)
 //      val secondPeriodFrom = LocalDate.parse("2016-12-12", formatter)

@@ -16,7 +16,8 @@
 
 package calculators
 
-import org.joda.time.{Days, LocalDate}
+import java.time.LocalDate
+import java.time.temporal.ChronoUnit.DAYS
 import utils.Periods
 
 import scala.math.BigDecimal.RoundingMode
@@ -103,7 +104,7 @@ trait CCCalculatorHelper {
   }
 
   def daysBetween(fromDate: LocalDate, toDate: LocalDate): Int = {
-    Days.daysBetween(fromDate, toDate).getDays
+    DAYS.between(fromDate, toDate).toInt
   }
 
 }

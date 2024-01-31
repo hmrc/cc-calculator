@@ -19,17 +19,16 @@ package calculators
 import javax.inject.Inject
 import models.input.tfc.{TFCCalculatorInput, TFCChild}
 import models.output.tfc._
-import org.joda.time.LocalDate
+import java.time.LocalDate
+
 import play.api.Logging
 import utils.{MessagesObject, TFCConfig, TFCTaxYearConfig}
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 
-class TFCCalculator @Inject()(tfcConfig: TFCConfig)
+class TFCCalculator @Inject()(tfcConfig: TFCConfig)(implicit ec: ExecutionContext)
   extends CCCalculatorHelper with MessagesObject with Logging {
-
-  import scala.concurrent.ExecutionContext.Implicits.global
 
   def getHouseholdContribution(periods: List[TFCPeriod]) : TFCContribution = {
     val householdTotalParentContribution: BigDecimal =

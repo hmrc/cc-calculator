@@ -8,7 +8,7 @@
     <logger name="uk.gov" level="INFO"/>
     <logger name="application" level="INFO"/>
 
-    <root level="${logger.root:-ERROR}">
+    <root level="ERROR">
         <appender-ref ref="STDOUT"/>
     </root>
 

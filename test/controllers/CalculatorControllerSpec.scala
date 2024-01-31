@@ -25,7 +25,7 @@ import models.output.CalculatorOutput
 import models.output.esc.{ESCCalculatorOutput, ESCSavings}
 import models.output.tc.TCCalculatorOutput
 import models.output.tfc.{TFCCalculatorOutput, TFCContribution}
-import org.joda.time.LocalDate
+import java.time.LocalDate
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import play.api.libs.json.{JsValue, Json}

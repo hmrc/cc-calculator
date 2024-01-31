@@ -21,7 +21,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.github.fge.jackson.JsonLoader
 import models.input.esc.ESCCalculatorInput
 import models.output.esc.{ESCCalculatorOutput, ESCSavings}
-import org.joda.time.LocalDate
+import java.time.LocalDate
 import org.mockito.ArgumentMatchers.{eq => mockEq, _}
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach

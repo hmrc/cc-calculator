@@ -18,8 +18,8 @@ package utils
 
 import com.codahale.metrics.SharedMetricRegistries
 import com.typesafe.config.ConfigFactory
-import org.joda.time.LocalDate
-import org.joda.time.format.DateTimeFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.Configuration
@@ -303,7 +303,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers with 
 
     "Return 243 for post-2011-maximum-exemption" in {
       val pattern = "dd-MM-yyyy"
-      val formatter = DateTimeFormat.forPattern(pattern)
+      val formatter = DateTimeFormatter.ofPattern(pattern)
       val fromDate = LocalDate.parse("23-05-2016", formatter)
       escConf.getMaxBottomBandAllowance(fromDate) shouldBe 243
 
@@ -311,7 +311,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers with 
 
     "Return 8112 for NI limit for 2016/2017" in {
       val pattern = "dd-MM-yyyy"
-      val formatter = DateTimeFormat.forPattern(pattern)
+      val formatter = DateTimeFormatter.ofPattern(pattern)
       val fromDate = LocalDate.parse("23-05-2016", formatter)
       escConf.getNILimit(fromDate) shouldBe 8112
 
@@ -319,7 +319,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers with 
 
     "Return error for invalid niCategoryCode" in {
       val pattern = "dd-MM-yyyy"
-      val formatter = DateTimeFormat.forPattern(pattern)
+      val formatter = DateTimeFormatter.ofPattern(pattern)
       val fromDate = LocalDate.parse("23-05-2016", formatter)
       try {
         val result = escConf.getConfig(fromDate, "Z", locationEngland)
@@ -335,7 +335,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers with 
       val configs : Seq[play.api.Configuration] = configuration.underlying.getConfigList("test-esc.rule-change").asScala.map(Configuration(_)).toSeq
 
       val pattern = "dd-MM-yyyy"
-      val formatter = DateTimeFormat.forPattern(pattern)
+      val formatter = DateTimeFormatter.ofPattern(pattern)
       val fromDate = LocalDate.parse("23-05-2017", formatter)
       // fetch the config if it matches the particular year
       val configForTaxYear = escConf.getConfigForTaxYear(fromDate, configs)
@@ -356,7 +356,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers with 
       x =>
         s"${x.description}" in {
           val pattern = "dd-MM-yyyy"
-          val formatter = DateTimeFormat.forPattern(pattern)
+          val formatter = DateTimeFormatter.ofPattern(pattern)
           val now = LocalDate.parse(x.date, formatter)
           val config = escConf.getConfig(now, x.niCategoryCode, x.location)
 
@@ -367,16 +367,16 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers with 
             defaultTaxCode = x.defaultTaxCode,
             personalAllowanceRate = 0.00,
             defaultPersonalAllowance = x.defaultPersonalAllowance,
-            taxStarterRate = if(x.location.equals(locationScotland) && now.isAfter(new LocalDate(2018,4,5))) 19.00 else 0,
-            taxStarterBandCapacity = if(x.location.equals(locationScotland) && now.isAfter(new LocalDate(2018,4,5))) 2000.00 else 0,
+            taxStarterRate = if(x.location.equals(locationScotland) && now.isAfter(LocalDate.of(2018,4,5))) 19.00 else 0,
+            taxStarterBandCapacity = if(x.location.equals(locationScotland) && now.isAfter(LocalDate.of(2018,4,5))) 2000.00 else 0,
             taxBasicRate = 20.00,
             taxBasicBandCapacity = x.taxBasicBandCapacity,
-            taxIntermediateRate = if(x.location.equals(locationScotland) && now.isAfter(new LocalDate(2018,4,5))) 21.00 else 0,
-            taxIntermediateBandCapacity = if(x.location.equals(locationScotland) && now.isAfter(new LocalDate(2018,4,5))) 19430.00 else 0,
+            taxIntermediateRate = if(x.location.equals(locationScotland) && now.isAfter(LocalDate.of(2018,4,5))) 21.00 else 0,
+            taxIntermediateBandCapacity = if(x.location.equals(locationScotland) && now.isAfter(LocalDate.of(2018,4,5))) 19430.00 else 0,
             taxHigherRateBandCapacity = x.taxHigherRateBandCapacity,
-            taxHigherRate = if(x.location.equals(locationScotland) && now.isAfter(new LocalDate(2018,4,5))) 41.00 else 40.00,
+            taxHigherRate = if(x.location.equals(locationScotland) && now.isAfter(LocalDate.of(2018,4,5))) 41.00 else 40.00,
             taxHigherBandUpperLimit = 150000.00,
-            taxAdditionalRate = if(x.location.equals(locationScotland) && now.isAfter(new LocalDate(2018,4,5))) 46.00 else 45.00,
+            taxAdditionalRate = if(x.location.equals(locationScotland) && now.isAfter(LocalDate.of(2018,4,5))) 46.00 else 45.00,
             taxAdditionalBandLowerLimit = 150000.01,
             niLimit = x.niLimit,
             niCategory = x.NICategory,
@@ -389,7 +389,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers with 
 
     "accessing 2017-2018 ptUelMonthlyUpperLimitForCat" in {
       val pattern = "dd-MM-yyyy"
-      val formatter = DateTimeFormat.forPattern(pattern)
+      val formatter = DateTimeFormatter.ofPattern(pattern)
       val fromDate = LocalDate.parse("06-09-2017", formatter)
       val escTaxYearConfig = escConf.getConfig(fromDate, "A", locationEngland)
       escTaxYearConfig.niCategory.ptUelMonthlyUpperLimitForCat shouldBe 3753.00
@@ -397,7 +397,7 @@ class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers with 
 
     "accessing taxBasicBandCapacity" in {
       val pattern = "dd-MM-yyyy"
-      val formatter = DateTimeFormat.forPattern(pattern)
+      val formatter = DateTimeFormatter.ofPattern(pattern)
       val fromDate = LocalDate.parse("06-12-2016", formatter)
       val escTaxYearConfig = escConf.getConfig(fromDate, "A", locationEngland)
       escTaxYearConfig.taxBasicBandCapacity shouldBe 32000.00

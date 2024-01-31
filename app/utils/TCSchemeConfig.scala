@@ -18,8 +18,9 @@ package utils
 
 import config.AppConfig
 import javax.inject.Inject
-import org.joda.time.LocalDate
-import org.joda.time.format.DateTimeFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+
 import play.api.Configuration
 
 case class WTC(
@@ -64,10 +65,11 @@ class TCConfig @Inject()(config: AppConfig,
   lazy val monthsInTaxYear: Int = 12
 
   def getCurrentTaxYearDateRange(fromDate : LocalDate) : (LocalDate, LocalDate) = {
-    val pattern = "dd-MM-yyyy"
-    val formatter = DateTimeFormat.forPattern(pattern)
     val month = config.taxYearEndMonth
     val day = config.taxYearEndDay
+    val dayPattern = if (day.toString.length == 1) "d" else "dd"
+    val monthPattern = if (month.toString.length == 1) "M" else "MM"
+    val formatter = DateTimeFormatter.ofPattern(s"$dayPattern-$monthPattern-yyyy")
     val currentTaxYear = getCurrentTaxYear(fromDate)
     val taxYearStartDate = LocalDate.parse(s"$day-$month-$currentTaxYear", formatter)
     val taxYearEndDate = LocalDate.parse(s"$day-$month-${currentTaxYear + 1}", formatter)

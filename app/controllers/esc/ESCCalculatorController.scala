@@ -27,13 +27,12 @@ import play.api.mvc.{Action, MessagesControllerComponents}
 import service.AuditEvents
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class ESCCalculatorController @Inject()(val mcc: MessagesControllerComponents,
                                         val calculator: ESCCalculator,
-                                        auditEvent: AuditEvents) extends BackendController(mcc)
+                                        auditEvent: AuditEvents)(implicit ec: ExecutionContext) extends BackendController(mcc)
   with I18nSupport with Logging {
 
 

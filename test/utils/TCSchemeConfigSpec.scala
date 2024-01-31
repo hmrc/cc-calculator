@@ -16,8 +16,9 @@
 
 package utils
 
-import org.joda.time.LocalDate
-import org.joda.time.format.DateTimeFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+
 import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatest.prop.TableDrivenPropertyChecks.forAll
@@ -25,7 +26,7 @@ import org.scalatest.prop.Tables.Table
 
 class TCSchemeConfigSpec extends FakeCCCalculatorApplication with MockitoSugar {
 
-  override val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+  override val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
 
   val defaultTaxYearConfig = TCTaxYearConfig(
     otherIncomeAdjustment = 300,

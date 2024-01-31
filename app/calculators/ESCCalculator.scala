@@ -20,11 +20,12 @@ import javax.inject.Inject
 import models.input.esc._
 import models.output.esc.{ESCCalculatorOutput, ESCSavings}
 import models.utility.{CalculationNIBands, CalculationTaxBands}
-import org.joda.time.LocalDate
+import java.time.LocalDate
+
 import play.api.Logging
 import utils.{ESCConfig, ESCTaxYearConfig, MessagesObject, Periods}
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class ESCCalculatorHelpers @Inject()(escConfig: ESCConfig)
   extends CCCalculatorHelper with MessagesObject with Logging {
@@ -473,9 +474,7 @@ class ESCCalculatorNi @Inject()(val escHelpers: ESCCalculatorHelpers) {
 
 class ESCCalculator @Inject()(escConfig: ESCConfig,
                               escCalc: ESCCalculatorTax,
-                              escCalcNI: ESCCalculatorNi) {
-
-  import scala.concurrent.ExecutionContext.Implicits.global
+                              escCalcNI: ESCCalculatorNi)(implicit ec: ExecutionContext) {
 
   /**
     *

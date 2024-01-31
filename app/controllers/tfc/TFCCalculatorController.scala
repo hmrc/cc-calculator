@@ -27,13 +27,12 @@ import play.api.mvc.{Action, MessagesControllerComponents}
 import service.AuditEvents
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class TFCCalculatorController @Inject()(val mcc: MessagesControllerComponents,
                                         val auditEvent: AuditEvents,
-                                        val calculator: TFCCalculator) extends BackendController(mcc)
+                                        val calculator: TFCCalculator)(implicit ec: ExecutionContext) extends BackendController(mcc)
   with I18nSupport with Logging {
 
   def calculate: Action[JsValue] = Action.async(parse.json) {

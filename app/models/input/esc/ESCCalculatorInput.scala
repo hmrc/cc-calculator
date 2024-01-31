@@ -16,11 +16,11 @@
 
 package models.input.esc
 
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+
 import config.ConfigConstants._
-import org.joda.time.LocalDate
-import org.joda.time.format.DateTimeFormat
 import play.api.libs.functional.syntax._
-import play.api.libs.json.JodaReads._
 import play.api.libs.json.{JsPath, Json, JsonValidationError, Reads}
 import utils.{Periods, _}
 
@@ -42,8 +42,8 @@ case class ESCTaxYear(from: LocalDate,
 
 object ESCTaxYear extends MessagesObject {
   implicit val taxYearReads: Reads[ESCTaxYear] = (
-    (JsPath \ "from").read[LocalDate](jodaLocalDateReads(datePattern)) and
-      (JsPath \ "until").read[LocalDate](jodaLocalDateReads(datePattern)) and
+    (JsPath \ "from").read[LocalDate] and
+      (JsPath \ "until").read[LocalDate] and
         (JsPath \ "periods").read[List[ESCPeriod]].filter(
           JsonValidationError("Please provide at least 1 Period")
         )(periods => periods.length >= lowerPeriodsLimitValidation)
@@ -58,8 +58,8 @@ case class ESCPeriod(from: LocalDate,
 object ESCPeriod extends MessagesObject {
 
   implicit val periodReads : Reads[ESCPeriod] = (
-    (JsPath \ "from").read[LocalDate](jodaLocalDateReads(datePattern)) and
-      (JsPath \ "until").read[LocalDate](jodaLocalDateReads(datePattern)) and
+    (JsPath \ "from").read[LocalDate] and
+      (JsPath \ "until").read[LocalDate] and
         (JsPath \ "claimants").read[List[ESCClaimant]].filter(JsonValidationError("Please provide at least 1 claimant")
         )(claimants => claimants.length >= lowerClaimantsLimitValidation) and
           (JsPath \ "children").read[List[Child]]
@@ -126,7 +126,7 @@ case class ESCClaimant(qualifying: Boolean = false,
 {
   def isESCStartDateBefore2011 : Boolean = {
     //returns true if ESC start date is before 6th April 2011
-    val formatter = DateTimeFormat.forPattern(datePattern)
+    val formatter = DateTimeFormatter.ofPattern(datePattern)
     val date2011 = LocalDate.parse("2011-04-06", formatter)
     escStartDate.isBefore(date2011)
   }
@@ -167,6 +167,6 @@ object ESCClaimant extends MessagesObject {
           (JsPath \ "previousIncome").readNullable[ESCIncome] and
             (JsPath \ "currentIncome").readNullable[ESCIncome] and
               (JsPath \ "vouchers").read[Boolean] and
-                (JsPath \ "escStartDate").read[LocalDate](jodaLocalDateReads(datePattern))
+                (JsPath \ "escStartDate").read[LocalDate]
     )(ESCClaimant.apply _)
 }

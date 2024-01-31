@@ -271,8 +271,8 @@ class TFCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
           |         "path":"/until",
           |         "validationErrors":[
           |            {
-          |               "message":"error.expected.jodadate.format",
-          |               "args":["yyyy-MM-dd"]
+          |               "message":"error.expected.date.isoformat",
+          |               "args":["ParseCaseSensitive(false)(Value(Year,4,10,EXCEEDS_PAD)'-'Value(MonthOfYear,2)'-'Value(DayOfMonth,2))[Offset(+HH:MM:ss,'Z')]"]
           |            }
           |         ]
           |      }

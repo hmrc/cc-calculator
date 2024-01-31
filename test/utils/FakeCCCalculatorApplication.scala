@@ -17,10 +17,12 @@
 package utils
 
 import java.nio.charset.Charset
-import akka.stream.Materializer
-import akka.util.ByteString
-import org.joda.time.LocalDate
-import org.joda.time.format.DateTimeFormat
+
+import org.apache.pekko.stream.Materializer
+import org.apache.pekko.util.ByteString
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+
 import org.scalatest.Suite
 import play.api.{Application, Configuration}
 import play.api.i18n.{Lang, MessagesApi}
@@ -29,8 +31,7 @@ import play.api.mvc.{MessagesControllerComponents, Result}
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.{JsValue, Json}
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 import scala.language.postfixOps
 
 trait FakeCCCalculatorApplication extends PlaySpec {
@@ -42,7 +43,7 @@ trait FakeCCCalculatorApplication extends PlaySpec {
     "govuk-tax.Test.services.contact-frontend.port" -> "9250"
   )
 
-  val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+  val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
   def parseDate(date: String): LocalDate = LocalDate.parse(date, formatter)
 
   /*lazy val app: Application = new GuiceApplicationBuilder()
@@ -51,8 +52,6 @@ trait FakeCCCalculatorApplication extends PlaySpec {
 
   lazy val app: Application =
     new GuiceApplicationBuilder()
-      .disable[com.kenshoo.play.metrics.PlayModule]
-      .disable[com.kenshoo.play.metrics.MetricsController]
       .configure(Configuration("metrics.enabled" -> false))
       .configure(Configuration("metrics.jvm" -> false))
       .configure(config)
@@ -63,6 +62,7 @@ trait FakeCCCalculatorApplication extends PlaySpec {
   implicit val lang: Lang = Lang("en")
   implicit lazy val messages: MessagesApi = app.injector.instanceOf[MessagesApi]
   implicit lazy val mcc: MessagesControllerComponents = app.injector.instanceOf[MessagesControllerComponents]
+  implicit val ec: ExecutionContext = app.injector.instanceOf[ExecutionContext]
 
   def jsonBodyOf(result: Result)(implicit mat: Materializer): JsValue = {
     Json.parse(bodyOf(result))

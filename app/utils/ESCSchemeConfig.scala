@@ -18,7 +18,7 @@ package utils
 
 import config.AppConfig
 import javax.inject.Inject
-import org.joda.time.LocalDate
+import java.time.LocalDate
 import play.api.Configuration
 import play.api.i18n.{Lang, MessagesApi}
 import scala.collection.JavaConverters.asScalaBufferConverter

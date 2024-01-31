@@ -18,8 +18,9 @@ package calculators
 
 import models.input.tfc.{TFCCalculatorInput, TFCChild, TFCDisability}
 import models.output.tfc.{TFCCalculatorOutput, TFCContribution, TFCOutputChild, TFCPeriod}
-import org.joda.time.LocalDate
-import org.joda.time.format.DateTimeFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+
 import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 import org.scalatestplus.play.PlaySpec
 import utils.{FakeCCCalculatorApplication, Periods, TFCConfig}
@@ -35,7 +36,7 @@ class TFCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication {
 
     "return a Future[AwardPeriod] result when household eligibility is true" in {
       val tfcCalculator = new TFCCalculator(tcfConfig) { }
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
       val fromDate = LocalDate.parse("2016-05-01T18:46:17", formatter)
       val untilDate = LocalDate.parse("2016-05-21T18:46:17", formatter)
 
@@ -53,7 +54,7 @@ class TFCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication {
 
     "return a calculated TFC for 1 TFC period with 1 child" in {
       val tfcCalculator = new TFCCalculator(tcfConfig) { }
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
       val fromDate = LocalDate.parse("2016-05-01T18:46:17", formatter)
       val untilDate = LocalDate.parse("2016-05-21T18:46:17", formatter)
       val child = TFCChild(childcareCost = BigDecimal(200.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability =
@@ -78,7 +79,7 @@ class TFCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication {
 
     "return a calculated TFC for 1 TFC period with 2 children" in {
       val tfcCalculator = new TFCCalculator(tcfConfig) { }
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
       val fromDate = LocalDate.parse("2016-05-01T18:46:17", formatter)
       val untilDate = LocalDate.parse("2016-05-21T18:46:17", formatter)
       val children = List(
@@ -121,7 +122,7 @@ class TFCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication {
 
     "return a calculated TFC for 1 TFC period" in {
       val tfcCalculator = new TFCCalculator(tcfConfig) { }
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
       val fromDate = LocalDate.parse("2016-05-01T18:46:17", formatter)
       val untilDate = LocalDate.parse("2016-05-21T18:46:17", formatter)
       val tfcPeriod = new models.input.tfc.TFCPeriod(from = fromDate, until = untilDate, periodEligibility = false, children = List())(Some(conf))
@@ -139,7 +140,7 @@ class TFCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication {
 
     "return a calculated TFC for 2 TFC periods" in {
       val tfcCalculator = new TFCCalculator(tcfConfig) { }
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
       val fromDate = LocalDate.parse("2016-05-01T18:46:17", formatter)
       val untilDate = LocalDate.parse("2016-05-21T18:46:17", formatter)
       val tfcPeriodList = List(
@@ -175,7 +176,7 @@ class TFCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication {
     }
     "return a output child for 1 child" in {
       val tfcCalculator = new TFCCalculator(tcfConfig) { }
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
       val fromDate = LocalDate.parse("2016-08-27T00:00:00", formatter)
       val untilDate = LocalDate.parse("2016-11-27T00:00:00", formatter)
       val child = TFCChild(childcareCost = BigDecimal(200.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = TFCDisability(disabled = false, severelyDisabled = false))
@@ -192,7 +193,7 @@ class TFCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication {
 
     "return a childcareCost for cost > 0.00" in {
       val tfcCalculator = new TFCCalculator(tcfConfig) { }
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
       val fromDate = LocalDate.parse("2016-08-27T00:00:00", formatter)
       val untilDate = LocalDate.parse("2016-11-27T00:00:00", formatter)
       val child = TFCChild(childcareCost = BigDecimal(500.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = TFCDisability(disabled = false, severelyDisabled = false))
@@ -204,7 +205,7 @@ class TFCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication {
 
     "return number of days between two dates" in {
       val tfcCalculator = new TFCCalculator(tcfConfig) { }
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
       val fromDate = LocalDate.parse("2016-05-01T18:46:17", formatter)
       val untilDate = LocalDate.parse("2016-05-21T18:46:17", formatter)
       val result = tfcCalculator.getChildQualifyingDaysInTFCPeriod(Some(fromDate), Some(untilDate))
@@ -213,7 +214,7 @@ class TFCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication {
 
     "return number of days in a TFCPeriod" in {
       val tfcCalculator = new TFCCalculator(tcfConfig) { }
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
       val fromDate = LocalDate.parse("2016-07-01T18:46:17", formatter)
       val untilDate = LocalDate.parse("2016-10-01T18:46:17", formatter)
       val result = tfcCalculator.getChildQualifyingDaysInTFCPeriod(Some(fromDate), Some(untilDate))
@@ -222,7 +223,7 @@ class TFCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication {
 
     "return exception  when until date is present and from date is null" in {
       val tfcCalculator = new TFCCalculator(tcfConfig) { }
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
       val fromDate = None
       val untilDate = LocalDate.parse("2016-07-01T18:46:17", formatter)
       try {
@@ -237,7 +238,7 @@ class TFCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication {
 
     "return exception when from date is present but until date is null" in {
       val tfcCalculator = new TFCCalculator(tcfConfig) { }
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
       val fromDate = LocalDate.parse("2016-07-01T18:46:17", formatter)
       val untilDate = None
       try {
@@ -264,7 +265,7 @@ class TFCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication {
 
     "return childcare cost for a period" in {
       val tfcCalculator = new TFCCalculator(tcfConfig) { }
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
       val fromDate = LocalDate.parse("2016-07-01T18:46:17", formatter)
       val untilDate = LocalDate.parse("2016-10-01T18:46:17", formatter)
       val child = TFCChild(childcareCost = BigDecimal(115.38), childcareCostPeriod=Periods.Weekly, qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = TFCDisability(disabled = false, severelyDisabled = false))
@@ -274,7 +275,7 @@ class TFCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication {
 
     "return childcare cost for a period for 0 spend" in {
       val tfcCalculator = new TFCCalculator(tcfConfig) { }
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
       val fromDate = LocalDate.parse("2016-07-01T18:46:17", formatter)
       val untilDate = LocalDate.parse("2016-10-01T18:46:17", formatter)
       val child = TFCChild(childcareCost = BigDecimal(0.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = TFCDisability(disabled = false, severelyDisabled = false))
@@ -284,7 +285,7 @@ class TFCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication {
 
     "return topUpPercent of child care cost for a period for current year" in {
       val tfcCalculator = new TFCCalculator(tcfConfig) { }
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
       val fromDate = LocalDate.parse("2016-07-01T18:46:17", formatter)
       val untilDate = LocalDate.parse("2016-10-01T18:46:17", formatter)
       val child = TFCChild(childcareCost = BigDecimal(500.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = TFCDisability(disabled = false, severelyDisabled = false))
@@ -295,7 +296,7 @@ class TFCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication {
 
     "return topUpPercent of child care cost for a period - disabled for next year" in {
       val tfcCalculator = new TFCCalculator(tcfConfig) { }
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
       val fromDate = LocalDate.parse("2017-07-01T18:46:17", formatter)
       val untilDate = LocalDate.parse("2017-10-01T18:46:17", formatter)
       val child = TFCChild(childcareCost = BigDecimal(500.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = TFCDisability(disabled = true, severelyDisabled = false))
@@ -306,7 +307,7 @@ class TFCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication {
 
     "return topUpPercent of child care cost for a period for zero amount" in {
       val tfcCalculator = new TFCCalculator(tcfConfig) { }
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
       val fromDate = LocalDate.parse("2017-07-01T18:46:17", formatter)
       val untilDate = LocalDate.parse("2017-10-01T18:46:17", formatter)
       val child = TFCChild(childcareCost = BigDecimal(0.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = TFCDisability(disabled = false, severelyDisabled = false))
@@ -317,7 +318,7 @@ class TFCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication {
 
     "return maximum topup  when child care monthly cost 0)" in {
       val tfcCalculator = new TFCCalculator(tcfConfig) { }
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
       val fromDate = LocalDate.parse("2017-07-01T18:46:17", formatter)
       val untilDate = LocalDate.parse("2017-10-01T18:46:17", formatter)
       val child = TFCChild(childcareCost = BigDecimal(0.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = TFCDisability(disabled = false, severelyDisabled = false))
@@ -329,7 +330,7 @@ class TFCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication {
 
     "return maximum topup  when child care monthly cost 700)" in {
       val tfcCalculator = new TFCCalculator(tcfConfig) { }
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
       val fromDate = LocalDate.parse("2017-07-01T18:46:17", formatter)
       val untilDate = LocalDate.parse("2017-10-01T18:46:17", formatter)
       val child = TFCChild(childcareCost = BigDecimal(700.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = TFCDisability(disabled = false, severelyDisabled = false))
@@ -342,7 +343,7 @@ class TFCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication {
 
     "return maximum topup  when child care monthly cost 833.34)" in {
       val tfcCalculator = new TFCCalculator(tcfConfig) { }
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
       val fromDate = LocalDate.parse("2017-07-01T18:46:17", formatter)
       val untilDate = LocalDate.parse("2017-10-01T18:46:17", formatter)
       val child = TFCChild(childcareCost = BigDecimal(833.34), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = TFCDisability(disabled = false, severelyDisabled = false))
@@ -355,7 +356,7 @@ class TFCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication {
 
     "return maximum topup  when child care monthly cost 1000)" in {
       val tfcCalculator = new TFCCalculator(tcfConfig) { }
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
       val fromDate = LocalDate.parse("2017-07-01T18:46:17", formatter)
       val untilDate = LocalDate.parse("2017-10-01T18:46:17", formatter)
       val child = TFCChild(childcareCost = BigDecimal(1000.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = TFCDisability(disabled = false, severelyDisabled = false))
@@ -367,7 +368,7 @@ class TFCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication {
 
     "return maximum topup  when child care monthly cost 0, child disabled)" in {
       val tfcCalculator = new TFCCalculator(tcfConfig) { }
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
       val fromDate = LocalDate.parse("2017-07-01T18:46:17", formatter)
       val untilDate = LocalDate.parse("2016-10-01T18:46:17", formatter)
       val child = TFCChild(childcareCost = BigDecimal(0.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = TFCDisability(disabled = true, severelyDisabled = false))
@@ -379,7 +380,7 @@ class TFCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication {
 
     "return maximum topup  when child care monthly cost 1000, child disabled)" in {
       val tfcCalculator = new TFCCalculator(tcfConfig) { }
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
       val fromDate = LocalDate.parse("2016-07-01T18:46:17", formatter)
       val untilDate = LocalDate.parse("2016-10-01T18:46:17", formatter)
       val child = TFCChild(childcareCost = BigDecimal(1000.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = TFCDisability(disabled = true, severelyDisabled = false))
@@ -391,7 +392,7 @@ class TFCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication {
 
     "return maximum topup  when child care monthly cost 1666.67, child disabled)" in {
       val tfcCalculator = new TFCCalculator(tcfConfig) { }
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
       val fromDate = LocalDate.parse("2016-07-01T18:46:17", formatter)
       val untilDate = LocalDate.parse("2016-10-01T18:46:17", formatter)
       val child = TFCChild(childcareCost = BigDecimal(1666.67), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = TFCDisability(disabled = true, severelyDisabled = false))
@@ -403,7 +404,7 @@ class TFCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication {
 
     "return maximum topUp  when child care monthly cost 5500, child disabled)" in {
       val tfcCalculator = new TFCCalculator(tcfConfig) { }
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
       val fromDate = LocalDate.parse("2016-07-01T18:46:17", formatter)
       val untilDate = LocalDate.parse("2017-10-01T18:46:17", formatter)
       val child = TFCChild(childcareCost = BigDecimal(1800.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = TFCDisability(disabled = true, severelyDisabled = false))
@@ -415,7 +416,7 @@ class TFCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication {
 
     "return calculated contribution for a child with monthly childcare cost 500 for current year" in {
       val tfcCalculator = new TFCCalculator(tcfConfig) { }
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
       val fromDate = LocalDate.parse("2016-07-01T18:46:17", formatter)
       val untilDate = LocalDate.parse("2016-07-06T18:46:17", formatter)
       val child = TFCChild(childcareCost = BigDecimal(500.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = TFCDisability(disabled = false, severelyDisabled = false))
@@ -431,7 +432,7 @@ class TFCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication {
 
     "return calculated contribution for a child with monthly childcare cost 1000 for current year" in {
       val tfcCalculator = new TFCCalculator(tcfConfig) { }
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
       val fromDate = LocalDate.parse("2016-07-01T18:46:17", formatter)
       val untilDate = LocalDate.parse("2016-10-01T18:46:17", formatter)
       val child = TFCChild(childcareCost = BigDecimal(1000.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = TFCDisability(disabled = false, severelyDisabled = false))
@@ -447,7 +448,7 @@ class TFCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication {
 
     "return calculated contribution for a child with monthly childcare cost 833 for current year" in {
       val tfcCalculator = new TFCCalculator(tcfConfig) { }
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
       val fromDate = LocalDate.parse("2016-07-01T18:46:17", formatter)
       val untilDate = LocalDate.parse("2016-10-01T18:46:17", formatter)
       val child = TFCChild(childcareCost = BigDecimal(833.33), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = TFCDisability(disabled = false, severelyDisabled = false))
@@ -463,7 +464,7 @@ class TFCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication {
 
     "return calculated contribution for a child with monthly childcare cost 600 for next year" in {
       val tfcCalculator = new TFCCalculator(tcfConfig) { }
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
       val fromDate = LocalDate.parse("2017-11-30T18:46:17", formatter)
       val untilDate = LocalDate.parse("2018-02-28T18:46:17", formatter)
       val child = TFCChild(childcareCost = BigDecimal(600.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = TFCDisability(disabled = false, severelyDisabled = false))
@@ -479,7 +480,7 @@ class TFCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication {
 
     "return calculated contribution for a disabled child with monthly childcare cost 1000 for next year" in {
       val tfcCalculator = new TFCCalculator(tcfConfig) { }
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
       val fromDate = LocalDate.parse("2017-11-30T18:46:17", formatter)
       val untilDate = LocalDate.parse("2018-02-28T18:46:17", formatter)
       val child = TFCChild(childcareCost = BigDecimal(1000.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = TFCDisability(disabled = true, severelyDisabled = false))
@@ -495,7 +496,7 @@ class TFCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication {
 
     "return calculated contribution for a disabled child with monthly childcare cost 2000 for next year" in {
       val tfcCalculator = new TFCCalculator(tcfConfig) { }
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
       val fromDate = LocalDate.parse("2017-05-31T18:46:17", formatter)
       val untilDate = LocalDate.parse("2017-08-31T18:46:17", formatter)
       val child = TFCChild(childcareCost = BigDecimal(2000.00), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = TFCDisability(disabled = true, severelyDisabled = false))
@@ -511,7 +512,7 @@ class TFCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication {
 
     "return calculated contribution for a disabled child with monthly childcare cost 1666.66 for next year" in {
       val tfcCalculator = new TFCCalculator(tcfConfig) { }
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
       val fromDate = LocalDate.parse("2017-05-31T18:46:17", formatter)
       val untilDate = LocalDate.parse("2017-08-31T18:46:17", formatter)
       val child = TFCChild(childcareCost = BigDecimal(1666.66), qualifying = true, from = Some(fromDate), until  = Some(untilDate),disability = TFCDisability(disabled = true, severelyDisabled = false))
@@ -527,7 +528,7 @@ class TFCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication {
 
     "return calculated contribution for a child not qualifying with monthly childcare cost 600 for next year" in {
       val tfcCalculator = new TFCCalculator(tcfConfig) { }
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
       val fromDate = LocalDate.parse("2017-11-30T18:46:17", formatter)
       val untilDate = LocalDate.parse("2018-02-28T18:46:17", formatter)
       val child = TFCChild(childcareCost = BigDecimal(600.00), qualifying = false, from = Some(fromDate), until  = Some(untilDate),disability = TFCDisability(disabled = false, severelyDisabled = false))
@@ -543,7 +544,7 @@ class TFCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication {
 
     "return calculated contribution for a disabled child not qualifying with monthly childcare cost 1000 for next year" in {
       val tfcCalculator = new TFCCalculator(tcfConfig) { }
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
       val fromDate = LocalDate.parse("2017-05-31T18:46:17", formatter)
       val untilDate = LocalDate.parse("2018-08-31T18:46:17", formatter)
       val child = TFCChild(childcareCost = BigDecimal(1000.00), qualifying = false, from = Some(fromDate), until  = Some(untilDate),disability = TFCDisability(disabled = true, severelyDisabled = false))
@@ -559,7 +560,7 @@ class TFCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication {
 
     "return output children for 2 children where 1 child is qualifying" in {
       val tfcCalculator = new TFCCalculator(tcfConfig) { }
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
       val fromDate = LocalDate.parse("2016-05-01T18:46:17", formatter)
       val untilDate = LocalDate.parse("2016-05-21T18:46:17", formatter)
       val children = List(
@@ -601,7 +602,7 @@ class TFCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication {
 
     "return output children for 2 children where both children are qualifying" in {
       val tfcCalculator = new TFCCalculator(tcfConfig) { }
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
       val fromDate = LocalDate.parse("2016-05-01T18:46:17", formatter)
       val untilDate = LocalDate.parse("2016-05-21T18:46:17", formatter)
       val children = List(
@@ -643,7 +644,7 @@ class TFCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication {
 
     "return output children for 2 children where both children are not qualifying" in {
       val tfcCalculator = new TFCCalculator(tcfConfig) { }
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
       val fromDate = LocalDate.parse("2016-05-01T18:46:17", formatter)
       val untilDate = LocalDate.parse("2016-05-21T18:46:17", formatter)
       val children = List(
@@ -726,7 +727,7 @@ class TFCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication {
     
     "Calculate the household contributions for 1 period for 1 child" in {
       val tfcCalculator = new TFCCalculator(tcfConfig) { }
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
       val periodOneFromDate = LocalDate.parse("2016-05-01T18:46:17", formatter)
       val periodOneUntilDate = LocalDate.parse("2016-08-01T18:46:17", formatter)
       val child = TFCOutputChild(childCareCost = BigDecimal(200.00), childContribution = TFCContribution(BigDecimal(480.00), BigDecimal(120.00), BigDecimal(600.00)))
@@ -743,7 +744,7 @@ class TFCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication {
 
     "Calculate the household contributions for 2 periods for 1 child" in {
       val tfcCalculator = new TFCCalculator(tcfConfig) { }
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
       val periodOneFromDate = LocalDate.parse("2016-05-01T18:46:17", formatter)
       val periodOneUntilDate = LocalDate.parse("2016-08-01T18:46:17", formatter)
       val periodTwoFromDate = LocalDate.parse("2016-08-01T18:46:17", formatter)
@@ -763,7 +764,7 @@ class TFCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication {
 
     "Calculate the household contributions for 3 periods for 1 child" in {
       val tfcCalculator = new TFCCalculator(tcfConfig)
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
       val periodOneFromDate = LocalDate.parse("2016-05-01T18:46:17", formatter)
       val periodOneUntilDate = LocalDate.parse("2016-08-01T18:46:17", formatter)
       val periodTwoFromDate = LocalDate.parse("2016-08-01T18:46:17", formatter)

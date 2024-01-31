@@ -16,7 +16,7 @@
 
 package calculators
 
-import org.joda.time.LocalDate
+import java.time.LocalDate
 import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 import org.scalatestplus.play.PlaySpec
 import utils.{FakeCCCalculatorApplication, Periods}

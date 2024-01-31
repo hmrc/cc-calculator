@@ -19,8 +19,10 @@ package service
 import javax.inject.Inject
 import uk.gov.hmrc.http.HeaderCarrier
 
+import scala.concurrent.ExecutionContext
 
-class AuditEvents @Inject()(val auditService: AuditService) {
+
+class AuditEvents @Inject()(val auditService: AuditService)(implicit ec: ExecutionContext) {
 
   def auditRequest(data: String)(implicit hc: HeaderCarrier): Unit = {
     auditEvent("Request", data)
