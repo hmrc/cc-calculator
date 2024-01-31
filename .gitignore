@@ -18,4 +18,6 @@ dist
 /.settings
 *.iws
 sbt.json
+.DS_Store
+
     
