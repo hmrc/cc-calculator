@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,10 +19,11 @@ package calculators
 import javax.inject.Inject
 import models.input.tc._
 import models.output.tc.{Element, Elements, TCCalculatorOutput, TaxYear}
-import org.joda.time.LocalDate
+import java.time.LocalDate
+
 import utils.{Periods, TCConfig, TCTaxYearConfig}
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 trait TCCalculatorElements extends TCCalculatorTapering {
 
@@ -528,9 +529,7 @@ trait TCCalculatorHelpers extends CCCalculatorHelper {
 
 }
 
-class TCCalculator @Inject()(val tcConfig: TCConfig) extends TCCalculatorElements with TCCalculatorHelpers {
-
-  import scala.concurrent.ExecutionContext.Implicits.global
+class TCCalculator @Inject()(val tcConfig: TCConfig)(implicit ec: ExecutionContext) extends TCCalculatorElements with TCCalculatorHelpers {
 
   def award(request: TCCalculatorInput): Future[models.output.tc.TCCalculatorOutput] = {
     Future {

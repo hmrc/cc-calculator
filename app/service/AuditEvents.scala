@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,10 @@ package service
 import javax.inject.Inject
 import uk.gov.hmrc.http.HeaderCarrier
 
+import scala.concurrent.ExecutionContext
 
-class AuditEvents @Inject()(val auditService: AuditService) {
+
+class AuditEvents @Inject()(val auditService: AuditService)(implicit ec: ExecutionContext) {
 
   def auditRequest(data: String)(implicit hc: HeaderCarrier): Unit = {
     auditEvent("Request", data)

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -88,7 +88,7 @@ class JSONFactorySpec extends FakeCCCalculatorApplication {
 //      val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_51.json")
 //      val json: JsValue = Json.parse(resource.toString)
 //      val result = json.validate[TCCalculatorInput]
-//      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+//      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 //      val firstPeriodFrom = LocalDate.parse("2016-09-27", formatter)
 //      val firstPeriodTo = LocalDate.parse("2016-12-12", formatter)
 //      val secondPeriodFrom = LocalDate.parse("2016-12-12", formatter)
@@ -182,7 +182,7 @@ class JSONFactorySpec extends FakeCCCalculatorApplication {
 //      val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_51.json")
 //      val json: JsValue = Json.parse(resource.toString)
 //      val result = json.validate[TCCalculatorInput]
-//      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+//      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 //      val firstPeriodFrom = LocalDate.parse("2016-09-27", formatter)
 //      val firstPeriodTo = LocalDate.parse("2016-12-12", formatter)
 //      val secondPeriodFrom = LocalDate.parse("2016-12-12", formatter)

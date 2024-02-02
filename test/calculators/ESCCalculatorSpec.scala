@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,8 +21,9 @@ import com.github.fge.jackson.JsonLoader
 import models.input.esc._
 import models.output.esc.{ESCCalculatorOutput, ESCSavings, ESCTaxAndNi}
 import models.utility.{CalculationNIBands, CalculationTaxBands}
-import org.joda.time.LocalDate
-import org.joda.time.format.DateTimeFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+
 import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 import org.mockito.ArgumentMatchers
 import org.scalatestplus.mockito.MockitoSugar
@@ -291,7 +292,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       val taxableEarnings = BigDecimal(10000.00)
       val PA = BigDecimal(0.00)
       val taxCode = "BR"
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
@@ -307,7 +308,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       val taxableEarnings = BigDecimal(45000)
       val PA = BigDecimal(0.00)
       val taxCode = "D0"
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
@@ -323,7 +324,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       val taxableEarnings = BigDecimal(60000)
       val PA = BigDecimal(0.00)
       val taxCode = "D1"
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
@@ -339,7 +340,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       val taxableEarnings = BigDecimal(9000)
       val PA = BigDecimal(0.00)
       val taxCode = "NT"
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
@@ -355,7 +356,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       val taxableEarnings = BigDecimal(10000)
       val PA = BigDecimal(10600)
       val taxCode = "1060L"
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
@@ -371,7 +372,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       val taxableEarnings = BigDecimal(10600)
       val PA = BigDecimal(10600)
       val taxCode = "1060L"
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
@@ -386,7 +387,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       val taxableEarnings = BigDecimal(10600.01)
       val PA = BigDecimal(10600)
       val taxCode = "1060L"
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
@@ -401,7 +402,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       val taxableEarnings = BigDecimal(42000)
       val PA = BigDecimal(10600)
       val taxCode = "1060L"
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
@@ -416,7 +417,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       val taxableEarnings = BigDecimal(42385)
       val PA = BigDecimal(10600)
       val taxCode = "1060L"
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
@@ -431,7 +432,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       val taxableEarnings = BigDecimal(42385.01)
       val PA = BigDecimal(11000)
       val taxCode = "1100L"
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
@@ -446,7 +447,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       val taxableEarnings = BigDecimal(150000)
       val PA = BigDecimal(11000)
       val taxCode = "1100L"
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
@@ -461,7 +462,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       val taxableEarnings = BigDecimal(150000.01)
       val PA = BigDecimal(11500)
       val taxCode = "1150L"
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2017", formatter)
       val toDate = LocalDate.parse("21-05-2018", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
@@ -476,7 +477,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       val taxableEarnings = BigDecimal(150000.01)
       val PA = BigDecimal(11500)
       val taxCode = "1150L"
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2017", formatter)
       val toDate = LocalDate.parse("21-05-2018", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
@@ -491,7 +492,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       val taxableEarnings = BigDecimal(9000.00)
       val PA = BigDecimal(10600)
       val taxCode = "1060L"
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
@@ -506,7 +507,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       val taxableEarnings = BigDecimal(12000.00)
       val PA = BigDecimal(11000)
       val taxCode = "1100L"
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
@@ -521,7 +522,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       val taxableEarnings = BigDecimal(50000.00)
       val PA = BigDecimal(11500)
       val taxCode = "1150L"
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2017", formatter)
       val toDate = LocalDate.parse("21-05-2018", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
@@ -536,7 +537,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       val taxableEarnings = BigDecimal(50000.00)
       val PA = BigDecimal(11500)
       val taxCode = "1150L"
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2017", formatter)
       val toDate = LocalDate.parse("21-05-2018", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
@@ -551,7 +552,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       val taxableEarnings = BigDecimal(150000.01)
       val PA = BigDecimal(11000)
       val taxCode = "1100L"
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
@@ -565,7 +566,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     "determine exemption amount (pre 2011, relevant earnings = 0)" in {
       val relevantEarnings = BigDecimal(0.00)
       val taxCode = "1060L"
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val escStartDate = LocalDate.parse("01-06-2009", formatter)
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
@@ -585,7 +586,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     "determine exemption amount for the 0% tax band Pre 2011 for earnings < 0 for TY2016" in {
       val relevantEarnings = BigDecimal(-10.00)
       val taxCode = "1100L"
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val escStartDate = LocalDate.parse("01-06-2010", formatter)
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
@@ -602,7 +603,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     "determine exemption amount for the 0% tax band Pre 2011 for earnings = PA for TY2016" in {
       val relevantEarnings = BigDecimal(0.00)
       val taxCode = "1060L"
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val escStartDate = LocalDate.parse("01-06-2010", formatter)
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
@@ -620,7 +621,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     "determine exemption amount for the 20% tax band Pre 2011 for earnings < basic rate ceiling for TY2016" in {
       val relevantEarnings = BigDecimal(10600.01)
       val taxCode = "1060L"
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val escStartDate = LocalDate.parse("01-06-2010", formatter)
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
@@ -637,7 +638,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     "determine exemption amount for the 40% tax band Pre 2011 for earnings < higher rate ceiling for TY2016" in {
       val relevantEarnings = BigDecimal(75000.00)
       val taxCode = "1060L"
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val escStartDate = LocalDate.parse("05-04-2011", formatter)
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
@@ -655,7 +656,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     "determine exemption amount for the 45% tax band Pre 2011 for earnings > higher rate ceiling for TY2016" in {
       val relevantEarnings = BigDecimal(155000.00)
       val taxCode = "1060L"
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val escStartDate = LocalDate.parse("01-06-2010", formatter)
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
@@ -673,7 +674,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     "determine exemption amount for the 0% tax band Post 2011 earnings < 0 for TY2016" in {
       val relevantEarnings = BigDecimal(-1.00)
       val taxCode = "1060L"
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val escStartDate = LocalDate.parse("01-06-2016", formatter)
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
@@ -691,7 +692,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     "determine exemption amount for the 0% tax band Post 2011 earnings < 0 for TY2017" in {
       val relevantEarnings = BigDecimal(-1.00)
       val taxCode = "1100L"
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val escStartDate = LocalDate.parse("01-06-2016", formatter)
       val fromDate = LocalDate.parse("01-05-2017", formatter)
       val toDate = LocalDate.parse("21-05-2018", formatter)
@@ -708,7 +709,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     "determine exemption amount for the 0% tax band Post 2011 earnings = PA for TY2016" in {
       val relevantEarnings = BigDecimal(0.00)
       val taxCode = "1060L"
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val escStartDate = LocalDate.parse("01-06-2016", formatter)
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
@@ -725,7 +726,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     "determine exemption amount for the 20% tax band Post 2011 earnings < Basic rate limit for TY2016" in {
       val relevantEarnings = BigDecimal(10600.01)
       val taxCode = "1060L"
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val escStartDate = LocalDate.parse("01-06-2016", formatter)
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
@@ -743,7 +744,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     "determine exemption amount for the 20% tax band Post 2011 earnings = basic rate ceiling for TY2016" in {
       val relevantEarnings = BigDecimal(42465.00)
       val taxCode = "1060L"
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val escStartDate = LocalDate.parse("01-06-2016", formatter)
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
@@ -761,7 +762,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     "determine exemption amount for the 40% tax band Post 2011 earnings < higher rate ceiling for TY2016" in {
       val relevantEarnings = BigDecimal(42465.01)
       val taxCode = "1060L"
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val escStartDate = LocalDate.parse("01-06-2016", formatter)
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
@@ -779,7 +780,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     "determine exemption amount for the 40% tax band Post 2011 earnings < higher rate ceiling for TY2017" in {
       val relevantEarnings = BigDecimal(43000.01)
       val taxCode = "1100L"
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val escStartDate = LocalDate.parse("01-06-2016", formatter)
       val fromDate = LocalDate.parse("02-05-2017", formatter)
       val toDate = LocalDate.parse("01-05-2018", formatter)
@@ -796,7 +797,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     "determine exemption amount for the 40% tax band on edge Post 2011 earnings = higher rate ceiling for TY2016" in {
       val relevantEarnings = BigDecimal(150000.00)
       val taxCode = "1060L"
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val escStartDate = LocalDate.parse("06-04-2011", formatter)
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
@@ -814,7 +815,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     "determine exemption amount for the 40% tax band for scottish tax code on edge post 2011 earnings = higher rate ceiling for TY2017" in {
       val relevantEarnings = BigDecimal(47000.00)
       val taxCode = "1150S"
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val escStartDate = LocalDate.parse("06-04-2011", formatter)
       val fromDate = LocalDate.parse("01-05-2017", formatter)
       val toDate = LocalDate.parse("21-03-2018", formatter)
@@ -832,7 +833,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     "determine exemption amount for the 45% tax band on edge Post 2011 earnings > higher rate ceiling for TY2017" in {
       val relevantEarnings = BigDecimal(150000.01)
       val taxCode = "1060L"
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val escStartDate = LocalDate.parse("06-04-2011", formatter)
       val fromDate = LocalDate.parse("01-05-2017", formatter)
       val toDate = LocalDate.parse("21-05-2018", formatter)
@@ -850,7 +851,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     "determine exemption amount for the 45% tax band Post 2011 earnings < additional rate ceiling for TY2016" in {
       val relevantEarnings = BigDecimal(155000.00)
       val taxCode = "1060L"
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val escStartDate = LocalDate.parse("01-06-2016", formatter)
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
@@ -868,7 +869,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     "determine exemption amount for the BR tax code Post 2011 earnings" in {
       val relevantEarnings = BigDecimal(155000.00)
       val taxCode = "BR"
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
@@ -883,7 +884,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     "determine exemption amount for the BR tax code pre 2011 earnings" in {
       val relevantEarnings = BigDecimal(79000.00)
       val taxCode = "BR"
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
@@ -898,7 +899,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     "determine exemption amount for the D0 tax code pre 2011 earnings" in {
       val relevantEarnings = BigDecimal(79000.00)
       val taxCode = "D0"
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
@@ -913,7 +914,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     "determine exemption amount for the D0 tax code post 2011 earnings" in {
       val relevantEarnings = BigDecimal(30000.00)
       val taxCode = "D0"
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
@@ -929,7 +930,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     "determine exemption amount for the D1 tax code pre 2011 earnings" in {
       val relevantEarnings = BigDecimal(79000.00)
       val taxCode = "D1"
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
@@ -945,7 +946,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     "determine exemption amount for the D1 tax code post 2011 earnings" in {
       val relevantEarnings = BigDecimal(79000.00)
       val taxCode = "D1"
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
@@ -961,7 +962,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     "determine exemption amount for the 0T tax code pre 2011 earnings" in {
       val relevantEarnings = BigDecimal(79000.00)
       val taxCode = "0T"
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2017", formatter)
       val toDate = LocalDate.parse("21-05-2018", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
@@ -977,7 +978,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     "determine exemption amount for the K tax code post 2011 earnings" in {
       val relevantEarnings = BigDecimal(12000.00)
       val taxCode = "K345"
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2017", formatter)
       val toDate = LocalDate.parse("21-05-2018", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
@@ -993,7 +994,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     "determine exemption amount for the NT tax code pre 2011 earnings" in {
       val relevantEarnings = BigDecimal(79000.00)
       val taxCode = "NT"
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
@@ -1009,7 +1010,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     "determine exemption amount for the NT tax code post 2011 earnings" in {
       val relevantEarnings = BigDecimal(79000.00)
       val taxCode = "NT"
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
@@ -1023,7 +1024,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     }
 
     "determine tax amount for each band (Income is 50000)" in {
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
@@ -1035,7 +1036,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     }
 
     "determine tax amount for each band (Income is 150000)" in {
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
@@ -1103,7 +1104,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     }
 
     "Determine relevant earnings (income is 9000) if taxable income is less than personal allowance" in {
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
@@ -1113,7 +1114,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     }
 
     "Determine relevant earnings (income is 12000) if taxable income is greater than personal allowance and less than higher rate ceiling" in {
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
@@ -1123,7 +1124,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     }
 
     "Determine relevant earnings (income is 150000) if taxable income is greater than personal allowance and less than higher rate ceiling (150000)" in {
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2017", formatter)
       val toDate = LocalDate.parse("21-05-2018", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
@@ -1133,7 +1134,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     }
 
     "Determine relevant earnings (income is 160000) if gross income is greater than higher rate ceiling (150000)" in {
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
@@ -1143,7 +1144,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     }
 
     "calculate savings per claimant (single claimant, post 2011, gross < personal allowance, voucher amount < max relief) (Monthly)" in {
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
 
@@ -1177,7 +1178,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     }
 
     "calculate savings per claimant (single claimant, post 2011, gross < basic rate limit, voucher amount > max relief) (Monthly)" in {
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2017", formatter)
       val toDate = LocalDate.parse("21-05-2018", formatter)
 
@@ -1197,7 +1198,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     }
 
     "Have correct total ESC Tax Savings for Scotland" in {
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("06-04-2018", formatter)
       val toDate = LocalDate.parse("06-04-2019", formatter)
 
@@ -1211,7 +1212,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     }
 
     "Have correct Tax Savings for Scotland with amount over to higher rate" in {
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("06-04-2018", formatter)
       val toDate = LocalDate.parse("06-04-2019", formatter)
 
@@ -1225,7 +1226,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     }
 
     "Have correct Tax Savings for Scotland with amount over to additional rate" in {
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("06-04-2018", formatter)
       val toDate = LocalDate.parse("06-04-2019", formatter)
 
@@ -1239,7 +1240,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     }
 
     "Have correct total ESC Tax Savings for England" in {
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("06-04-2018", formatter)
       val toDate = LocalDate.parse("06-04-2019", formatter)
 
@@ -1253,7 +1254,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     }
 
     "Have the correct total NI Savings for England" in {
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("06-04-2018", formatter)
       val toDate = LocalDate.parse("06-04-2019", formatter)
 
@@ -1267,7 +1268,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     }
 
     "Have the correct total NI Savings for Scotland when paid under 46k threshold" in {
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("06-04-2018", formatter)
       val toDate = LocalDate.parse("06-04-2019", formatter)
 
@@ -1282,7 +1283,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
 
     "Have the correct total NI Savings for Scotland when paid over 46k threshold" when {
       "200 childcare costs" in {
-        val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+        val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
         val fromDate = LocalDate.parse("06-04-2018", formatter)
         val toDate = LocalDate.parse("06-04-2019", formatter)
 
@@ -1296,7 +1297,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       }
 
       "100 childcare costs" in {
-        val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+        val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
         val fromDate = LocalDate.parse("06-04-2018", formatter)
         val toDate = LocalDate.parse("06-04-2019", formatter)
 
@@ -1312,7 +1313,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
 
     "Have the correct total NI Savings for Scotland when paid over 100000k" when {
       "with 300 childcare costs" in {
-        val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+        val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
         val fromDate = LocalDate.parse("06-04-2018", formatter)
         val toDate = LocalDate.parse("06-04-2019", formatter)
 
@@ -1326,7 +1327,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       }
 
       "with 100 childcare costs" in {
-        val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+        val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
         val fromDate = LocalDate.parse("06-04-2018", formatter)
         val toDate = LocalDate.parse("06-04-2019", formatter)
 
@@ -1341,7 +1342,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     }
 
     "Have the correct total NI Savings for England when paid over 46k threshold" in {
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("06-04-2018", formatter)
       val toDate = LocalDate.parse("06-04-2019", formatter)
 
@@ -1355,7 +1356,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     }
 
     "Have the correct NI exemption for Scotland when paid 45k" in {
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("06-04-2018", formatter)
       val toDate = LocalDate.parse("06-04-2019", formatter)
 
@@ -1369,7 +1370,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     }
 
     "calculate savings per claimant (single claimant, post 2011, gross < additional rate limit, voucher amount < max relief) (Monthly)" in {
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
 
@@ -1389,7 +1390,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     }
 
     "calculate savings per claimant (single claimant, post 2011, gross > additional rate limit, voucher amount > max relief) (Monthly)" in {
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
 
@@ -1409,7 +1410,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     }
 
     "calculate savings per claimant (two claimants, first - post 2011, gross > additional rate limit, voucher amount < max relief, second - post 2011, gross < additional rate limit, voucher amount < max relief) (Monthly)" in {
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
 
@@ -1444,7 +1445,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
 
 
     "calculate savings per claimant (single claimant, pre 2011, gross > additional rate limit, voucher amount > max relief) (Monthly)" in {
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val escStartDate = LocalDate.parse("01-05-2009", formatter)
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
@@ -1467,7 +1468,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     }
 
     "calculate tax and NI savings per claimant (single period, one claimant, 0 eligible months) (Monthly)" in {
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val inputClaimant = ESCClaimant(qualifying = false, isPartner = false, eligibleMonthsInPeriod = 0, previousIncome = None, currentIncome = None, vouchers = false,
@@ -1489,7 +1490,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     }
 
     "calculate tax and NI savings per claimant (single period, one claimant, 9 eligible months) (Monthly)" in {
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val inputClaimant = ESCClaimant(qualifying = false, isPartner = false,
@@ -1512,7 +1513,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     }
 
     "calculate tax and NI savings per claimant (period 1 - 9 eligible months, period 2 - 2 eligible months, one claimant) (taxablePay 50000.00) (Monthly)" in {
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val fromDate2 = LocalDate.parse("21-05-2017", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
@@ -1545,7 +1546,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     }
 
     "calculate tax savings per claimant (period 1 - 2 eligible months, period 2 - 0 eligible months, one claimant) (taxablePay 50000.00) (Monthly)" in {
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val fromDate2 = LocalDate.parse("21-05-2017", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
@@ -1579,7 +1580,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
 
     "calculate tax savings per claimant (claimant 1 = period 1 - 10 eligible months, period 2 - 1 eligible months) (claimant 2 = period 1 - 1 eligible months," +
       " period 2 - 1 eligible months) (taxablePay both 50000.00) (Monthly)" in {
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val fromDate2 = LocalDate.parse("21-05-2017", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
@@ -1621,7 +1622,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
 
     "calculate tax savings per claimant (claimant 1 = period 1 - 0 eligible months, period 2 - 0 eligible months) (claimant 2 = period 1 - 0 eligible months," +
       " period 2 - 1 eligible months) (taxablePay both 50000.00) (Monthly)" in {
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-12-2016", formatter)
       val fromDate2 = LocalDate.parse("21-12-2016", formatter)
@@ -1666,7 +1667,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
 
     "calculate tax savings per claimant (claimant 1 = period 1 - 0 eligible months, period 2 - 1 eligible months) (claimant 2 = period 1 - 0 eligible months," +
       " period 2 - 0 eligible months) (taxablePay both 50000.00) (Monthly)" in {
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-12-2016", formatter)
       val fromDate2 = LocalDate.parse("21-12-2016", formatter)
@@ -1712,7 +1713,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     // NI TESTS //
     "allocate gross earnings to NI bands (earnings in lower earnings level, TY2016, category A)" in {
       val grossPay = BigDecimal(485.00)
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
@@ -1725,7 +1726,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
 
     "allocate gross earnings to NI bands (earnings in primary earnings level, TY2016, category A)" in {
       val grossPay = BigDecimal(485.01)
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
@@ -1738,7 +1739,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
 
     "allocate gross earnings to NI bands (earnings in primary earnings level, TY2016, category B)" in {
       val grossPay = BigDecimal(672)
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
@@ -1751,7 +1752,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
 
     "allocate gross earnings to NI bands (earnings in upper accrual earnings level, TY2016, category B)" in {
       val grossPay = BigDecimal(672.01)
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
@@ -1764,7 +1765,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
 
     "allocate gross earnings to NI bands (earnings in upper accrual earnings level, TY2016, category C)" in {
       val grossPay = BigDecimal(3337.00)
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
@@ -1777,7 +1778,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
 
     "allocate gross earnings to NI bands (earnings in upper  earnings level, TY2016, category A)" in {
       val grossPay = BigDecimal(3337.01)
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
@@ -1790,7 +1791,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
 
     "allocate gross earnings to NI bands (earnings in upper  earnings level, TY2016, category C)" in {
       val grossPay = BigDecimal(3532.00)
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
@@ -1803,7 +1804,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
 
     "allocate gross earnings to NI bands (earnings in above upper earnings level, TY2016, category C)" in {
       val grossPay = BigDecimal(3532.01)
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
@@ -1816,7 +1817,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
 
     "allocate gross earnings to NI bands (earnings in above upper earnings level, TY2017, category B)" in {
       val grossPay = BigDecimal(10000.00)
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2017", formatter)
       val toDate = LocalDate.parse("21-05-2018", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
@@ -1828,7 +1829,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     }
 
     "determine NI amount for each band (earnings is 485 (lower earnings level), TY2016, category A)" in {
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
@@ -1841,7 +1842,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     }
 
     "determine NI amount for each band (earnings is 600 (primary earnings level), TY2016, category A)" in {
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
@@ -1854,7 +1855,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     }
 
     "determine NI amount for each band (earnings is 672 (primary earnings level), TY2016, category B)" in {
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
@@ -1867,7 +1868,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     }
 
     "determine NI amount for each band (earnings is 800 (upper accrual earnings level), TY2017, category A)" in {
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2017", formatter)
       val toDate = LocalDate.parse("21-05-2018", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
@@ -1880,7 +1881,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     }
 
     "determine NI amount for each band (earnings is 800 (upper accrual earnings level), TY2016, category B)" in {
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
@@ -1893,7 +1894,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     }
 
     "determine NI amount for each band (earnings is 800 (upper accrual earnings level), TY2016, category C)" in {
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
@@ -1906,7 +1907,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     }
 
     "determine NI amount for each band (earnings is 3500 (upper earnings level), TY2016, category A)" in {
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
@@ -1919,7 +1920,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     }
 
     "determine NI amount for each band (earnings is 3500 (upper earnings level), TY2016, category B)" in {
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
@@ -1932,7 +1933,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     }
 
     "determine NI amount for each band (earnings is 3500 (upper earnings level), TY2016, category C)" in {
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
@@ -1945,7 +1946,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     }
 
     "determine NI amount for each band (earnings is 4000 (above upper earnings level), TY2016, category A)" in {
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
@@ -1958,7 +1959,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     }
 
     "determine NI amount for each band (earnings is 4000 (above upper earnings level), TY2016, category B)" in {
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
@@ -1971,7 +1972,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     }
 
     "determine NI amount for each band (earnings is 4000 (above upper earnings level), TY2016, category C)" in {
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
@@ -1984,7 +1985,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     }
 
     "determine NI amount for each band (earnings is 485 (lower earnings level), TY2017, category A)" in {
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2017", formatter)
       val toDate = LocalDate.parse("21-05-2018", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
@@ -1997,7 +1998,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     }
 
     "determine NI amount for each band (earnings is 600 (primary earnings level), TY2017, category A)" in {
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2017", formatter)
       val toDate = LocalDate.parse("21-05-2018", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
@@ -2010,7 +2011,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     }
 
     "determine NI amount for each band (earnings is 672 (primary earnings level), TY2017, category B)" in {
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2017", formatter)
       val toDate = LocalDate.parse("21-05-2018", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
@@ -2023,7 +2024,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     }
 
     "determine NI amount for each band (earnings is 800 (upper accrual earnings level), TY2016, category A)" in {
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
@@ -2036,7 +2037,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     }
 
     "determine NI amount for each band (earnings is 3500 (upper earnings level), TY2017, category B)" in {
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2017", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
@@ -2049,7 +2050,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     }
 
     "determine NI amount for each band (earnings is 4000 (above upper earnings level), TY2017, category C)" in {
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2017", formatter)
       val toDate = LocalDate.parse("21-05-2018", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
@@ -2061,7 +2062,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     }
 
     "determine NI amount for each band (earnings is 4000 (above upper earnings level), TY2017, category B)" in {
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("06-04-2017", formatter)
       val toDate = LocalDate.parse("05-04-2018", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
@@ -2073,7 +2074,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     }
 
     "determine NI amount for each band (earnings is 4000 (above upper earnings level), TY2018, category A)" in {
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2018", formatter)
       val toDate = LocalDate.parse("05-04-2019", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
@@ -2085,7 +2086,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     }
 
     "determine NI amount for each band (earnings is 4000 (above upper earnings level), TY2018, category B)" in {
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("06-04-2018", formatter)
       val toDate = LocalDate.parse("05-04-2019", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
@@ -2097,7 +2098,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
     }
 
     "determine NI amount for each band (earnings is 4000 (above upper earnings level), TY2018, category C)" in {
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2018", formatter)
       val toDate = LocalDate.parse("05-04-2019", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
@@ -2160,7 +2161,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       val grossPay = BigDecimal(4000.00)
       val reliefAmount = BigDecimal(124.00)
       val calcPeriod = Periods.Yearly
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
@@ -2176,7 +2177,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       val grossPay = BigDecimal(4000.00)
       val reliefAmount = BigDecimal(124.00)
       val calcPeriod = Periods.Yearly
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
@@ -2191,7 +2192,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       val grossPay = BigDecimal(3500.00)
       val reliefAmount = BigDecimal(200.00)
       val calcPeriod = Periods.Yearly
-      val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2017", formatter)
       val toDate = LocalDate.parse("21-05-2018", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())

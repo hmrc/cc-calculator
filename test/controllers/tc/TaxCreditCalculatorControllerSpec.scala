@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import calculators.TCCalculator
 import com.github.fge.jackson.JsonLoader
 import models.input.tc.TCCalculatorInput
 import models.output.tc.TCCalculatorOutput
-import org.joda.time.LocalDate
+import java.time.LocalDate
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
@@ -47,7 +47,7 @@ class TaxCreditCalculatorControllerSpec extends FakeCCCalculatorApplication with
   val invalidData = Table(
     ("Json", "Path", "Error", "Args"),
     ("empty_json", "/taxYears", "error.path.missing", ""),
-    ("invalid_date", "/taxYears(0)/from", "error.expected.jodadate.format", "\"\""),
+    ("invalid_date", "/taxYears(0)/from", "error.expected.date.isoformat", "\"ParseCaseSensitive(false)(Value(Year,4,10,EXCEEDS_PAD)'-'Value(MonthOfYear,2)'-'Value(DayOfMonth,2))[Offset(+HH:MM:ss,'Z')]\""),
     ("negative_childcare_cost", "/taxYears(0)/periods(0)/children(0)/childcareCost", "Childcare Spend cost should not be less than 0.00", "")
   )
 

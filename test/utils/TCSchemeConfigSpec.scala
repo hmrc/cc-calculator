@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,9 @@
 
 package utils
 
-import org.joda.time.LocalDate
-import org.joda.time.format.DateTimeFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+
 import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatest.prop.TableDrivenPropertyChecks.forAll
@@ -25,7 +26,7 @@ import org.scalatest.prop.Tables.Table
 
 class TCSchemeConfigSpec extends FakeCCCalculatorApplication with MockitoSugar {
 
-  override val formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+  override val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
 
   val defaultTaxYearConfig = TCTaxYearConfig(
     otherIncomeAdjustment = 300,

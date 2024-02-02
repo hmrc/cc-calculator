@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -271,8 +271,8 @@ class TFCCalculatorControllerSpec extends FakeCCCalculatorApplication with Mocki
           |         "path":"/until",
           |         "validationErrors":[
           |            {
-          |               "message":"error.expected.jodadate.format",
-          |               "args":["yyyy-MM-dd"]
+          |               "message":"error.expected.date.isoformat",
+          |               "args":["ParseCaseSensitive(false)(Value(Year,4,10,EXCEEDS_PAD)'-'Value(MonthOfYear,2)'-'Value(DayOfMonth,2))[Offset(+HH:MM:ss,'Z')]"]
           |            }
           |         ]
           |      }

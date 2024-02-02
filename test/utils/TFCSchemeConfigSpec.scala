@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,9 @@
 
 package utils
 
-import org.joda.time.LocalDate
-import org.joda.time.format.DateTimeFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+
 import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 import org.scalatestplus.mockito.MockitoSugar
 
@@ -42,7 +43,7 @@ class TFCSchemeConfigSpec extends FakeCCCalculatorApplication with MockitoSugar 
 
     "(following year) return the end date of tax year" in {
       val pattern = "dd-MM-yyyy"
-      val formatter = DateTimeFormat.forPattern(pattern)
+      val formatter = DateTimeFormatter.ofPattern(pattern)
       val now = LocalDate.parse("23-06-2016", formatter)
       val endOfTaxYear = tfcConfig.taxYearEndDate(now, "tfc")
       endOfTaxYear shouldBe LocalDate.parse("06-04-2017", formatter)
@@ -50,7 +51,7 @@ class TFCSchemeConfigSpec extends FakeCCCalculatorApplication with MockitoSugar 
 
     "(current year) return the end date of tax year" in {
       val pattern = "dd-MM-yyyy"
-      val formatter = DateTimeFormat.forPattern(pattern)
+      val formatter = DateTimeFormatter.ofPattern(pattern)
       val now = LocalDate.parse("23-02-2016", formatter)
       val endOfTaxYear = tfcConfig.taxYearEndDate(now, "tfc")
       endOfTaxYear shouldBe LocalDate.parse("06-04-2016", formatter)
@@ -58,7 +59,7 @@ class TFCSchemeConfigSpec extends FakeCCCalculatorApplication with MockitoSugar 
 
     "return 2016/2017 TFC taxYear Config for a date 24-07-2016" in {
       val pattern = "dd-MM-yyyy"
-      val formatter = DateTimeFormat.forPattern(pattern)
+      val formatter = DateTimeFormatter.ofPattern(pattern)
       val fromDate = LocalDate.parse("24-07-2016", formatter)
       val config = tfcConfig.getConfig(fromDate)
       val tfcTaxYear = TFCTaxYearConfig(
@@ -71,7 +72,7 @@ class TFCSchemeConfigSpec extends FakeCCCalculatorApplication with MockitoSugar 
 
     "return 2017/2018 TFC taxYear Config for a date 24-07-2017" in {
       val pattern = "dd-MM-yyyy"
-      val formatter = DateTimeFormat.forPattern(pattern)
+      val formatter = DateTimeFormatter.ofPattern(pattern)
       val fromDate = LocalDate.parse("24-07-2017", formatter)
       val config = tfcConfig.getConfig(fromDate)
       val tfcTaxYear = TFCTaxYearConfig(
@@ -84,7 +85,7 @@ class TFCSchemeConfigSpec extends FakeCCCalculatorApplication with MockitoSugar 
 
     "return 2017/2018 TFC taxYear Config for a date 24-07-2018" in {
       val pattern = "dd-MM-yyyy"
-      val formatter = DateTimeFormat.forPattern(pattern)
+      val formatter = DateTimeFormatter.ofPattern(pattern)
       val fromDate = LocalDate.parse("24-07-2018", formatter)
       val config = tfcConfig.getConfig(fromDate)
       val tfcTaxYear = TFCTaxYearConfig(
@@ -97,7 +98,7 @@ class TFCSchemeConfigSpec extends FakeCCCalculatorApplication with MockitoSugar 
 
     "return default TFC taxYear Config for a date 24-07-2015" in {
       val pattern = "dd-MM-yyyy"
-      val formatter = DateTimeFormat.forPattern(pattern)
+      val formatter = DateTimeFormatter.ofPattern(pattern)
       val fromDate = LocalDate.parse("24-07-2015", formatter)
       val config = tfcConfig.getConfig(fromDate)
       val tfcTaxYear = TFCTaxYearConfig(
@@ -110,7 +111,7 @@ class TFCSchemeConfigSpec extends FakeCCCalculatorApplication with MockitoSugar 
 
     "return default TFC taxYear Config for a date 05-04-2016" in {
       val pattern = "dd-MM-yyyy"
-      val formatter = DateTimeFormat.forPattern(pattern)
+      val formatter = DateTimeFormatter.ofPattern(pattern)
       val fromDate = LocalDate.parse("05-04-2016", formatter)
       val config = tfcConfig.getConfig(fromDate)
       val tfcTaxYear = TFCTaxYearConfig(
@@ -123,7 +124,7 @@ class TFCSchemeConfigSpec extends FakeCCCalculatorApplication with MockitoSugar 
 
     "return 2016/2017 TFC taxYear Config for a date 06-04-2016" in {
       val pattern = "dd-MM-yyyy"
-      val formatter = DateTimeFormat.forPattern(pattern)
+      val formatter = DateTimeFormatter.ofPattern(pattern)
       val fromDate = LocalDate.parse("06-04-2016", formatter)
       val config = tfcConfig.getConfig(fromDate)
       val tfcTaxYear = TFCTaxYearConfig(
@@ -136,7 +137,7 @@ class TFCSchemeConfigSpec extends FakeCCCalculatorApplication with MockitoSugar 
 
     "return 2016/2017 TFC taxYear Config for a date 05-04-2017" in {
       val pattern = "dd-MM-yyyy"
-      val formatter = DateTimeFormat.forPattern(pattern)
+      val formatter = DateTimeFormatter.ofPattern(pattern)
       val fromDate = LocalDate.parse("05-04-2017", formatter)
       val config = tfcConfig.getConfig(fromDate)
       val tfcTaxYear = TFCTaxYearConfig(
@@ -149,7 +150,7 @@ class TFCSchemeConfigSpec extends FakeCCCalculatorApplication with MockitoSugar 
 
     "return 2017/2018 TFC taxYear Config for a date 06-04-2017" in {
       val pattern = "dd-MM-yyyy"
-      val formatter = DateTimeFormat.forPattern(pattern)
+      val formatter = DateTimeFormatter.ofPattern(pattern)
       val fromDate = LocalDate.parse("06-04-2017", formatter)
       val config = tfcConfig.getConfig(fromDate)
       val tfcTaxYear = TFCTaxYearConfig(
@@ -162,7 +163,7 @@ class TFCSchemeConfigSpec extends FakeCCCalculatorApplication with MockitoSugar 
 
     "return 2017/2018 TFC taxYear Config for a date 05-04-2018" in {
       val pattern = "dd-MM-yyyy"
-      val formatter = DateTimeFormat.forPattern(pattern)
+      val formatter = DateTimeFormatter.ofPattern(pattern)
       val fromDate = LocalDate.parse("05-04-2018", formatter)
       val config = tfcConfig.getConfig(fromDate)
       val tfcTaxYear = TFCTaxYearConfig(
@@ -175,7 +176,7 @@ class TFCSchemeConfigSpec extends FakeCCCalculatorApplication with MockitoSugar 
 
     "return 2017/2018 TFC taxYear Config for a date 06-04-2018" in {
       val pattern = "dd-MM-yyyy"
-      val formatter = DateTimeFormat.forPattern(pattern)
+      val formatter = DateTimeFormatter.ofPattern(pattern)
       val fromDate = LocalDate.parse("06-04-2018", formatter)
       val config = tfcConfig.getConfig(fromDate)
       val tfcTaxYear = TFCTaxYearConfig(

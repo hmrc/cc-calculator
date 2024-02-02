@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,8 @@
 
 package calculators
 
-import org.joda.time.{Days, LocalDate}
+import java.time.LocalDate
+import java.time.temporal.ChronoUnit.DAYS
 import utils.Periods
 
 import scala.math.BigDecimal.RoundingMode
@@ -103,7 +104,7 @@ trait CCCalculatorHelper {
   }
 
   def daysBetween(fromDate: LocalDate, toDate: LocalDate): Int = {
-    Days.daysBetween(fromDate, toDate).getDays
+    DAYS.between(fromDate, toDate).toInt
   }
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.github.fge.jackson.JsonLoader
 import models.input.esc.ESCCalculatorInput
 import models.output.esc.{ESCCalculatorOutput, ESCSavings}
-import org.joda.time.LocalDate
+import java.time.LocalDate
 import org.mockito.ArgumentMatchers.{eq => mockEq, _}
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach

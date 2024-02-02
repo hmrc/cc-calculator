@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,13 +27,12 @@ import service.AuditEvents
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 import utils.JSONFactory
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class TaxCreditCalculatorController @Inject()(val mcc: MessagesControllerComponents,
                                               val auditEvent: AuditEvents,
-                                              val calculator: TCCalculator) extends BackendController(mcc)
+                                              val calculator: TCCalculator)(implicit ec: ExecutionContext) extends BackendController(mcc)
   with I18nSupport with Logging  {
 
   def calculate: Action[JsValue] = Action.async(parse.json) {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,10 @@
 
 package models.input.tc
 
-import org.joda.time.LocalDate
+import java.time.LocalDate
+
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
-import play.api.libs.json.JodaReads._
-import play.api.libs.json.JodaWrites._
 import utils._
 
 case class TCCalculatorInput(

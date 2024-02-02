@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,8 +21,10 @@ import java.util.Calendar
 
 import config.AppConfig
 import javax.inject.Inject
-import org.joda.time.LocalDate
-import org.joda.time.format.DateTimeFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Date
+import java.time.ZoneId.systemDefault
 import play.api.Configuration
 
 class CCConfig @Inject()(val appConfig: AppConfig) {
@@ -50,7 +52,7 @@ class CCConfig @Inject()(val appConfig: AppConfig) {
       case head :: tail =>
         val configDate = new SimpleDateFormat(formatterDatePattern).parse(head.get[String]("rule-date"))
         // exit tail recursive
-        if (currentDate.toDate.after(configDate) || currentDate.toDate.compareTo(configDate) == 0) {
+        if (toDate(currentDate).after(configDate) || toDate(currentDate).compareTo(configDate) == 0) {
           getConfigHelper(currentDate, Nil, Some(head))
         } else {
           getConfigHelper(currentDate, tail, acc)
@@ -61,9 +63,9 @@ class CCConfig @Inject()(val appConfig: AppConfig) {
   def getCurrentTaxYear(from: LocalDate) : Int = {
     val currentCalendar = Calendar.getInstance()
     currentCalendar.clear()
-    currentCalendar.setTime(from.toDate)
+    currentCalendar.setTime(toDate(from))
     val periodYear = currentCalendar.get(Calendar.YEAR)
-    val periodStart = from.toDate
+    val periodStart = toDate(from)
 
     val januaryCalendar = Calendar.getInstance()
     januaryCalendar.clear()
@@ -96,13 +98,18 @@ class CCConfig @Inject()(val appConfig: AppConfig) {
       val currentYear = now.getYear
       calendar.set(currentYear, month, day)
       val taxDate = calendar.getTime
-      if (taxDate.before(now.toDate)) {
+      if (taxDate.before(toDate(now))) {
         calendar.add(Calendar.YEAR, 1)
       }
       calendar.get(Calendar.YEAR)
     }
-    val pattern = "dd-MM-yyyy"
-    val formatter = DateTimeFormat.forPattern(pattern)
+    val dayPattern = if (day.toString.length == 1) "d" else "dd"
+    val monthPattern = if (month.toString.length == 1) "M" else "MM"
+    val formatter = DateTimeFormatter.ofPattern(s"$dayPattern-$monthPattern-yyyy")
     LocalDate.parse(s"$day-$month-$year", formatter)
+  }
+
+  private def toDate(localDate: LocalDate): Date = {
+    Date.from(localDate.atStartOfDay(systemDefault).toInstant)
   }
 }

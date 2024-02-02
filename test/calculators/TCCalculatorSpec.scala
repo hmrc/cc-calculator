@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,9 @@ package calculators
 
 import models.input.tc._
 import models.output.tc.{Element, Elements, Period}
-import org.joda.time.LocalDate
-import org.joda.time.format.DateTimeFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.mockito.MockitoSugar
@@ -1434,7 +1435,7 @@ class TCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with Mo
     }
 
     "(does not require tapering - income less than threshold) Determine the net amounts of the period" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val fromDate = LocalDate.parse("2016-05-01", formatter)
       val untilDate = LocalDate.parse("2016-05-21", formatter)
 
@@ -1472,7 +1473,7 @@ class TCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with Mo
     }
 
     "(tapers all amounts fully) Determine the net amounts of the period" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val fromDate = LocalDate.parse("2016-05-01", formatter)
       val untilDate = LocalDate.parse("2016-05-21", formatter)
 
@@ -1510,7 +1511,7 @@ class TCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with Mo
     }
 
     "(no tapering required, single claimant claiming social security benefit) Determine the net amounts of a the period" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val fromDate = LocalDate.parse("2016-05-01", formatter)
       val untilDate = LocalDate.parse("2016-05-21", formatter)
 
@@ -1550,7 +1551,7 @@ class TCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with Mo
     }
 
     "(tapering required, single claimant not claiming social security benefit) Determine the net amounts of a the period" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val fromDate = LocalDate.parse("2016-05-01", formatter)
       val untilDate = LocalDate.parse("2016-05-21", formatter)
 
@@ -1590,7 +1591,7 @@ class TCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with Mo
     }
 
     "(no tapering required, joint claimants, one claimant claiming social security benefit) Determine the net amounts of a the period" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val fromDate = LocalDate.parse("2016-05-01", formatter)
       val untilDate = LocalDate.parse("2016-05-21", formatter)
 
@@ -1631,7 +1632,7 @@ class TCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with Mo
     }
 
     "(no tapering required, joint claimants, both claimants claiming social security benefit) Determine the net amounts of a the period" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val fromDate = LocalDate.parse("2016-05-01", formatter)
       val untilDate = LocalDate.parse("2016-05-21", formatter)
 
@@ -1672,7 +1673,7 @@ class TCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with Mo
     }
 
     "(tapering required, joint claimants, both not claiming social security benefit) Determine the net amounts of a the period" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val fromDate = LocalDate.parse("2016-05-01", formatter)
       val untilDate = LocalDate.parse("2016-05-21", formatter)
 
@@ -1790,7 +1791,7 @@ class TCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with Mo
     }
 
     "determine if tapering fourth element (CTC family element)is required" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val fromDate = LocalDate.parse("2016-05-01", formatter)
       val untilDate = LocalDate.parse("2016-05-21", formatter)
 
@@ -1830,7 +1831,7 @@ class TCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with Mo
     }
 
     "(full tapering) taper fourth element (CTC family element) when calculated CTC threshold is greater than ctcIncomeThreshold" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val fromDate = LocalDate.parse("2016-05-01", formatter)
       val untilDate = LocalDate.parse("2016-05-21", formatter)
 
@@ -1871,7 +1872,7 @@ class TCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with Mo
     }
 
     "(full tapering) taper fourth element (CTC family element) when calculated CTC threshold is lesser than ctcIncomeThreshold" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val fromDate = LocalDate.parse("2016-05-01", formatter)
       val untilDate = LocalDate.parse("2016-05-21", formatter)
 
@@ -1912,7 +1913,7 @@ class TCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with Mo
     }
 
     "(patrial tapering) taper fourth element (CTC family element) when calculated CTC threshold is greater than ctcIncomeThreshold" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val fromDate = LocalDate.parse("2016-05-01", formatter)
       val untilDate = LocalDate.parse("2016-05-21", formatter)
 
@@ -1954,7 +1955,7 @@ class TCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with Mo
 
 
     "(partial tapering) taper fourth element (CTC family element) when calculated CTC threshold is lesser than ctcIncomeThreshold" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val fromDate = LocalDate.parse("2016-05-01", formatter)
       val untilDate = LocalDate.parse("2016-05-21", formatter)
 
@@ -1995,7 +1996,7 @@ class TCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with Mo
     }
 
     "(partial tapering) taper fourth element (CTC family element) when calculated CTC threshold is greater than ctcIncomeThreshold and income" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val fromDate = LocalDate.parse("2016-05-01", formatter)
       val untilDate = LocalDate.parse("2016-05-21", formatter)
 
@@ -2037,7 +2038,7 @@ class TCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with Mo
     }
 
     "Determine that the list of periods is not populated when the period list is empty" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val fromDate = LocalDate.parse("2016-09-27", formatter)
       val untilDate = LocalDate.parse("2017-04-06", formatter)
 

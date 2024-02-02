@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import models.output.CalculatorOutput
 import models.output.esc.{ESCCalculatorOutput, ESCSavings}
 import models.output.tc.TCCalculatorOutput
 import models.output.tfc.{TFCCalculatorOutput, TFCContribution}
-import org.joda.time.LocalDate
+import java.time.LocalDate
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import play.api.libs.json.{JsValue, Json}
