@@ -2,32 +2,13 @@
 
 [![Build Status](https://travis-ci.org/hmrc/cc-calculator.svg?branch=master)](https://travis-ci.org/hmrc/cc-calculator) [ ![Download](https://api.bintray.com/packages/hmrc/releases/cc-calculator/images/download.svg) ](https://bintray.com/hmrc/releases/cc-calculator/_latestVersion)
 
-This is a placeholder README.md for a new repository
-
 Childcare Calculator microservice calculates actual childcare costs per different scheme (Tax Credits, Employer Supported Childcare and Tax Free Childcare).
 
-Microservice consists of 3 different parts, each having separate endpoints and a different input/output structure.
-
-The service will accept a JSON request formatted according to Eligibility Microservice's output with additional fields added which are required for calculation. The response of the service is also of a form of a structured JSON document.
-
-
-* **Endpoint URLs**
-
-  * **TC (Income Advice Calculation):**   /tax-credits/calculate/income-advice  <br />
-  * **TC (Total Award Calculation):**   /tax-credits/calculate/total-award  <br />
-  * **ESC :**  /employer-supported-childcare/calculate <br />
-  * **TFC :**  /tax-free-childcare/calculate <br />
+The service will accept a JSON request formatted according to Eligibility Microservice's output with additional fields added which are required for calculation.
 
 * **Port Number**
 
   * **CC Calculator:** 9372
-
-* **API Documentation for each service:**
-
-    * **[Tax Credits Calculation](/README_TC.md)**
-    * **[Employer Supported Childcare Calculation](/README_ESC.md)**
-    * **[Tax Free Childcare Calculation](/README_TFC.md)**
-
 
 
 * **Method:**
