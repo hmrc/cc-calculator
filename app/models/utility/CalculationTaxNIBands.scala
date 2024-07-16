@@ -16,7 +16,7 @@
 
 package models.utility
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 /**
  * Created by adamconder on 28/09/15.
@@ -33,7 +33,7 @@ case class CalculationTaxBands(
                                 zeroRateBand : BigDecimal = BigDecimal(0.00)
                                 )
 object CalculationTaxBands {
-  implicit val taxBanksFormat = Json.format[CalculationTaxBands]
+  implicit val taxBanksFormat: OFormat[CalculationTaxBands] = Json.format[CalculationTaxBands]
 }
 
 case class CalculationNIBands (
@@ -44,5 +44,5 @@ case class CalculationNIBands (
                                 )
 
 object CalculationNIBands {
-  implicit val niBanksFormat = Json.format[CalculationNIBands]
+  implicit val niBanksFormat: OFormat[CalculationNIBands] = Json.format[CalculationNIBands]
 }
