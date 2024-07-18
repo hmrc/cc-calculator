@@ -21,7 +21,7 @@ import javax.inject.Inject
 import java.time.LocalDate
 import play.api.Configuration
 import play.api.i18n.{Lang, MessagesApi}
-import scala.collection.JavaConverters.asScalaBufferConverter
+import scala.jdk.CollectionConverters.CollectionHasAsScala
 
 class ESCConfig @Inject()(appConfig: AppConfig,
                           configuration: Configuration,
