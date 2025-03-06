@@ -36,14 +36,6 @@ class AuditEvents @Inject()(val auditService: AuditService)(implicit ec: Executi
     auditEvent("TFCResponse", data)
   }
 
-  def auditTCRequest(data : String) (implicit hc: HeaderCarrier): Unit = {
-    auditEvent("TCRequest", data)
-  }
-
-  def auditTCResponse(data : String) (implicit hc: HeaderCarrier): Unit = {
-    auditEvent("TCResponse", data)
-  }
-
   def auditESCRequest(data : String) (implicit hc: HeaderCarrier): Unit = {
     auditEvent("ESCRequest", data)
   }

@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/hmrc/cc-calculator.svg?branch=master)](https://travis-ci.org/hmrc/cc-calculator) [ ![Download](https://api.bintray.com/packages/hmrc/releases/cc-calculator/images/download.svg) ](https://bintray.com/hmrc/releases/cc-calculator/_latestVersion)
 
-Childcare Calculator microservice calculates actual childcare costs per different scheme (Tax Credits, Employer Supported Childcare and Tax Free Childcare).
+Childcare Calculator microservice calculates actual childcare costs per different scheme (Employer Supported Childcare and Tax Free Childcare).
 
 The service will accept a JSON request formatted according to Eligibility Microservice's output with additional fields added which are required for calculation.
 

@@ -26,7 +26,7 @@ class JSONFactorySpec extends FakeCCCalculatorApplication {
 
     "Return a valid output JSON when error sequence and status are passed" in {
       val status = 400
-      val JSONPath = JsPath \ "tc"
+      val JSONPath = JsPath \ "tfc"
       val validationError = JsonValidationError("Very Bad Thing Happened", 400)
       val errorTuple: (JsPath, Seq[JsonValidationError]) = (JSONPath, Seq(validationError))
 
@@ -37,7 +37,7 @@ class JSONFactorySpec extends FakeCCCalculatorApplication {
           |"errors":
           |[
           |   {
-          |     "path" : "/tc",
+          |     "path" : "/tfc",
           |     "validationErrors" :
           |     [
           |       {

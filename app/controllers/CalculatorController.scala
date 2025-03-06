@@ -16,11 +16,10 @@
 
 package controllers
 
-import calculators.{ESCCalculator, TCCalculator, TFCCalculator}
+import calculators.{ESCCalculator, TFCCalculator}
 import javax.inject.{Inject, Singleton}
 import models.input.CalculatorInput
 import models.input.esc.ESCCalculatorInput
-import models.input.tc.TCCalculatorInput
 import models.input.tfc.TFCCalculatorInput
 import models.output.CalculatorOutput
 import play.api.Logging
@@ -36,7 +35,6 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class CalculatorController @Inject()(val mcc: MessagesControllerComponents,
                                      val auditEvent: AuditEvents,
-                                     val tcCalculator: TCCalculator,
                                      val tfcCalculator: TFCCalculator,
                                      val escCalculator: ESCCalculator,
                                      val tfcConfig: TFCConfig)(implicit ec: ExecutionContext)
@@ -52,28 +50,17 @@ class CalculatorController @Inject()(val mcc: MessagesControllerComponents,
         auditEvent.auditRequest(result.toString)
 
         for {
-          tcRes <- calculateTC(result.tc)
           tfcRes <- calculateTFC(result.tfc)
           escRes <- calculateESC(result.esc)
-        } yield Ok(Json.toJson[CalculatorOutput](CalculatorOutput(tcAmount = tcRes, tfcAmount = tfcRes, escAmount = escRes)))
+        } yield Ok(Json.toJson[CalculatorOutput](CalculatorOutput(tfcAmount = tfcRes, escAmount = escRes)))
 
       }
     )
   }
 
-  private def calculateTC(tc: Option[TCCalculatorInput]): Future[Option[BigDecimal]] = {
-    if(tc.isDefined) {
-      tcCalculator.award(tc.get).map { result =>
-        Some(result.totalAwardAmount)
-      }
-    }
-    else {
-      Future.successful(None)
-    }
-  }
 
   private def calculateTFC(tfc: Option[TFCCalculatorInput]): Future[Option[BigDecimal]] = {
-    if(tfc.isDefined) {
+    if (tfc.isDefined) {
       tfcCalculator.award(tfc.get).map { result =>
         Some(result.householdContribution.government)
       }
@@ -84,7 +71,7 @@ class CalculatorController @Inject()(val mcc: MessagesControllerComponents,
   }
 
   private def calculateESC(esc: Option[ESCCalculatorInput]): Future[Option[BigDecimal]] = {
-    if(esc.isDefined) {
+    if (esc.isDefined) {
       escCalculator.award(esc.get).map { result =>
         Some(result.totalSavings.totalSaving)
       }
