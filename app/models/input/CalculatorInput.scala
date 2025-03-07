@@ -17,11 +17,10 @@
 package models.input
 
 import models.input.esc.ESCCalculatorInput
-import models.input.tc.TCCalculatorInput
 import models.input.tfc.TFCCalculatorInput
 import play.api.libs.json.{Json, Reads}
 
-case class CalculatorInput(tc: Option[TCCalculatorInput], tfc: Option[TFCCalculatorInput], esc: Option[ESCCalculatorInput])
+case class CalculatorInput(tfc: Option[TFCCalculatorInput], esc: Option[ESCCalculatorInput])
 
 object CalculatorInput {
   implicit val calculatorInput: Reads[CalculatorInput] = Json.reads[CalculatorInput]
