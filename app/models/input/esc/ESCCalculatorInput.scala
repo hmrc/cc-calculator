@@ -119,7 +119,6 @@ object ESCIncome {
 case class ESCClaimant(qualifying: Boolean = false,
                        isPartner: Boolean = false,
                        eligibleMonthsInPeriod: Int,
-                       previousIncome: Option[ESCIncome],
                        currentIncome: Option[ESCIncome],
                        vouchers: Boolean = false,
                        escStartDate: LocalDate) extends MessagesObject
@@ -132,7 +131,7 @@ case class ESCClaimant(qualifying: Boolean = false,
   }
 
   val income: ESCTotalIncome = {
-    val (empIncome, pension, inputTaxCode) = getTotalIncome(previousIncome, currentIncome)
+    val (empIncome, pension, inputTaxCode) = getTotalIncome(currentIncome)
     ESCTotalIncome(
       taxablePay = empIncome.getOrElse(defaultAmount) - (pension.getOrElse(defaultAmount) * noOfMonths),
       gross = empIncome.getOrElse(defaultAmount),
@@ -145,14 +144,13 @@ case class ESCClaimant(qualifying: Boolean = false,
     case _ => (None, None, None)
   }
 
-  private def getTotalIncome(previousIncome : Option[ESCIncome], currentIncome: Option[ESCIncome]) = {
-    val (empPrevious, pensionPrevious, taxCodePrevious) = determineIncomeElems(previousIncome)
+  private def getTotalIncome(currentIncome: Option[ESCIncome]) = {
     val (emp, pension, taxCode) = determineIncomeElems(currentIncome)
 
     (
-      if(emp.isDefined) emp else empPrevious,
-      if(pension.isDefined) pension else pensionPrevious,
-      if(taxCode.isDefined) taxCode else taxCodePrevious
+      emp,
+      pension,
+      taxCode
     )
   }
 }
@@ -164,7 +162,6 @@ object ESCClaimant extends MessagesObject {
       (JsPath \ "isPartner").read[Boolean].orElse(Reads.pure(false)) and
         (JsPath \ "eligibleMonthsInPeriod").read[Int].filter(JsonValidationError("Number of months should not be less than 0 and not more than 99")
         )(months => months >= lowerMonthsLimitValidation && months < upperMonthsLimitValidation) and
-          (JsPath \ "previousIncome").readNullable[ESCIncome] and
             (JsPath \ "currentIncome").readNullable[ESCIncome] and
               (JsPath \ "vouchers").read[Boolean] and
                 (JsPath \ "escStartDate").read[LocalDate]

@@ -571,7 +571,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
-      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, previousIncome = None, currentIncome = None,
+      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, currentIncome = None,
         vouchers = true, escStartDate = escStartDate)
       val pre2011 = claimant.isESCStartDateBefore2011
       val calcPeriod = Periods.Monthly
@@ -591,7 +591,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
-      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, previousIncome = None, currentIncome = None,
+      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, currentIncome = None,
         vouchers = true, escStartDate = escStartDate)
       val pre2011 = claimant.isESCStartDateBefore2011
 
@@ -608,7 +608,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
-      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, previousIncome = None, currentIncome = None,
+      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, currentIncome = None,
         vouchers = true, escStartDate = escStartDate)
       val pre2011 = claimant.isESCStartDateBefore2011
       val calcPeriod = Periods.Yearly
@@ -626,7 +626,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
-      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, previousIncome = None, currentIncome = None,
+      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, currentIncome = None,
         vouchers = true, escStartDate = escStartDate)
       val pre2011 = claimant.isESCStartDateBefore2011
 
@@ -643,7 +643,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
-      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, previousIncome = None, currentIncome = None,
+      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, currentIncome = None,
         vouchers = true, escStartDate = escStartDate)
       val pre2011 = claimant.isESCStartDateBefore2011
       val calcPeriod = Periods.Yearly
@@ -661,7 +661,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
-      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, previousIncome = None, currentIncome = None,
+      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, currentIncome = None,
         vouchers = true, escStartDate = escStartDate)
       val pre2011 = claimant.isESCStartDateBefore2011
       val calcPeriod = Periods.Monthly
@@ -679,7 +679,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
-      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, previousIncome = None, currentIncome = None,
+      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, currentIncome = None,
         vouchers = true, escStartDate = escStartDate)
       val pre2011 = claimant.isESCStartDateBefore2011
       val calcPeriod = Periods.Yearly
@@ -697,7 +697,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2017", formatter)
       val toDate = LocalDate.parse("21-05-2018", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
-      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, previousIncome = None, currentIncome = None,
+      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, currentIncome = None,
         vouchers = true, escStartDate = escStartDate)
       val pre2011 = claimant.isESCStartDateBefore2011
 
@@ -714,7 +714,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
-      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, previousIncome = None, currentIncome = None,
+      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, currentIncome = None,
         vouchers = true, escStartDate = escStartDate)
       val pre2011 = claimant.isESCStartDateBefore2011
 
@@ -731,7 +731,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
-      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, previousIncome = None, currentIncome = None,
+      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, currentIncome = None,
         vouchers = true, escStartDate = escStartDate)
       val pre2011 = claimant.isESCStartDateBefore2011
       val calcPeriod = Periods.Monthly
@@ -749,7 +749,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
-      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, previousIncome = None, currentIncome = None,
+      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, currentIncome = None,
         vouchers = true, escStartDate = escStartDate)
       val pre2011 = claimant.isESCStartDateBefore2011
 
@@ -767,7 +767,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
-      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, previousIncome = None, currentIncome = None,
+      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, currentIncome = None,
         vouchers = true, escStartDate = escStartDate)
       val pre2011 = claimant.isESCStartDateBefore2011
       val calcPeriod = Periods.Yearly
@@ -785,7 +785,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("02-05-2017", formatter)
       val toDate = LocalDate.parse("01-05-2018", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
-      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, previousIncome = None, currentIncome = None,
+      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, currentIncome = None,
         vouchers = true, escStartDate = escStartDate)
       val pre2011 = claimant.isESCStartDateBefore2011
 
@@ -802,7 +802,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
-      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, previousIncome = None, currentIncome = None,
+      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, currentIncome = None,
         vouchers = true, escStartDate = escStartDate)
       val pre2011 = claimant.isESCStartDateBefore2011
       val calcPeriod = Periods.Monthly
@@ -820,7 +820,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2017", formatter)
       val toDate = LocalDate.parse("21-03-2018", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
-      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, previousIncome = None, currentIncome = None,
+      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, currentIncome = None,
         vouchers = true, escStartDate = escStartDate)
       val pre2011 = claimant.isESCStartDateBefore2011
       val calcPeriod = Periods.Monthly
@@ -838,7 +838,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2017", formatter)
       val toDate = LocalDate.parse("21-05-2018", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
-      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, previousIncome = None, currentIncome = None,
+      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, currentIncome = None,
         vouchers = true, escStartDate = escStartDate)
       val pre2011 = claimant.isESCStartDateBefore2011
       val calcPeriod = Periods.Yearly
@@ -856,7 +856,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
-      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, previousIncome = None, currentIncome = None,
+      val claimant = models.input.esc.ESCClaimant(qualifying = true, eligibleMonthsInPeriod = 2, currentIncome = None,
         vouchers = true, escStartDate = escStartDate)
       val pre2011 = claimant.isESCStartDateBefore2011
       val calcPeriod = Periods.Yearly
@@ -1149,7 +1149,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       val toDate = LocalDate.parse("21-05-2017", formatter)
 
       val inputClaimant = ESCClaimant(qualifying = true, isPartner = false,
-        eligibleMonthsInPeriod = 1, previousIncome = None,
+        eligibleMonthsInPeriod = 1,
         currentIncome = Some(ESCIncome(Some(9000.00), Some(0.00))), vouchers = true, escStartDate = fromDate)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant), children = List(buildChild(childCareCost = 500)))
 
@@ -1183,7 +1183,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       val toDate = LocalDate.parse("21-05-2018", formatter)
 
       val inputClaimant = ESCClaimant(qualifying = true, isPartner = false,
-        eligibleMonthsInPeriod = 12, previousIncome = Some(ESCIncome(Some(42700.00), Some(100.00))), currentIncome = None, vouchers = true, escStartDate = fromDate)
+        eligibleMonthsInPeriod = 12, currentIncome = Some(ESCIncome(Some(42700.00), Some(100.00))), vouchers = true, escStartDate = fromDate)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant), children = List(buildChild(childCareCost = 500)))
 
       val result = escCalc.determineSavingsPerClaimant(period, location = location)
@@ -1203,7 +1203,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       val toDate = LocalDate.parse("06-04-2019", formatter)
 
       val inputClaimant = ESCClaimant(qualifying = true, isPartner = false,
-        eligibleMonthsInPeriod = 12, previousIncome = Some(ESCIncome(Some(15000))), currentIncome = Some(ESCIncome(Some(15000))), vouchers = true, escStartDate = fromDate)
+        eligibleMonthsInPeriod = 12, currentIncome = Some(ESCIncome(Some(15000))), vouchers = true, escStartDate = fromDate)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant), children = List(buildChild(childCareCost = 200)))
 
       val result = escCalc.determineSavingsPerClaimant(period, location = locationScotland)
@@ -1217,7 +1217,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       val toDate = LocalDate.parse("06-04-2019", formatter)
 
       val inputClaimant = ESCClaimant(qualifying = true, isPartner = false,
-        eligibleMonthsInPeriod = 12, previousIncome = Some(ESCIncome(Some(49000))), currentIncome = Some(ESCIncome(Some(49000))), vouchers = true, escStartDate = fromDate)
+        eligibleMonthsInPeriod = 12, currentIncome = Some(ESCIncome(Some(49000))), vouchers = true, escStartDate = fromDate)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant), children = List(buildChild(childCareCost = 300)))
 
       val result = escCalc.determineSavingsPerClaimant(period, location = locationScotland)
@@ -1231,7 +1231,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       val toDate = LocalDate.parse("06-04-2019", formatter)
 
       val inputClaimant = ESCClaimant(qualifying = true, isPartner = false,
-        eligibleMonthsInPeriod = 12, previousIncome = Some(ESCIncome(Some(150012))), currentIncome = Some(ESCIncome(Some(150012))), vouchers = true, escStartDate = fromDate)
+        eligibleMonthsInPeriod = 12, currentIncome = Some(ESCIncome(Some(150012))), vouchers = true, escStartDate = fromDate)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant), children = List(buildChild(childCareCost = 300)))
 
       val result = escCalc.determineSavingsPerClaimant(period, location = locationScotland)
@@ -1245,7 +1245,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       val toDate = LocalDate.parse("06-04-2019", formatter)
 
       val inputClaimant = ESCClaimant(qualifying = true, isPartner = false,
-        eligibleMonthsInPeriod = 12, previousIncome = Some(ESCIncome(Some(15000))), currentIncome = Some(ESCIncome(Some(15000))), vouchers = true, escStartDate = fromDate)
+        eligibleMonthsInPeriod = 12, currentIncome = Some(ESCIncome(Some(15000))), vouchers = true, escStartDate = fromDate)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant), children = List(buildChild(childCareCost = 200)))
 
       val result = escCalc.determineSavingsPerClaimant(period, location = location)
@@ -1259,7 +1259,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       val toDate = LocalDate.parse("06-04-2019", formatter)
 
       val inputClaimant = ESCClaimant(qualifying = true, isPartner = false,
-        eligibleMonthsInPeriod = 12, previousIncome = Some(ESCIncome(Some(15000))), currentIncome = Some(ESCIncome(Some(15000))), vouchers = true, escStartDate = fromDate)
+        eligibleMonthsInPeriod = 12, currentIncome = Some(ESCIncome(Some(15000))), vouchers = true, escStartDate = fromDate)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant), children = List(buildChild(childCareCost = 200)))
 
       val result = escCalc.determineSavingsPerClaimant(period, location = location)
@@ -1273,7 +1273,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       val toDate = LocalDate.parse("06-04-2019", formatter)
 
       val inputClaimant = ESCClaimant(qualifying = true, isPartner = false,
-        eligibleMonthsInPeriod = 12, previousIncome = Some(ESCIncome(Some(15000))), currentIncome = Some(ESCIncome(Some(15000))), vouchers = true, escStartDate = fromDate)
+        eligibleMonthsInPeriod = 12, currentIncome = Some(ESCIncome(Some(15000))), vouchers = true, escStartDate = fromDate)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant), children = List(buildChild(childCareCost = 200)))
 
       val result = escCalc.determineSavingsPerClaimant(period, location = locationScotland)
@@ -1288,7 +1288,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
         val toDate = LocalDate.parse("06-04-2019", formatter)
 
         val inputClaimant = ESCClaimant(qualifying = true, isPartner = false,
-          eligibleMonthsInPeriod = 12, previousIncome = Some(ESCIncome(Some(47000))), currentIncome = Some(ESCIncome(Some(47000))), vouchers = true, escStartDate = fromDate)
+          eligibleMonthsInPeriod = 12, currentIncome = Some(ESCIncome(Some(47000))), vouchers = true, escStartDate = fromDate)
         val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant), children = List(buildChild(childCareCost = 200)))
 
         val result = escCalc.determineSavingsPerClaimant(period, location = locationScotland)
@@ -1302,7 +1302,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
         val toDate = LocalDate.parse("06-04-2019", formatter)
 
         val inputClaimant = ESCClaimant(qualifying = true, isPartner = false,
-          eligibleMonthsInPeriod = 12, previousIncome = Some(ESCIncome(Some(47000))), currentIncome = Some(ESCIncome(Some(47000))), vouchers = true, escStartDate = fromDate)
+          eligibleMonthsInPeriod = 12, currentIncome = Some(ESCIncome(Some(47000))), vouchers = true, escStartDate = fromDate)
         val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant), children = List(buildChild(childCareCost = 100)))
 
         val result = escCalc.determineSavingsPerClaimant(period, location = locationScotland)
@@ -1318,7 +1318,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
         val toDate = LocalDate.parse("06-04-2019", formatter)
 
         val inputClaimant = ESCClaimant(qualifying = true, isPartner = false,
-          eligibleMonthsInPeriod = 12, previousIncome = Some(ESCIncome(Some(110000))), currentIncome = Some(ESCIncome(Some(110000))), vouchers = true, escStartDate = fromDate)
+          eligibleMonthsInPeriod = 12, currentIncome = Some(ESCIncome(Some(110000))), vouchers = true, escStartDate = fromDate)
         val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant), children = List(buildChild(childCareCost = 300)))
 
         val result = escCalc.determineSavingsPerClaimant(period, location = locationScotland)
@@ -1332,7 +1332,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
         val toDate = LocalDate.parse("06-04-2019", formatter)
 
         val inputClaimant = ESCClaimant(qualifying = true, isPartner = false,
-          eligibleMonthsInPeriod = 12, previousIncome = Some(ESCIncome(Some(110000))), currentIncome = Some(ESCIncome(Some(110000))), vouchers = true, escStartDate = fromDate)
+          eligibleMonthsInPeriod = 12, currentIncome = Some(ESCIncome(Some(110000))), vouchers = true, escStartDate = fromDate)
         val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant), children = List(buildChild(childCareCost = 100)))
 
         val result = escCalc.determineSavingsPerClaimant(period, location = locationScotland)
@@ -1347,7 +1347,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       val toDate = LocalDate.parse("06-04-2019", formatter)
 
       val inputClaimant = ESCClaimant(qualifying = true, isPartner = false,
-        eligibleMonthsInPeriod = 12, previousIncome = Some(ESCIncome(Some(47000))), currentIncome = Some(ESCIncome(Some(47000))), vouchers = true, escStartDate = fromDate)
+        eligibleMonthsInPeriod = 12, currentIncome = Some(ESCIncome(Some(47000))), vouchers = true, escStartDate = fromDate)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant), children = List(buildChild(childCareCost = 200)))
 
       val result = escCalc.determineSavingsPerClaimant(period, location = location)
@@ -1361,7 +1361,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       val toDate = LocalDate.parse("06-04-2019", formatter)
 
       val inputClaimant = ESCClaimant(qualifying = true, isPartner = false,
-        eligibleMonthsInPeriod = 12, previousIncome = Some(ESCIncome(Some(45000))), currentIncome = Some(ESCIncome(Some(45000))), vouchers = true, escStartDate = fromDate)
+        eligibleMonthsInPeriod = 12, currentIncome = Some(ESCIncome(Some(45000))), vouchers = true, escStartDate = fromDate)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant), children = List(buildChild(childCareCost = 300)))
 
       val result = escCalc.determineSavingsPerClaimant(period, location = locationScotland)
@@ -1374,7 +1374,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
 
-      val inputClaimant = ESCClaimant(qualifying = true, isPartner = false, eligibleMonthsInPeriod = 1, previousIncome = Some(ESCIncome(Some(50000.00))), currentIncome = None, vouchers = true, escStartDate = fromDate)
+      val inputClaimant = ESCClaimant(qualifying = true, isPartner = false, eligibleMonthsInPeriod = 1, currentIncome = Some(ESCIncome(Some(50000.00))), vouchers = true, escStartDate = fromDate)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant), children = List(buildChild(childCareCost = 20.77, childCareCostPeriod = Periods.Weekly)))
 
       val result = escCalc.determineSavingsPerClaimant(period, location = location)
@@ -1394,7 +1394,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
 
-      val inputClaimant = ESCClaimant(qualifying = true, isPartner = false, eligibleMonthsInPeriod = 1, previousIncome = None,
+      val inputClaimant = ESCClaimant(qualifying = true, isPartner = false, eligibleMonthsInPeriod = 1,
         currentIncome = Some(ESCIncome(Some(150001))), vouchers = true, escStartDate = fromDate)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant), children = List(buildChild(childCareCost = 115.38, childCareCostPeriod = Periods.Weekly)))
 
@@ -1414,11 +1414,11 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
 
-      val inputClaimant = ESCClaimant(qualifying = true, isPartner = false, eligibleMonthsInPeriod = 1, previousIncome = None,
+      val inputClaimant = ESCClaimant(qualifying = true, isPartner = false, eligibleMonthsInPeriod = 1,
         currentIncome = Some(ESCIncome(Some(150001))), vouchers = true, escStartDate = fromDate)
       val inputClaimant2 = ESCClaimant(qualifying = true, isPartner = true, eligibleMonthsInPeriod = 1,
-        previousIncome = Some(ESCIncome(Some(150001))),
-        currentIncome = None, vouchers = true, escStartDate = fromDate)
+        currentIncome = Some(ESCIncome(Some(150001))),
+        vouchers = true, escStartDate = fromDate)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant, inputClaimant2), children = List(buildChild(childCareCost = 80), buildChild(childCareCost = 120)))
 
       val result = escCalc.determineSavingsPerClaimant(period, location = location)
@@ -1451,8 +1451,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       val toDate = LocalDate.parse("21-05-2017", formatter)
 
       val inputClaimant = ESCClaimant(qualifying = true, isPartner = false, eligibleMonthsInPeriod = 1,
-        previousIncome = Some(ESCIncome(Some(150001))),
-        currentIncome = None, vouchers = true, escStartDate = escStartDate)
+        currentIncome = Some(ESCIncome(Some(150001))), vouchers = true, escStartDate = escStartDate)
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant), children = List(buildChild(childCareCost = 500)))
 
       val result = escCalc.determineSavingsPerClaimant(period, location = location)
@@ -1471,7 +1470,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
-      val inputClaimant = ESCClaimant(qualifying = false, isPartner = false, eligibleMonthsInPeriod = 0, previousIncome = None, currentIncome = None, vouchers = false,
+      val inputClaimant = ESCClaimant(qualifying = false, isPartner = false, eligibleMonthsInPeriod = 0, currentIncome = None, vouchers = false,
         escStartDate = fromDate)
 
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant), children = List())
@@ -1494,7 +1493,7 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       val fromDate = LocalDate.parse("01-05-2016", formatter)
       val toDate = LocalDate.parse("21-05-2017", formatter)
       val inputClaimant = ESCClaimant(qualifying = false, isPartner = false,
-        eligibleMonthsInPeriod = 9, previousIncome = None, currentIncome = None, vouchers = false,
+        eligibleMonthsInPeriod = 9, currentIncome = None, vouchers = false,
         escStartDate = fromDate)
 
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant), children = List())
@@ -1520,12 +1519,12 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       val toDate2 = LocalDate.parse("21-10-2017", formatter)
 
       val inputClaimant = ESCClaimant(qualifying = true, isPartner = false,
-        eligibleMonthsInPeriod = 9, previousIncome = None, currentIncome = Some(ESCIncome(Some(50000.00))), vouchers = true,
+        eligibleMonthsInPeriod = 9, currentIncome = Some(ESCIncome(Some(50000.00))), vouchers = true,
         escStartDate = fromDate)
 
       val inputClaimant2 = ESCClaimant(qualifying = true, isPartner = false,
-        eligibleMonthsInPeriod = 2, previousIncome = Some(ESCIncome(Some(50000.00))),
-        currentIncome = None, vouchers = true,
+        eligibleMonthsInPeriod = 2, currentIncome = Some(ESCIncome(Some(50000.00))),
+        vouchers = true,
         escStartDate = fromDate)
 
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant), children = List(buildChild(childCareCost = 90)))
@@ -1553,12 +1552,12 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       val toDate2 = LocalDate.parse("21-10-2017", formatter)
 
       val inputClaimant = ESCClaimant(qualifying = true, isPartner = false,
-        eligibleMonthsInPeriod = 2, previousIncome = Some(ESCIncome(Some(50000.00))),
-        currentIncome = None, vouchers = true,
+        eligibleMonthsInPeriod = 2, currentIncome = Some(ESCIncome(Some(50000.00))),
+        vouchers = true,
         escStartDate = fromDate)
 
       val inputClaimant2 = ESCClaimant(qualifying = false, isPartner = false,
-        eligibleMonthsInPeriod = 0, previousIncome = None, currentIncome = None, vouchers = false,
+        eligibleMonthsInPeriod = 0, currentIncome = None, vouchers = false,
         escStartDate = fromDate)
 
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant), children = List(buildChild(childCareCost = 90)))
@@ -1587,15 +1586,15 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       val toDate2 = LocalDate.parse("21-10-2017", formatter)
 
       val inputClaimant = ESCClaimant(qualifying = true, isPartner = false,
-        eligibleMonthsInPeriod = 10, previousIncome = Some(ESCIncome(Some(50000))), currentIncome = None, vouchers = true,
+        eligibleMonthsInPeriod = 10, currentIncome = Some(ESCIncome(Some(50000))), vouchers = true,
         escStartDate = fromDate)
       val inputPartner = ESCClaimant(qualifying = true, isPartner = true,
-        eligibleMonthsInPeriod = 1, previousIncome = Some(ESCIncome(Some(50000))), currentIncome = None, vouchers = true,
+        eligibleMonthsInPeriod = 1, currentIncome = Some(ESCIncome(Some(50000))), vouchers = true,
         escStartDate = fromDate)
 
-      val inputClaimant2 = ESCClaimant(qualifying = true, isPartner = false, eligibleMonthsInPeriod = 1, previousIncome = None, currentIncome = None, vouchers = true,
+      val inputClaimant2 = ESCClaimant(qualifying = true, isPartner = false, eligibleMonthsInPeriod = 1, currentIncome = None, vouchers = true,
         escStartDate = fromDate)
-      val inputPartner2 = ESCClaimant(qualifying = true, isPartner = true, eligibleMonthsInPeriod = 1, previousIncome = None, currentIncome = None, vouchers = true,
+      val inputPartner2 = ESCClaimant(qualifying = true, isPartner = true, eligibleMonthsInPeriod = 1, currentIncome = None, vouchers = true,
         escStartDate = fromDate)
 
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant, inputPartner), children = List(buildChild(childCareCost = 180)))
@@ -1629,17 +1628,17 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       val toDate2 = LocalDate.parse("06-04-2017", formatter)
 
       val inputClaimant = ESCClaimant(qualifying = false, isPartner = false,
-        eligibleMonthsInPeriod = 0, previousIncome = None, currentIncome = Some(ESCIncome(Some(50000))), vouchers = false,
+        eligibleMonthsInPeriod = 0, currentIncome = Some(ESCIncome(Some(50000))), vouchers = false,
         escStartDate = fromDate)
       val inputPartner = ESCClaimant(qualifying = false, isPartner = true,
-        eligibleMonthsInPeriod = 0, previousIncome = None, currentIncome = Some(ESCIncome(Some(50000))), vouchers = false,
+        eligibleMonthsInPeriod = 0, currentIncome = Some(ESCIncome(Some(50000))), vouchers = false,
         escStartDate = fromDate)
 
       val inputClaimant2 = ESCClaimant(qualifying = false, isPartner = false,
-        eligibleMonthsInPeriod = 0, previousIncome = None, currentIncome = Some(ESCIncome(Some(50000))), vouchers = false,
+        eligibleMonthsInPeriod = 0, currentIncome = Some(ESCIncome(Some(50000))), vouchers = false,
         escStartDate = fromDate)
       val inputPartner2 = ESCClaimant(qualifying = true, isPartner = true,
-        eligibleMonthsInPeriod = 1, previousIncome = None, currentIncome = Some(ESCIncome(Some(50000))), vouchers = true,
+        eligibleMonthsInPeriod = 1, currentIncome = Some(ESCIncome(Some(50000))), vouchers = true,
         escStartDate = fromDate)
 
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant, inputPartner), children = List(buildChild(childCareCost = 90)))
@@ -1674,17 +1673,17 @@ class ESCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication with M
       val toDate2 = LocalDate.parse("06-04-2017", formatter)
 
       val inputPartner = ESCClaimant(qualifying = false, isPartner = true,
-        eligibleMonthsInPeriod = 0, previousIncome = None, currentIncome = Some(ESCIncome(Some(50000))), vouchers = false,
+        eligibleMonthsInPeriod = 0, currentIncome = Some(ESCIncome(Some(50000))), vouchers = false,
         escStartDate = fromDate)
       val inputClaimant = ESCClaimant(qualifying = false, isPartner = false,
-        eligibleMonthsInPeriod = 0, previousIncome = None, currentIncome = Some(ESCIncome(Some(50000))), vouchers = false,
+        eligibleMonthsInPeriod = 0, currentIncome = Some(ESCIncome(Some(50000))), vouchers = false,
         escStartDate = fromDate)
 
       val inputPartner2 = ESCClaimant(qualifying = false, isPartner = true,
-        eligibleMonthsInPeriod = 0, previousIncome = None, currentIncome = Some(ESCIncome(Some(50000))), vouchers = false,
+        eligibleMonthsInPeriod = 0, currentIncome = Some(ESCIncome(Some(50000))), vouchers = false,
         escStartDate = fromDate)
       val inputClaimant2 = ESCClaimant(qualifying = true, isPartner = false,
-        eligibleMonthsInPeriod = 1, previousIncome = None, currentIncome = Some(ESCIncome(Some(50000))), vouchers = true,
+        eligibleMonthsInPeriod = 1, currentIncome = Some(ESCIncome(Some(50000))), vouchers = true,
         escStartDate = fromDate)
 
       val period = ESCPeriod(from = fromDate, until = toDate, claimants = List(inputClaimant, inputPartner), children = List(buildChild(childCareCost = 90)))
