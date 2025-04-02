@@ -60,35 +60,6 @@ class CCConfig @Inject()(val appConfig: AppConfig) {
     }
   }
 
-  def getCurrentTaxYear(from: LocalDate) : Int = {
-    val currentCalendar = Calendar.getInstance()
-    currentCalendar.clear()
-    currentCalendar.setTime(toDate(from))
-    val periodYear = currentCalendar.get(Calendar.YEAR)
-    val periodStart = toDate(from)
-
-    val januaryCalendar = Calendar.getInstance()
-    januaryCalendar.clear()
-    januaryCalendar.set(Calendar.YEAR, periodYear)
-    januaryCalendar.set(Calendar.MONTH, Calendar.JANUARY)
-    januaryCalendar.set(Calendar.DAY_OF_MONTH, 1)
-    val january1st = januaryCalendar.getTime
-
-    val aprilCalendarDayOfMonth = 5
-    val aprilCalendar = Calendar.getInstance()
-    aprilCalendar.clear()
-    aprilCalendar.set(Calendar.YEAR, periodYear)
-    aprilCalendar.set(Calendar.MONTH, Calendar.APRIL)
-    aprilCalendar.set(Calendar.DAY_OF_MONTH, aprilCalendarDayOfMonth)
-    val april5th = aprilCalendar.getTime
-
-    if ((periodStart.compareTo(january1st) == 0 || periodStart.after(january1st)) && (periodStart.before(april5th) || periodStart.compareTo(april5th) == 0)) {
-      periodYear - 1
-    } else {
-      periodYear
-    }
-  }
-
   def taxYearEndDate(now: LocalDate = LocalDate.now(), schemeName: String): LocalDate = {
     val month = appConfig.schemeMonth(schemeName)
     val day = appConfig.schemeDay(schemeName)

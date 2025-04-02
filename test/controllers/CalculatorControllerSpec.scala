@@ -19,11 +19,9 @@ package controllers
 import calculators._
 import com.github.fge.jackson.JsonLoader
 import models.input.esc.ESCCalculatorInput
-import models.input.tc.TCCalculatorInput
 import models.input.tfc.TFCCalculatorInput
 import models.output.CalculatorOutput
 import models.output.esc.{ESCCalculatorOutput, ESCSavings}
-import models.output.tc.TCCalculatorOutput
 import models.output.tfc.{TFCCalculatorOutput, TFCContribution}
 import java.time.LocalDate
 import org.mockito.Mockito._
@@ -43,10 +41,9 @@ class CalculatorControllerSpec extends FakeCCCalculatorApplication with MockitoS
   implicit val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json")
 
   lazy val audits = app.injector.instanceOf[AuditEvents]
-  lazy val tcc = app.injector.instanceOf[TCCalculator]
   lazy val tfc = app.injector.instanceOf[TFCCalculator]
   lazy val esc = app.injector.instanceOf[ESCCalculator]
-  lazy val tcfConfig = app.injector.instanceOf[TFCConfig]
+  lazy val tfcConfig = app.injector.instanceOf[TFCConfig]
 
   "CalculatorController" must {
 
@@ -60,52 +57,30 @@ class CalculatorControllerSpec extends FakeCCCalculatorApplication with MockitoS
 
       "return BAD_REQUEST" when {
         "invalid request is given" in {
-          val sut = new CalculatorController(mcc, audits, tcc, tfc, esc, tcfConfig)
+          val sut = new CalculatorController(mcc, audits, tfc, esc, tfcConfig)
 
-          val result = await(sut.calculate()(request.withBody(Json.obj("tc" -> "test", "tfc" -> "test", "esc" -> "test"))))
+          val result = await(sut.calculate()(request.withBody(Json.obj("tfc" -> "test", "esc" -> "test"))))
           status(result) shouldBe BAD_REQUEST
         }
       }
 
       "calculate savings" when {
 
-        val stubbedTCC = mock[TCCalculator]
         val stubbedTFC = mock[TFCCalculator]
         val stubbedESC = mock[ESCCalculator]
 
         "valid data is given" when {
 
           "request doesn't contain any data" in {
-            val sut = new CalculatorController(mcc, audits, tcc, tfc, esc, tcfConfig)
+            val sut = new CalculatorController(mcc, audits, tfc, esc, tfcConfig)
 
             val result = await(sut.calculate()(request.withBody(Json.obj())))
             status(result) shouldBe OK
-            jsonBodyOf(result) shouldBe Json.toJson(CalculatorOutput(tcAmount = None, tfcAmount = None, escAmount = None))
-          }
-
-          "request contains data only for TC" in {
-            val sut = new CalculatorController(mcc, audits, stubbedTCC, tfc, esc, tcfConfig)
-            val validInput: JsValue = Json.parse(JsonLoader.fromResource("/json/tc/input/valid_json.json").toString)
-
-            when(stubbedTCC.award(any[TCCalculatorInput]))
-              .thenReturn(Future.successful(
-                TCCalculatorOutput(
-                  from = LocalDate.now,
-                  until = LocalDate.now.plusYears(1),
-                  houseHoldAdviceAmount = BigDecimal(0.00),
-                  totalAwardAmount = BigDecimal(100.00),
-                  taxYears = List.empty
-                )
-              )
-            )
-
-            val result = await(sut.calculate()(request.withBody(Json.obj("tc" -> validInput))))
-            status(result) shouldBe OK
-            jsonBodyOf(result) shouldBe Json.toJson(CalculatorOutput(tcAmount = Some(100), tfcAmount = None, escAmount = None))
+            jsonBodyOf(result) shouldBe Json.toJson(CalculatorOutput(tfcAmount = None, escAmount = None))
           }
 
           "request contains data only for TFC" in {
-            val sut = new CalculatorController(mcc, audits, tcc, stubbedTFC, esc, tcfConfig)
+            val sut = new CalculatorController(mcc, audits, stubbedTFC, esc, tfcConfig)
 
             val validInput: JsValue = Json.parse(JsonLoader.fromResource("/json/tfc/input/calculator_input_test.json").toString)
 
@@ -121,11 +96,11 @@ class CalculatorControllerSpec extends FakeCCCalculatorApplication with MockitoS
 
             val result = await(sut.calculate()(request.withBody(Json.obj("tfc" -> validInput))))
             status(result) shouldBe OK
-            jsonBodyOf(result) shouldBe Json.toJson(CalculatorOutput(tcAmount = None, tfcAmount = Some(200), escAmount = None))
+            jsonBodyOf(result) shouldBe Json.toJson(CalculatorOutput(tfcAmount = Some(200), escAmount = None))
           }
 
           "request contains data only for ESC" in {
-            val sut = new CalculatorController(mcc, audits, tcc, tfc, stubbedESC, tcfConfig)
+            val sut = new CalculatorController(mcc, audits, tfc, stubbedESC, tfcConfig)
 
             val validInput: JsValue = Json.parse(JsonLoader.fromResource(s"/json/esc/input/calculator_input_test.json").toString)
 
@@ -146,27 +121,14 @@ class CalculatorControllerSpec extends FakeCCCalculatorApplication with MockitoS
 
             val result = await(sut.calculate()(request.withBody(Json.obj("esc" -> validInput))))
             status(result) shouldBe OK
-            jsonBodyOf(result) shouldBe Json.toJson(CalculatorOutput(tcAmount = None, tfcAmount = None, escAmount = Some(300)))
+            jsonBodyOf(result) shouldBe Json.toJson(CalculatorOutput(tfcAmount = None, escAmount = Some(300)))
           }
 
-          "request contains data for TC, TFC and ESC" in {
-            val sut = new CalculatorController(mcc, audits, stubbedTCC, stubbedTFC, stubbedESC, tcfConfig)
+          "request contains data for TFC and ESC" in {
+            val sut = new CalculatorController(mcc, audits, stubbedTFC, stubbedESC, tfcConfig)
 
-            val validTCInput: JsValue = Json.parse(JsonLoader.fromResource("/json/tc/input/valid_json.json").toString)
             val validTFCInput: JsValue = Json.parse(JsonLoader.fromResource("/json/tfc/input/calculator_input_test.json").toString)
             val validESCInput: JsValue = Json.parse(JsonLoader.fromResource(s"/json/esc/input/calculator_input_test.json").toString)
-
-            when(stubbedTCC.award(any[TCCalculatorInput]))
-              .thenReturn(Future.successful(
-                TCCalculatorOutput(
-                  from = LocalDate.now,
-                  until = LocalDate.now.plusYears(1),
-                  houseHoldAdviceAmount = BigDecimal(0.00),
-                  totalAwardAmount = BigDecimal(100.00),
-                  taxYears = List.empty
-                )
-              )
-            )
 
             when(stubbedTFC.award(any[TFCCalculatorInput]))
               .thenReturn(Future.successful(
@@ -193,9 +155,9 @@ class CalculatorControllerSpec extends FakeCCCalculatorApplication with MockitoS
               )
             )
 
-            val result = await(sut.calculate()(request.withBody(Json.obj("tc" -> validTCInput, "tfc" -> validTFCInput, "esc" -> validESCInput))))
+            val result = await(sut.calculate()(request.withBody(Json.obj("tfc" -> validTFCInput, "esc" -> validESCInput))))
             status(result) shouldBe OK
-            jsonBodyOf(result) shouldBe Json.toJson(CalculatorOutput(tcAmount = Some(100), tfcAmount = Some(200), escAmount = Some(300)))
+            jsonBodyOf(result) shouldBe Json.toJson(CalculatorOutput(tfcAmount = Some(200), escAmount = Some(300)))
           }
 
         }
