@@ -23,19 +23,17 @@ trait AppConfigConstantSettings {
   val defaultMaxNoOfChildren = 25
 }
 
-class AppConfig @Inject()(val config: ServicesConfig) extends AppConfigConstantSettings{
+class AppConfig @Inject() (val config: ServicesConfig) extends AppConfigConstantSettings {
 
-  lazy val upperMonthsLimitValidation: Int = config.getInt("esc.months-upper-limit")
-  lazy val lowerMonthsLimitValidation: Int = config.getInt("esc.months-lower-limit")
-  lazy val lowerPeriodsLimitValidation: Int = config.getInt("esc.periods-lower-limit")
-  lazy val lowerTaxYearsLimitValidation: Int = config.getInt("esc.tax-years-lower-limit")
-  lazy val lowerClaimantsLimitValidation: Int =  config.getInt("esc.claimants-lower-limit")
+  lazy val upperMonthsLimitValidation: Int    = config.getInt("esc.months-upper-limit")
+  lazy val lowerMonthsLimitValidation: Int    = config.getInt("esc.months-lower-limit")
+  lazy val lowerPeriodsLimitValidation: Int   = config.getInt("esc.periods-lower-limit")
+  lazy val lowerTaxYearsLimitValidation: Int  = config.getInt("esc.tax-years-lower-limit")
+  lazy val lowerClaimantsLimitValidation: Int = config.getInt("esc.claimants-lower-limit")
 
   lazy val taxYearEndMonth: Int = config.getInt("tfc.end-of-tax-year-date.month")
-  lazy val taxYearEndDay: Int = config.getInt("tfc.end-of-tax-year-date.day")
+  lazy val taxYearEndDay: Int   = config.getInt("tfc.end-of-tax-year-date.day")
 
   def schemeMonth(schemeName: String): Int = config.getInt(s"$schemeName.end-of-tax-year-date.month")
-  def schemeDay(schemeName: String): Int = config.getInt(s"$schemeName.end-of-tax-year-date.day")
+  def schemeDay(schemeName: String): Int   = config.getInt(s"$schemeName.end-of-tax-year-date.day")
 }
-
-

@@ -21,74 +21,73 @@ import java.time.LocalDate
 import play.api.libs.json.{Json, Writes}
 import utils.Periods
 
-/**
- * Created by user on 18/06/15.
- */
+/** Created by user on 18/06/15.
+  */
 case class ESCCalculatorOutput(
-                                from: LocalDate,
-                                until: LocalDate,
-                                totalSavings: ESCSavings,
-                                taxYears: List[ESCTaxYear]
-                           )
+    from: LocalDate,
+    until: LocalDate,
+    totalSavings: ESCSavings,
+    taxYears: List[ESCTaxYear]
+)
 
 object ESCCalculatorOutput {
   implicit val escCalculationWrites: Writes[ESCCalculatorOutput] = Json.writes[ESCCalculatorOutput]
 }
 
 case class ESCTaxYear(
-                       from: LocalDate,
-                       until: LocalDate,
-                       totalSavings: ESCSavings,
-                       claimants: List[ESCClaimant]
-                    )
+    from: LocalDate,
+    until: LocalDate,
+    totalSavings: ESCSavings,
+    claimants: List[ESCClaimant]
+)
 
 object ESCTaxYear {
   implicit val TaxYearWrites: Writes[ESCTaxYear] = Json.writes[ESCTaxYear]
 }
 
 case class ESCSavings(
-                    totalSaving: BigDecimal = BigDecimal(0.00),
-                    taxSaving: BigDecimal = BigDecimal(0.00),
-                    niSaving: BigDecimal = BigDecimal(0.00)
-                    )
+    totalSaving: BigDecimal = BigDecimal(0.00),
+    taxSaving: BigDecimal = BigDecimal(0.00),
+    niSaving: BigDecimal = BigDecimal(0.00)
+)
 
 object ESCSavings {
-  implicit val SavingsWrites : Writes[ESCSavings] = Json.writes[ESCSavings]
+  implicit val SavingsWrites: Writes[ESCSavings] = Json.writes[ESCSavings]
 }
 
 case class ESCClaimant(
-                        qualifying: Boolean = false,
-                        eligibleMonthsInTaxYear: Int,
-                        isPartner: Boolean = false,
-                        income: ESCIncome,
-                        vouchers: Boolean = false,
-                        escAmount: BigDecimal = BigDecimal(0.00),
-                        escAmountPeriod: Periods.Period,
-                        escStartDate: LocalDate,
-                        savings: ESCSavings,
-                        taxAndNIBeforeSacrifice: ESCTaxAndNi,
-                        taxAndNIAfterSacrifice: ESCTaxAndNi
-                     )
+    qualifying: Boolean = false,
+    eligibleMonthsInTaxYear: Int,
+    isPartner: Boolean = false,
+    income: ESCIncome,
+    vouchers: Boolean = false,
+    escAmount: BigDecimal = BigDecimal(0.00),
+    escAmountPeriod: Periods.Period,
+    escStartDate: LocalDate,
+    savings: ESCSavings,
+    taxAndNIBeforeSacrifice: ESCTaxAndNi,
+    taxAndNIAfterSacrifice: ESCTaxAndNi
+)
 
 object ESCClaimant {
   implicit val claimantWrites: Writes[ESCClaimant] = Json.writes[ESCClaimant]
 }
 
 case class ESCIncome(
-                   taxablePay: BigDecimal = BigDecimal(0.00),
-                   gross: BigDecimal = BigDecimal(0.00),
-                   taxCode: String = "",
-                   niCategory: String = ""
-                   )
+    taxablePay: BigDecimal = BigDecimal(0.00),
+    gross: BigDecimal = BigDecimal(0.00),
+    taxCode: String = "",
+    niCategory: String = ""
+)
 
 object ESCIncome {
-  implicit val IncomeWrites : Writes[ESCIncome] = Json.writes[ESCIncome]
+  implicit val IncomeWrites: Writes[ESCIncome] = Json.writes[ESCIncome]
 }
 
 case class ESCTaxAndNi(
-  taxPaid: BigDecimal = BigDecimal(0.00),
-  niPaid: BigDecimal = BigDecimal(0.00)
- )
+    taxPaid: BigDecimal = BigDecimal(0.00),
+    niPaid: BigDecimal = BigDecimal(0.00)
+)
 
 object ESCTaxAndNi {
   implicit val taxAndNIWrites: Writes[ESCTaxAndNi] = Json.writes[ESCTaxAndNi]

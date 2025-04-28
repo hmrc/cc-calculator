@@ -22,15 +22,14 @@ import java.time.LocalDate
 import play.api.Configuration
 
 case class TFCTaxYearConfig(
-                             topUpPercent: Double,
-                             maxGovtContribution: Double,
-                             maxGovtContributionForDisabled: Double
-                             )
+    topUpPercent: Double,
+    maxGovtContribution: Double,
+    maxGovtContributionForDisabled: Double
+)
 
-class TFCConfig @Inject()(val config: AppConfig,
-                          configuration: Configuration) extends CCConfig(config) {
+class TFCConfig @Inject() (val config: AppConfig, configuration: Configuration) extends CCConfig(config) {
 
-  def getConfig(currentDate: LocalDate) : TFCTaxYearConfig  = {
+  def getConfig(currentDate: LocalDate): TFCTaxYearConfig = {
 
     val configs: Seq[play.api.Configuration] = configuration.get[Seq[Configuration]]("tfc.rule-change")
 
@@ -41,16 +40,15 @@ class TFCConfig @Inject()(val config: AppConfig,
     // fetch the config if it matches the particular year
     getConfigForTaxYear(currentDate, configs) match {
       case Some(x) => getTaxYear(x)
-      case _ => getTaxYear(defaultConfig)
+      case _       => getTaxYear(defaultConfig)
     }
   }
 
-  def getTaxYear(config : Configuration): TFCTaxYearConfig = {
+  def getTaxYear(config: Configuration): TFCTaxYearConfig =
     TFCTaxYearConfig(
       topUpPercent = config.get[Double]("top-up-percent"),
       maxGovtContribution = config.get[Double]("max-government-contribution-per-child"),
       maxGovtContributionForDisabled = config.get[Double]("max-government-contribution-per-disabled-child")
     )
-  }
 
 }

@@ -31,22 +31,25 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class AuditEventsTest extends PlaySpec with FakeCCCalculatorApplication with MockitoSugar {
   implicit val request = FakeRequest()
-  implicit var hc = new HeaderCarrier()
+  implicit var hc      = new HeaderCarrier()
 
   trait ObservableAuditConnector extends AuditConnector {
-    var events : ListBuffer[DataEvent] = new ListBuffer[DataEvent]
+    var events: ListBuffer[DataEvent] = new ListBuffer[DataEvent]
 
-    def observedEvents : ListBuffer[DataEvent] = events
+    def observedEvents: ListBuffer[DataEvent] = events
 
-    def addEvent(auditEvent : DataEvent): Unit = {
+    def addEvent(auditEvent: DataEvent): Unit =
       events = events += auditEvent
-    }
 
     override def auditingConfig: AuditingConfig = ???
-    override def sendEvent(event: DataEvent)(implicit hc: HeaderCarrier = HeaderCarrier(), ec : ExecutionContext): Future[AuditResult] = {
+
+    override def sendEvent(
+        event: DataEvent
+    )(implicit hc: HeaderCarrier = HeaderCarrier(), ec: ExecutionContext): Future[AuditResult] = {
       addEvent(event.asInstanceOf[DataEvent])
       Future.successful(AuditResult.Success)
     }
+
   }
 
   def createObservableAuditConnector = new ObservableAuditConnector {
@@ -55,7 +58,7 @@ class AuditEventsTest extends PlaySpec with FakeCCCalculatorApplication with Moc
     override def datastreamMetrics: DatastreamMetrics = ???
   }
 
-  def createAuditor(observableAuditConnector : ObservableAuditConnector) = {
+  def createAuditor(observableAuditConnector: ObservableAuditConnector) = {
 
     val testAuditService = new AuditService(observableAuditConnector) {
       override val auditSource = "cc-calculator"
@@ -69,11 +72,11 @@ class AuditEventsTest extends PlaySpec with FakeCCCalculatorApplication with Moc
     "audit request received - success " in {
 
       val observableAuditConnector = createObservableAuditConnector
-      val auditor = createAuditor(observableAuditConnector)
+      val auditor                  = createAuditor(observableAuditConnector)
 
       auditor.auditRequest("Data")
 
-      val event =  observableAuditConnector.events.head
+      val event = observableAuditConnector.events.head
 
       event.auditType must equal("Request")
       event.detail("data") should startWith("Data")
@@ -83,11 +86,11 @@ class AuditEventsTest extends PlaySpec with FakeCCCalculatorApplication with Moc
     "audit request received for TFC - success " in {
 
       val observableAuditConnector = createObservableAuditConnector
-      val auditor = createAuditor(observableAuditConnector)
+      val auditor                  = createAuditor(observableAuditConnector)
 
       auditor.auditTFCRequest("Data")
 
-      val event =  observableAuditConnector.events.head
+      val event = observableAuditConnector.events.head
 
       event.auditType must equal("TFCRequest")
       event.detail("data") should startWith("Data")
@@ -97,11 +100,11 @@ class AuditEventsTest extends PlaySpec with FakeCCCalculatorApplication with Moc
     "audit response processed for TFC - success " in {
 
       val observableAuditConnector = createObservableAuditConnector
-      val auditor = createAuditor(observableAuditConnector)
+      val auditor                  = createAuditor(observableAuditConnector)
 
       auditor.auditTFCResponse("Data")
 
-      val event =  observableAuditConnector.events.head
+      val event = observableAuditConnector.events.head
 
       event.auditType must equal("TFCResponse")
       event.detail("data") should startWith("Data")
@@ -111,11 +114,11 @@ class AuditEventsTest extends PlaySpec with FakeCCCalculatorApplication with Moc
     "audit request received for ESC - success " in {
 
       val observableAuditConnector = createObservableAuditConnector
-      val auditor = createAuditor(observableAuditConnector)
+      val auditor                  = createAuditor(observableAuditConnector)
 
       auditor.auditESCRequest("Data")
 
-      val event =  observableAuditConnector.events.head
+      val event = observableAuditConnector.events.head
 
       event.auditType must equal("ESCRequest")
       event.detail("data") should startWith("Data")
@@ -125,17 +128,16 @@ class AuditEventsTest extends PlaySpec with FakeCCCalculatorApplication with Moc
     "audit response processed for ESC - success " in {
 
       val observableAuditConnector = createObservableAuditConnector
-      val auditor = createAuditor(observableAuditConnector)
+      val auditor                  = createAuditor(observableAuditConnector)
 
       auditor.auditESCResponse("Data")
 
-      val event =  observableAuditConnector.events.head
+      val event = observableAuditConnector.events.head
 
       event.auditType must equal("ESCResponse")
       event.detail("data") should startWith("Data")
 
     }
   }
-
 
 }

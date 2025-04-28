@@ -33,17 +33,20 @@ class AuditServiceTest extends PlaySpec {
 
     "auditer should send message" in {
 
-      implicit val hc = HeaderCarrier(forwarded = Some(ForwardedFor("testIp")),  // test the IP address is in audit request
-        sessionId = Some(SessionId("sessionid-random")))
+      implicit val hc = HeaderCarrier(
+        forwarded = Some(ForwardedFor("testIp")), // test the IP address is in audit request
+        sessionId = Some(SessionId("sessionid-random"))
+      )
 
       implicit val ec = new GuiceApplicationBuilder().build().injector.instanceOf[ExecutionContext]
 
       val auditConnectorObj = new AuditConnector {
 
+        var lastAuditEvent: Option[DataEvent] = None
 
-        var lastAuditEvent : Option[DataEvent]  = None
-
-        override def sendEvent(event: DataEvent)(implicit hc: HeaderCarrier = HeaderCarrier(), ec : ExecutionContext): Future[AuditResult] = {
+        override def sendEvent(
+            event: DataEvent
+        )(implicit hc: HeaderCarrier = HeaderCarrier(), ec: ExecutionContext): Future[AuditResult] = {
           lastAuditEvent = Some(event.asInstanceOf[DataEvent])
           Future.successful(AuditResult.Success)
         }
@@ -61,12 +64,11 @@ class AuditServiceTest extends PlaySpec {
 
       auditTest.sendEvent("testTranType", Map("randomDetails" -> "+=+=+=+=+=+=+=+=+"))(hc, ec)
 
-
       auditTest.sendEvent("testTranType", Map("randomDetails" -> "+=+=+=+=+=+=+=+=+"))
 
-      val auditEvent : DataEvent = auditConnectorObj.lastAuditEvent.get
+      val auditEvent: DataEvent = auditConnectorObj.lastAuditEvent.get
 
-      auditEvent should not equal Nil
+      (auditEvent should not).equal(Nil)
 
       auditEvent.auditSource must equal("cc-eligibility")
       auditEvent.auditType must equal("testTranType")

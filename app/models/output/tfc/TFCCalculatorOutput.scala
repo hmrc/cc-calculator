@@ -19,45 +19,44 @@ package models.output.tfc
 import java.time.LocalDate
 import play.api.libs.json.{Json, Writes}
 
-/**
- * Created by user on 18/06/15.
- */
+/** Created by user on 18/06/15.
+  */
 case class TFCCalculatorOutput(
-                                householdContribution: TFCContribution,
-                                numberOfPeriods: Short,
-                                periods: List[TFCPeriod]
-                           )
+    householdContribution: TFCContribution,
+    numberOfPeriods: Short,
+    periods: List[TFCPeriod]
+)
 
 object TFCCalculatorOutput {
-  implicit val tfcCalculationWrites : Writes[TFCCalculatorOutput] = Json.writes[TFCCalculatorOutput]
+  implicit val tfcCalculationWrites: Writes[TFCCalculatorOutput] = Json.writes[TFCCalculatorOutput]
 }
 
 case class TFCPeriod(
-                      from: LocalDate,
-                      until: LocalDate,
-                      periodContribution : TFCContribution,
-                      children: List[TFCOutputChild]
-                      )
+    from: LocalDate,
+    until: LocalDate,
+    periodContribution: TFCContribution,
+    children: List[TFCOutputChild]
+)
 
 object TFCPeriod {
-  implicit val periodWrites : Writes[TFCPeriod] = Json.writes[TFCPeriod]
+  implicit val periodWrites: Writes[TFCPeriod] = Json.writes[TFCPeriod]
 }
 
 case class TFCOutputChild(
-                        childCareCost : BigDecimal = BigDecimal(0.00),
-                        childContribution : TFCContribution
-                        )
+    childCareCost: BigDecimal = BigDecimal(0.00),
+    childContribution: TFCContribution
+)
 
 object TFCOutputChild {
-  implicit val childWrites : Writes[TFCOutputChild] = Json.writes[TFCOutputChild]
+  implicit val childWrites: Writes[TFCOutputChild] = Json.writes[TFCOutputChild]
 }
 
 case class TFCContribution(
-                          parent : BigDecimal = BigDecimal(0.00),
-                          government : BigDecimal = BigDecimal(0.00),
-                          totalChildCareSpend : BigDecimal = BigDecimal(0.00)
-                          )
+    parent: BigDecimal = BigDecimal(0.00),
+    government: BigDecimal = BigDecimal(0.00),
+    totalChildCareSpend: BigDecimal = BigDecimal(0.00)
+)
 
 object TFCContribution {
-  implicit val contributionWrites : Writes[TFCContribution] = Json.writes[TFCContribution]
+  implicit val contributionWrites: Writes[TFCContribution] = Json.writes[TFCContribution]
 }

@@ -23,10 +23,9 @@ import utils.Periods
 import scala.math.BigDecimal.RoundingMode
 
 trait CCCalculatorHelper {
-  /**
-   * Unformatted:   5.465068
-   * Formatted:      .46
-   */
+
+  /** Unformatted: 5.465068 Formatted: .46
+    */
   def round(value: BigDecimal): BigDecimal = value.setScale(2, RoundingMode.HALF_UP)
 
   def roundToPound(value: BigDecimal): BigDecimal = value.setScale(0, RoundingMode.HALF_UP)
@@ -38,73 +37,66 @@ trait CCCalculatorHelper {
   def roundDownToTwoDigits(value: BigDecimal): BigDecimal = value.setScale(2, RoundingMode.HALF_EVEN)
 
   // normalise the monetary amount per quarter quarter
-  def amountToQuarterlyAmount(cost: BigDecimal, fromPeriod: Periods.Period): BigDecimal = {
+  def amountToQuarterlyAmount(cost: BigDecimal, fromPeriod: Periods.Period): BigDecimal =
     fromPeriod match {
-      case Periods.Weekly => (cost * 52) / 4
+      case Periods.Weekly  => (cost * 52) / 4
       case Periods.Monthly => cost * 3
-      case Periods.Yearly => cost / 4
-      case _ => 0.00 //error
+      case Periods.Yearly  => cost / 4
+      case _               => 0.00 // error
     }
-  }
 
-  def annualAmountToPeriod(cost: BigDecimal, toPeriod: Periods.Period): BigDecimal = {
+  def annualAmountToPeriod(cost: BigDecimal, toPeriod: Periods.Period): BigDecimal =
     toPeriod match {
-      case Periods.Weekly => cost / 52
+      case Periods.Weekly  => cost / 52
       case Periods.Monthly => cost / 12
-      case Periods.Yearly => cost
-      case _ => 0.00 //error
+      case Periods.Yearly  => cost
+      case _               => 0.00 // error
     }
-  }
 
-  def monthlyAmountToPeriod(cost: BigDecimal, toPeriod: Periods.Period): BigDecimal = {
+  def monthlyAmountToPeriod(cost: BigDecimal, toPeriod: Periods.Period): BigDecimal =
     toPeriod match {
-      case Periods.Weekly => (cost * 12) / 52
+      case Periods.Weekly  => (cost * 12) / 52
       case Periods.Monthly => cost
-      case Periods.Yearly => cost * 12
-      case _ => 0.00 //error
+      case Periods.Yearly  => cost * 12
+      case _               => 0.00 // error
     }
-  }
 
-  def amountToAnnualAmount(cost: BigDecimal, fromPeriod: Periods.Period): BigDecimal = {
+  def amountToAnnualAmount(cost: BigDecimal, fromPeriod: Periods.Period): BigDecimal =
     fromPeriod match {
-      case Periods.Weekly => cost * 52
+      case Periods.Weekly  => cost * 52
       case Periods.Monthly => cost * 12
-      case Periods.Yearly => cost
-      case _ => 0.00 //error
+      case Periods.Yearly  => cost
+      case _               => 0.00 // error
     }
-  }
 
-  def amountToMonthlyAmount(cost: BigDecimal, fromPeriod: Periods.Period): BigDecimal = {
+  def amountToMonthlyAmount(cost: BigDecimal, fromPeriod: Periods.Period): BigDecimal =
 
     fromPeriod match {
-      case Periods.Weekly => cost * 52 / 12
+      case Periods.Weekly  => cost * 52 / 12
       case Periods.Monthly => cost
-      case Periods.Yearly => cost / 12
-      case _ => 0.00 //error
+      case Periods.Yearly  => cost / 12
+      case _               => 0.00 // error
     }
-  }
 
-  def amountToWeeklyAmount(cost: BigDecimal, fromPeriod: Periods.Period): BigDecimal = {
+  def amountToWeeklyAmount(cost: BigDecimal, fromPeriod: Periods.Period): BigDecimal =
     fromPeriod match {
-      case Periods.Weekly => cost
+      case Periods.Weekly  => cost
       case Periods.Monthly => (cost * 12) / 52
-      case Periods.Yearly => cost / 52
-      case _ => 0.00 //error
+      case Periods.Yearly  => cost / 52
+      case _               => 0.00 // error
     }
-  }
 
   def amountFromPeriodToDaily(cost: BigDecimal, fromPeriod: Periods.Period, daysInTheYear: Int): BigDecimal = {
     val amount: BigDecimal = fromPeriod match {
-      case Periods.Weekly => (cost * 52) / daysInTheYear
+      case Periods.Weekly  => (cost * 52) / daysInTheYear
       case Periods.Monthly => (cost * 12) / daysInTheYear
-      case Periods.Yearly => cost / daysInTheYear
-      case _ => 0.00 //error
+      case Periods.Yearly  => cost / daysInTheYear
+      case _               => 0.00 // error
     }
     amount
   }
 
-  def daysBetween(fromDate: LocalDate, toDate: LocalDate): Int = {
+  def daysBetween(fromDate: LocalDate, toDate: LocalDate): Int =
     DAYS.between(fromDate, toDate).toInt
-  }
 
 }

@@ -20,6 +20,7 @@ import play.api.Logging
 import play.api.libs.json._
 
 object EnumUtils extends Logging {
+
   def enumReads[E <: Enumeration](`enum`: E): Reads[E#Value] =
     new Reads[E#Value] {
       def reads(json: JsValue): JsResult[E#Value] = json match {
@@ -34,36 +35,36 @@ object EnumUtils extends Logging {
     new Writes[E#Value] {
       def writes(v: E#Value): JsValue = JsString(v.toString)
     }
+
 }
 
 object Periods extends Enumeration {
   type Period = Value
 
-  private val yearlyIndex = 4
+  private val yearlyIndex  = 4
   private val invalidIndex = 5
 
-  val Weekly = Value(0, "Week")
+  val Weekly  = Value(0, "Week")
   val Monthly = Value(2, "Month")
-  val Yearly = Value(yearlyIndex, "Year")
+  val Yearly  = Value(yearlyIndex, "Year")
   val INVALID = Value(invalidIndex, "INVALID")
 
   implicit val enumReads: Reads[Period] = EnumUtils.enumReads(Periods)
 
   implicit def enumWrites: Writes[Period] = EnumUtils.enumWrites
 
-  def toString(period: Value): String = {
+  def toString(period: Value): String =
     period match {
-      case Weekly => "cc.period.weekly"
+      case Weekly  => "cc.period.weekly"
       case Monthly => "cc.period.monthly"
-      case Yearly => "cc.period.yearly"
-      case _ => "cc.period.invalid"
+      case Yearly  => "cc.period.yearly"
+      case _       => "cc.period.invalid"
     }
-  }
 
-  def toPeriod(period: String): Value = {
+  def toPeriod(period: String): Value =
     period.toLowerCase match {
       case "monthly" => Monthly
-      case _ => INVALID
+      case _         => INVALID
     }
-  }
+
 }

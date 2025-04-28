@@ -27,25 +27,29 @@ import java.util.Date
 import java.time.ZoneId.systemDefault
 import play.api.Configuration
 
-class CCConfig @Inject()(val appConfig: AppConfig) {
+class CCConfig @Inject() (val appConfig: AppConfig) {
 
   val formatterDatePattern = "dd-MM-yyyy"
 
-  def getConfigForTaxYear(currentDate: LocalDate, configs : Seq[Configuration]) : Option[Configuration] =  {
-    //get the configs for all years except the default
+  def getConfigForTaxYear(currentDate: LocalDate, configs: Seq[Configuration]): Option[Configuration] = {
+    // get the configs for all years except the default
     val configsExcludingDefault =
       configs.filterNot(_.get[String]("rule-date").contains("default"))
 
     // ensure the latest date is in the head position
-    val sorted = configsExcludingDefault.sortBy(c => {
+    val sorted = configsExcludingDefault.sortBy { c =>
       val predicate = new SimpleDateFormat(formatterDatePattern).parse(c.get[String]("rule-date"))
       predicate
-    }).reverse
+    }.reverse
     val result = getConfigHelper(currentDate, sorted.toList, None)
     result
   }
 
-  def getConfigHelper(currentDate: LocalDate, taxYearConfigs: List[Configuration], acc: Option[Configuration]): Option[Configuration] = {
+  def getConfigHelper(
+      currentDate: LocalDate,
+      taxYearConfigs: List[Configuration],
+      acc: Option[Configuration]
+  ): Option[Configuration] =
 
     taxYearConfigs match {
       case Nil => acc
@@ -58,14 +62,13 @@ class CCConfig @Inject()(val appConfig: AppConfig) {
           getConfigHelper(currentDate, tail, acc)
         }
     }
-  }
 
   def taxYearEndDate(now: LocalDate = LocalDate.now(), schemeName: String): LocalDate = {
     val month = appConfig.schemeMonth(schemeName)
-    val day = appConfig.schemeDay(schemeName)
+    val day   = appConfig.schemeDay(schemeName)
     // have to determine the year as this is not a fixed date
     val year = {
-      val calendar = Calendar.getInstance()
+      val calendar    = Calendar.getInstance()
       val currentYear = now.getYear
       calendar.set(currentYear, month, day)
       val taxDate = calendar.getTime
@@ -74,13 +77,13 @@ class CCConfig @Inject()(val appConfig: AppConfig) {
       }
       calendar.get(Calendar.YEAR)
     }
-    val dayPattern = if (day.toString.length == 1) "d" else "dd"
+    val dayPattern   = if (day.toString.length == 1) "d" else "dd"
     val monthPattern = if (month.toString.length == 1) "M" else "MM"
-    val formatter = DateTimeFormatter.ofPattern(s"$dayPattern-$monthPattern-yyyy")
+    val formatter    = DateTimeFormatter.ofPattern(s"$dayPattern-$monthPattern-yyyy")
     LocalDate.parse(s"$day-$month-$year", formatter)
   }
 
-  private def toDate(localDate: LocalDate): Date = {
+  private def toDate(localDate: LocalDate): Date =
     Date.from(localDate.atStartOfDay(systemDefault).toInstant)
-  }
+
 }

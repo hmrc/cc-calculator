@@ -23,9 +23,9 @@ import play.api.Configuration
 import play.api.i18n.{Lang, MessagesApi}
 import scala.jdk.CollectionConverters.CollectionHasAsScala
 
-class ESCConfig @Inject()(appConfig: AppConfig,
-                          configuration: Configuration,
-                          messages: MessagesApi) extends CCConfig(appConfig) with MessagesObject {
+class ESCConfig @Inject() (appConfig: AppConfig, configuration: Configuration, messages: MessagesApi)
+    extends CCConfig(appConfig)
+    with MessagesObject {
 
   private implicit val lang: Lang = Lang("en")
 
@@ -70,12 +70,15 @@ class ESCConfig @Inject()(appConfig: AppConfig,
     // get the ni Category
     val niCat = getNiCategory(niCategoryCode, config)
 
-    val localConfig = config.getOptional[Configuration](s"tax.${location.toLowerCase}").getOrElse(config.getOptional[Configuration]("tax.default").get)
+    val localConfig = config
+      .getOptional[Configuration](s"tax.${location.toLowerCase}")
+      .getOrElse(config.getOptional[Configuration]("tax.default").get)
 
     ESCTaxYearConfig(
       post2011MaxExemptionMonthlyBasic = config.getOptional[Double]("post-2011-maximum-exemption.basic.monthly").get,
       post2011MaxExemptionMonthlyHigher = config.getOptional[Double]("post-2011-maximum-exemption.higher.monthly").get,
-      post2011MaxExemptionMonthlyAdditional = config.getOptional[Double]("post-2011-maximum-exemption.additional.monthly").get,
+      post2011MaxExemptionMonthlyAdditional =
+        config.getOptional[Double]("post-2011-maximum-exemption.additional.monthly").get,
       defaultTaxCode = localConfig.getOptional[String]("default-tax-code").get,
       personalAllowanceRate = localConfig.getOptional[Double]("personal-allowance.rate").get,
       defaultPersonalAllowance = localConfig.getOptional[Double]("personal-allowance.default-personal-allowance").get,
@@ -84,7 +87,8 @@ class ESCConfig @Inject()(appConfig: AppConfig,
       taxBasicRate = localConfig.getOptional[Double]("basic.rate").get,
       taxBasicBandCapacity = localConfig.getOptional[Double]("basic.band-capacity-annual-amount").get,
       taxIntermediateRate = localConfig.getOptional[Double]("intermediate.rate").getOrElse(0),
-      taxIntermediateBandCapacity = localConfig.getOptional[Double]("intermediate.band-capacity-annual-amount").getOrElse(0),
+      taxIntermediateBandCapacity =
+        localConfig.getOptional[Double]("intermediate.band-capacity-annual-amount").getOrElse(0),
       taxHigherRateBandCapacity = localConfig.getOptional[Double]("higher.band-capacity-annual-amount").getOrElse(0),
       taxHigherRate = localConfig.getOptional[Double]("higher.rate").get,
       taxHigherBandUpperLimit = localConfig.getOptional[Double]("higher.band-annual-upper-limit").getOrElse(0),
@@ -96,25 +100,25 @@ class ESCConfig @Inject()(appConfig: AppConfig,
     )
   }
 
-  def getNiCategory(niCategoryCode: String, config: Configuration): NiCategory ={
+  def getNiCategory(niCategoryCode: String, config: Configuration): NiCategory = {
     // get the ni Category
     val niCode = niCategoryCode match {
-      case cat if cat.isEmpty => config.get[String]("default-ni-code")
+      case cat if cat.isEmpty                                           => config.get[String]("default-ni-code")
       case cat if cat.equals("A") || cat.equals("B") || cat.equals("C") => cat
       case _ => throw new NoSuchElementException(messages("cc.scheme.config.invalid.ni.category"))
     }
-    val configs : Seq[play.api.Configuration] = config.underlying.getConfigList("niCategories")
-      .asScala.map(Configuration(_)).toSeq
+    val configs: Seq[play.api.Configuration] =
+      config.underlying.getConfigList("niCategories").asScala.map(Configuration(_)).toSeq
     getNiCategoryHelper(niCode, configs, None) match {
       case Some(z) => z
-      case _ =>   throw new NoSuchElementException(messages("cc.scheme.config.ni.category.not.found"))
+      case _       => throw new NoSuchElementException(messages("cc.scheme.config.ni.category.not.found"))
     }
   }
 
-  //Scottish tax changes
-  def getNiCategoryHelper(code: String, niCategories: Seq[Configuration], acc: Option[NiCategory]): Option[NiCategory] = {
+  // Scottish tax changes
+  def getNiCategoryHelper(code: String, niCategories: Seq[Configuration], acc: Option[NiCategory]): Option[NiCategory] =
     niCategories.toList match {
-      case Nil =>  acc
+      case Nil => acc
       case head :: tail =>
         if (head.get[String]("ni-cat-code").equals(code)) {
           val niCat = NiCategory(
@@ -132,46 +136,47 @@ class ESCConfig @Inject()(appConfig: AppConfig,
             aboveUelRateForCat = head.get[Double]("above-UEL.rate")
           )
           getNiCategoryHelper(code, Nil, Some(niCat))
-        }
-        else {
+        } else {
           getNiCategoryHelper(code, tail, acc)
         }
     }
-  }
+
 }
 
 case class NiCategory(
-          niCategoryCode: String,
-          lelMonthlyLowerLimitForCat: Double,
-          lelMonthlyUpperLimitForCat: Double,
-          lelRateForCat: Double,
-          lelPtMonthlyLowerLimitForCat: Double,
-          lelPtMonthlyUpperLimitForCat: Double,
-          lelPtRateForCat: Double,
-          ptUelMonthlyLowerLimitForCat: Double,
-          ptUelMonthlyUpperLimitForCat: Double,
-          ptUelRateForCat: Double,
-          aboveUelMonthlyLowerLimitForCat: Double,
-          aboveUelRateForCat: Double)
+    niCategoryCode: String,
+    lelMonthlyLowerLimitForCat: Double,
+    lelMonthlyUpperLimitForCat: Double,
+    lelRateForCat: Double,
+    lelPtMonthlyLowerLimitForCat: Double,
+    lelPtMonthlyUpperLimitForCat: Double,
+    lelPtRateForCat: Double,
+    ptUelMonthlyLowerLimitForCat: Double,
+    ptUelMonthlyUpperLimitForCat: Double,
+    ptUelRateForCat: Double,
+    aboveUelMonthlyLowerLimitForCat: Double,
+    aboveUelRateForCat: Double
+)
 
-case class ESCTaxYearConfig (
-                             post2011MaxExemptionMonthlyBasic: Double,
-                             post2011MaxExemptionMonthlyHigher: Double,
-                             post2011MaxExemptionMonthlyAdditional: Double,
-                             defaultTaxCode: String,
-                             personalAllowanceRate: Double,
-                             defaultPersonalAllowance: Double,
-                             taxStarterRate: Double,
-                             taxStarterBandCapacity: Double,
-                             taxBasicRate: Double,
-                             taxBasicBandCapacity: Double,
-                             taxIntermediateRate: Double,
-                             taxIntermediateBandCapacity: Double,
-                             taxHigherRateBandCapacity: Double,
-                             taxHigherRate: Double,
-                             taxHigherBandUpperLimit: Double,
-                             taxAdditionalRate: Double,
-                             taxAdditionalBandLowerLimit: Double,
-                             niLimit: Double,
-                             niCategory: NiCategory,
-                             basicNiThresholdUk: Double)
+case class ESCTaxYearConfig(
+    post2011MaxExemptionMonthlyBasic: Double,
+    post2011MaxExemptionMonthlyHigher: Double,
+    post2011MaxExemptionMonthlyAdditional: Double,
+    defaultTaxCode: String,
+    personalAllowanceRate: Double,
+    defaultPersonalAllowance: Double,
+    taxStarterRate: Double,
+    taxStarterBandCapacity: Double,
+    taxBasicRate: Double,
+    taxBasicBandCapacity: Double,
+    taxIntermediateRate: Double,
+    taxIntermediateBandCapacity: Double,
+    taxHigherRateBandCapacity: Double,
+    taxHigherRate: Double,
+    taxHigherBandUpperLimit: Double,
+    taxAdditionalRate: Double,
+    taxAdditionalBandLowerLimit: Double,
+    niLimit: Double,
+    niCategory: NiCategory,
+    basicNiThresholdUk: Double
+)
