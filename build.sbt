@@ -25,7 +25,7 @@ lazy val microservice = Project(appName, file("."))
   .settings(playSettings ++ scoverageSettings: _*)
   .settings(PlayKeys.playDefaultPort := 9372)
   .settings(
-    libraryDependencies ++= AppDependencies(),
+    libraryDependencies ++= AppDependencies.all,
     dependencyOverrides += "commons-codec" % "commons-codec" % "1.12",
     retrieveManaged                       := true,
     update / evictionWarningOptions       := EvictionWarningOptions.default.withWarnScalaVersionEviction(false),

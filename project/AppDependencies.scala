@@ -3,7 +3,7 @@ import play.sbt.PlayImport._
 
 object AppDependencies {
 
-  val bootstrapVersion = "9.7.0"
+  private val bootstrapVersion = "9.7.0"
 
   val compile: Seq[ModuleID] = Seq(
     ws,
@@ -13,20 +13,9 @@ object AppDependencies {
     "com.fasterxml.jackson.module" %% "jackson-module-scala"      % "2.16.1"
   )
 
-  trait TestDependencies {
-    lazy val scope: String       = "test"
-    lazy val test: Seq[ModuleID] = ???
-  }
+  val test: Seq[ModuleID] = Seq(
+    "uk.gov.hmrc" %% "bootstrap-test-play-30" % bootstrapVersion % Test
+  )
 
-  object Test {
-
-    def apply(): Seq[ModuleID] = new TestDependencies {
-      override lazy val test = Seq(
-        "uk.gov.hmrc" %% "bootstrap-test-play-30" % bootstrapVersion % scope
-      )
-    }.test
-
-  }
-
-  def apply(): Seq[ModuleID] = compile ++ Test()
+  val all: Seq[ModuleID] = compile ++ test
 }
