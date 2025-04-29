@@ -38,12 +38,12 @@ trait FakeCCCalculatorApplication extends PlaySpec {
   this: Suite =>
 
   val config: Map[String, _] = Map(
-    "csrf.sign.tokens" -> false,
+    "csrf.sign.tokens"                              -> false,
     "govuk-tax.Test.services.contact-frontend.host" -> "localhost",
     "govuk-tax.Test.services.contact-frontend.port" -> "9250"
   )
 
-  val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+  val formatter                          = DateTimeFormatter.ofPattern("yyyy-MM-dd")
   def parseDate(date: String): LocalDate = LocalDate.parse(date, formatter)
 
   /*lazy val app: Application = new GuiceApplicationBuilder()
@@ -57,20 +57,17 @@ trait FakeCCCalculatorApplication extends PlaySpec {
       .configure(config)
       .build()
 
-
-  implicit lazy val mat: Materializer = app.materializer
-  implicit val lang: Lang = Lang("en")
-  implicit lazy val messages: MessagesApi = app.injector.instanceOf[MessagesApi]
+  implicit lazy val mat: Materializer                 = app.materializer
+  implicit val lang: Lang                             = Lang("en")
+  implicit lazy val messages: MessagesApi             = app.injector.instanceOf[MessagesApi]
   implicit lazy val mcc: MessagesControllerComponents = app.injector.instanceOf[MessagesControllerComponents]
-  implicit val ec: ExecutionContext = app.injector.instanceOf[ExecutionContext]
+  implicit val ec: ExecutionContext                   = app.injector.instanceOf[ExecutionContext]
 
-  def jsonBodyOf(result: Result)(implicit mat: Materializer): JsValue = {
+  def jsonBodyOf(result: Result)(implicit mat: Materializer): JsValue =
     Json.parse(bodyOf(result))
-  }
 
-  def jsonBodyOf(resultF: Future[Result])(implicit mat: Materializer): Future[JsValue] = {
+  def jsonBodyOf(resultF: Future[Result])(implicit mat: Materializer): Future[JsValue] =
     resultF.map(jsonBodyOf)
-  }
 
   def bodyOf(result: Result)(implicit mat: Materializer): String = {
     val bodyBytes: ByteString = await(result.body.consumeData)
@@ -82,14 +79,13 @@ trait FakeCCCalculatorApplication extends PlaySpec {
     bodyBytes.decodeString(Charset.defaultCharset().name)
   }
 
-  def bodyOf(resultF: Future[Result])(implicit mat: Materializer): Future[String] = {
+  def bodyOf(resultF: Future[Result])(implicit mat: Materializer): Future[String] =
     resultF.map(bodyOf)
-  }
 
   import scala.concurrent.duration._
   import scala.concurrent.{Await, Future}
 
-  implicit val defaultTimeout: FiniteDuration = 5 seconds
+  implicit val defaultTimeout: FiniteDuration = 5.seconds
 
   implicit def extractAwait[A](future: Future[A]): A = await[A](future)
 

@@ -19,9 +19,8 @@ package utils
 import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 import play.api.libs.json.{JsError, JsString, Json}
 
-/**
- * Created by adamconder on 09/06/15.
- */
+/** Created by adamconder on 09/06/15.
+  */
 class PeriodsSpec extends FakeCCCalculatorApplication {
 
   "Periods" must {
@@ -62,6 +61,7 @@ class PeriodsSpec extends FakeCCCalculatorApplication {
     }
 
   }
+
   "Enumutils" must {
     "return JsError" in {
       class test extends Enumeration
@@ -71,4 +71,5 @@ class PeriodsSpec extends FakeCCCalculatorApplication {
       utilRes shouldBe JsError("String value expected")
     }
   }
+
 }

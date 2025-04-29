@@ -21,31 +21,24 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext
 
+class AuditEvents @Inject() (val auditService: AuditService)(implicit ec: ExecutionContext) {
 
-class AuditEvents @Inject()(val auditService: AuditService)(implicit ec: ExecutionContext) {
-
-  def auditRequest(data: String)(implicit hc: HeaderCarrier): Unit = {
+  def auditRequest(data: String)(implicit hc: HeaderCarrier): Unit =
     auditEvent("Request", data)
-  }
 
-  def auditTFCRequest(data : String) (implicit hc: HeaderCarrier): Unit = {
+  def auditTFCRequest(data: String)(implicit hc: HeaderCarrier): Unit =
     auditEvent("TFCRequest", data)
-  }
 
-  def auditTFCResponse(data : String) (implicit hc: HeaderCarrier): Unit = {
+  def auditTFCResponse(data: String)(implicit hc: HeaderCarrier): Unit =
     auditEvent("TFCResponse", data)
-  }
 
-  def auditESCRequest(data : String) (implicit hc: HeaderCarrier): Unit = {
+  def auditESCRequest(data: String)(implicit hc: HeaderCarrier): Unit =
     auditEvent("ESCRequest", data)
-  }
 
-  def auditESCResponse(data : String) (implicit hc: HeaderCarrier): Unit = {
+  def auditESCResponse(data: String)(implicit hc: HeaderCarrier): Unit =
     auditEvent("ESCResponse", data)
-  }
 
-  private def auditEvent(auditEventType : String, data: String) (implicit hc: HeaderCarrier): Unit = {
+  private def auditEvent(auditEventType: String, data: String)(implicit hc: HeaderCarrier): Unit =
     auditService.sendEvent(auditEventType, Map("data" -> data))
-  }
 
 }

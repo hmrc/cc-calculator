@@ -18,30 +18,30 @@ package models.utility
 
 import play.api.libs.json.{Json, OFormat}
 
-/**
- * Created by adamconder on 28/09/15.
- */
+/** Created by adamconder on 28/09/15.
+  */
 
 // CalculationTaxBands used for determining monthly relief
 
 case class CalculationTaxBands(
-                                additionalRateBand : BigDecimal = BigDecimal(0.00),
-                                higherRateBand : BigDecimal = BigDecimal(0.00),
-                                basicRateBand : BigDecimal = BigDecimal(0.00),
-                                intermediateRateBand: BigDecimal = BigDecimal(0.00),
-                                starterRateBand: BigDecimal = BigDecimal(0.00),
-                                zeroRateBand : BigDecimal = BigDecimal(0.00)
-                                )
+    additionalRateBand: BigDecimal = BigDecimal(0.00),
+    higherRateBand: BigDecimal = BigDecimal(0.00),
+    basicRateBand: BigDecimal = BigDecimal(0.00),
+    intermediateRateBand: BigDecimal = BigDecimal(0.00),
+    starterRateBand: BigDecimal = BigDecimal(0.00),
+    zeroRateBand: BigDecimal = BigDecimal(0.00)
+)
+
 object CalculationTaxBands {
   implicit val taxBanksFormat: OFormat[CalculationTaxBands] = Json.format[CalculationTaxBands]
 }
 
-case class CalculationNIBands (
-                              aboveUpperEarningsBand : BigDecimal = BigDecimal(0.00),
-                              upperEarningsBand : BigDecimal = BigDecimal(0.00),
-                              primaryEarningsBand : BigDecimal = BigDecimal(0.00),
-                              lowerEarningsBand : BigDecimal = BigDecimal(0.00)
-                                )
+case class CalculationNIBands(
+    aboveUpperEarningsBand: BigDecimal = BigDecimal(0.00),
+    upperEarningsBand: BigDecimal = BigDecimal(0.00),
+    primaryEarningsBand: BigDecimal = BigDecimal(0.00),
+    lowerEarningsBand: BigDecimal = BigDecimal(0.00)
+)
 
 object CalculationNIBands {
   implicit val niBanksFormat: OFormat[CalculationNIBands] = Json.format[CalculationNIBands]

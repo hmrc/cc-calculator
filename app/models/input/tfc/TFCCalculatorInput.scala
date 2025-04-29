@@ -25,82 +25,101 @@ import play.api.libs.json._
 import utils.{TFCConfig, _}
 
 case class TFCCalculatorInput(
-                               from: LocalDate,
-                               until: LocalDate,
-                               householdEligibility: Boolean,
-                               periods: List[TFCPeriod]
-                             )
+    from: LocalDate,
+    until: LocalDate,
+    householdEligibility: Boolean,
+    periods: List[TFCPeriod]
+)
 
 object TFCCalculatorInput extends MessagesObject {
-  implicit val tfcEligibilityFormat: Reads[TFCCalculatorInput] = (
-    (JsPath \ "from").read[LocalDate] and
-      (JsPath \ "until").read[LocalDate] and
-        (JsPath \ "householdEligibility").read[Boolean] and
-          (JsPath \ "periods").read[List[TFCPeriod]].filter(JsonValidationError("Please provide at least 1 Period"))(periods => periods.nonEmpty)
-    )(TFCCalculatorInput.apply _)
+
+  implicit val tfcEligibilityFormat: Reads[TFCCalculatorInput] =
+    (JsPath \ "from")
+      .read[LocalDate]
+      .and((JsPath \ "until").read[LocalDate])
+      .and((JsPath \ "householdEligibility").read[Boolean])
+      .and(
+        (JsPath \ "periods")
+          .read[List[TFCPeriod]]
+          .filter(JsonValidationError("Please provide at least 1 Period"))(periods => periods.nonEmpty)
+      )(TFCCalculatorInput.apply _)
+
 }
 
 case class TFCPeriod @Inject() (
-                      from: LocalDate,
-                      until: LocalDate,
-                      periodEligibility: Boolean,
-                      children: List[TFCChild]
-                    )(conf: Option[TFCConfig]){
+    from: LocalDate,
+    until: LocalDate,
+    periodEligibility: Boolean,
+    children: List[TFCChild]
+)(conf: Option[TFCConfig]) {
 
-  def configRule : TFCTaxYearConfig = conf.get.getConfig(from)
+  def configRule: TFCTaxYearConfig = conf.get.getConfig(from)
 
-  def createNewWithConfig(configIn: TFCConfig): TFCPeriod = {
+  def createNewWithConfig(configIn: TFCConfig): TFCPeriod =
     new TFCPeriod(from, until, periodEligibility, children)(Some(configIn))
-  }
 
 }
 
 object TFCPeriod extends MessagesObject with AppConfigConstantSettings {
 
-  def apply(from: LocalDate, until: LocalDate, periodEligibility: Boolean, children: List[TFCChild]): TFCPeriod = {
+  def apply(from: LocalDate, until: LocalDate, periodEligibility: Boolean, children: List[TFCChild]): TFCPeriod =
     new TFCPeriod(from, until, periodEligibility, children)(None)
-  }
 
-  implicit val periodFormat : Reads[TFCPeriod] = (
-    (JsPath \ "from").read[LocalDate] and
-      (JsPath \ "until").read[LocalDate] and
-        (JsPath \ "periodEligibility").read[Boolean] and
-          (JsPath \ "children").read[List[TFCChild]].filter(JsonValidationError("Please provide at least 1 child or maximum of 25 children")
-          )(children => children.nonEmpty && children.length <= defaultMaxNoOfChildren)
-    )(TFCPeriod.apply(_,_,_,_))
+  implicit val periodFormat: Reads[TFCPeriod] =
+    (JsPath \ "from")
+      .read[LocalDate]
+      .and((JsPath \ "until").read[LocalDate])
+      .and((JsPath \ "periodEligibility").read[Boolean])
+      .and(
+        (JsPath \ "children")
+          .read[List[TFCChild]]
+          .filter(JsonValidationError("Please provide at least 1 child or maximum of 25 children"))(children =>
+            children.nonEmpty && children.length <= defaultMaxNoOfChildren
+          )
+      )(TFCPeriod.apply(_, _, _, _))
+
 }
 
 case class TFCChild(
-                     qualifying: Boolean,
-                     from: Option[LocalDate],
-                     until: Option[LocalDate],
-                     childcareCost: BigDecimal,
-                     childcareCostPeriod: Periods.Period = Periods.Monthly,
-                     disability: TFCDisability
-                   ) {
-  def getChildDisability: Boolean = {
+    qualifying: Boolean,
+    from: Option[LocalDate],
+    until: Option[LocalDate],
+    childcareCost: BigDecimal,
+    childcareCostPeriod: Periods.Period = Periods.Monthly,
+    disability: TFCDisability
+) {
+
+  def getChildDisability: Boolean =
     disability.disabled || disability.severelyDisabled
-  }
+
 }
 
 object TFCChild extends MessagesObject {
-  def childSpendValidation(cost: BigDecimal) : Boolean = {
+
+  def childSpendValidation(cost: BigDecimal): Boolean =
     cost >= BigDecimal(0.00)
-  }
-  implicit val childFormat : Reads[TFCChild] = (
-    (JsPath \ "qualifying").read[Boolean] and
-      (JsPath \ "from").readNullable[LocalDate] and
-        (JsPath \ "until").readNullable[LocalDate] and
-          (JsPath \ "childcareCost").read[BigDecimal].filter(JsonValidationError("Childcare Spend cost should not be less than 0.00"))(x => childSpendValidation(x)) and
-            (JsPath \ "childcareCostPeriod").read[Periods.Period] and
-              (JsPath \ "disability").read[TFCDisability]
-    )(TFCChild.apply _)
+
+  implicit val childFormat: Reads[TFCChild] =
+    (JsPath \ "qualifying")
+      .read[Boolean]
+      .and((JsPath \ "from").readNullable[LocalDate])
+      .and((JsPath \ "until").readNullable[LocalDate])
+      .and(
+        (JsPath \ "childcareCost")
+          .read[BigDecimal]
+          .filter(JsonValidationError("Childcare Spend cost should not be less than 0.00"))(x =>
+            childSpendValidation(x)
+          )
+      )
+      .and((JsPath \ "childcareCostPeriod").read[Periods.Period])
+      .and((JsPath \ "disability").read[TFCDisability])(TFCChild.apply _)
+
 }
 
 case class TFCDisability(
-                          disabled: Boolean = false,
-                          severelyDisabled: Boolean = false
-                        )
+    disabled: Boolean = false,
+    severelyDisabled: Boolean = false
+)
 
 object TFCDisability {
   implicit val disabilityReads: Reads[TFCDisability] = Json.reads[TFCDisability]

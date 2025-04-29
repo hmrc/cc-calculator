@@ -25,29 +25,28 @@ class JSONFactorySpec extends FakeCCCalculatorApplication {
   "JSONFactory" must {
 
     "Return a valid output JSON when error sequence and status are passed" in {
-      val status = 400
-      val JSONPath = JsPath \ "tfc"
-      val validationError = JsonValidationError("Very Bad Thing Happened", 400)
+      val status                                         = 400
+      val JSONPath                                       = JsPath \ "tfc"
+      val validationError                                = JsonValidationError("Very Bad Thing Happened", 400)
       val errorTuple: (JsPath, Seq[JsonValidationError]) = (JSONPath, Seq(validationError))
 
-      val outputJSON = Json.parse(
-        """
-          |{
-          |"status": 400,
-          |"errors":
-          |[
-          |   {
-          |     "path" : "/tfc",
-          |     "validationErrors" :
-          |     [
-          |       {
-          |        "message": "Very Bad Thing Happened",
-          |        "args": [400]
-          |       }
-          |     ]
-          |   }
-          | ]
-          | }
+      val outputJSON = Json.parse("""
+                                    |{
+                                    |"status": 400,
+                                    |"errors":
+                                    |[
+                                    |   {
+                                    |     "path" : "/tfc",
+                                    |     "validationErrors" :
+                                    |     [
+                                    |       {
+                                    |        "message": "Very Bad Thing Happened",
+                                    |        "args": [400]
+                                    |       }
+                                    |     ]
+                                    |   }
+                                    | ]
+                                    | }
         """.stripMargin)
 
       val result = utils.JSONFactory.generateErrorJSON(status, Left(Seq(errorTuple)))
@@ -56,12 +55,11 @@ class JSONFactorySpec extends FakeCCCalculatorApplication {
 
     "Return a valid output JSON if error sequence is missing" in {
       val status = 500
-      val outputJSON = Json.parse(
-        """
-          |{
-          |"status": 500,
-          |"errors": ["Error while generating JSON response"]
-          | }
+      val outputJSON = Json.parse("""
+                                    |{
+                                    |"status": 500,
+                                    |"errors": ["Error while generating JSON response"]
+                                    | }
         """.stripMargin)
 
       val result = utils.JSONFactory.generateErrorJSON(status, Left(Nil))
@@ -69,18 +67,17 @@ class JSONFactorySpec extends FakeCCCalculatorApplication {
     }
 
     "Return a valid output JSON when exception and status are passed" in {
-      val status = 500
+      val status    = 500
       val exception = new Exception("Very Bad Thing Happened")
 
-      val outputJSON = Json.parse(
-        """
-          |{
-          |"status": 500,
-          |"error": "Very Bad Thing Happened"
-          | }
+      val outputJSON = Json.parse("""
+                                    |{
+                                    |"status": 500,
+                                    |"error": "Very Bad Thing Happened"
+                                    | }
         """.stripMargin)
 
-      val result  = utils.JSONFactory.generateErrorJSON(status, Right(exception))
+      val result = utils.JSONFactory.generateErrorJSON(status, Right(exception))
       result shouldBe outputJSON
     }
 
@@ -273,4 +270,5 @@ class JSONFactorySpec extends FakeCCCalculatorApplication {
 //      }
 //    }
   }
+
 }
