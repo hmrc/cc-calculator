@@ -8,7 +8,7 @@ lazy val plugins: Seq[Plugins]          = Seq(SbtDistributablesPlugin)
 lazy val playSettings: Seq[Setting[_]]  = Seq.empty
 
 ThisBuild / majorVersion := 1
-ThisBuild / scalaVersion := "2.13.12"
+ThisBuild / scalaVersion := "2.13.16"
 
 lazy val scoverageSettings =
   Seq(
