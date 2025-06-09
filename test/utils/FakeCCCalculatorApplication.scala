@@ -32,7 +32,6 @@ import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.{JsValue, Json}
 
 import scala.concurrent.{ExecutionContext, Future}
-import scala.language.postfixOps
 
 trait FakeCCCalculatorApplication extends PlaySpec {
   this: Suite =>

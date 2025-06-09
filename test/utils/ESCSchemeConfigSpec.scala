@@ -23,7 +23,7 @@ import java.time.format.DateTimeFormatter
 import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.Configuration
-import scala.collection.JavaConverters.asScalaBufferConverter
+import scala.jdk.CollectionConverters.CollectionHasAsScala
 
 class ESCSchemeConfigSpec extends FakeCCCalculatorApplication with Helpers with MockitoSugar {
 
