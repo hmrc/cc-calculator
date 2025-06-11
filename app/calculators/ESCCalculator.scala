@@ -101,6 +101,7 @@ class ESCCalculatorHelpers @Inject() (escConfig: ESCConfig)
       case gross if gross <= personalAllowance => (BigDecimal(0.00), income.taxablePay - niLimit)
       case gross if gross <= higherRateCeiling => (income.taxablePay - personalAllowance, personalAllowance - niLimit)
       case gross if gross > higherRateCeiling  => (income.taxablePay, BigDecimal(0.00))
+      case _                                   => (BigDecimal(0.00), BigDecimal(0.00))
     }
   }
 
@@ -122,6 +123,7 @@ class ESCCalculatorHelpers @Inject() (escConfig: ESCConfig)
         monthlyAmountToPeriod(config.post2011MaxExemptionMonthlyHigher, calcPeriod)
       case amount if amount > higherRateCeiling => // 45% band
         monthlyAmountToPeriod(config.post2011MaxExemptionMonthlyAdditional, calcPeriod)
+      case _ => BigDecimal(0.0)
     }
   }
 
@@ -137,6 +139,7 @@ class ESCCalculatorHelpers @Inject() (escConfig: ESCConfig)
           case code if zeroTaxCode(code) => BigDecimal(0.00)
           case _                         => monthlyAmountToPeriod(escConfig.pre2011MaxExemptionMonthly, calcPeriod)
         }
+      case _ => BigDecimal(0.00)
     }
 
   private def zeroTaxCode(code: String): Boolean = code.contains("NT") || code.contains("0T") || code.startsWith("K")

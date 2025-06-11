@@ -18,7 +18,6 @@ package service
 
 import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 import org.scalatestplus.play.PlaySpec
-import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import uk.gov.hmrc.http.{ForwardedFor, HeaderCarrier, SessionId}
 import uk.gov.hmrc.play.audit.http.config.AuditingConfig

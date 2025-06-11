@@ -24,14 +24,15 @@ import uk.gov.hmrc.play.audit.http.config.AuditingConfig
 import uk.gov.hmrc.play.audit.http.connector.{AuditChannel, AuditConnector, AuditResult, DatastreamMetrics}
 import uk.gov.hmrc.play.audit.model.DataEvent
 import org.scalatestplus.play.PlaySpec
+import play.api.mvc.AnyContentAsEmpty
 import utils.FakeCCCalculatorApplication
 
 import scala.collection.mutable.ListBuffer
 import scala.concurrent.{ExecutionContext, Future}
 
 class AuditEventsTest extends PlaySpec with FakeCCCalculatorApplication with MockitoSugar {
-  implicit val request = FakeRequest()
-  implicit var hc      = new HeaderCarrier()
+  implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
+  implicit var hc: HeaderCarrier                            = new HeaderCarrier()
 
   trait ObservableAuditConnector extends AuditConnector {
     var events: ListBuffer[DataEvent] = new ListBuffer[DataEvent]

@@ -23,6 +23,7 @@ import models.input.tfc.TFCCalculatorInput
 import models.output.CalculatorOutput
 import models.output.esc.{ESCCalculatorOutput, ESCSavings}
 import models.output.tfc.{TFCCalculatorOutput, TFCContribution}
+
 import java.time.LocalDate
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
@@ -34,11 +35,14 @@ import utils.{FakeCCCalculatorApplication, TFCConfig}
 import org.mockito.ArgumentMatchers._
 import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.mvc.AnyContentAsEmpty
 
 import scala.concurrent.Future
 
 class CalculatorControllerSpec extends FakeCCCalculatorApplication with MockitoSugar with BeforeAndAfterEach {
-  implicit val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json")
+
+  implicit val request: FakeRequest[AnyContentAsEmpty.type] =
+    FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json")
 
   lazy val audits    = app.injector.instanceOf[AuditEvents]
   lazy val tfc       = app.injector.instanceOf[TFCCalculator]

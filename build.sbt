@@ -12,7 +12,7 @@ ThisBuild / scalaVersion := "2.13.16"
 
 lazy val scoverageSettings =
   Seq(
-    ScoverageKeys.coverageExcludedPackages := "<empty>;Reverse.*;.*Routes.*;routes_routing.*;uk.gov.hmrc;config.*;",
+    ScoverageKeys.coverageExcludedPackages := "<empty>;Reverse.*;.*.Routes.*;routes_routing.*;uk.gov.hmrc;config.*;prod.*",
     ScoverageKeys.coverageMinimumStmtTotal := 95,
     ScoverageKeys.coverageFailOnMinimum    := true,
     ScoverageKeys.coverageHighlighting     := true,
@@ -28,10 +28,13 @@ lazy val microservice = Project(appName, file("."))
     libraryDependencies ++= AppDependencies.all,
     dependencyOverrides += "commons-codec" % "commons-codec" % "1.12",
     retrieveManaged                       := true,
-    update / evictionWarningOptions       := EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
     routesGenerator                       := InjectedRoutesGenerator,
     resolvers += Resolver.jcenterRepo
   )
   .settings(
-    scalacOptions += "-Wconf:cat=unused-imports&src=routes/.*:s"
+    scalacOptions ++= Seq(
+      // Silence unused warnings on Play `routes` files
+      "-Wconf:cat=unused-imports&src=.*routes.*:s",
+      "-Wconf:cat=unused-privates&src=.*routes.*:s"
+    )
   )
