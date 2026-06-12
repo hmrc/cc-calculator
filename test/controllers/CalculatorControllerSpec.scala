@@ -84,7 +84,8 @@ class CalculatorControllerSpec extends FakeCCCalculatorApplication with MockitoS
           "request contains data only for TFC" in {
             val sut = new CalculatorController(mcc, audits, stubbedTFC, esc, tfcConfig)
 
-            val validInput: JsValue = Json.parse(TestFileReader.readFrom("test/resources/json/tfc/input/calculator_input_test.json"))
+            val validInput: JsValue =
+              Json.parse(TestFileReader.readFrom("test/resources/json/tfc/input/calculator_input_test.json"))
 
             when(stubbedTFC.award(any[TFCCalculatorInput]))
               .thenReturn(
@@ -105,7 +106,8 @@ class CalculatorControllerSpec extends FakeCCCalculatorApplication with MockitoS
           "request contains data only for ESC" in {
             val sut = new CalculatorController(mcc, audits, tfc, stubbedESC, tfcConfig)
 
-            val validInput: JsValue = Json.parse(TestFileReader.readFrom("test/resources/json/esc/input/calculator_input_test.json"))
+            val validInput: JsValue =
+              Json.parse(TestFileReader.readFrom("test/resources/json/esc/input/calculator_input_test.json"))
 
             when(stubbedESC.award(any[ESCCalculatorInput]))
               .thenReturn(

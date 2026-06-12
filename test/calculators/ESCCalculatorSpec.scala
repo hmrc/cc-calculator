@@ -3545,8 +3545,9 @@ class ESCCalculatorSpec
     }
 
     "Generate total award with claimants (Total Award test)" in {
-      val json: JsValue = Json.parse(TestFileReader.readFrom("test/resources/json/esc/input/calculator_input_test.json"))
-      val inputJson     = json.validate[ESCCalculatorInput]
+      val json: JsValue =
+        Json.parse(TestFileReader.readFrom("test/resources/json/esc/input/calculator_input_test.json"))
+      val inputJson = json.validate[ESCCalculatorInput]
       inputJson.isInstanceOf[JsSuccess[ESCCalculatorInput]] shouldBe true
 
       val result: ESCCalculatorOutput = escCalc.award(inputJson.get)
