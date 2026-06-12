@@ -8,7 +8,6 @@ object AppDependencies {
   val compile: Seq[ModuleID] = Seq(
     ws,
     "uk.gov.hmrc"                  %% "bootstrap-backend-play-30" % bootstrapVersion,
-    "com.github.java-json-tools"    % "json-schema-validator"     % "2.2.14",
     "org.json4s"                   %% "json4s-jackson"            % "4.1.0-M8",
     "com.fasterxml.jackson.module" %% "jackson-module-scala"      % "2.21.3"
   )

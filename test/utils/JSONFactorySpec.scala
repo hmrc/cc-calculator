@@ -17,7 +17,6 @@
 package utils
 
 import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
-
 import play.api.libs.json._
 
 class JSONFactorySpec extends FakeCCCalculatorApplication {
@@ -82,7 +81,7 @@ class JSONFactorySpec extends FakeCCCalculatorApplication {
     }
 
 //    "Return a valid JSON response with calculation result (Scenario 51 input)" in {
-//      val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_51.json")
+//      val resource: JsonNode = TestFileReader.readFrom("/json/tc/input/2016/scenario_51.json")
 //      val json: JsValue = Json.parse(resource.toString)
 //      val result = json.validate[TCCalculatorInput]
 //      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
@@ -176,7 +175,7 @@ class JSONFactorySpec extends FakeCCCalculatorApplication {
 //    }
 //
 //    "Return a valid JSON response with advice earnings calculation result (Scenario 51 input)" in {
-//      val resource: JsonNode = JsonLoader.fromResource("/json/tc/input/2016/scenario_51.json")
+//      val resource: JsonNode = TestFileReader.readFrom("/json/tc/input/2016/scenario_51.json")
 //      val json: JsValue = Json.parse(resource.toString)
 //      val result = json.validate[TCCalculatorInput]
 //      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")

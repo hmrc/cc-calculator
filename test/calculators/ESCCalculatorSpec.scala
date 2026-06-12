@@ -16,20 +16,17 @@
 
 package calculators
 
-import com.fasterxml.jackson.databind.JsonNode
-import com.github.fge.jackson.JsonLoader
 import models.input.esc._
 import models.output.esc.{ESCCalculatorOutput, ESCSavings, ESCTaxAndNi}
 import models.utility.{CalculationNIBands, CalculationTaxBands}
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-
 import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.{JsSuccess, JsValue, Json}
-import utils.{ESCConfig, FakeCCCalculatorApplication, Periods}
+import utils.{ESCConfig, FakeCCCalculatorApplication, Periods, TestFileReader}
 
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import scala.concurrent.Future
 
 class ESCCalculatorSpec
@@ -3548,15 +3545,13 @@ class ESCCalculatorSpec
     }
 
     "Generate total award with claimants (Total Award test)" in {
-      val resource: JsonNode = JsonLoader.fromResource("/json/esc/input/calculator_input_test.json")
-      val json: JsValue      = Json.parse(resource.toString)
-      val inputJson          = json.validate[ESCCalculatorInput]
+      val json: JsValue = Json.parse(TestFileReader.readFrom("test/resources/json/esc/input/calculator_input_test.json"))
+      val inputJson     = json.validate[ESCCalculatorInput]
       inputJson.isInstanceOf[JsSuccess[ESCCalculatorInput]] shouldBe true
 
       val result: ESCCalculatorOutput = escCalc.award(inputJson.get)
 
-      val resourceJson        = JsonLoader.fromResource("/json/esc/output/output_test_1.json")
-      val outputJson: JsValue = Json.parse(resourceJson.toString)
+      val outputJson: JsValue = Json.parse(TestFileReader.readFrom("test/resources/json/esc/output/output_test_1.json"))
 
       Json.toJson(result) shouldBe outputJson
     }
