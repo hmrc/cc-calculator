@@ -17,26 +17,24 @@
 package controllers
 
 import calculators._
-import com.github.fge.jackson.JsonLoader
 import models.input.esc.ESCCalculatorInput
 import models.input.tfc.TFCCalculatorInput
 import models.output.CalculatorOutput
 import models.output.esc.{ESCCalculatorOutput, ESCSavings}
 import models.output.tfc.{TFCCalculatorOutput, TFCContribution}
-
-import java.time.LocalDate
+import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
+import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.json.{JsValue, Json}
+import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import service.AuditEvents
-import utils.{FakeCCCalculatorApplication, TFCConfig}
-import org.mockito.ArgumentMatchers._
-import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
-import org.scalatestplus.mockito.MockitoSugar
-import play.api.mvc.AnyContentAsEmpty
+import utils.{FakeCCCalculatorApplication, TFCConfig, TestFileReader}
 
+import java.time.LocalDate
 import scala.concurrent.Future
 
 class CalculatorControllerSpec extends FakeCCCalculatorApplication with MockitoSugar with BeforeAndAfterEach {
@@ -87,7 +85,7 @@ class CalculatorControllerSpec extends FakeCCCalculatorApplication with MockitoS
             val sut = new CalculatorController(mcc, audits, stubbedTFC, esc, tfcConfig)
 
             val validInput: JsValue =
-              Json.parse(JsonLoader.fromResource("/json/tfc/input/calculator_input_test.json").toString)
+              Json.parse(TestFileReader.readFrom("test/resources/json/tfc/input/calculator_input_test.json"))
 
             when(stubbedTFC.award(any[TFCCalculatorInput]))
               .thenReturn(
@@ -109,7 +107,7 @@ class CalculatorControllerSpec extends FakeCCCalculatorApplication with MockitoS
             val sut = new CalculatorController(mcc, audits, tfc, stubbedESC, tfcConfig)
 
             val validInput: JsValue =
-              Json.parse(JsonLoader.fromResource(s"/json/esc/input/calculator_input_test.json").toString)
+              Json.parse(TestFileReader.readFrom("test/resources/json/esc/input/calculator_input_test.json"))
 
             when(stubbedESC.award(any[ESCCalculatorInput]))
               .thenReturn(
@@ -136,9 +134,9 @@ class CalculatorControllerSpec extends FakeCCCalculatorApplication with MockitoS
             val sut = new CalculatorController(mcc, audits, stubbedTFC, stubbedESC, tfcConfig)
 
             val validTFCInput: JsValue =
-              Json.parse(JsonLoader.fromResource("/json/tfc/input/calculator_input_test.json").toString)
+              Json.parse(TestFileReader.readFrom("test/resources/json/tfc/input/calculator_input_test.json"))
             val validESCInput: JsValue =
-              Json.parse(JsonLoader.fromResource(s"/json/esc/input/calculator_input_test.json").toString)
+              Json.parse(TestFileReader.readFrom("test/resources/json/esc/input/calculator_input_test.json"))
 
             when(stubbedTFC.award(any[TFCCalculatorInput]))
               .thenReturn(

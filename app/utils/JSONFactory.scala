@@ -35,7 +35,7 @@ trait JSONFactory extends Logging {
         Json.obj("status" -> status, "error" -> s"${e.getMessage}")
     }
 
-  def errorBuilder(errors: Seq[(JsPath, collection.Seq[JsonValidationError])]): JsArray =
+  private def errorBuilder(errors: Seq[(JsPath, collection.Seq[JsonValidationError])]): JsArray =
     if (errors.nonEmpty) {
       JsArray(
         errors.map { case (path, validationErrors) =>
