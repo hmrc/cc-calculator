@@ -8,7 +8,7 @@ lazy val plugins: Seq[Plugins]          = Seq(SbtDistributablesPlugin)
 lazy val playSettings: Seq[Setting[_]]  = Seq.empty
 
 ThisBuild / majorVersion := 1
-ThisBuild / scalaVersion := "2.13.18"
+ThisBuild / scalaVersion := "3.3.7"
 
 lazy val scoverageSettings =
   Seq(
@@ -34,7 +34,7 @@ lazy val microservice = Project(appName, file("."))
   .settings(
     scalacOptions ++= Seq(
       // Silence unused warnings on Play `routes` files
-      "-Wconf:cat=unused-imports&src=.*routes.*:s",
-      "-Wconf:cat=unused-privates&src=.*routes.*:s"
+      "-Wconf:msg=.*unused import.*&src=.*routes.*:s",
+      "-Wconf:msg=.*unused private member.*&src=.*routes.*:s"
     )
   )

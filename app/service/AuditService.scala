@@ -31,9 +31,9 @@ class AuditService @Inject() (val auditConnector: AuditConnector) {
       implicit hc: HeaderCarrier,
       ec: ExecutionContext
   ): Future[AuditResult] =
-    auditConnector.sendEvent(buildEvent(auditType, details, sessionId))
+    auditConnector.sendEvent(buildEvent(auditType, details))
 
-  def buildEvent(auditType: String, details: Map[String, String], sessionId: Option[String] = None)(
+  def buildEvent(auditType: String, details: Map[String, String])(
       implicit hc: HeaderCarrier
   ): DataEvent = {
     val auditEvent = DataEvent(

@@ -21,7 +21,7 @@ import models.output.tfc.{TFCCalculatorOutput, TFCContribution, TFCOutputChild, 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
+import org.scalatest.matchers.should.Matchers.shouldBe
 import org.scalatestplus.play.PlaySpec
 import utils.{FakeCCCalculatorApplication, Periods, TFCConfig}
 
@@ -1080,6 +1080,44 @@ class TFCCalculatorSpec extends PlaySpec with FakeCCCalculatorApplication {
       val periodTwoUntilDate = LocalDate.parse("2016-11-01T18:46:17", formatter)
       val child = TFCOutputChild(
         childCareCost = BigDecimal(200.00),
+        childContribution = TFCContribution(BigDecimal(480.00), BigDecimal(120.00), BigDecimal(600.00))
+      )
+      val tfcPeriod1 = models.output.tfc.TFCPeriod(
+        from = periodOneFromDate,
+        until = periodOneUntilDate,
+        periodContribution = TFCContribution(BigDecimal(480.00), BigDecimal(120.00), BigDecimal(600.00)),
+        children = List(child)
+      )
+      val tfcPeriod2 = models.output.tfc.TFCPeriod(
+        from = periodTwoFromDate,
+        until = periodTwoUntilDate,
+        periodContribution = TFCContribution(BigDecimal(480.00), BigDecimal(120.00), BigDecimal(600.00)),
+        children = List(child)
+      )
+      val tfcPeriod3 = models.output.tfc.TFCPeriod(
+        from = periodTwoFromDate,
+        until = periodTwoUntilDate,
+        periodContribution = TFCContribution(BigDecimal(480.00), BigDecimal(120.00), BigDecimal(600.00)),
+        children = List(child)
+      )
+
+      val result = tfcCalculator.getHouseholdContribution(List(tfcPeriod1, tfcPeriod2, tfcPeriod3))
+
+      result shouldBe TFCContribution(
+        parent = BigDecimal(1440.00),
+        government = BigDecimal(360.00),
+        totalChildCareSpend = BigDecimal(1800.00)
+      )
+    }
+
+    "Calculate the household contributions for 3 periods for 1 child with default child care cost" in {
+      val tfcCalculator      = new TFCCalculator(tcfConfig)
+      val formatter          = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
+      val periodOneFromDate  = LocalDate.parse("2016-05-01T18:46:17", formatter)
+      val periodOneUntilDate = LocalDate.parse("2016-08-01T18:46:17", formatter)
+      val periodTwoFromDate  = LocalDate.parse("2016-08-01T18:46:17", formatter)
+      val periodTwoUntilDate = LocalDate.parse("2016-11-01T18:46:17", formatter)
+      val child = TFCOutputChild(
         childContribution = TFCContribution(BigDecimal(480.00), BigDecimal(120.00), BigDecimal(600.00))
       )
       val tfcPeriod1 = models.output.tfc.TFCPeriod(

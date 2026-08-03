@@ -16,12 +16,16 @@
 
 package utils
 
-import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
-import play.api.libs.json.{JsError, JsString, Json}
+import org.scalatest.matchers.should.Matchers.shouldBe
+import play.api.libs.json.{JsError, JsString, JsSuccess, Json}
 
 /** Created by adamconder on 09/06/15.
   */
 class PeriodsSpec extends FakeCCCalculatorApplication {
+
+  private enum TestEnum {
+    case One, Two
+  }
 
   "Periods" must {
 
@@ -62,11 +66,24 @@ class PeriodsSpec extends FakeCCCalculatorApplication {
 
   }
 
-  "Enumutils" must {
-    "return JsError" in {
-      class test extends Enumeration
+  "EnumUtils" must {
 
-      val utilRes = EnumUtils.enumReads(new test).reads(Json.obj("periods" -> "0"))
+    "return the enum value for a valid string" in {
+      val result = EnumUtils.enumReads(TestEnum.values)(_.toString).reads(JsString("One"))
+
+      result shouldBe JsSuccess(TestEnum.One)
+    }
+
+    "return JsError for an invalid enum string" in {
+      val result =
+        EnumUtils.enumReads(TestEnum.values)(_.toString).reads(JsString("Three"))
+
+      result shouldBe JsError("Unknown enum value: Three")
+    }
+
+    "return JsError when the JSON value is not a string" in {
+
+      val utilRes = EnumUtils.enumReads(TestEnum.values)(_.toString).reads(Json.obj("periods" -> "0"))
 
       utilRes shouldBe JsError("String value expected")
     }
