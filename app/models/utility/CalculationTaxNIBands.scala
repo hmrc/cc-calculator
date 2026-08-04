@@ -33,7 +33,7 @@ case class CalculationTaxBands(
 )
 
 object CalculationTaxBands {
-  implicit val taxBanksFormat: OFormat[CalculationTaxBands] = Json.format[CalculationTaxBands]
+  given OFormat[CalculationTaxBands] = Json.format[CalculationTaxBands]
 }
 
 case class CalculationNIBands(
@@ -44,5 +44,5 @@ case class CalculationNIBands(
 )
 
 object CalculationNIBands {
-  implicit val niBanksFormat: OFormat[CalculationNIBands] = Json.format[CalculationNIBands]
+  given OFormat[CalculationNIBands] = Json.format[CalculationNIBands]
 }

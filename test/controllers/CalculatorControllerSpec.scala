@@ -16,21 +16,21 @@
 
 package controllers
 
-import calculators._
+import calculators.*
 import models.input.esc.ESCCalculatorInput
 import models.input.tfc.TFCCalculatorInput
 import models.output.CalculatorOutput
 import models.output.esc.{ESCCalculatorOutput, ESCSavings}
 import models.output.tfc.{TFCCalculatorOutput, TFCContribution}
-import org.mockito.ArgumentMatchers._
-import org.mockito.Mockito._
+import org.mockito.ArgumentMatchers.*
+import org.mockito.Mockito.*
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.matchers.should.Matchers.{should, shouldBe}
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import service.AuditEvents
 import utils.{FakeCCCalculatorApplication, TFCConfig, TestFileReader}
 
@@ -39,7 +39,7 @@ import scala.concurrent.Future
 
 class CalculatorControllerSpec extends FakeCCCalculatorApplication with MockitoSugar with BeforeAndAfterEach {
 
-  implicit val request: FakeRequest[AnyContentAsEmpty.type] =
+  given request: FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json")
 
   lazy val audits    = app.injector.instanceOf[AuditEvents]

@@ -17,7 +17,7 @@
 package utils
 
 import org.scalatest.matchers.should.Matchers.shouldBe
-import play.api.libs.json._
+import play.api.libs.json.*
 
 class JSONFactorySpec extends FakeCCCalculatorApplication {
 

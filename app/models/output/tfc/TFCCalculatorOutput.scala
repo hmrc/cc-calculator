@@ -28,7 +28,7 @@ case class TFCCalculatorOutput(
 )
 
 object TFCCalculatorOutput {
-  implicit val tfcCalculationWrites: Writes[TFCCalculatorOutput] = Json.writes[TFCCalculatorOutput]
+  given Writes[TFCCalculatorOutput] = Json.writes[TFCCalculatorOutput]
 }
 
 case class TFCPeriod(
@@ -39,7 +39,7 @@ case class TFCPeriod(
 )
 
 object TFCPeriod {
-  implicit val periodWrites: Writes[TFCPeriod] = Json.writes[TFCPeriod]
+  given Writes[TFCPeriod] = Json.writes[TFCPeriod]
 }
 
 case class TFCOutputChild(
@@ -48,7 +48,7 @@ case class TFCOutputChild(
 )
 
 object TFCOutputChild {
-  implicit val childWrites: Writes[TFCOutputChild] = Json.writes[TFCOutputChild]
+  given Writes[TFCOutputChild] = Json.writes[TFCOutputChild]
 }
 
 case class TFCContribution(
@@ -58,5 +58,5 @@ case class TFCContribution(
 )
 
 object TFCContribution {
-  implicit val contributionWrites: Writes[TFCContribution] = Json.writes[TFCContribution]
+  given Writes[TFCContribution] = Json.writes[TFCContribution]
 }

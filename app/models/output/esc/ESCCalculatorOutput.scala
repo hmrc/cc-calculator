@@ -31,7 +31,7 @@ case class ESCCalculatorOutput(
 )
 
 object ESCCalculatorOutput {
-  implicit val escCalculationWrites: Writes[ESCCalculatorOutput] = Json.writes[ESCCalculatorOutput]
+  given Writes[ESCCalculatorOutput] = Json.writes[ESCCalculatorOutput]
 }
 
 case class ESCTaxYear(
@@ -42,7 +42,7 @@ case class ESCTaxYear(
 )
 
 object ESCTaxYear {
-  implicit val TaxYearWrites: Writes[ESCTaxYear] = Json.writes[ESCTaxYear]
+  given Writes[ESCTaxYear] = Json.writes[ESCTaxYear]
 }
 
 case class ESCSavings(
@@ -52,7 +52,7 @@ case class ESCSavings(
 )
 
 object ESCSavings {
-  implicit val SavingsWrites: Writes[ESCSavings] = Json.writes[ESCSavings]
+  given Writes[ESCSavings] = Json.writes[ESCSavings]
 }
 
 case class ESCClaimant(
@@ -70,7 +70,7 @@ case class ESCClaimant(
 )
 
 object ESCClaimant {
-  implicit val claimantWrites: Writes[ESCClaimant] = Json.writes[ESCClaimant]
+  given Writes[ESCClaimant] = Json.writes[ESCClaimant]
 }
 
 case class ESCIncome(
@@ -81,7 +81,7 @@ case class ESCIncome(
 )
 
 object ESCIncome {
-  implicit val IncomeWrites: Writes[ESCIncome] = Json.writes[ESCIncome]
+  given Writes[ESCIncome] = Json.writes[ESCIncome]
 }
 
 case class ESCTaxAndNi(
@@ -90,5 +90,5 @@ case class ESCTaxAndNi(
 )
 
 object ESCTaxAndNi {
-  implicit val taxAndNIWrites: Writes[ESCTaxAndNi] = Json.writes[ESCTaxAndNi]
+  given Writes[ESCTaxAndNi] = Json.writes[ESCTaxAndNi]
 }

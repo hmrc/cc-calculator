@@ -27,27 +27,20 @@ class AuditService @Inject() (val auditConnector: AuditConnector) {
 
   val auditSource: String = "cc-calculator"
 
-  def sendEvent(auditType: String, details: Map[String, String], sessionId: Option[String] = None)(
-      implicit hc: HeaderCarrier,
+  def sendEvent(auditType: String, details: Map[String, String])(
+      using hc: HeaderCarrier,
       ec: ExecutionContext
   ): Future[AuditResult] =
     auditConnector.sendEvent(buildEvent(auditType, details))
 
   def buildEvent(auditType: String, details: Map[String, String])(
-      implicit hc: HeaderCarrier
-  ): DataEvent = {
-    val auditEvent = DataEvent(
+      using hc: HeaderCarrier
+  ): DataEvent =
+    DataEvent(
       auditSource = auditSource,
       auditType = auditType,
       tags = hc.headers(HeaderNames.explicitlyIncludedHeaders).toMap,
       detail = details
     )
-//      detail = generateDetails(request, details))
-    auditEvent
-  }
-
-//  private def generateDetails(request: Request[_], details: Map[String, String]): Map[String, String] = {
-//    details ++ Map("deviceID" -> DeviceId(request).map(_.id).getOrElse("-"))
-//  }
 
 }

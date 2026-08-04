@@ -27,7 +27,7 @@ class ESCConfig @Inject() (appConfig: AppConfig, configuration: Configuration, m
     extends CCConfig(appConfig)
     with MessagesObject {
 
-  private implicit val lang: Lang = Lang("en")
+  given Lang = Lang("en")
 
   lazy val pre2011MaxExemptionMonthly: Double = configuration
     .get[Double](s"esc.pre-2011-maximum-exemption.basic-higher-additional.monthly")

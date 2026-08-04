@@ -20,9 +20,9 @@ import java.time.LocalDate
 
 import com.google.inject.Inject
 import config.AppConfigConstantSettings
-import play.api.libs.functional.syntax._
-import play.api.libs.json._
-import utils.{TFCConfig, _}
+import play.api.libs.functional.syntax.*
+import play.api.libs.json.*
+import utils.{TFCConfig, *}
 
 case class TFCCalculatorInput(
     from: LocalDate,
@@ -33,7 +33,7 @@ case class TFCCalculatorInput(
 
 object TFCCalculatorInput extends MessagesObject {
 
-  implicit val tfcEligibilityFormat: Reads[TFCCalculatorInput] =
+  given Reads[TFCCalculatorInput] =
     (JsPath \ "from")
       .read[LocalDate]
       .and((JsPath \ "until").read[LocalDate])
@@ -65,7 +65,7 @@ object TFCPeriod extends MessagesObject with AppConfigConstantSettings {
   def apply(from: LocalDate, until: LocalDate, periodEligibility: Boolean, children: List[TFCChild]): TFCPeriod =
     new TFCPeriod(from, until, periodEligibility, children)(None)
 
-  implicit val periodFormat: Reads[TFCPeriod] =
+  given Reads[TFCPeriod] =
     (JsPath \ "from")
       .read[LocalDate]
       .and((JsPath \ "until").read[LocalDate])
@@ -99,7 +99,7 @@ object TFCChild extends MessagesObject {
   def childSpendValidation(cost: BigDecimal): Boolean =
     cost >= BigDecimal(0.00)
 
-  implicit val childFormat: Reads[TFCChild] =
+  given Reads[TFCChild] =
     (JsPath \ "qualifying")
       .read[Boolean]
       .and((JsPath \ "from").readNullable[LocalDate])
@@ -122,5 +122,5 @@ case class TFCDisability(
 )
 
 object TFCDisability {
-  implicit val disabilityReads: Reads[TFCDisability] = Json.reads[TFCDisability]
+  given Reads[TFCDisability] = Json.reads[TFCDisability]
 }

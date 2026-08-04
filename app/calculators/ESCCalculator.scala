@@ -17,7 +17,7 @@
 package calculators
 
 import javax.inject.Inject
-import models.input.esc._
+import models.input.esc.*
 import models.output.esc.{ESCCalculatorOutput, ESCSavings}
 import models.utility.{CalculationNIBands, CalculationTaxBands}
 import java.time.LocalDate
@@ -519,7 +519,7 @@ class ESCCalculatorNi @Inject() (val escHelpers: ESCCalculatorHelpers) {
 }
 
 class ESCCalculator @Inject() (escConfig: ESCConfig, escCalc: ESCCalculatorTax, escCalcNI: ESCCalculatorNi)(
-    implicit ec: ExecutionContext
+    using ec: ExecutionContext
 ) {
 
   /** @param maximumReliefAmount

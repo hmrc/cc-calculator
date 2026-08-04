@@ -25,7 +25,7 @@ import models.output.CalculatorOutput
 import play.api.Logging
 import play.api.i18n.I18nSupport
 import play.api.libs.json.{JsValue, Json}
-import play.api.mvc.{Action, MessagesControllerComponents}
+import play.api.mvc.{Action, MessagesControllerComponents, Request}
 import service.AuditEvents
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 import utils.TFCConfig
@@ -39,12 +39,13 @@ class CalculatorController @Inject() (
     val tfcCalculator: TFCCalculator,
     val escCalculator: ESCCalculator,
     val tfcConfig: TFCConfig
-)(implicit ec: ExecutionContext)
+)(using ec: ExecutionContext)
     extends BackendController(mcc)
     with I18nSupport
     with Logging {
 
-  def calculate: Action[JsValue] = Action.async(parse.json) { implicit request =>
+  def calculate: Action[JsValue] = Action.async(parse.json) { request =>
+    given Request[JsValue] = request
     request.body
       .validate[CalculatorInput]
       .fold(
