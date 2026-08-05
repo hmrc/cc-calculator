@@ -28,8 +28,8 @@ class AuditService @Inject() (val auditConnector: AuditConnector) {
   val auditSource: String = "cc-calculator"
 
   def sendEvent(auditType: String, details: Map[String, String])(
-      using hc: HeaderCarrier,
-      ec: ExecutionContext
+      using HeaderCarrier,
+      ExecutionContext
   ): Future[AuditResult] =
     auditConnector.sendEvent(buildEvent(auditType, details))
 

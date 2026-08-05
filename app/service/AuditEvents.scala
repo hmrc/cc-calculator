@@ -23,22 +23,22 @@ import scala.concurrent.ExecutionContext
 
 class AuditEvents @Inject() (val auditService: AuditService)(using ec: ExecutionContext) {
 
-  def auditRequest(data: String)(using hc: HeaderCarrier): Unit =
+  def auditRequest(data: String)(using HeaderCarrier): Unit =
     auditEvent("Request", data)
 
-  def auditTFCRequest(data: String)(using hc: HeaderCarrier): Unit =
+  def auditTFCRequest(data: String)(using HeaderCarrier): Unit =
     auditEvent("TFCRequest", data)
 
-  def auditTFCResponse(data: String)(using hc: HeaderCarrier): Unit =
+  def auditTFCResponse(data: String)(using HeaderCarrier): Unit =
     auditEvent("TFCResponse", data)
 
-  def auditESCRequest(data: String)(using hc: HeaderCarrier): Unit =
+  def auditESCRequest(data: String)(using HeaderCarrier): Unit =
     auditEvent("ESCRequest", data)
 
-  def auditESCResponse(data: String)(using hc: HeaderCarrier): Unit =
+  def auditESCResponse(data: String)(using HeaderCarrier): Unit =
     auditEvent("ESCResponse", data)
 
-  private def auditEvent(auditEventType: String, data: String)(using hc: HeaderCarrier): Unit =
+  private def auditEvent(auditEventType: String, data: String)(using HeaderCarrier): Unit =
     auditService.sendEvent(auditEventType, Map("data" -> data))
 
 }
