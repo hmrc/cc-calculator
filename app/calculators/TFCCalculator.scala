@@ -18,7 +18,7 @@ package calculators
 
 import javax.inject.Inject
 import models.input.tfc.{TFCCalculatorInput, TFCChild}
-import models.output.tfc._
+import models.output.tfc.*
 import java.time.LocalDate
 
 import play.api.Logging
@@ -26,7 +26,7 @@ import utils.{MessagesObject, TFCConfig, TFCTaxYearConfig}
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class TFCCalculator @Inject() (tfcConfig: TFCConfig)(implicit ec: ExecutionContext)
+class TFCCalculator @Inject() (tfcConfig: TFCConfig)(using ExecutionContext)
     extends CCCalculatorHelper
     with MessagesObject
     with Logging {

@@ -16,7 +16,7 @@
 
 package calculators
 
-import models.input.esc._
+import models.input.esc.*
 import models.output.esc.{ESCCalculatorOutput, ESCSavings, ESCTaxAndNi}
 import models.utility.{CalculationNIBands, CalculationTaxBands}
 import org.scalatest.matchers.should.Matchers.shouldBe

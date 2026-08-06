@@ -32,12 +32,12 @@ class AuditServiceTest extends PlaySpec {
 
     "auditer should send message" in {
 
-      implicit val hc: HeaderCarrier = HeaderCarrier(
+      given hc: HeaderCarrier = HeaderCarrier(
         forwarded = Some(ForwardedFor("testIp")), // test the IP address is in audit request
         sessionId = Some(SessionId("sessionid-random"))
       )
 
-      implicit val ec: ExecutionContext = new GuiceApplicationBuilder().build().injector.instanceOf[ExecutionContext]
+      given ec: ExecutionContext = new GuiceApplicationBuilder().build().injector.instanceOf[ExecutionContext]
 
       final class TestAuditConnector extends AuditConnector {
 
@@ -45,7 +45,7 @@ class AuditServiceTest extends PlaySpec {
 
         override def sendEvent(
             event: DataEvent
-        )(implicit hc: HeaderCarrier = HeaderCarrier(), ec: ExecutionContext): Future[AuditResult] = {
+        )(using hc: HeaderCarrier = HeaderCarrier(), ec: ExecutionContext): Future[AuditResult] = {
           lastAuditEvent = Some(event.asInstanceOf[DataEvent])
           Future.successful(AuditResult.Success)
         }
@@ -63,7 +63,7 @@ class AuditServiceTest extends PlaySpec {
         override val auditSource = "cc-eligibility"
       }
 
-      auditTest.sendEvent("testTranType", Map("randomDetails" -> "+=+=+=+=+=+=+=+=+"))(hc, ec)
+      auditTest.sendEvent("testTranType", Map("randomDetails" -> "+=+=+=+=+=+=+=+=+"))(using hc, ec)
 
       auditTest.sendEvent("testTranType", Map("randomDetails" -> "+=+=+=+=+=+=+=+=+"))
 

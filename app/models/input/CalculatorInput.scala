@@ -23,5 +23,5 @@ import play.api.libs.json.{Json, Reads}
 case class CalculatorInput(tfc: Option[TFCCalculatorInput], esc: Option[ESCCalculatorInput])
 
 object CalculatorInput {
-  implicit val calculatorInput: Reads[CalculatorInput] = Json.reads[CalculatorInput]
+  given Reads[CalculatorInput] = Json.reads[CalculatorInput]
 }

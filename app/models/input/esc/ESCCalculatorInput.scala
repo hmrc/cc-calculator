@@ -19,8 +19,8 @@ package models.input.esc
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-import config.ConfigConstants._
-import play.api.libs.functional.syntax._
+import config.ConfigConstants.*
+import play.api.libs.functional.syntax.*
 import play.api.libs.json.{JsPath, Json, JsonValidationError, Reads}
 import utils.{Periods, _}
 
@@ -28,7 +28,7 @@ case class ESCCalculatorInput(taxYears: List[ESCTaxYear], location: String)
 
 object ESCCalculatorInput extends MessagesObject {
 
-  implicit val escEligibilityReads: Reads[ESCCalculatorInput] =
+  given Reads[ESCCalculatorInput] =
     (JsPath \ "taxYears")
       .read[List[ESCTaxYear]]
       .filter(JsonValidationError("Please provide at least 1 Tax Year"))(taxYears =>
@@ -42,7 +42,7 @@ case class ESCTaxYear(from: LocalDate, until: LocalDate, periods: List[ESCPeriod
 
 object ESCTaxYear extends MessagesObject {
 
-  implicit val taxYearReads: Reads[ESCTaxYear] =
+  given Reads[ESCTaxYear] =
     (JsPath \ "from")
       .read[LocalDate]
       .and((JsPath \ "until").read[LocalDate])
@@ -60,7 +60,7 @@ case class ESCPeriod(from: LocalDate, until: LocalDate, claimants: List[ESCClaim
 
 object ESCPeriod extends MessagesObject {
 
-  implicit val periodReads: Reads[ESCPeriod] =
+  given Reads[ESCPeriod] =
     (JsPath \ "from")
       .read[LocalDate]
       .and((JsPath \ "until").read[LocalDate])
@@ -86,7 +86,7 @@ object Child {
   def childSpendValidation(cost: BigDecimal): Boolean =
     cost >= BigDecimal(0.00)
 
-  implicit val childReads: Reads[Child] =
+  given Reads[Child] =
     (JsPath \ "qualifying")
       .read[Boolean]
       .and(
@@ -136,7 +136,7 @@ case class ESCIncome(
 )
 
 object ESCIncome {
-  implicit val incomeRead: Reads[ESCIncome] = Json.reads[ESCIncome]
+  given Reads[ESCIncome] = Json.reads[ESCIncome]
 }
 
 case class ESCClaimant(
@@ -183,7 +183,7 @@ case class ESCClaimant(
 
 object ESCClaimant extends MessagesObject {
 
-  implicit val claimantReads: Reads[ESCClaimant] =
+  given Reads[ESCClaimant] =
     (JsPath \ "qualifying")
       .read[Boolean]
       .orElse(Reads.pure(false))

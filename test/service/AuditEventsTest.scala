@@ -31,8 +31,8 @@ import scala.collection.mutable.ListBuffer
 import scala.concurrent.{ExecutionContext, Future}
 
 class AuditEventsTest extends PlaySpec with FakeCCCalculatorApplication with MockitoSugar {
-  implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
-  implicit var hc: HeaderCarrier                            = new HeaderCarrier()
+  given FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
+  given HeaderCarrier                       = new HeaderCarrier()
 
   trait ObservableAuditConnector extends AuditConnector {
     var events: ListBuffer[DataEvent] = new ListBuffer[DataEvent]
@@ -46,7 +46,7 @@ class AuditEventsTest extends PlaySpec with FakeCCCalculatorApplication with Moc
 
     override def sendEvent(
         event: DataEvent
-    )(implicit hc: HeaderCarrier = HeaderCarrier(), ec: ExecutionContext): Future[AuditResult] = {
+    )(using hc: HeaderCarrier = HeaderCarrier(), ec: ExecutionContext): Future[AuditResult] = {
       addEvent(event.asInstanceOf[DataEvent])
       Future.successful(AuditResult.Success)
     }

@@ -17,7 +17,7 @@
 package utils
 
 import play.api.Logging
-import play.api.libs.json._
+import play.api.libs.json.*
 
 object JSONFactory extends JSONFactory
 
