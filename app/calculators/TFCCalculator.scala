@@ -26,7 +26,7 @@ import utils.{MessagesObject, TFCConfig, TFCTaxYearConfig}
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class TFCCalculator @Inject() (tfcConfig: TFCConfig)(using ec: ExecutionContext)
+class TFCCalculator @Inject() (tfcConfig: TFCConfig)(using ExecutionContext)
     extends CCCalculatorHelper
     with MessagesObject
     with Logging {

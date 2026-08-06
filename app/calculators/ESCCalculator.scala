@@ -519,7 +519,7 @@ class ESCCalculatorNi @Inject() (val escHelpers: ESCCalculatorHelpers) {
 }
 
 class ESCCalculator @Inject() (escConfig: ESCConfig, escCalc: ESCCalculatorTax, escCalcNI: ESCCalculatorNi)(
-    using ec: ExecutionContext
+    using ExecutionContext
 ) {
 
   /** @param maximumReliefAmount

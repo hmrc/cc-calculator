@@ -39,7 +39,7 @@ class CalculatorController @Inject() (
     val tfcCalculator: TFCCalculator,
     val escCalculator: ESCCalculator,
     val tfcConfig: TFCConfig
-)(using ec: ExecutionContext)
+)(using ExecutionContext)
     extends BackendController(mcc)
     with I18nSupport
     with Logging {

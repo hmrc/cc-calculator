@@ -58,13 +58,13 @@ trait FakeCCCalculatorApplication extends PlaySpec {
   given mcc: MessagesControllerComponents = app.injector.instanceOf[MessagesControllerComponents]
   given ExecutionContext                  = app.injector.instanceOf[ExecutionContext]
 
-  def jsonBodyOf(result: Result)(using mat: Materializer): JsValue =
+  def jsonBodyOf(result: Result)(using Materializer): JsValue =
     Json.parse(bodyOf(result))
 
-  def jsonBodyOf(resultF: Future[Result])(using mat: Materializer): Future[JsValue] =
+  def jsonBodyOf(resultF: Future[Result])(using Materializer): Future[JsValue] =
     resultF.map(jsonBodyOf)
 
-  def bodyOf(result: Result)(using mat: Materializer): String = {
+  def bodyOf(result: Result)(using Materializer): String = {
     val bodyBytes: ByteString = await(result.body.consumeData)
     // We use the default charset to preserve the behaviour of a previous
     // version of this code, which used new String(Array[Byte]).
@@ -74,7 +74,7 @@ trait FakeCCCalculatorApplication extends PlaySpec {
     bodyBytes.decodeString(Charset.defaultCharset().name)
   }
 
-  def bodyOf(resultF: Future[Result])(using mat: Materializer): Future[String] =
+  def bodyOf(resultF: Future[Result])(using Materializer): Future[String] =
     resultF.map(bodyOf)
 
   import scala.concurrent.duration.*
