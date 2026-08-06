@@ -21,47 +21,58 @@ import play.api.libs.json._
 
 object EnumUtils extends Logging {
 
-  def enumReads[E <: Enumeration](`enum`: E): Reads[E#Value] =
-    new Reads[E#Value] {
-      def reads(json: JsValue): JsResult[E#Value] = json match {
-        case JsString(s) => JsSuccess(enum.withName(s))
-        case _ =>
-          logger.warn(s"EnumUtils.enumReads - JsError::: String value expected")
-          JsError("String value expected")
-      }
+  def enumReads[E](values: Array[E])(asString: E => String): Reads[E] =
+    Reads {
+      case JsString(value) =>
+        values.find(enumValue => asString(enumValue) == value) match {
+          case Some(enumValue) =>
+            JsSuccess(enumValue)
+
+          case None =>
+            logger.warn(s"EnumUtils.enumReads - Unknown enum value: $value")
+            JsError(s"Unknown enum value: $value")
+        }
+
+      case _ =>
+        logger.warn("EnumUtils.enumReads - String value expected")
+        JsError("String value expected")
     }
 
-  implicit def enumWrites[E <: Enumeration]: Writes[E#Value] =
-    new Writes[E#Value] {
-      def writes(v: E#Value): JsValue = JsString(v.toString)
-    }
+  def enumWrites[E](asString: E => String): Writes[E] =
+    Writes(enumValue => JsString(asString(enumValue)))
 
 }
 
-object Periods extends Enumeration {
-  type Period = Value
+enum Periods(val id: Int, val jsonValue: String) {
 
-  private val yearlyIndex  = 4
-  private val invalidIndex = 5
+  case Weekly extends Periods(id = 0, jsonValue = "Week")
 
-  val Weekly  = Value(0, "Week")
-  val Monthly = Value(2, "Month")
-  val Yearly  = Value(yearlyIndex, "Year")
-  val INVALID = Value(invalidIndex, "INVALID")
+  case Monthly extends Periods(id = 2, jsonValue = "Month")
 
-  implicit val enumReads: Reads[Period] = EnumUtils.enumReads(Periods)
+  case Yearly extends Periods(id = 4, jsonValue = "Year")
 
-  implicit def enumWrites: Writes[Period] = EnumUtils.enumWrites
+  case INVALID extends Periods(id = 5, jsonValue = "INVALID")
 
-  def toString(period: Value): String =
+  override def toString: String = jsonValue
+}
+
+object Periods {
+
+  type Period = Periods
+
+  given enumReads: Reads[Period] = EnumUtils.enumReads(Periods.values)(_.jsonValue)
+
+  given enumWrites: Writes[Period] = EnumUtils.enumWrites(_.jsonValue)
+
+  def toString(period: Period): String =
     period match {
       case Weekly  => "cc.period.weekly"
       case Monthly => "cc.period.monthly"
       case Yearly  => "cc.period.yearly"
-      case _       => "cc.period.invalid"
+      case INVALID => "cc.period.invalid"
     }
 
-  def toPeriod(period: String): Value =
+  def toPeriod(period: String): Period =
     period.toLowerCase match {
       case "monthly" => Monthly
       case _         => INVALID

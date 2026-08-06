@@ -19,10 +19,10 @@ package calculators
 import models.input.esc._
 import models.output.esc.{ESCCalculatorOutput, ESCSavings, ESCTaxAndNi}
 import models.utility.{CalculationNIBands, CalculationTaxBands}
-import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
+import org.scalatest.matchers.should.Matchers.shouldBe
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.PlaySpec
-import play.api.libs.json.{JsSuccess, JsValue, Json}
+import play.api.libs.json.{JsError, JsSuccess, JsValue, Json}
 import utils.{ESCConfig, FakeCCCalculatorApplication, Periods, TestFileReader}
 
 import java.time.LocalDate
@@ -75,7 +75,6 @@ class ESCCalculatorSpec
       val period = ESCPeriod(from = periodStart, until = periodEnd, List(), children = List())
       val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(89000.00))
       val result = escCalc.getPersonalAllowance(
-        period,
         income,
         escConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location)
       )
@@ -89,7 +88,6 @@ class ESCCalculatorSpec
       val period = ESCPeriod(from = periodStart, until = periodEnd, List(), children = List())
       val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(110000.00))
       val result = escCalc.getPersonalAllowance(
-        period,
         income,
         escConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location)
       )
@@ -103,7 +101,6 @@ class ESCCalculatorSpec
       val period = ESCPeriod(from = periodStart, until = periodEnd, List(), children = List())
       val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "1060L")
       val result = escCalc.getPersonalAllowance(
-        period,
         income,
         escConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location)
       )
@@ -117,7 +114,6 @@ class ESCCalculatorSpec
       val period = ESCPeriod(from = periodStart, until = periodEnd, List(), children = List())
       val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "1200m")
       val result = escCalc.getPersonalAllowance(
-        period,
         income,
         escConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location)
       )
@@ -131,7 +127,6 @@ class ESCCalculatorSpec
       val period = ESCPeriod(from = periodStart, until = periodEnd, List(), children = List())
       val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "1201N")
       val result = escCalc.getPersonalAllowance(
-        period,
         income,
         escConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location)
       )
@@ -145,7 +140,6 @@ class ESCCalculatorSpec
       val period = ESCPeriod(from = periodStart, until = periodEnd, List(), children = List())
       val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "1039T")
       val result = escCalc.getPersonalAllowance(
-        period,
         income,
         escConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location)
       )
@@ -159,7 +153,6 @@ class ESCCalculatorSpec
       val period = ESCPeriod(from = periodStart, until = periodEnd, List(), children = List())
       val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "1103y")
       val result = escCalc.getPersonalAllowance(
-        period,
         income,
         escConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location)
       )
@@ -173,7 +166,6 @@ class ESCCalculatorSpec
       val period = ESCPeriod(from = periodStart, until = periodEnd, List(), children = List())
       val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "BR")
       val result = escCalc.getPersonalAllowance(
-        period,
         income,
         escConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location)
       )
@@ -187,7 +179,6 @@ class ESCCalculatorSpec
       val period = ESCPeriod(from = periodStart, until = periodEnd, List(), children = List())
       val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "d0")
       val result = escCalc.getPersonalAllowance(
-        period,
         income,
         escConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location)
       )
@@ -201,7 +192,6 @@ class ESCCalculatorSpec
       val period = ESCPeriod(from = periodStart, until = periodEnd, List(), children = List())
       val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "D1")
       val result = escCalc.getPersonalAllowance(
-        period,
         income,
         escConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location)
       )
@@ -215,7 +205,6 @@ class ESCCalculatorSpec
       val period = ESCPeriod(from = periodStart, until = periodEnd, List(), children = List())
       val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "NT")
       val result = escCalc.getPersonalAllowance(
-        period,
         income,
         escConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location)
       )
@@ -229,7 +218,6 @@ class ESCCalculatorSpec
       val period = ESCPeriod(from = periodStart, until = periodEnd, List(), List())
       val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00))
       val result = escCalc.getPersonalAllowance(
-        period,
         income,
         escConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location)
       )
@@ -243,7 +231,6 @@ class ESCCalculatorSpec
       val period = ESCPeriod(from = periodStart, until = periodEnd, List(), List())
       val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "950w1")
       val result = escCalc.getPersonalAllowance(
-        period,
         income,
         escConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location)
       )
@@ -257,7 +244,6 @@ class ESCCalculatorSpec
       val period = ESCPeriod(from = periodStart, until = periodEnd, List(), List())
       val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "1170m1")
       val result = escCalc.getPersonalAllowance(
-        period,
         income,
         escConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location)
       )
@@ -271,7 +257,6 @@ class ESCCalculatorSpec
       val period = ESCPeriod(from = periodStart, until = periodEnd, List(), List())
       val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "1150x")
       val result = escCalc.getPersonalAllowance(
-        period,
         income,
         escConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location)
       )
@@ -285,7 +270,6 @@ class ESCCalculatorSpec
       val period = ESCPeriod(from = periodStart, until = periodEnd, List(), List())
       val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "0t")
       val result = escCalc.getPersonalAllowance(
-        period,
         income,
         escConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location)
       )
@@ -299,7 +283,6 @@ class ESCCalculatorSpec
       val period = ESCPeriod(from = periodStart, until = periodEnd, List(), List())
       val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "k475")
       val result = escCalc.getPersonalAllowance(
-        period,
         income,
         escConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location)
       )
@@ -314,7 +297,6 @@ class ESCCalculatorSpec
       val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "590K")
       try {
         val result = escCalc.getPersonalAllowance(
-          period,
           income,
           escConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location)
         )
@@ -333,7 +315,6 @@ class ESCCalculatorSpec
       val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "12W100")
       try {
         val result = escCalc.getPersonalAllowance(
-          period,
           income,
           escConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location)
         )
@@ -352,7 +333,6 @@ class ESCCalculatorSpec
       val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "S120")
       try {
         val result = escCalc.getPersonalAllowance(
-          period,
           income,
           escConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location)
         )
@@ -370,7 +350,6 @@ class ESCCalculatorSpec
       val period = ESCPeriod(from = periodStart, until = periodEnd, List(), List())
       val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "1200s")
       val result = escCalc.getPersonalAllowance(
-        period,
         income,
         escConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location)
       )
@@ -396,7 +375,6 @@ class ESCCalculatorSpec
       val result = escCalcTax.allocateAmountToTaxBands(
         taxableEarnings,
         PA,
-        period,
         calcPeriod,
         taxCode,
         escConfig.getConfig(period.from, "", location)
@@ -424,7 +402,6 @@ class ESCCalculatorSpec
       val result = escCalcTax.allocateAmountToTaxBands(
         taxableEarnings,
         PA,
-        period,
         calcPeriod,
         taxCode,
         escConfig.getConfig(period.from, "", location)
@@ -452,7 +429,6 @@ class ESCCalculatorSpec
       val result = escCalcTax.allocateAmountToTaxBands(
         taxableEarnings,
         PA,
-        period,
         calcPeriod,
         taxCode,
         escConfig.getConfig(period.from, "", location)
@@ -476,7 +452,6 @@ class ESCCalculatorSpec
       val result = escCalcTax.allocateAmountToTaxBands(
         taxableEarnings,
         PA,
-        period,
         calcPeriod,
         taxCode,
         escConfig.getConfig(period.from, "", location)
@@ -504,7 +479,6 @@ class ESCCalculatorSpec
       val result = escCalcTax.allocateAmountToTaxBands(
         taxableEarnings,
         PA,
-        period,
         calcPeriod,
         taxCode,
         escConfig.getConfig(period.from, "", location)
@@ -531,7 +505,6 @@ class ESCCalculatorSpec
       val result = escCalcTax.allocateAmountToTaxBands(
         taxableEarnings,
         PA,
-        period,
         Periods.Yearly,
         taxCode,
         escConfig.getConfig(period.from, "", location)
@@ -558,7 +531,6 @@ class ESCCalculatorSpec
       val result = escCalcTax.allocateAmountToTaxBands(
         taxableEarnings,
         PA,
-        period,
         Periods.Yearly,
         taxCode,
         escConfig.getConfig(period.from, "", location)
@@ -585,7 +557,6 @@ class ESCCalculatorSpec
       val result = escCalcTax.allocateAmountToTaxBands(
         taxableEarnings,
         PA,
-        period,
         Periods.Yearly,
         taxCode,
         escConfig.getConfig(period.from, "", location)
@@ -612,7 +583,6 @@ class ESCCalculatorSpec
       val result = escCalcTax.allocateAmountToTaxBands(
         taxableEarnings,
         PA,
-        period,
         Periods.Yearly,
         taxCode,
         escConfig.getConfig(period.from, "", location)
@@ -639,7 +609,6 @@ class ESCCalculatorSpec
       val result = escCalcTax.allocateAmountToTaxBands(
         taxableEarnings,
         PA,
-        period,
         Periods.Yearly,
         taxCode,
         escConfig.getConfig(period.from, "", location)
@@ -666,7 +635,6 @@ class ESCCalculatorSpec
       val result = escCalcTax.allocateAmountToTaxBands(
         taxableEarnings,
         PA,
-        period,
         Periods.Yearly,
         taxCode,
         escConfig.getConfig(period.from, "", location)
@@ -693,7 +661,6 @@ class ESCCalculatorSpec
       val result = escCalcTax.allocateAmountToTaxBands(
         taxableEarnings,
         PA,
-        period,
         Periods.Yearly,
         taxCode,
         escConfig.getConfig(period.from, "", location)
@@ -720,7 +687,6 @@ class ESCCalculatorSpec
       val result = escCalcTax.allocateAmountToTaxBands(
         taxableEarnings,
         PA,
-        period,
         Periods.Yearly,
         taxCode,
         escConfig.getConfig(period.from, "", locationScotland)
@@ -747,7 +713,6 @@ class ESCCalculatorSpec
       val result = escCalcTax.allocateAmountToTaxBands(
         taxableEarnings,
         PA,
-        period,
         Periods.Yearly,
         taxCode,
         escConfig.getConfig(period.from, "", location)
@@ -774,7 +739,6 @@ class ESCCalculatorSpec
       val result = escCalcTax.allocateAmountToTaxBands(
         taxableEarnings,
         PA,
-        period,
         Periods.Yearly,
         taxCode,
         escConfig.getConfig(period.from, "", location)
@@ -801,7 +765,6 @@ class ESCCalculatorSpec
       val result = escCalcTax.allocateAmountToTaxBands(
         taxableEarnings,
         PA,
-        period,
         Periods.Yearly,
         taxCode,
         escConfig.getConfig(period.from, "", location)
@@ -828,7 +791,6 @@ class ESCCalculatorSpec
       val result = escCalcTax.allocateAmountToTaxBands(
         taxableEarnings,
         PA,
-        period,
         Periods.Yearly,
         taxCode,
         escConfig.getConfig(period.from, "", locationScotland)
@@ -855,7 +817,6 @@ class ESCCalculatorSpec
       val result = escCalcTax.allocateAmountToTaxBands(
         taxableEarnings,
         PA,
-        period,
         Periods.Yearly,
         taxCode,
         escConfig.getConfig(period.from, "", location)
@@ -1557,7 +1518,7 @@ class ESCCalculatorSpec
       )
       val outputModel =
         CalculationTaxBands(zeroRateBand = 0.00, basicRateBand = 6373, higherRateBand = 3014, additionalRateBand = 0.00)
-      val result = escCalcTax.calculateTaxPerBand(inputModel, period, escConfig.getConfig(period.from, "", location))
+      val result = escCalcTax.calculateTaxPerBand(inputModel, escConfig.getConfig(period.from, "", location))
       result shouldBe outputModel
     }
 
@@ -1579,7 +1540,7 @@ class ESCCalculatorSpec
         higherRateBand = 43014.00,
         additionalRateBand = 0.00
       )
-      val result = escCalcTax.calculateTaxPerBand(inputModel, period, escConfig.getConfig(period.from, "", location))
+      val result = escCalcTax.calculateTaxPerBand(inputModel, escConfig.getConfig(period.from, "", location))
       result shouldBe outputModel
     }
 
@@ -1648,7 +1609,7 @@ class ESCCalculatorSpec
       val period    = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
       val income    = ESCTotalIncome(taxablePay = BigDecimal(9000), gross = BigDecimal(9000))
       val result =
-        escCalcHelpers.getAnnualRelevantEarnings(income, period, escConfig.getConfig(period.from, "", location))
+        escCalcHelpers.getAnnualRelevantEarnings(income, escConfig.getConfig(period.from, "", location))
       result shouldBe ((BigDecimal(0.00), BigDecimal(888.00)))
     }
 
@@ -1659,7 +1620,7 @@ class ESCCalculatorSpec
       val period    = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
       val income    = ESCTotalIncome(taxablePay = BigDecimal(12000), gross = BigDecimal(12000))
       val result =
-        escCalcHelpers.getAnnualRelevantEarnings(income, period, escConfig.getConfig(period.from, "", location))
+        escCalcHelpers.getAnnualRelevantEarnings(income, escConfig.getConfig(period.from, "", location))
       result shouldBe ((BigDecimal(1000.00), BigDecimal(2888.0)))
     }
 
@@ -1670,7 +1631,7 @@ class ESCCalculatorSpec
       val period    = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
       val income    = ESCTotalIncome(taxablePay = BigDecimal(150000), gross = BigDecimal(150000))
       val result =
-        escCalcHelpers.getAnnualRelevantEarnings(income, period, escConfig.getConfig(period.from, "", location))
+        escCalcHelpers.getAnnualRelevantEarnings(income, escConfig.getConfig(period.from, "", location))
       result shouldBe ((BigDecimal(138500.00), BigDecimal(3336.00)))
     }
 
@@ -1681,7 +1642,7 @@ class ESCCalculatorSpec
       val period    = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List())
       val income = ESCTotalIncome(taxablePay = BigDecimal(155000), gross = BigDecimal(160000)) // gross include pension amount of 50000
       val result =
-        escCalcHelpers.getAnnualRelevantEarnings(income, period, escConfig.getConfig(period.from, "", location))
+        escCalcHelpers.getAnnualRelevantEarnings(income, escConfig.getConfig(period.from, "", location))
       result shouldBe ((BigDecimal(155000.00), BigDecimal(0.00)))
     }
 
@@ -2753,7 +2714,7 @@ class ESCCalculatorSpec
         upperEarningsBand = 0,
         aboveUpperEarningsBand = 0
       )
-      val result = escCalcNi.allocateAmountToNIBands(grossPay, period, escConfig.getConfig(period.from, "A", location))
+      val result = escCalcNi.allocateAmountToNIBands(grossPay, escConfig.getConfig(period.from, "A", location))
 
       result shouldBe outputModel
     }
@@ -2771,7 +2732,7 @@ class ESCCalculatorSpec
         upperEarningsBand = 0,
         aboveUpperEarningsBand = 0
       )
-      val result = escCalcNi.allocateAmountToNIBands(grossPay, period, escConfig.getConfig(period.from, "A", location))
+      val result = escCalcNi.allocateAmountToNIBands(grossPay, escConfig.getConfig(period.from, "A", location))
 
       result shouldBe outputModel
     }
@@ -2789,7 +2750,7 @@ class ESCCalculatorSpec
         upperEarningsBand = 0,
         aboveUpperEarningsBand = 0
       )
-      val result = escCalcNi.allocateAmountToNIBands(grossPay, period, escConfig.getConfig(period.from, "B", location))
+      val result = escCalcNi.allocateAmountToNIBands(grossPay, escConfig.getConfig(period.from, "B", location))
 
       result shouldBe outputModel
     }
@@ -2807,7 +2768,7 @@ class ESCCalculatorSpec
         upperEarningsBand = 0.01,
         aboveUpperEarningsBand = 0
       )
-      val result = escCalcNi.allocateAmountToNIBands(grossPay, period, escConfig.getConfig(period.from, "B", location))
+      val result = escCalcNi.allocateAmountToNIBands(grossPay, escConfig.getConfig(period.from, "B", location))
 
       result shouldBe outputModel
     }
@@ -2825,7 +2786,7 @@ class ESCCalculatorSpec
         upperEarningsBand = 2665,
         aboveUpperEarningsBand = 0
       )
-      val result = escCalcNi.allocateAmountToNIBands(grossPay, period, escConfig.getConfig(period.from, "C", location))
+      val result = escCalcNi.allocateAmountToNIBands(grossPay, escConfig.getConfig(period.from, "C", location))
 
       result shouldBe outputModel
     }
@@ -2843,7 +2804,7 @@ class ESCCalculatorSpec
         upperEarningsBand = 2665.01,
         aboveUpperEarningsBand = 0
       )
-      val result = escCalcNi.allocateAmountToNIBands(grossPay, period, escConfig.getConfig(period.from, "A", location))
+      val result = escCalcNi.allocateAmountToNIBands(grossPay, escConfig.getConfig(period.from, "A", location))
 
       result shouldBe outputModel
     }
@@ -2861,7 +2822,7 @@ class ESCCalculatorSpec
         upperEarningsBand = 2860,
         aboveUpperEarningsBand = 0
       )
-      val result = escCalcNi.allocateAmountToNIBands(grossPay, period, escConfig.getConfig(period.from, "C", location))
+      val result = escCalcNi.allocateAmountToNIBands(grossPay, escConfig.getConfig(period.from, "C", location))
 
       result shouldBe outputModel
     }
@@ -2879,7 +2840,7 @@ class ESCCalculatorSpec
         upperEarningsBand = 2860.01,
         aboveUpperEarningsBand = 0.0
       )
-      val result = escCalcNi.allocateAmountToNIBands(grossPay, period, escConfig.getConfig(period.from, "C", location))
+      val result = escCalcNi.allocateAmountToNIBands(grossPay, escConfig.getConfig(period.from, "C", location))
 
       result shouldBe outputModel
     }
@@ -2897,7 +2858,7 @@ class ESCCalculatorSpec
         upperEarningsBand = 3073,
         aboveUpperEarningsBand = 6247
       )
-      val result = escCalcNi.allocateAmountToNIBands(grossPay, period, escConfig.getConfig(period.from, "B", location))
+      val result = escCalcNi.allocateAmountToNIBands(grossPay, escConfig.getConfig(period.from, "B", location))
 
       result shouldBe outputModel
     }
@@ -2920,7 +2881,7 @@ class ESCCalculatorSpec
         upperEarningsBand = 0,
         aboveUpperEarningsBand = 0
       )
-      val result = escCalcNi.calculateNIPerBand(inputModel, period, escConfig.getConfig(period.from, "A", location))
+      val result = escCalcNi.calculateNIPerBand(inputModel, escConfig.getConfig(period.from, "A", location))
 
       result shouldBe outputModel
     }
@@ -2943,7 +2904,7 @@ class ESCCalculatorSpec
         upperEarningsBand = 0,
         aboveUpperEarningsBand = 0
       )
-      val result = escCalcNi.calculateNIPerBand(inputModel, period, escConfig.getConfig(period.from, "A", location))
+      val result = escCalcNi.calculateNIPerBand(inputModel, escConfig.getConfig(period.from, "A", location))
 
       result shouldBe outputModel
     }
@@ -2966,7 +2927,7 @@ class ESCCalculatorSpec
         upperEarningsBand = 0,
         aboveUpperEarningsBand = 0
       )
-      val result = escCalcNi.calculateNIPerBand(inputModel, period, escConfig.getConfig(period.from, "B", location))
+      val result = escCalcNi.calculateNIPerBand(inputModel, escConfig.getConfig(period.from, "B", location))
 
       result shouldBe outputModel
     }
@@ -2989,7 +2950,7 @@ class ESCCalculatorSpec
         upperEarningsBand = 15.36,
         aboveUpperEarningsBand = 0
       )
-      val result = escCalcNi.calculateNIPerBand(inputModel, period, escConfig.getConfig(period.from, "A", location))
+      val result = escCalcNi.calculateNIPerBand(inputModel, escConfig.getConfig(period.from, "A", location))
 
       result shouldBe outputModel
     }
@@ -3012,7 +2973,7 @@ class ESCCalculatorSpec
         upperEarningsBand = 7.4880,
         aboveUpperEarningsBand = 0
       )
-      val result = escCalcNi.calculateNIPerBand(inputModel, period, escConfig.getConfig(period.from, "B", location))
+      val result = escCalcNi.calculateNIPerBand(inputModel, escConfig.getConfig(period.from, "B", location))
 
       result shouldBe outputModel
     }
@@ -3035,7 +2996,7 @@ class ESCCalculatorSpec
         upperEarningsBand = 0,
         aboveUpperEarningsBand = 0
       )
-      val result = escCalcNi.calculateNIPerBand(inputModel, period, escConfig.getConfig(period.from, "C", location))
+      val result = escCalcNi.calculateNIPerBand(inputModel, escConfig.getConfig(period.from, "C", location))
 
       result shouldBe outputModel
     }
@@ -3058,7 +3019,7 @@ class ESCCalculatorSpec
         upperEarningsBand = 339.36,
         aboveUpperEarningsBand = 0
       )
-      val result = escCalcNi.calculateNIPerBand(inputModel, period, escConfig.getConfig(period.from, "A", location))
+      val result = escCalcNi.calculateNIPerBand(inputModel, escConfig.getConfig(period.from, "A", location))
 
       result shouldBe outputModel
     }
@@ -3081,7 +3042,7 @@ class ESCCalculatorSpec
         upperEarningsBand = 165.438,
         aboveUpperEarningsBand = 0
       )
-      val result = escCalcNi.calculateNIPerBand(inputModel, period, escConfig.getConfig(period.from, "B", location))
+      val result = escCalcNi.calculateNIPerBand(inputModel, escConfig.getConfig(period.from, "B", location))
 
       result shouldBe outputModel
     }
@@ -3104,7 +3065,7 @@ class ESCCalculatorSpec
         upperEarningsBand = 0,
         aboveUpperEarningsBand = 0
       )
-      val result = escCalcNi.calculateNIPerBand(inputModel, period, escConfig.getConfig(period.from, "C", location))
+      val result = escCalcNi.calculateNIPerBand(inputModel, escConfig.getConfig(period.from, "C", location))
 
       result shouldBe outputModel
     }
@@ -3127,7 +3088,7 @@ class ESCCalculatorSpec
         upperEarningsBand = 321.60,
         aboveUpperEarningsBand = 9.36
       )
-      val result = escCalcNi.calculateNIPerBand(inputModel, period, escConfig.getConfig(period.from, "A", location))
+      val result = escCalcNi.calculateNIPerBand(inputModel, escConfig.getConfig(period.from, "A", location))
 
       result shouldBe outputModel
     }
@@ -3150,7 +3111,7 @@ class ESCCalculatorSpec
         upperEarningsBand = 156.78,
         aboveUpperEarningsBand = 9.36
       )
-      val result = escCalcNi.calculateNIPerBand(inputModel, period, escConfig.getConfig(period.from, "B", location))
+      val result = escCalcNi.calculateNIPerBand(inputModel, escConfig.getConfig(period.from, "B", location))
 
       result shouldBe outputModel
     }
@@ -3173,7 +3134,7 @@ class ESCCalculatorSpec
         upperEarningsBand = 0,
         aboveUpperEarningsBand = 0
       )
-      val result = escCalcNi.calculateNIPerBand(inputModel, period, escConfig.getConfig(period.from, "C", location))
+      val result = escCalcNi.calculateNIPerBand(inputModel, escConfig.getConfig(period.from, "C", location))
 
       result shouldBe outputModel
     }
@@ -3196,7 +3157,7 @@ class ESCCalculatorSpec
         upperEarningsBand = 0,
         aboveUpperEarningsBand = 0
       )
-      val result = escCalcNi.calculateNIPerBand(inputModel, period, escConfig.getConfig(period.from, "A", location))
+      val result = escCalcNi.calculateNIPerBand(inputModel, escConfig.getConfig(period.from, "A", location))
 
       result shouldBe outputModel
     }
@@ -3219,7 +3180,7 @@ class ESCCalculatorSpec
         upperEarningsBand = 0,
         aboveUpperEarningsBand = 0
       )
-      val result = escCalcNi.calculateNIPerBand(inputModel, period, escConfig.getConfig(period.from, "A", location))
+      val result = escCalcNi.calculateNIPerBand(inputModel, escConfig.getConfig(period.from, "A", location))
 
       result shouldBe outputModel
     }
@@ -3242,7 +3203,7 @@ class ESCCalculatorSpec
         upperEarningsBand = 0,
         aboveUpperEarningsBand = 0
       )
-      val result = escCalcNi.calculateNIPerBand(inputModel, period, escConfig.getConfig(period.from, "B", location))
+      val result = escCalcNi.calculateNIPerBand(inputModel, escConfig.getConfig(period.from, "B", location))
 
       result shouldBe outputModel
     }
@@ -3265,7 +3226,7 @@ class ESCCalculatorSpec
         upperEarningsBand = 15.36,
         aboveUpperEarningsBand = 0
       )
-      val result = escCalcNi.calculateNIPerBand(inputModel, period, escConfig.getConfig(period.from, "A", location))
+      val result = escCalcNi.calculateNIPerBand(inputModel, escConfig.getConfig(period.from, "A", location))
 
       result shouldBe outputModel
     }
@@ -3288,7 +3249,7 @@ class ESCCalculatorSpec
         upperEarningsBand = 165.438,
         aboveUpperEarningsBand = 0
       )
-      val result = escCalcNi.calculateNIPerBand(inputModel, period, escConfig.getConfig(period.from, "B", location))
+      val result = escCalcNi.calculateNIPerBand(inputModel, escConfig.getConfig(period.from, "B", location))
 
       result shouldBe outputModel
     }
@@ -3310,7 +3271,7 @@ class ESCCalculatorSpec
         upperEarningsBand = 0,
         aboveUpperEarningsBand = 0
       )
-      val result = escCalcNi.calculateNIPerBand(inputModel, period, escConfig.getConfig(period.from, "C", location))
+      val result = escCalcNi.calculateNIPerBand(inputModel, escConfig.getConfig(period.from, "C", location))
 
       result shouldBe outputModel
     }
@@ -3332,7 +3293,7 @@ class ESCCalculatorSpec
         upperEarningsBand = 167.31,
         aboveUpperEarningsBand = 9.36
       )
-      val result = escCalcNi.calculateNIPerBand(inputModel, period, escConfig.getConfig(period.from, "B", location))
+      val result = escCalcNi.calculateNIPerBand(inputModel, escConfig.getConfig(period.from, "B", location))
 
       result shouldBe outputModel
     }
@@ -3354,7 +3315,7 @@ class ESCCalculatorSpec
         upperEarningsBand = 343.20,
         aboveUpperEarningsBand = 9.36
       )
-      val result = escCalcNi.calculateNIPerBand(inputModel, period, escConfig.getConfig(period.from, "A", location))
+      val result = escCalcNi.calculateNIPerBand(inputModel, escConfig.getConfig(period.from, "A", location))
 
       result shouldBe outputModel
     }
@@ -3376,7 +3337,7 @@ class ESCCalculatorSpec
         upperEarningsBand = 167.31,
         aboveUpperEarningsBand = 9.36
       )
-      val result = escCalcNi.calculateNIPerBand(inputModel, period, escConfig.getConfig(period.from, "B", location))
+      val result = escCalcNi.calculateNIPerBand(inputModel, escConfig.getConfig(period.from, "B", location))
 
       result shouldBe outputModel
     }
@@ -3398,7 +3359,7 @@ class ESCCalculatorSpec
         upperEarningsBand = 0,
         aboveUpperEarningsBand = 0
       )
-      val result = escCalcNi.calculateNIPerBand(inputModel, period, escConfig.getConfig(period.from, "C", location))
+      val result = escCalcNi.calculateNIPerBand(inputModel, escConfig.getConfig(period.from, "C", location))
 
       result shouldBe outputModel
     }
@@ -3484,18 +3445,15 @@ class ESCCalculatorSpec
     "determine total NI savings per month after salary sacrifice for niCategory A (income 4000, voucher amount 200)" in {
       val grossPay     = BigDecimal(4000.00)
       val reliefAmount = BigDecimal(124.00)
-      val calcPeriod   = Periods.Yearly
       val formatter    = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate     = LocalDate.parse("01-05-2016", formatter)
       val toDate       = LocalDate.parse("21-05-2017", formatter)
       val period       = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
 
       val result = escCalcNi.calculateNISavings(
-        period,
         grossPay,
         reliefAmount,
-        escConfig.getConfig(period.from, "A", location),
-        calcPeriod
+        escConfig.getConfig(period.from, "A", location)
       )
       result._1 shouldBe BigDecimal(2.48)
       result._2 shouldBe BigDecimal(357.66)
@@ -3505,18 +3463,15 @@ class ESCCalculatorSpec
     "determine total NI savings per month after salary sacrifice for niCategory B (income 4000, voucher amount 200)" in {
       val grossPay     = BigDecimal(4000.00)
       val reliefAmount = BigDecimal(124.00)
-      val calcPeriod   = Periods.Yearly
       val formatter    = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate     = LocalDate.parse("01-05-2016", formatter)
       val toDate       = LocalDate.parse("21-05-2017", formatter)
       val period       = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
 
       val result = escCalcNi.calculateNISavings(
-        period,
         grossPay,
         reliefAmount,
-        escConfig.getConfig(period.from, "B", location),
-        calcPeriod
+        escConfig.getConfig(period.from, "B", location)
       )
       result._1 shouldBe BigDecimal(2.48)
       result._2 shouldBe BigDecimal(178.63)
@@ -3526,18 +3481,15 @@ class ESCCalculatorSpec
     "determine total NI savings per month after salary sacrifice for niCategory A (income 3500, voucher amount 200)" in {
       val grossPay     = BigDecimal(3500.00)
       val reliefAmount = BigDecimal(200.00)
-      val calcPeriod   = Periods.Yearly
       val formatter    = DateTimeFormatter.ofPattern("dd-MM-yyyy")
       val fromDate     = LocalDate.parse("01-05-2017", formatter)
       val toDate       = LocalDate.parse("21-05-2018", formatter)
       val period       = ESCPeriod(from = fromDate, until = toDate, claimants = List(), children = List[Child]())
 
       val result = escCalcNi.calculateNISavings(
-        period,
         grossPay,
         reliefAmount,
-        escConfig.getConfig(period.from, "A", location),
-        calcPeriod
+        escConfig.getConfig(period.from, "A", location)
       )
       result._1 shouldBe BigDecimal(24)
       result._2 shouldBe BigDecimal(338.40)
@@ -3547,10 +3499,17 @@ class ESCCalculatorSpec
     "Generate total award with claimants (Total Award test)" in {
       val json: JsValue =
         Json.parse(TestFileReader.readFrom("test/resources/json/esc/input/calculator_input_test.json"))
-      val inputJson = json.validate[ESCCalculatorInput]
-      inputJson.isInstanceOf[JsSuccess[ESCCalculatorInput]] shouldBe true
 
-      val result: ESCCalculatorOutput = escCalc.award(inputJson.get)
+      val input: ESCCalculatorInput =
+        json.validate[ESCCalculatorInput] match {
+          case JsSuccess(value, _) =>
+            value
+
+          case JsError(errors) =>
+            fail(s"Failed to validate input JSON: $errors")
+        }
+
+      val result: ESCCalculatorOutput = escCalc.award(input)
 
       val outputJson: JsValue = Json.parse(TestFileReader.readFrom("test/resources/json/esc/output/output_test_1.json"))
 
@@ -3564,7 +3523,6 @@ class ESCCalculatorSpec
       val period = ESCPeriod(from = periodStart, until = periodEnd, List(), children = List())
       val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "1100L")
       escCalc.getPersonalAllowance(
-        period,
         income,
         escConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location)
       ) shouldBe 11000
@@ -3577,7 +3535,6 @@ class ESCCalculatorSpec
       val period = ESCPeriod(from = periodStart, until = periodEnd, List(), children = List())
       val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "9999M")
       escCalc.getPersonalAllowance(
-        period,
         income,
         escConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location)
       ) shouldBe 99990
@@ -3590,7 +3547,6 @@ class ESCCalculatorSpec
       val period = ESCPeriod(from = periodStart, until = periodEnd, List(), children = List())
       val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "9Y")
       escCalc.getPersonalAllowance(
-        period,
         income,
         escConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location)
       ) shouldBe 90
@@ -3603,7 +3559,6 @@ class ESCCalculatorSpec
       val period = ESCPeriod(from = periodStart, until = periodEnd, List(), children = List())
       val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "d1")
       escCalcHelpers.getTaxCode(
-        period,
         income,
         escConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location)
       ) shouldBe "D1"
@@ -3616,12 +3571,10 @@ class ESCCalculatorSpec
       val period = ESCPeriod(from = periodStart, until = periodEnd, List(), children = List())
       val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "1200X")
       escCalcHelpers.getTaxCode(
-        period,
         income,
         escConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location)
       ) shouldBe "1200X"
       escCalc.getPersonalAllowance(
-        period,
         income,
         escConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location)
       ) shouldBe 12000
@@ -3634,12 +3587,10 @@ class ESCCalculatorSpec
       val period = ESCPeriod(from = periodStart, until = periodEnd, List(), children = List())
       val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "900W1")
       escCalcHelpers.getTaxCode(
-        period,
         income,
         escConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location)
       ) shouldBe "900W1"
       escCalc.getPersonalAllowance(
-        period,
         income,
         escConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location)
       ) shouldBe 9000
@@ -3653,7 +3604,6 @@ class ESCCalculatorSpec
       val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "Y")
       try {
         val result = escCalcHelpers.getTaxCode(
-          period,
           income,
           escConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location)
         )
@@ -3672,7 +3622,6 @@ class ESCCalculatorSpec
       val income = ESCTotalIncome(taxablePay = BigDecimal(0.00), gross = BigDecimal(0.00), taxCode = "D11")
       try {
         val result = escCalcHelpers.getTaxCode(
-          period,
           income,
           escConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location)
         )

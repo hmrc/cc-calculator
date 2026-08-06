@@ -20,7 +20,7 @@ import com.codahale.metrics.SharedMetricRegistries
 import com.typesafe.config.ConfigFactory
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
+import org.scalatest.matchers.should.Matchers.shouldBe
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.Configuration
 import scala.jdk.CollectionConverters.CollectionHasAsScala

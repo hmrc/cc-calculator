@@ -19,7 +19,7 @@ package utils
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
+import org.scalatest.matchers.should.Matchers.shouldBe
 import org.scalatestplus.mockito.MockitoSugar
 
 class TFCSchemeConfigSpec extends FakeCCCalculatorApplication with MockitoSugar {

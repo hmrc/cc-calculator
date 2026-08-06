@@ -16,7 +16,7 @@
 
 package service
 
-import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
+import org.scalatest.matchers.should.Matchers.{should, shouldBe}
 import org.scalatestplus.play.PlaySpec
 import play.api.inject.guice.GuiceApplicationBuilder
 import uk.gov.hmrc.http.{ForwardedFor, HeaderCarrier, SessionId}
@@ -32,14 +32,14 @@ class AuditServiceTest extends PlaySpec {
 
     "auditer should send message" in {
 
-      implicit val hc = HeaderCarrier(
+      implicit val hc: HeaderCarrier = HeaderCarrier(
         forwarded = Some(ForwardedFor("testIp")), // test the IP address is in audit request
         sessionId = Some(SessionId("sessionid-random"))
       )
 
-      implicit val ec = new GuiceApplicationBuilder().build().injector.instanceOf[ExecutionContext]
+      implicit val ec: ExecutionContext = new GuiceApplicationBuilder().build().injector.instanceOf[ExecutionContext]
 
-      val auditConnectorObj = new AuditConnector {
+      final class TestAuditConnector extends AuditConnector {
 
         var lastAuditEvent: Option[DataEvent] = None
 
@@ -56,6 +56,8 @@ class AuditServiceTest extends PlaySpec {
 
         override def datastreamMetrics: DatastreamMetrics = ???
       }
+
+      val auditConnectorObj = new TestAuditConnector
 
       val auditTest: AuditService = new AuditService(auditConnectorObj) {
         override val auditSource = "cc-eligibility"

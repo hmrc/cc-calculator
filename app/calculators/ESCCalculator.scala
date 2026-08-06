@@ -36,7 +36,7 @@ class ESCCalculatorHelpers @Inject() (escConfig: ESCConfig)
     try
       Some(string.toInt)
     catch {
-      case e: Exception =>
+      case _: Exception =>
         None
     }
 
@@ -65,7 +65,7 @@ class ESCCalculatorHelpers @Inject() (escConfig: ESCConfig)
     }
   }
 
-  def validateTaxCode(period: ESCPeriod, income: ESCTotalIncome): (BigDecimal, String) =
+  def validateTaxCode(income: ESCTotalIncome): (BigDecimal, String) =
     income.taxCode.toUpperCase.trim match {
       case code if validateCode(code) => (BigDecimal(0.00), code)
       case code if validateCodeBasedOnEndsWith(code) =>
@@ -82,15 +82,14 @@ class ESCCalculatorHelpers @Inject() (escConfig: ESCConfig)
         throw new NoSuchElementException("Please enter valid tax code")
     }
 
-  def getTaxCode(period: ESCPeriod, income: ESCTotalIncome, config: ESCTaxYearConfig): String =
+  def getTaxCode(income: ESCTotalIncome, config: ESCTaxYearConfig): String =
     income.taxCode.trim match {
       case code if code.trim.isEmpty => config.defaultTaxCode
-      case _                         => validateTaxCode(period, income)._2
+      case _                         => validateTaxCode(income)._2
     }
 
   def getAnnualRelevantEarnings(
       income: ESCTotalIncome,
-      period: ESCPeriod,
       config: ESCTaxYearConfig
   ): (BigDecimal, BigDecimal) = {
     val higherRateCeiling = config.taxHigherBandUpperLimit
@@ -361,7 +360,6 @@ class ESCCalculatorTax @Inject() (escHelpers: ESCCalculatorHelpers) {
   }
 
   def calculateTaxSavings(
-      period: ESCPeriod,
       taxablePay: BigDecimal,
       personalAllowance: BigDecimal,
       reliefAmount: BigDecimal,
@@ -372,8 +370,7 @@ class ESCCalculatorTax @Inject() (escHelpers: ESCCalculatorHelpers) {
 
     val taxPerBandBeforeSacrifice: CalculationTaxBands =
       calculateTaxPerBand(
-        allocateAmountToTaxBands(taxablePay, personalAllowance, period, calcPeriod, taxCode, config),
-        period,
+        allocateAmountToTaxBands(taxablePay, personalAllowance, calcPeriod, taxCode, config),
         config
       )
 
@@ -383,8 +380,7 @@ class ESCCalculatorTax @Inject() (escHelpers: ESCCalculatorHelpers) {
 
     val taxPerBandAfterSacrifice: CalculationTaxBands =
       calculateTaxPerBand(
-        allocateAmountToTaxBands(postSalarySacrificeEarnings, personalAllowance, period, calcPeriod, taxCode, config),
-        period,
+        allocateAmountToTaxBands(postSalarySacrificeEarnings, personalAllowance, calcPeriod, taxCode, config),
         config
       )
 
@@ -398,7 +394,6 @@ class ESCCalculatorTax @Inject() (escHelpers: ESCCalculatorHelpers) {
 
   def calculateTaxPerBand(
       taxableAmountPerBand: CalculationTaxBands,
-      period: ESCPeriod,
       config: ESCTaxYearConfig
   ): CalculationTaxBands = {
 
@@ -422,7 +417,6 @@ class ESCCalculatorTax @Inject() (escHelpers: ESCCalculatorHelpers) {
   def allocateAmountToTaxBands(
       taxablePay: BigDecimal,
       personalAllowancePerPeriod: BigDecimal,
-      period: ESCPeriod,
       calcPeriod: Periods.Period,
       taxCode: String,
       config: ESCTaxYearConfig
@@ -445,7 +439,7 @@ class ESCCalculatorTax @Inject() (escHelpers: ESCCalculatorHelpers) {
 
 class ESCCalculatorNi @Inject() (val escHelpers: ESCCalculatorHelpers) {
 
-  def allocateAmountToNIBands(grossPay: BigDecimal, period: ESCPeriod, config: ESCTaxYearConfig): CalculationNIBands = {
+  def allocateAmountToNIBands(grossPay: BigDecimal, config: ESCTaxYearConfig): CalculationNIBands = {
     val lowerEarningsLimit: BigDecimal   = config.niCategory.lelMonthlyUpperLimitForCat
     val primaryEarningsLimit: BigDecimal = config.niCategory.lelPtMonthlyUpperLimitForCat
     val upperEarningsLimit: BigDecimal   = config.niCategory.ptUelMonthlyUpperLimitForCat
@@ -479,7 +473,6 @@ class ESCCalculatorNi @Inject() (val escHelpers: ESCCalculatorHelpers) {
 
   def calculateNIPerBand(
       grossAmountPerBand: CalculationNIBands,
-      period: ESCPeriod,
       config: ESCTaxYearConfig
   ): CalculationNIBands = {
     val lelBandRate: BigDecimal      = config.niCategory.lelRateForCat
@@ -505,19 +498,17 @@ class ESCCalculatorNi @Inject() (val escHelpers: ESCCalculatorHelpers) {
   }
 
   def calculateNISavings(
-      period: ESCPeriod,
       grossPay: BigDecimal,
       reliefAmount: BigDecimal,
-      config: ESCTaxYearConfig,
-      calcPeriod: Periods.Period
+      config: ESCTaxYearConfig
   ): (BigDecimal, BigDecimal, BigDecimal) = {
     val niPerBandBeforeSacrifice: CalculationNIBands =
-      calculateNIPerBand(allocateAmountToNIBands(grossPay, period, config), period, config)
+      calculateNIPerBand(allocateAmountToNIBands(grossPay, config), config)
     val totalNIDueBeforeSacrifice: BigDecimal = totalNIDue(niPerBandBeforeSacrifice, Periods.Yearly)
     val postSalarySacrificeEarnings: BigDecimal =
       escHelpers.subtractActualReliefFromIncome(grossPay, reliefAmount, Periods.Yearly)
     val niPerBandAfterSacrifice: CalculationNIBands =
-      calculateNIPerBand(allocateAmountToNIBands(postSalarySacrificeEarnings, period, config), period, config)
+      calculateNIPerBand(allocateAmountToNIBands(postSalarySacrificeEarnings, config), config)
     val totalNIDueAfterSacrifice: BigDecimal = totalNIDue(niPerBandAfterSacrifice, Periods.Yearly)
     // Total tax savings per one month
     val niSavingAmountPerMonth = escHelpers.determineTotalSavings(totalNIDueBeforeSacrifice, totalNIDueAfterSacrifice)
@@ -629,8 +620,8 @@ class ESCCalculator @Inject() (escConfig: ESCConfig, escCalc: ESCCalculatorTax, 
       // Use monthly values for calculation
       val calcPeriod = Periods.Monthly
       val config     = escConfig.getConfig(period.from, claimant.income.niCategory.toUpperCase.trim, location)
-      val taxCode    = escCalcNI.escHelpers.getTaxCode(period, claimant.income, config)
-      val personalAllowanceAmount: BigDecimal = getPersonalAllowance(period, claimant.income, config)
+      val taxCode    = escCalcNI.escHelpers.getTaxCode(claimant.income, config)
+      val personalAllowanceAmount: BigDecimal = getPersonalAllowance(claimant.income, config)
 
       val (actualTaxReliefAmount, actualNIReliefAmount): (BigDecimal, BigDecimal) = if (!claimant.isPartner) {
         (parentESCTaxAmount, parentESCTaxAmount + parentESCNIAmount)
@@ -649,7 +640,6 @@ class ESCCalculator @Inject() (escConfig: ESCConfig, escCalc: ESCCalculatorTax, 
 
       val taxSavingAmounts: (BigDecimal, BigDecimal, BigDecimal) =
         escCalc.calculateTaxSavings(
-          period,
           taxablePayMonthly,
           personalAllowanceMonthly,
           actualTaxReliefAmount,
@@ -659,7 +649,7 @@ class ESCCalculator @Inject() (escConfig: ESCConfig, escCalc: ESCCalculatorTax, 
         )
 
       val niSavingAmounts: (BigDecimal, BigDecimal, BigDecimal) =
-        escCalcNI.calculateNISavings(period, grossPayMonthly, actualNIReliefAmount, config, calcPeriod)
+        escCalcNI.calculateNISavings(grossPayMonthly, actualNIReliefAmount, config)
 
       escCalcNI.escHelpers.populateClaimantModel(
         claimant.qualifying,
@@ -684,10 +674,10 @@ class ESCCalculator @Inject() (escConfig: ESCConfig, escCalc: ESCCalculatorTax, 
     }
   }
 
-  def getPersonalAllowance(period: ESCPeriod, income: ESCTotalIncome, config: ESCTaxYearConfig): BigDecimal =
+  def getPersonalAllowance(income: ESCTotalIncome, config: ESCTaxYearConfig): BigDecimal =
     income.taxCode.trim match {
       case code if code.isEmpty => income.adjustPersonalAllowance(config.defaultPersonalAllowance)
-      case _                    => escCalcNI.escHelpers.validateTaxCode(period, income)._1
+      case _                    => escCalcNI.escHelpers.validateTaxCode(income)._1
     }
 
   private def determineRelief(
@@ -730,11 +720,11 @@ class ESCCalculator @Inject() (escConfig: ESCConfig, escCalc: ESCCalculatorTax, 
       location: String
   ) = {
     val config  = escConfig.getConfig(period.from, income.niCategory.toUpperCase.trim, location)
-    val taxCode = escCalcNI.escHelpers.getTaxCode(period, income, config)
+    val taxCode = escCalcNI.escHelpers.getTaxCode(income, config)
     // relevantEarningsForTax - range between salary and personal allowance
     // relevantEarningsForNI - range between salary or personal allowance (whichever is less) and NI limit
     val (relevantEarningsForTax, relevantEarningsForNI): (BigDecimal, BigDecimal) =
-      escCalcNI.escHelpers.getAnnualRelevantEarnings(income, period, config)
+      escCalcNI.escHelpers.getAnnualRelevantEarnings(income, config)
     // maximum limit of £243 a month
     val maximumReliefAmount: BigDecimal = escCalcNI.escHelpers.determineMaximumIncomeRelief(
       isESCStartDateBefore2011,
