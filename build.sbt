@@ -28,8 +28,7 @@ lazy val microservice = Project(appName, file("."))
     libraryDependencies ++= AppDependencies.all,
     dependencyOverrides += "commons-codec" % "commons-codec" % "1.12",
     retrieveManaged                       := true,
-    routesGenerator                       := InjectedRoutesGenerator,
-    resolvers += Resolver.jcenterRepo
+    routesGenerator                       := InjectedRoutesGenerator
   )
   .settings(
     scalacOptions ++= Seq(
