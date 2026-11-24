@@ -26,7 +26,7 @@ lazy val microservice = Project(appName, file("."))
   .settings(PlayKeys.playDefaultPort := 9372)
   .settings(
     libraryDependencies ++= AppDependencies.all,
-    dependencyOverrides += "commons-codec" % "commons-codec" % "1.12",
+    dependencyOverrides += "commons-codec" % "commons-codec" % "1.23.0",
     retrieveManaged                       := true,
     routesGenerator                       := InjectedRoutesGenerator
   )
