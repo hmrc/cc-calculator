@@ -9,7 +9,7 @@ object AppDependencies {
     ws,
     "uk.gov.hmrc"                  %% "bootstrap-backend-play-30" % bootstrapVersion,
     "org.json4s"                   %% "json4s-jackson"            % "4.1.0-M8",
-    "com.fasterxml.jackson.module" %% "jackson-module-scala"      % "2.21.3"
+    "com.fasterxml.jackson.module" %% "jackson-module-scala"      % "2.23.0"
   )
 
   val test: Seq[ModuleID] = Seq(
